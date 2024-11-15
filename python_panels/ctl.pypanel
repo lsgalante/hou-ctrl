@@ -336,8 +336,9 @@ def onCreateInterface():
     <includeInToolbarMenu menu_position="202" create_separator="false"/>
     <help><![CDATA[]]></help>
   </interface>
-  <interface name="ctl" label="ctl" icon="MISC_python" showNetworkNavigationBar="true" help_url="">
-    <script><![CDATA[import os
+  <interface name="ctl" label="ctl" icon="MISC_python" showNetworkNavigationBar="false" help_url="">
+    <script><![CDATA[import hou_ctrl_utils as hcu
+import os
 from PySide2 import QtCore, QtGui, QtWidgets
 
 class Dialog(QtWidgets.QFrame):
@@ -353,164 +354,62 @@ class Dialog(QtWidgets.QFrame):
         s.menu_bar_b      = QtWidgets.QPushButton("menu_bar")
         s.stow_bars_b     = QtWidgets.QPushButton("stow_bars")
         # actions
-        s.hide_shelf_b.clicked.connect(s.hide_shelf)
-        s.show_shelf_b.clicked.connect(s.show_shelf)
-        s.tabs_b.clicked.connect(s.toggle_tabs)
-        s.network_ctrls_b.clicked.connect(s.toggle_network_ctrls)
-        s.network_menu_b.clicked.connect(s.toggle_network_menu)
-        s.menu_bar_b.clicked.connect(s.toggle_menu_bar)
-        s.stow_bars_b.clicked.connect(s.toggle_stow_bars)
+        s.hide_shelf_b.clicked.connect(hcu.shelf_hide)
+        s.show_shelf_b.clicked.connect(hcu.shelf_show)
+        s.tabs_b.clicked.connect(hcu.tab_toggle)
+        s.network_ctrls_b.clicked.connect(hcu.network_ctrl_toggle)
+        s.network_menu_b.clicked.connect(hcu.network_menu_toggle)
+        s.menu_bar_b.clicked.connect(hcu.menubar_toggle)
+        s.stow_bars_b.clicked.connect(hcu.stowbar_toggle)
         
         # group 1
         s.update_menu_bar_b        = QtWidgets.QPushButton("update_menu_bar")
         s.reload_color_scheme_b    = QtWidgets.QPushButton("reload_color_scheme")
-        s.reload_viewport_scheme_b = QtWidgets.QPushButton("reload_viewport_scheme")
         s.trigger_update_b         = QtWidgets.QPushButton("trigger_update")
         s.update_mode_auto_b       = QtWidgets.QPushButton("update_mode_auto")
         s.update_mode_manual_b     = QtWidgets.QPushButton("update_mode_manual")
         # actions
-        s.update_menu_bar_b.clicked.connect(s.update_menu_bar)
-        s.reload_color_scheme_b.clicked.connect(s.reload_color_scheme)
-        s.reload_viewport_scheme_b.clicked.connect(s.reload_viewport_scheme)
-        s.trigger_update_b.clicked.connect(s.trigger_update)
-        s.update_mode_auto_b.clicked.connect(s.update_mode_auto)
-        s.update_mode_manual_b.clicked.connect(s.update_mode_manual)
+        s.update_menu_bar_b.clicked.connect(hcu.menubar_update)
+        s.reload_color_scheme_b.clicked.connect(hcu.color_scheme_reload)
+        s.trigger_update_b.clicked.connect(hcu.update_trigger)
+        s.update_mode_auto_b.clicked.connect(hcu.update_mode_auto)
+        s.update_mode_manual_b.clicked.connect(hcu.update_mode_manual)
         
         # separator
         s.frame = QtWidgets.QFrame()
         s.frame.setFrameStyle(4)
         s.frame.setLineWidth(1)
         
-        # layout_a
-        # group 0
-        layout_a = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.TopToBottom)
-        layout_a.addWidget(s.hide_shelf_b)
-        # layout_a.addWidget(s.show_shelf_b)
-        # layout_a.addWidget(s.tabs_b)
-        # layout_a.addWidget(s.network_ctrls_b)
-        # layout_a.addWidget(s.network_menu_b)
-        # layout_a.addWidget(s.menu_bar_b)
-        # layout_a.addWidget(s.stow_bars_b)
+        # layout_0
+        layout_0 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.TopToBottom)
+        # group_0
+        layout_0.addWidget(s.hide_shelf_b)
+        layout_0.addWidget(s.show_shelf_b)
+        layout_0.addWidget(s.tabs_b)
+        layout_0.addWidget(s.network_ctrls_b)
+        layout_0.addWidget(s.network_menu_b)
+        layout_0.addWidget(s.menu_bar_b)
+        layout_0.addWidget(s.stow_bars_b)
         # separator
-        # layout_a.addWidget(s.frame)
-        # group 1
-        # layout_a.addWidget(s.update_menu_bar_b)
-        # layout_a.addWidget(s.reload_color_scheme_b)
-        # layout_a.addWidget(s.reload_viewport_scheme_b)
-        # layout_a.addWidget(s.trigger_update_b)
-        # layout_a.addWidget(s.update_mode_auto_b)
-        # layout_a.addWidget(s.update_mode_manual_b)
+        layout_0.addWidget(s.frame)
+        # group_1
+        layout_0.addWidget(s.update_menu_bar_b)
+        layout_0.addWidget(s.reload_color_scheme_b)
+        layout_0.addWidget(s.trigger_update_b)
+        layout_0.addWidget(s.update_mode_auto_b)
+        layout_0.addWidget(s.update_mode_manual_b)
         
-        shown = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.TopToBottom)
-        shown.addWidget(s.tabs_b)
-        shown_widget = QtWidgets.QWidget()
-        shown_widget.setLayout(shown)
+        layout_0_widget = QtWidgets.QWidget()
+        layout_0_widget.setLayout(layout_0)
         
         s.scroll_area = QtWidgets.QScrollArea()
         s.scroll_area.setWidgetResizable(True)
-        s.scroll_area.setWidget(shown_widget)
+        s.scroll_area.setWidget(layout_0_widget)
 
         # container
         container = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.TopToBottom)
-        container.addLayout(layout_a)
         container.addWidget(s.scroll_area)
         s.setLayout(container)
-        
-# layout_a
-# group_0
-        
-    def hide_shelf(s):
-        desktop = hou.ui.curDesktop()
-        desktop.shelfDock().show(0)
-        
-    def show_shelf(s):
-        desktop = hou.ui.curDesktop()
-        desktop.shelfDock().show(1)
-        
-    def toggle_tabs(s):
-        panes = hou.ui.curDesktop().panes()
-        show = 1
-        for pane in panes:
-            if pane.isShowingPaneTabs():
-                show = 0
-        [pane.showPaneTabs(show) for pane in panes]
-            
-    def toggle_network_ctrls(s):
-        tabs = hou.ui.paneTabs()
-        show = 1
-        for tab in tabs:
-            if tab.isShowingNetworkControls():
-                show = 0
-        [tab.showNetworkControls(show) for tab in tabs]
-    
-    def toggle_network_menu(s):
-        tabs = hou.ui.paneTabs()
-        show = 1
-        for tab in tabs:
-            if tab.type() == hou.paneTabType.NetworkEditor:
-                if tab.getPref("showmenu") == "1":
-                    show = 0
-        for tab in tabs:
-            if tab.type() == hou.paneTabType.NetworkEditor:
-                tab.setPref("showmenu",["0","1"][show])
-            
-    def toggle_menu_bar(s):
-        show = 1
-        if hou.getPreference("showmenu.val") == "1":
-            show = 0
-        hou.setPreference("showmenu.val",["0","1"][show])
-               
-    def toggle_stow_bars(s):
-        hide = hou.ui.hideAllMinimizedStowbars()
-        hou.ui.setHideAllMinimizedStowbars(not hide)
-
-# layout_a
-# group 1
-    
-    def update_menu_bar(s):
-        hou.ui.updateMainMenuBar()
-        
-    def reload_color_scheme(s):
-        hou.ui.reloadColorScheme()
-        
-    def reload_viewport_scheme(s):
-        hou.ui.reloadViewportColorSchemes()
-        
-    def trigger_update(s):
-        hou.ui.triggerUpdate()
-        
-    def update_mode_auto(s):
-        hou.setUpdateMode(hou.updateMode.AutoUpdate)
-        
-    def update_mode_manual(s):
-        hou.setUpdateMode(hou.updateMode.Manual)
-        
-#    def toggle_stow(s):
-#        # stow shelf
-#        self.stow_shelf()
-#        # hide stow bars
-#        b = hou.ui.hideAllMinimizedStowbars()
-#        b = not b
-#        
-#        for p in hou.ui.panes():
-#            p.setShowPaneTabs(not b)
-#       for p in hou.ui.paneTabs():
-#           if p.type()!=hou.paneTabType.NetworkEditor:
-#               p.setShowNetworkControls(not b)
-#       
-#           if p.type()==hou.paneTabType.NetworkEditor:
-#               p.setPref('showmenu',['0','1'][not b])
-#           elif p.type()==hou.paneTabType.SceneViewer:
-#               p.showDisplayOptionsBar(not b)
-#               p.showOperationBar(not b)
-#               p.showSelectionBar(not b)
-#               if p.includeColorCorrectionBar():
-#                   p.showColorCorrectionBar(not b)
-#               if p.includeMemoryBar():
-#                   p.showMemoryBar(not b)
-#       hou.ui.curDesktop().shelfDock().show(not b)
-#       hou.setPreference('showmenu.val',['0','1'][not b])
-#       hou.ui.setHideAllMinimizedStowbars(b)
 
 def onCreateInterface():
     # Create the dialog to display and edit the color information.
