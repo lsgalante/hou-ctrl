@@ -1,0 +1,6 @@
+# A flat list of UI font usage to font name mappings
+Black			"Vegur Bold"
+Proportional		"Source Sans Pro"
+Proportional-CJK	"WenQuanYi Zen Hei"
+Fixed			"Source Code Pro"
+Fixed-CJK		"WenQuanYi Zen Hei Mono"
