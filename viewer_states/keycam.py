@@ -13,95 +13,112 @@ import viewerstate.utils as su
 # vwr = viewer
 
 class State(object):
-    HUD_NAV = {
-        "title": "nav",
+    HUD_LAYOUT = {
+        "title": "layout",
         "rows": [
-            {"id"  : "mode"        , "label": "mode"       , "key"  :"M"},
-            {"id"  : "mode_g"      , "type" : "choicegraph", "count": 5 },
-            {"type": "divider"                                          },
-            {"id"  : "vp_name"     , "label": "viewport"                },
-            {"id"  : "vp_name_g"   , "type" : "choicegraph", "count": 4 },
-            {"id"  : "layout"      , "label": "layout"                  },
-            {"id"  : "layout_g"    , "type" : "choicegraph", "count": 8 },
-            {"id"  : "target"      , "label": "target"                  },
-            {"id"  : "target_g"    , "type" : "choicegraph", "count": 2 }
+            {"id"  : "mode"     , "label": "mode"       , "key"  :"M"},
+            {"type": "divider"                                       },
+            {"id"  : "hud"      , "label": "hud"                     },
+            {"id"  : "hud_g"    , "type" : "choicegraph", "count": 5 },
+            {"id"  : "vp_name"  , "label": "vp_name"                },
+            {"id"  : "vp_name_g", "type" : "choicegraph", "count": 4 },
+            {"id"  : "layout"   , "label": "layout"                  },
+            {"id"  : "layout_g" , "type" : "choicegraph", "count": 8 },
+            {"id"  : "target"   , "label": "target"                  },
+            {"id"  : "target_g" , "type" : "choicegraph", "count": 2 }
         ]
     }
 
     HUD_DELTA = {
         "title": "delta",
         "rows": [
-            {"id"  : "mode"     , "label": "mode"       , "key"  : "M"          },
-            {"id"  : "mode_g"   , "type" : "choicegraph", "count": 5, "value": 2},
-            {"type": "divider"                                                  },
-            {"id"  : "axis_size", "label": "axis_size"                          },
-            {"id"  : "rot"      , "label": "rot_delta"                          },
-            {"id"  : "tr"       , "label": "tr_delta"                           },
-            {"id"  : "dist"     , "label": "dist_delta"                         },
-            {"id"  : "ow"       , "label": "ortho_width_delta"                  }
+            {"id"  : "mode"     , "label": "mode"       , "key"  : "M"},
+            {"type": "divider"                                        },
+            {"id"  : "hud"      , "label": "hud"                      },
+            {"id"  : "hud_g"    , "type" : "choicegraph", "count": 5  },
+            {"id"  : "axis_size", "label": "axis_size"                },
+            {"id"  : "rot"      , "label": "rot_delta"                },
+            {"id"  : "tr"       , "label": "tr_delta"                 },
+            {"id"  : "dist"     , "label": "dist_delta"               },
+            {"id"  : "ow"       , "label": "ortho_width_delta"        }
         ]
     }
 
     HUD_VIS = {
         "title": "vis",
         "rows": [
-            {"id"  : "mode"  , "label": "mode"       , "key"  : "M"          },
-            {"id"  : "mode_g", "type" : "choicegraph", "count": 5, "value": 3},
-            {"type": "divider"                                               },
-            {"id"  : "viz"   , "label": "vis"                                }
+            {"id"  : "mode"  , "label": "mode"       , "key"  : "M"},
+            {"type": "divider"                                     },
+            {"id"  : "hud"   , "label": "hud"                      },          
+            {"id"  : "hud_g" , "type" : "choicegraph", "count": 5  },
+            {"id"  : "viz"   , "label": "vis"                      }
         ]
     }
 
     HUD_FOCUS = {
         "title": "focus",
         "rows": [
-            {"id"  : "mode"     , "label": "mode"       , "key"  : "M"           },
-            {"id"  : "mode_g"   , "type" : "choicegraph", "count": 5 , "value": 4},
-            {"type": "divider"                                                   },
-            {"id"  : "attr"     , "label": "attr"       , "value": "partition"   },
-            {"id"  : "focus"    , "label": "focus"      , "value": 0             },
-            {"id"  : "focus_g"  , "type" : "choicegraph", "count": 10            }
+            {"id"  : "mode"   , "label": "mode"       , "key"  : "M"        },
+            {"type": "divider"                                              },
+            {"id"  : "hud"    , "label": "hud"                              },
+            {"id"  : "hud_g"  , "type" : "choicegraph", "count": 5          }, 
+            {"id"  : "attr"   , "label": "attr"       , "value": "partition"},
+            {"id"  : "focus"  , "label": "focus"      , "value": 0          },
+            {"id"  : "focus_g", "type" : "choicegraph", "count": 10         }
         ]
     }
 
     def __init__(s, state_name, scene_viewer):
         s.state_name       = state_name
         s.axes             = [1, 1, 1]
-        s.ctrl_arr         = ("vp_name", "layout", "target")
-        s.ctrl             = "vp_name"
-        s.focus_attr       = "partition"
-        s.focus_arr        = ("attribute", "focus")
-        s.focus_idx        = 0
-        s.focus_sel        = "attribute"
-        s.layout_arr       = ("DoubleSide", "DoubleStack", "Quad", "QuadBottomSplit", "QuadLeftSplit", "Single", "TripleBottomSplit", "TripleLeftSplit")
-        s.layout           = "Single"
-        s.mode_arr         = ("nav", "ctrl", "delta", "vis", "focus")
+        s.mode_arr         = ("nav", "set")
         s.mode             = "nav"
+        s.hud_arr          = ("layout", "delta", "vis", "focus")
+        s.hud              = "layout"
         s.init_reset       = 1
         s.init_cam_display = 0
-        s.target_arr       = ("cam", "pivot")
-        s.target           = "cam"
-        s.vp_name_arr      = ()
-        s.vp_name          = ""
-        s.vw_arr           = ("persp", "top", "bottom", "front", "back", "right", "left")
         s.vwr              = scene_viewer
 
-        s.unit_dict={
-            "axis_size": 4,
-            "rot"      : 7.5,
-            "tr"       : 1,
-            "ow"       : 1,
-            "dist"     : 1
+        s.layout_hud_dict={
+            "ctrl_arr"    : ("hud", "vp_name", "layout", "target"),
+            "ctrl"        : "hud",
+            "viewport_arr": (),
+            "viewport"    : "",
+            "vw_arr"      : ("persp", "top", "bottom", "front", "back", "right", "left"),
+            "layout_arr"  : ("DoubleSide", "DoubleStack", "Quad", "QuadBottomSplit", "QuadLeftSplit", "Single", "TripleBottomSplit", "TripleLeftSplit"),
+            "layout"      : "Single",
+            "target_arr"  : ("cam", "pivot"),
+            "target"      : "cam"
         }
 
-        s.delta_dict={
-            "val_arr"  : ("axis_size", "rot", "tr", "dist", "ow"),
-            "val"      : "axis_size",
+        s.unit_dict={
+        "axis_size": 4,
+        "rot"      : 7.5,
+        "tr"       : 1,
+        "ow"       : 1,
+        "dist"     : 1
+        }
+
+        s.delta_hud_dict={
+            "ctrl_arr" : ("hud", "axis_size", "rot", "tr", "dist", "ow"),
+            "ctrl"     : "hud",
             "axis_size": s.unit_dict["axis_size"],
-            "rot"      : s.unit_dict["rot"],
-            "tr"       : s.unit_dict["tr"],
-            "ow"       : s.unit_dict["ow"],
-            "dist"     : s.unit_dict["dist"]
+            "rot"      : s.unit_dict["rot"      ],
+            "tr"       : s.unit_dict["tr"       ],
+            "ow"       : s.unit_dict["ow"       ],
+            "dist"     : s.unit_dict["dist"     ]
+        }
+
+        s.focus_hud_dict={
+            "ctrl_arr"  : ("attribute", "focus"),
+            "ctrl"      : "attribute",
+            "focus_attr": "partition",
+            "focus_idx" : 0
+        }
+
+        s.vis_hud_dict={
+            "ctrl_arr": ("hud"),
+            "ctrl"    : "hud"
         }
 
         # drawables
@@ -214,10 +231,10 @@ class State(object):
         s.v_log("cam_move_pvt", "func")
         target = s.nav_dict["target"]
         if   target == "cam":
-            tr                          = s.parms["tr"]["value"]
+            tr = s.parms["tr"]["value"]
             s.parms["tru_pvt"]["value"] = list(tr)
         elif target == "centroid":
-            centroid                    = s.geo_get_centroid()
+            centroid = s.geo_get_centroid()
         elif target == "origin":
             s.parms["tr"     ]["value"] = [0, 0, s.cam_get_dist()]
             s.parms["rot"    ]["value"] = [45, 45, 0]
@@ -233,18 +250,22 @@ class State(object):
 
     def cam_next_proj(s):
         s.v_log("cam_next_proj", "func")
-        cam = s.cam
+        cam       = s.cam
         proj_parm = cam.parm("projection")
-        proj = proj_parm.evalAsString() 
-        if   proj == "ortho":       proj_parm.set("perspective")
-        elif proj == "perspective": proj_parm.set("ortho")
+        proj      = proj_parm.evalAsString() 
+        if proj == "ortho":
+            proj_parm.set("perspective")
+        elif proj == "perspective":
+            proj_parm.set("ortho")
 
     def cam_proj_update(s):
         s.v_log("cam_proj_update", "func")
-        cam = s.cam
+        cam       = s.cam
         proj_parm = cam.parm("projection")
-        if   s.proj == "ortho": proj_parm.set("ortho")
-        elif s.proj == "persp": proj_parm.set("perspective")
+        if s.proj == "ortho":
+            proj_parm.set("ortho")
+        elif s.proj == "persp":
+            proj_parm.set("perspective")
         s.geo_frame()
 
     def cam_reset(s):
@@ -262,9 +283,8 @@ class State(object):
 
     def cam_rot(s, key):
         s.v_log("cam_rot", "func")
-        dd = s.delta_dict
         rot = list(s.parms["rot"]["value"])
-        rot_delta = dd["rot"]
+        rot_delta = s.delta_hud_dict["rot"]
         if   key == "h": rot[1] = (rot[1] + rot_delta) % 360
         elif key == "j": rot[0] = (rot[0] - rot_delta) % 360
         elif key == "k": rot[0] = (rot[0] + rot_delta) % 360
@@ -286,7 +306,8 @@ class State(object):
         # s.cam_get_dir()
         pvt = list(s.parms["pvt"]["value"])
         tr  = list(s.parms["tr" ]["value"])
-        if   key == "h": pvt[0] = pvt[0] - s.delta_dict["tr"]
+        if key == "h":
+            pvt[0] = pvt[0] - s.delta_dict["tr"]
         elif key == "j":
             pvt[1] = pvt[1] - s.delta_dict["tr"]
             tr[1]  = tr[1]  - s.delta_dict["tr"]
@@ -322,7 +343,7 @@ class State(object):
         # gather vars
         vp   = s.vp_get()[0]
         type = vp.type()
-        if "main" in s.vp_name:
+        if "main" in s.layout_hud_dict["vp_name"]:
             if key[0] == "S": s.cam_tr(key[-1])
             else            : s.cam_rot(key)
             s.cam_update()
@@ -488,110 +509,110 @@ class State(object):
 
     def hud_change_focus(s, key):
         s.v_log("hud_change_focus", "func")
-        if   key == "j": s.focus_sel = s.list_next(s.focus_arr, s.focus_sel)
-        elif key == "k": s.focus_sel = s.list_prev(s.focus_arr, s.focus_sel) 
+        if key == "j":
+            s.focus_sel = s.list_next(s.focus_arr, s.focus_sel)
+        elif key == "k":
+            s.focus_sel = s.list_prev(s.focus_arr, s.focus_sel) 
         elif key in ("h", "l"):
             attr = hou.ui.readInput("focus_attr", buttons=("OK", "Cancel"), initial_contents=s.focus_attr)
-            if attr[0] == 0: s.focus_attr = attr[1]
+            if attr[0] == 0:
+                s.focus_attr = attr[1]
         s.hud_update()
 
-    def hud_change_ctrl(s, key):
-        s.v_log("hud_change_ctrl", "func")
-        # select ctrl
+    def hud_mode(s):
+        s.v_log("hud_mode", "func")
+        idx    = s.mode_arr.index(s.mode)
+        idx   += 1
+        idx   %= 2
+        s.mode = s.mode_arr[idx]
+        s.v_log(s.mode, "normal")
+        s.hud_update()
+        s.cam_fit_aspect()
+
+    def hud_nav(s, key):
+        s.v_log("hud_nav", "func")
+
+        # source common variables
+        hud_dict = getattr(s, s.hud + "_hud_dict")
+        ctrl     = hud_dict["ctrl"]
+        s.v_log(ctrl, "normal")
+
+        # change control        
         if key in ("j", "k"):
-            ctrl_idx = s.ctrl_arr.index(s.ctrl)
+            ctrl_arr = hud_dict["ctrl_arr"]
+            ctrl_idx = ctrl_arr.index(ctrl)
+
             if   key == "j": ctrl_idx += 1
             elif key == "k": ctrl_idx -= 1
-            ctrl_idx %= len(s.ctrl_arr)
-            s.ctrl = s.ctrl_arr[ctrl_idx]
-        # change val
+
+            ctrl_idx         %= len(ctrl_arr)
+            ctrl              = ctrl_arr[ctrl_idx]
+            hud_dict["ctrl"]  = ctrl
+
+        # change control value
         elif key in ("h", "l"):
-            val     = getattr(s, s.ctrl)
-            val_arr = getattr(s, s.ctrl + "_arr")
-            val_idx = val_arr.index(val)
-            if   key == "h": val_idx -= 1
-            elif key == "l": val_idx += 1
-            val_idx %= len(val_arr)
-            setattr(s, s.ctrl, val_arr[val_idx])
-        if s.ctrl == "layout": s.vp_layout_set()
-        s.hud_update()
+            ctrl_val_arr = None
+            ctrl_val     = None
+            if ctrl == "hud":
+                ctrl_val_arr = s.hud_arr
+                ctrl_val     = s.hud
+            else:
+                ctrl_val_arr = hud_dict[ctrl + "_arr"] 
+                ctrl_val     = hud_dict[ctrl]
+            ctrl_val_idx = ctrl_val_arr.index(ctrl_val)
 
-    def hud_change_val(s, key):
-        s.v_log("hud_change_val", "func")
-        dd =      s.delta_dict
-        ud =      s.unit_dict
-        val =     vd["val"]
-        val_arr = vd["val_arr"]
-        if   key == "h": dd[val] -=  ud[val]
-        elif key == "j": vd["val"] = s.list_prev(val_arr, val)
-        elif key == "k": vd["val"] = s.list_next(val_arr, val)
-        elif key == "l": vd[val] +=  dd[val]
-        s.hud_update()
+            if   key == "h": ctrl_val_idx -= 1
+            elif key == "l": ctrl_val_idx += 1 
+            
+            ctrl_val_idx   %= len(ctrl_val_arr)
+            ctrl_val        = ctrl_val_arr[ctrl_val_idx]
+            if ctrl == "hud":
+                s.hud = ctrl_val_arr[ctrl_val_idx]
+            else:           
+                hud_dict[ctrl] = ctrl_val_arr[ctrl_val_idx]
 
-    def hud_next_mode(s):
-        s.v_log("hud_next_mode", "func")
-        idx = s.mode_arr.index(s.mode)
-        idx += 1
-        idx %= len(s.mode_arr)
-        new_mode = s.mode_arr[idx]
-        s.mode = new_mode
+        # update dict 
+        setattr(s, s.hud + "_hud_dict", hud_dict)
+        if ctrl == "layout": s.vp_layout_set()
+        #elif s.hud == "delta":
+        #    if   key == "h": s.delta_dict[val ] -= s.unit_dict[val]
+        #    elif key == "j": s.unit_dict["val"]  = s.list_prev(val_arr, val)
+        #    elif key == "k": s.unit_dict["val"]  = s.list_next(val_arr, val)
+        #    elif key == "l": s.delta_dict[val ] += s.unit_dict[val]
         s.hud_update()
-        s.cam_fit_aspect()
-
-    def hud_prev_mode(s):
-        s.v_log("hud_prev_mode", "func")
-        idx = s.mode_arr.index(s.mode)
-        idx -= 1
-        idx %= len(s.mode_arr)
-        new_mode = s.mode_arr[idx]
-        s.mode = new_mode
-        s.hud_update()
-        s.cam_fit_aspect()
 
     def hud_update(s):
         s.v_log("hud_update", "func")
-        dd = s.delta_dict
-        if s.mode == "nav":
+        if s.hud == "layout":
             # change count of vp_name_arr graph
-            s.HUD_NAV["rows"][4]["count"] = len(s.vp_name_arr)
-            s.vwr.hudInfo(template=s.HUD_NAV)
+            s.HUD_LAYOUT["rows"][5]["count"] = len(s.layout_hud_dict["vp_name_arr"])
+            s.vwr.hudInfo(template=s.HUD_LAYOUT)
             updates={
-                "mode"        : {"value": s.mode},
-                "mode_g"      : {"value": s.mode_arr.index(s.mode)},
-                "vp_name"     : {"value": s.vp_name},
-                "vp_name_g"   : {"value": s.vp_name_arr.index(s.vp_name)},
-                "layout"      : {"value": s.layout},
-                "layout_g"    : {"value": s.layout_arr.index(s.layout)},
-                "target"      : {"value": s.target},
-                "target_g"    : {"value": s.target_arr.index(s.target)}
+                "mode"     : {"value": s.mode                                                              },
+                "hud"      : {"value": s.hud                                                               },
+                "hud_g"    : {"value": s.hud_arr.index(s.hud)                                              },
+                "vp_name"  : {"value": s.layout_hud_dict["vp_name"]                                        },
+                "vp_name_g": {"value": s.layout_hud_dict["vp_name_arr"].index(s.layout_hud_dict["vp_name"])},
+                "layout"   : {"value": s.layout_hud_dict["layout"]                                         },
+                "layout_g" : {"value": s.layout_hud_dict["layout_arr"].index(s.layout_hud_dict["layout"])  },
+                "target"   : {"value": s.layout_hud_dict["target"]                                         },
+                "target_g" : {"value": s.layout_hud_dict["target_arr"].index(s.layout_hud_dict["target"])  }
             }
+            if s.mode == "set":
+                updates[s.layout_hud_dict["ctrl"]]["value"] = "[" + updates[s.layout_hud_dict["ctrl"]]["value"] + "]"
             s.vwr.hudInfo(hud_values=updates)
 
-        elif s.mode == "ctrl":
-            s.vwr.hudInfo(template=s.HUD_NAV)
-            updates={
-                "mode"        : {"value": s.mode},
-                "mode_g"      : {"value": s.mode_arr.index(s.mode)},
-                "vp_name"     : {"value": s.vp_name},
-                "vp_name_g"   : {"value": s.vp_name_arr.index(s.vp_name)},
-                "layout"      : {"value": s.layout},
-                "layout_g"    : {"value": s.layout_arr.index(s.layout)},
-                "target"      : {"value": s.target},
-                "target_g"    : {"value": s.target_arr.index(s.target)}
-            }
-            updates[s.ctrl]["value"] = "[" + updates[s.ctrl]["value"] + "]"
-            s.vwr.hudInfo(hud_values=updates)
-
-        elif s.mode == "delta":
+        elif s.hud == "delta":
             s.vwr.hudInfo(template=s.HUD_DELTA)
             updates={
-                "mode"     : {"value": s.mode},
-                "mode_g"   : {"value": s.mode_arr.index(s.mode)},
-                "axis_size": {"value": str(dd["axis_size"])},
-                "rot"      : {"value": str(dd["rot"])},
-                "tr"       : {"value": str(dd["tr"])},
-                "ow"       : {"value": str(dd["ow"])},
-                "dist"     : {"value": str(dd["dist"])}
+                "mode"     : {"value": s.mode                },
+                "hud"      : {"value": s.hud                 },
+                "hud_g"    : {"value": s.hud_arr.index(s.hud)},
+                "axis_size": {"value": str(dd["axis_size"])  },
+                "rot"      : {"value": str(dd["rot"])        },
+                "tr"       : {"value": str(dd["tr"])         },
+                "ow"       : {"value": str(dd["ow"])         },
+                "dist"     : {"value": str(dd["dist"])       }
             }
             updates[dd["val"]]["value"] = "[" + updates[dd["val"]]["value"] + "]"
             s.vwr.hudInfo(hud_values=updates)
@@ -599,15 +620,21 @@ class State(object):
         elif s.mode == "vis":
             s.vwr.hudInfo(template=s.HUD_VIS)
             updates={
+                "mode" : {"value": s.mode                },
+                "hud"  : {"value": s.hud                 },
+                "hud_g": {"value": s.hud_arr.index(s.hud)}
             }
             s.vwr.hudInfo(hud_values=updates)
 
         elif s.mode == "focus":
             s.vwr.hudInfo(template=s.HUD_FOCUS)
             updates={
-                "attr"   : {"value": s.focus_attr},
-                "focus"  : {"value": str(0)},
-                "focus_g": {"value": 0}
+                "mode"   : {"value": s.mode                },
+                "hud"    : {"value": s.hud                 },
+                "hud_g"  : {"value": s.hud_arr.index(s.hud)},
+                "attr"   : {"value": s.focus_attr          },
+                "focus"  : {"value": str(0)                },
+                "focus_g": {"value": 0                     }
             }
             sel = s.focus_sel
             #updates[sel]["value"] = "[" + updates[sel]["value"] + "]"
@@ -666,7 +693,7 @@ class State(object):
 
     def vp_arr_update(s):
         s.v_log("vp_arr_update", "func")
-        vp_arr      = list(s.vwr.viewports())
+        vp_arr = list(s.vwr.viewports())
         vp_arr.reverse()
         vp_name_arr = []
         for vp in vp_arr:
@@ -674,18 +701,19 @@ class State(object):
             else: vp_name_arr.append(vp.name())
         vp_name_arr.append("non-main")
         [s.v_log(vp_name_arr, "normal")]
-        s.vp_name_arr = vp_name_arr
-        s.vp_name     = vp_name_arr[0]
-        s.layout      = str(s.vwr.viewportLayout()).split(".")[-1]
+        s.layout_hud_dict["vp_name_arr"] = vp_name_arr
+        s.layout_hud_dict["vp_name"] = vp_name_arr[0]
+        s.layout_hud_dict["layout" ] = str(s.vwr.viewportLayout()).split(".")[-1]
 
     def vp_focus(s):
         s.v_log("vp_focus", "func")
 
     def vp_get(s):
         s.v_log("vp_get", "func")
-        if s.vp_name == "main": 
+        vp_name = s.layout_hud_dict["vp_name"]
+        if vp_name == "main": 
             return [s.vwr.findViewport("persp1")]
-        elif s.vp_name == "non-main":
+        elif vp_name == "non-main":
             vp_arr = []
             for vp in s.vwr.viewports():
                 if vp.name() != "persp1":
@@ -697,7 +725,8 @@ class State(object):
 
     def vp_layout_set(s):
         s.v_log("vp_layout_set", "func")
-        s.vwr.setViewportLayout(eval("hou.geometryViewportLayout." + s.layout))
+        layout = s.layout_hud_dict["layout"]
+        s.vwr.setViewportLayout(eval("hou.geometryViewportLayout." + layout))
 
     def vp_swap(s):
         s.v_log("vp_swap", "func")
@@ -757,7 +786,6 @@ class State(object):
         # parms
         s.init_parms()
         # hud
-        s.v_log(s.layout, "normal")
         s.hud_update()
         s.init_settings()
 
@@ -766,20 +794,14 @@ class State(object):
         s.v_log("onKeyEvent", "func")
         key = kwargs["ui_event"].device().keyString()
         s.v_log(key, "normal")
-        # prev mode
-        if key == "Shift+m":
-            s.hud_prev_mode()
-            return True
         # navigate
-        elif key[-1] in ("h", "j", "k", "l"):
-            if   s.mode == "nav"  : s.cam_xform(key)
-            elif s.mode == "ctrl" : s.hud_change_ctrl(key)
-            elif s.mode == "delta": s.hud_change_delta(key)
-            elif s.mode == "focus": s.hud_change_focus(key)
+        if key[-1] in ("h", "j", "k", "l"):
+            if   s.mode == "nav": s.cam_xform(key)
+            elif s.mode == "set": s.hud_nav(key)
             return True
-        # next mode
+        # hud mode
         elif key == "m":
-            s.hud_next_mode()
+            s.hud_mode()
             return True
         # change projection
         elif key == "o":
