@@ -81,13 +81,13 @@ class State(object):
         s.mode_arr = ("navigate", "settings")
         s.mode = "navigate"
         s.viewer = scene_viewer
-        s.vp_persp = hou.geometryViewportType.Perspective
-        s.vp_top = hou.geometryViewportType.Top
+        s.vp_persp  = hou.geometryViewportType.Perspective
+        s.vp_top    = hou.geometryViewportType.Top
         s.vp_bottom = hou.geometryViewportType.Bottom
-        s.vp_front = hou.geometryViewportType.Front
-        s.vp_back = hou.geometryViewportType.Back
-        s.vp_right = hou.geometryViewportType.Right
-        s.vp_left = hou.geometryViewportType.Left
+        s.vp_front  = hou.geometryViewportType.Front
+        s.vp_back   = hou.geometryViewportType.Back
+        s.vp_right  = hou.geometryViewportType.Right
+        s.vp_left   = hou.geometryViewportType.Left
 
         s.hud_dict_layout={
             "ctrl_arr": ("hud", "main_vp_view", "vp_name", "layout"),
