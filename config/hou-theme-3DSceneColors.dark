@@ -129,12 +129,12 @@ LocateNearAlpha:                ALPHA         0.3    # mouse locate nearby alpha
 
 # POINT
 
-SelectedPointColor:             1.00 1.00 0.00       # selected points and point info
-PointColor:                     0.40 1.00 1.00       # non-selected points and point info
-PointLocateColor:               0.6 0.9 1.0          # mouse locate point color
-PointLocateRemoveColor:         1.0 0.10 0.10        # mouse locate point color
-PointLocateToggleColor:         0.7 0.3 0.6          # mouse locate point color
-PointLocateAlpha:               ALPHA     1          # mouse locate point overlay alpha
+SelectedPointColor:             1.00 0.00 0.00       # selected points and point info
+PointColor:                     0.40 0.60 1.00       # non-selected points and point info
+PointLocateColor:               0.60 0.90 1.00       # mouse locate point color
+PointLocateRemoveColor:         1.00 0.10 0.10       # mouse locate point color
+PointLocateToggleColor:         0.70 0.30 0.60       # mouse locate point color
+PointLocateAlpha:               ALPHA 1.0            # mouse locate point overlay alpha
 PointTrailColor:                0.00 0.58 0.58       # non-selected point trails
 
 # PRIM

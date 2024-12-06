@@ -11,10 +11,10 @@ class State(object):
             {"id": "divider", "type": "divider"},
             {"id": "hud", "label": "hud"},
             {"id": "hud_g", "type": "choicegraph"},
-            {"id": "main_vp_view", "label": "main_vp_view"},
-            {"id": "main_vp_view_g", "type": "choicegraph"},
-            {"id": "vp_name", "label": "vp_name"},
-            {"id": "vp_name_g", "type": "choicegraph"},
+            {"id": "main_view", "label": "main_view"},
+            {"id": "main_view_g", "type": "choicegraph"},
+            {"id": "view_name", "label": "view_name"},
+            {"id": "view_name_g", "type": "choicegraph"},
             {"id": "layout", "label": "layout"},
             {"id": "layout_g", "type": "choicegraph"}
         ]
@@ -74,37 +74,37 @@ class State(object):
     def __init__(s, state_name, scene_viewer):
         s.state_name = state_name
         s.axes = [1, 1, 1]
-        s.hud_arr = ("layout", "movement", "delta", "vis", "focus")
+        s.huds = ("layout", "movement", "delta", "vis", "focus")
         s.hud = "layout"
         s.init_reset = 1
         s.init_cam_display = 0
-        s.mode_arr = ("navigate", "settings")
+        s.modes = ("navigate", "settings")
         s.mode = "navigate"
         s.viewer = scene_viewer
-        s.vp_persp  = hou.geometryViewportType.Perspective
-        s.vp_top    = hou.geometryViewportType.Top
-        s.vp_bottom = hou.geometryViewportType.Bottom
-        s.vp_front  = hou.geometryViewportType.Front
-        s.vp_back   = hou.geometryViewportType.Back
-        s.vp_right  = hou.geometryViewportType.Right
-        s.vp_left   = hou.geometryViewportType.Left
+        s.view_persp  = hou.geometryViewportType.Perspective
+        s.view_top    = hou.geometryViewportType.Top
+        s.view_bottom = hou.geometryViewportType.Bottom
+        s.view_front  = hou.geometryViewportType.Front
+        s.view_back   = hou.geometryViewportType.Back
+        s.view_right  = hou.geometryViewportType.Right
+        s.view_left   = hou.geometryViewportType.Left
 
         s.hud_dict_layout={
-            "ctrl_arr": ("hud", "main_vp_view", "vp_name", "layout"),
+            "ctrls": ("hud", "main_view", "view_name", "layout"),
             "ctrl": "hud",
-            "main_vp_view_arr": ("persp", "top", "bottom", "front", "back", "right", "left"),
-            "main_vp_view": "persp",
-            "viewport_arr": (),
-            "viewport": "",
-            "vw_arr": ("persp", "top", "bottom", "front", "back", "right", "left"),
-            "layout_arr": ("DoubleSide", "DoubleStack", "Quad", "QuadBottomSplit", "QuadLeftSplit", "Single", "TripleBottomSplit", "TripleLeftSplit"),
+            "main_views": ("persp", "top", "bottom", "front", "back", "right", "left"),
+            "main_view": "persp",
+            "view_names": (),
+            "view_name": "",
+            "vws": ("persp", "top", "bottom", "front", "back", "right", "left"),
+            "layouts": ("DoubleSide", "DoubleStack", "Quad", "QuadBottomSplit", "QuadLeftSplit", "Single", "TripleBottomSplit", "TripleLeftSplit"),
             "layout": "Single"
         }
     
         s.hud_dict_movement={
-            "ctrl_arr": ("hud", "target"),
+            "ctrls": ("hud", "target"),
             "ctrl": "hud",
-            "target_arr": ("cam", "pivot"),
+            "targets": ("cam", "pivot"),
             "target": "cam"
         }
 
@@ -117,7 +117,7 @@ class State(object):
         }
 
         s.hud_dict_delta={
-            "ctrl_arr": ("hud", "axis_size", "rot", "tr", "dist", "ow"),
+            "ctrls": ("hud", "axis_size", "rot", "tr", "dist", "ow"),
             "ctrl": "hud",
             "axis_size": s.unit_dict["axis_size"],
             "rot": s.unit_dict["rot"],
@@ -127,12 +127,12 @@ class State(object):
         }
 
         s.hud_dict_vis={
-            "ctrl_arr": ("hud"),
+            "ctrls": ("hud"),
             "ctrl": "hud"
         }
 
         s.hud_dict_focus={
-            "ctrl_arr": ("hud", "attr", "focus"),
+            "ctrls": ("hud", "attr", "focus"),
             "ctrl": "hud",
             "focus_attr": "partition",
             "focus_idx": 0
@@ -182,8 +182,8 @@ class State(object):
         s.v_log("cam_fit_aspect", "func")
         s.cam.parm("resx").set(1000)
         s.cam.parm("resy").set(1000)
-        vp = s.viewer.findViewport("persp1")
-        ratio = vp.size()[2] / vp.size()[3]
+        view = s.viewer.findViewport("persp1")
+        ratio = view.size()[2] / view.size()[3]
         s.cam.parm("aspect").set(ratio)
 
     def cam_from_state(s):
@@ -211,10 +211,10 @@ class State(object):
 
     def cam_init(s):
         s.v_log("cam_init", "func")
-        vp = s.vp_get()[0]
+        view = s.views_get()[0]
         # check if keycam exists and if not, make it
-        child_arr = [ node.name() for node in hou.node("/obj").children() ]
-        if "keycam" not in child_arr:
+        childs = [ node.name() for node in hou.node("/obj").children() ]
+        if "keycam" not in childs:
             cam = hou.node("/obj").createNode("cam")
             cam.setName("keycam")
         # define vars
@@ -223,9 +223,9 @@ class State(object):
         pvt = [0, 0, 0]
         ow = 1
         # check if cam is default cam
-        cam = vp.camera()
+        cam = view.camera()
         if cam == None:
-            cam = vp.defaultCamera()
+            cam = view.defaultCamera()
             tr = cam.translation()
             rot = cam.rotation()
             pvt = cam.pivot()
@@ -236,8 +236,8 @@ class State(object):
             pvt = cam.evalParmTuple("p")
             ow = cam.evalParm("orthowidth")
         s.cam = hou.node("/obj/keycam")
-        vp.setCamera(s.cam)
-        vp.lockCameraToView(1)
+        view.setCamera(s.cam)
+        view.lockCameraToView(1)
 
     def cam_move_pvt(s):
         s.v_log("cam_move_pvt", "func")
@@ -305,8 +305,14 @@ class State(object):
     def cam_set_view(s):
         s.v_log("cam_set_view", "func")
         d = s.hud_dict_layout
-        s.v_log(d["viewport"], "normal")
-        s.v_log(d["viewport_arr"], "normal")
+        main_view = d["main_view"]
+        if main_view == "top": s.parms["rot"]["value"] = [270, 0, 0]
+        elif main_view == "bottom": s.parms["rot"]["value"] = [90, 0, 0]
+        elif main_view == "front": s.parms["rot"]["value"] = [0, 180, 0]
+        elif main_view == "back": s.parms["rot"]["value"] = [0, 0, 0]
+        elif main_view == "right": s.parms["rot"]["value"] = [0, 90, 0]
+        elif main_view == "left": s.parms["rot"]["value"] = [0, 270, 0]
+        s.cam_update()
 
     def cam_to_state(s):
         s.v_log("cam_to_state", "func")
@@ -360,37 +366,37 @@ class State(object):
     def cam_xform(s, key):
         s.v_log("cam_xform", "func")
         # gather vars
-        vp = s.vp_get()[0]
-        type = vp.type()
-        if "main" in s.hud_dict_layout["vp_name"]:
+        view = s.views_get()[0]
+        type = view.type()
+        if "main" in s.hud_dict_layout["view_names"]:
             if key[0] == "S": s.cam_tr(key[-1])
             else: s.cam_rot(key)
             s.cam_update()
             s.drawable_update_pvt()
             s.drawable_update_ray()
         else:
-            vp = s.viewer.findViewport(s.vp_name)
-            cam = vp.defaultCamera()
+            view = s.viewer.findViewport(s.view_name)
+            cam = view.defaultCamera()
             tr = list(cam.translation())
             ti = s.unit_dict["tr"]
-            idx_arr = [0, 0]
-            if "top" in s.vp_name: idx_arr = [0, 1]
-            elif "bottom" in s.vp_name: idx_arr = [2, 0]
-            elif "front" in s.vp_name: idx_arr = [0, 1]
-            elif "back" in s.vp_name: idx_arr = [1, 0]
-            elif "right" in s.vp_name: idx_arr = [0, 1]
-            elif "left" in s.vp_name: idx_arr = [1, 2]
-            if key == "h": tr[idx_arr[0]] += ti
-            elif key == "j": tr[idx_arr[1]] += ti
-            elif key == "k": tr[idx_arr[1]] -= ti
-            elif key == "l": tr[idx_arr[0]] -= ti
+            idxs = [0, 0]
+            if "top" in s.view: idxs = [0, 1]
+            elif "bottom" in s.view: idxs = [2, 0]
+            elif "front" in s.view: idxs = [0, 1]
+            elif "back" in s.view: idxs = [1, 0]
+            elif "right" in s.view: idxs = [0, 1]
+            elif "left" in s.view: idxs = [1, 2]
+            if key == "h": tr[idxs[0]] += ti
+            elif key == "j": tr[idxs[1]] += ti
+            elif key == "k": tr[idxs[1]] -= ti
+            elif key == "l": tr[idxs[0]] -= ti
             cam.setTranslation(tr)
 
     def cam_zoom(s, key):
         s.v_log("cam_zoom", "func")
-        vp_arr = s.vp_get()
-        for vp in vp_arr:
-            if vp.type() == s.vp_persp:
+        views = s.views_get()
+        for view in views:
+            if view.type() == s.view_persp:
                 proj = s.cam.parm("projection").evalAsString()
                 if proj == "perspective":
                     if key == "=": s.parms["dist"]["value"] -= s.hud_dict_delta["dist"]
@@ -404,7 +410,7 @@ class State(object):
                 s.drawable_update_pvt()
                 s.drawable_update_ray()
             else:
-                cam = vp.defaultCamera()
+                cam = view.defaultCamera()
                 ow = cam.orthoWidth()
                 if key == "-": cam.setOrthoWidth(ow + s.hud_dict_delta["ow"])
                 elif key == "=": cam.setOrthoWidth(ow - s.hud_dict_delta["ow"])
@@ -495,8 +501,6 @@ class State(object):
 
     def focus_set_attr(s):
         s.v_log("focus", "func")
-        #if key == "j": s.focus_sel = s.list_next(s.focus_arr, s.focus_sel)
-        #elif key == "k": s.focus_sel = s.list_prev(s.focus_arr, s.focus_sel) 
         attr = hou.ui.readInput("focus_attr", buttons=("OK", "Cancel"), initial_contents=s.hud_dict_focus["focus_attr"])
         if attr[0] == 0:
             s.hud_dict_focus["focus_attr"] = attr[1]
@@ -505,10 +509,10 @@ class State(object):
 
     def geo_frame( s ):
         s.v_log("geo_frame", "func")
-        for vp in s.viewer.viewports():
-            cam = vp.camera()
-            if cam == None: vp.frameAll()
-            else: vp.frameAll()
+        for view in s.viewer.viewports():
+            cam = view.camera()
+            if cam == None: view.frameAll()
+            else: view.frameAll()
         #[vp.frameAll() for vp in s.viewer.viewports()]
         s.cam_to_state()
         #s.drawable_update_pvt()
@@ -548,18 +552,18 @@ class State(object):
             if x["id"][-2:] == "_g":
                 arr = None
                 # count the number of items in the array
-                if x["id"] == "hud_g": arr = s.hud_arr
-                else: arr = d[x["id"][0:-2] + "_arr"]
+                if x["id"] == "hud_g": arr = s.huds
+                else: arr = d[x["id"][0:-2] + "s"]
                 # set the number of bars in the graph
                 hud_dict["rows"][ct]["count"] = len(arr)
             ct += 1
 
     def hud_mode(s):
         s.v_log("hud_mode", "func")
-        idx = s.mode_arr.index(s.mode)
+        idx = s.modes.index(s.mode)
         idx += 1
         idx %= 2
-        s.mode = s.mode_arr[idx]
+        s.mode = s.modes[idx]
         s.hud_update()
         s.cam_fit_aspect()
 
@@ -567,41 +571,36 @@ class State(object):
         s.v_log("hud_nav", "func")
         # source common variables
         d = getattr(s, "hud_dict_" + s.hud)
-        d["hud_arr"] = s.hud_arr
+        d["huds"] = s.huds
         d["hud"] = s.hud
         ctrl = d["ctrl"]
         # select control        
         if key in ("j", "k"):
-            ctrl_arr = d["ctrl_arr"]
-            ctrl_idx = ctrl_arr.index(ctrl)
+            ctrls = d["ctrls"]
+            ctrl_idx = ctrls.index(ctrl)
             if key == "j": ctrl_idx += 1
             elif key == "k": ctrl_idx -= 1
-            ctrl_idx %= len(ctrl_arr)
-            ctrl = ctrl_arr[ctrl_idx]
+            ctrl_idx %= len(ctrls)
+            ctrl = ctrls[ctrl_idx]
             d["ctrl"] = ctrl
         # change control value
         elif key in ("h", "l"):
             if ctrl == "attr":
                 s.focus_set_attr() 
             else:
-                ctrl_val_arr = d[ctrl + "_arr"] 
+                ctrl_vals = d[ctrl + "s"] 
                 ctrl_val = d[ctrl]
-                ctrl_val_idx = ctrl_val_arr.index(ctrl_val)
+                ctrl_val_idx = ctrl_vals.index(ctrl_val)
                 if key == "h": ctrl_val_idx -= 1
                 elif key == "l": ctrl_val_idx += 1 
-                ctrl_val_idx %= len(ctrl_val_arr)
-                ctrl_val = ctrl_val_arr[ctrl_val_idx]
-                d[ctrl] = ctrl_val_arr[ctrl_val_idx]
+                ctrl_val_idx %= len(ctrl_vals)
+                ctrl_val = ctrl_vals[ctrl_val_idx]
+                d[ctrl] = ctrl_vals[ctrl_val_idx]
 
         # update dict 
         #setattr(s, s.hud + "_hud_dict", hud_dict)
-        if ctrl == "layout": s.vp_layout_set()
-        elif ctrl == "main_vp_view": s.cam_set_view()
-        #elif s.hud == "delta":
-        #    if key == "h": s.delta_dict[val ] -= s.unit_dict[val]
-        #    elif key == "j": s.unit_dict["val"] = s.list_prev(val_arr, val)
-        #    elif key == "k": s.unit_dict["val"] = s.list_next(val_arr, val)
-        #    elif key == "l": s.delta_dict[val ] += s.unit_dict[val]
+        if ctrl == "layout": s.view_layout_set()
+        elif ctrl == "main_view": s.cam_set_view()
         s.hud = d["hud"]
         s.hud_update()
 
@@ -623,13 +622,13 @@ class State(object):
                 # first three are common to all huds
                 if row["id"] == "mode": updates["mode"] = {"value": s.mode}
                 elif row["id"] == "hud": updates["hud"] = {"value": s.hud}
-                elif row["id"] == "hud_g": updates["hud_g"] = {"value": s.hud_arr.index(s.hud)}
+                elif row["id"] == "hud_g": updates["hud_g"] = {"value": s.huds.index(s.hud)}
                 # if it is a graph
                 elif row["id"][-2:] == "_g":
                     val_name = row["id"][0:-2]
                     val = v_d[val_name]
-                    val_arr = v_d[val_name + "_arr"]
-                    updates[row["id"]] = {"value": val_arr.index(val)}
+                    vals = v_d[val_name + "s"]
+                    updates[row["id"]] = {"value": vals.index(val)}
                 else:
                     val_name = row["id"]
                     val = v_d[val_name]
@@ -678,8 +677,8 @@ class State(object):
             s.v_log(s.geo_get_centroid(), "normal")
         elif key == "hud_state":
             x=1
-        elif key == "vp":
-            s.v_log(s.vp, "normal")
+        elif key == "view":
+            s.v_log(s.view, "normal")
 
     def print_kwargs(s, kwargs):
         s.v_log("print_kwargs", "func")
@@ -690,68 +689,68 @@ class State(object):
         s.v_log_separator()
         s.v_log(ui_event, "normal")
 
-    def vp_arr_populate(s):
-        s.v_log("vp_arr_populate", "func")
-        vp_arr = list( s.viewer.viewports() )
-        vp_arr.reverse()
-        vp_name_arr = []
-        for vp in vp_arr:
-            if vp.type() == s.vp_persp: vp_name_arr.append("main")
-            else: vp_name_arr.append(vp.name())
-        vp_name_arr.append("non-main")
-        s.hud_dict_layout["vp_name_arr"] = vp_name_arr
-        s.hud_dict_layout["vp_name"] = vp_name_arr[0]
+    def views_populate(s):
+        s.v_log("views_populate", "func")
+        views = list( s.viewer.viewports() )
+        views.reverse()
+        view_names = []
+        for view in views:
+            if view.type() == s.view_persp: view_names.append("main")
+            else: view_names.append(view.name())
+        view_names.append("non-main")
+        s.hud_dict_layout["view_names"] = view_names
+        s.hud_dict_layout["view_name"] = view_names[0]
         s.hud_dict_layout["layout" ] = str(s.viewer.viewportLayout()).split(".")[-1]
 
-    def vp_focus(s):
-        s.v_log("vp_focus", "func")
+    def view_focus(s):
+        s.v_log("view_focus", "func")
 
-    def vp_get(s):
-        s.v_log("vp_get", "func")
-        vp_name = s.hud_dict_layout["vp_name"]
-        if vp_name == "main": 
+    def views_get(s):
+        s.v_log("views_get", "func")
+        view = s.hud_dict_layout["view_name"]
+        if view == "main": 
             return [s.viewer.findViewport("persp1")]
-        elif vp_name == "non-main":
-            vp_arr = []
-            for vp in s.viewer.viewports():
-                if vp.name() != "persp1":
-                    vp_arr.append(vp)
-            vp_arr.reverse()
-            return vp_arr
+        elif view == "non-main":
+            views = []
+            for view in s.viewer.viewports():
+                if view.name() != "persp1":
+                    views.append(view)
+            views.reverse()
+            return views
         else:
-            return [s.viewer.findViewport(s.vp_name)]
+            return [s.viewer.findViewport(s.view)]
 
-    def vp_layout_set(s):
-        s.v_log("vp_layout_set", "func")
+    def view_layout_set(s):
+        s.v_log("view_layout_set", "func")
         layout = s.hud_dict_layout["layout"]
         s.viewer.setViewportLayout(getattr(hou.geometryViewportLayout, layout))
 
-    def vp_swap(s):
-        s.v_log("vp_swap", "func")
-        vp_arr = s.viewer.viewports()
-        vp_name_arr = [vp.name() for vp in vp_arr]
+    def view_swap(s):
+        s.v_log("view_swap", "func")
+        views = s.viewer.viewports()
+        view_names = [view.name() for view in views]
 
-        vp_name_arr = vp_name_arr[1:] + [vp_name_arr[0]]
-        vp_type_arr = vp_type_arr[1:] + [vp_type_arr[0]]
-        for i, vp in enumerate(vp_arr):
-            vp.changeName("v" * i)
-        for i, vp in enumerate(vp_arr):
-            vp.changeName(vp_name_arr[i])
-            vp.changeType(vp_type_arr[i])
-        # s.v_log(v_name_arr, "normal")
-        # s.v_log(v_type_arr, "normal")
+        views = views[1:] + [views[0]]
+        view_types = view_types[1:] + [view_types[0]]
+        for i, view in enumerate(viewa):
+            view.changeName("v" * i)
+        for i, view in enumerate(views):
+            view.changeName(views[i])
+            view.changeType(view_types[i])
+        # s.v_log(v_names, "normal")
+        # s.v_log(v_types, "normal")
 
-    def vp_type_set(s, code):
-        s.v_log("vp_type_set", "func")
-        vp_name = s.vp
-        vp = s.viewer.findViewport(vp_name)
-        if code == "persp": vp.changeType(s.vp_persp)
-        elif code == "top": vp.changeType(s.vp_top)
-        elif code == "bottom": vp.changeType(s.vp_bottom)
-        elif code == "front": vp.changeType(s.vp_front)
-        elif code == "back": vp.changeType(s.vp_back)
-        elif code == "right": vp.changeType(s.vp_right)
-        elif code == "left": vp.changeType(s.vp_left)
+    def view_type_set(s, code):
+        s.v_log("view_type_set", "func")
+        view_name = s.view_name
+        view = s.viewer.findViewport(view)
+        if code == "persp": view.changeType(s.view_persp)
+        elif code == "top": view.changeType(s.view_top)
+        elif code == "bottom": view.changeType(s.view_bottom)
+        elif code == "front": view.changeType(s.view_front)
+        elif code == "back": view.changeType(s.view_back)
+        elif code == "right": view.changeType(s.view_right)
+        elif code == "left": view.changeType(s.view_left)
 
     def v_log(s, message, level):
         if level == "normal": s.log(message)
@@ -776,10 +775,10 @@ class State(object):
         # prevent exiting state when selecting nodes
         kwargs["state_flags"]["exit_on_node_select"] = False
         # init vars
-        s.vp = s.viewer.selectedViewport()
+        s.view = s.viewer.selectedViewport()
         s.parms = kwargs["state_parms"]
         # vp/cam
-        s.vp_arr_populate()
+        s.views_populate()
         s.cam_init()
         # parms
         s.init_parms()
@@ -836,14 +835,14 @@ class State(object):
         elif action == "y_axis": s.drawable_update_axis(kwargs, "y")
         elif action == "z_axis": s.drawable_update_axis(kwargs, "z")
         # vw Menu
-        elif action == "vp_swap": s.vp_swap()
+        elif action == "view_swap": s.view_swap()
         # test menu
-        elif action == "vp_arr_populate": s.vp_arr_populate()
+        elif action == "views_populate": s.views_populate()
         # print menu
         elif action == "print_cam_vals": s.print("cam_vals")
         elif action == "print_centroid": s.print("centroid")
         elif action == "print_kwargs": s.print_kwargs(kwargs)
-        elif action == "print_vp": s.print("vp")
+        elif action == "print_view": s.print("view")
 
         # def onMouseEvent(s, kwargs):
         #     node = kwargs["node"]
@@ -892,7 +891,7 @@ def make_menu(template):
     menu.addActionItem("cam_reset", "cam_reset")
     menu.addActionItem("cam_fit_aspect", "cam_fit_aspect")
     menu.addActionItem("geo_frame", "geo_frame")
-    menu.addActionItem("swap_vp", "swap_vp")
+    menu.addActionItem("swap_view", "swap_view")
     menu.addSeparator()
     menu.addActionItem("show_all_axes", "show_all_axes")
     menu.addActionItem("hide_all_axes", "hide_all_axes")
@@ -904,10 +903,10 @@ def make_menu(template):
     menu.addActionItem("print_cam_vals", "print_cam_vals")
     menu.addActionItem("print_kwargs", "print_kwargs")
     menu.addActionItem("print_centroid", "print_centroid")
-    menu.addActionItem("print_vp", "print_vp")
+    menu.addActionItem("print_view", "print_view")
     menu.addSeparator()
     menu.addActionItem("cam_to_state", "cam_to_state")
-    menu.addActionItem("vp_arr_populate", "vp_arr_populate")
+    menu.addActionItem("views_populate", "views_populate")
     template.bindMenu(menu)
 
 def make_parameters(template):
