@@ -1,236 +1,241 @@
 #include "NodeGraphCommon.inc"
 #include "hou-theme-colors.inc"
 
-PaletteBackground:				grey2
-PaletteSelected:				YELLOW
-ShapePaletteShape:				grey7
+// Wires
+GraphConnector:                     #605000        // connector
+GraphConnectorLabel:                GREY(0.70)     // connector label
+GraphConnectorError:                #CE5E5E        // connector error
+GraphWire:                          #a09000        // wire
+GraphWireUnused:                    0.40 0.40 0.40 // wire unused
+GraphWireError:                     red            // wire error
+GraphWireLoopBack:                  0.30 0.30 1.00 // wire loopback
+GraphWireSelection:                 #ffbb00        // wire selection
+GraphWireNodeSelection:             yellow         // wire node selection
+GraphWireLongFaded:                 0.50 0.50 0.50 // wire long faded
+GraphWireLongerFaded:               0.50 0.50 0.50 // wire longer faded
+GraphWireStub:                      GREY(0.70)     // wire stub
+GraphWireStubSelection:             yellow         // wire stub selection
+GraphWireCut:                       red            // wire cut
+GraphWireCutPath:                   0.95 0.30 0.00 // wire cut path
+GraphWireStitchStart:               #B8E986        // wire stitch start
+GraphWireStitchEnd:                 #B8E986        // wire stitch end
+GraphSpareWire:                     #8967D9        // wire spare
+GraphParmOverrideWire:              #FFA500        // wire parm override
+GraphDependency:                    #9A6955        // dependency
+GraphDependencyEndAffector:         #668E4A        // dependency
+GraphDependencyExternalIn:          GREY(0.8)      // dependency
+GraphDependencyExternalOut:         GREY(0.8)      // dependency
 
-BackgroundImageLocate:				grey9
-BackgroundImageBorder:				YELLOW
-BackgroundImageBrightness:			YELLOW
-BackgroundImageLink:				GREY(0.8)
+// Selection
+GraphPickFill:                      #aa9000        // drag selection bg
+GraphPreSelection:                  0.75 0.86 1.0  // item pre selection
+GraphItemCurrent:                   #ffa000        // item current
+GraphItemCurrentNonSelected:        #aa7000        // item current non-selected
+GraphItemSelection:                 #aa7000        // multi-selection
+GraphItemSelectionContrast:         mud_lite       // item selection contrast
+GraphItemContentsSelection:         #6E780C        // item selection contents
+GraphSnapLine:                      #5C704D        // item snap line
+GraphDotPinAccent:                  GREY(0.3)      // dot accent
 
-GraphOverlayLeftText:				0.2 0.9 0.9
-GraphOverlayCenterText:				#a0a0a0
-GraphOverlayRightText:				#a0a0a0
+// General
+GraphBackground:                    #000000        // bg
+GraphPromptText:                    #404040
+GraphGridLines:                     #403000        // grid lines
+GraphGridPoints:                    mud_lite       // grid points
+GraphNameText:                      #a0a0a0        // node label
+GraphNodeTypeText:                  grey7          // node type text
+GraphCommentText:                   grey7          // node comment
+GraphDescriptiveNameText:           grey7          // node description?
+GraphContextOptionDepsText:         #6DB4BD
+GraphOutputForViewText:             #6DB4BD
+GraphDetailIdText:                  grey7
+GraphNetworkBoxText:                white          // network box text
+GraphNetworkBoxTextDark:            black        // network box text dark
+GraphNetworkBoxNameText:            #76A8E1        // network box
+GraphIndirectText:                  white
+GraphIndirectTextDark:              black
+GraphItemBorder:                    green
+GraphMinimizeButton:                GREY(0.8)
 
-GraphBackground:				#000000
-GraphOverviewBackground:			GREY(0.10)
-GraphOverviewViewRegion:			0.5 0.3 0.5
-GraphOverviewBorder:				grey0
-GraphPromptText:		    		#404040
-GraphGridLines:			    		#312638
-GraphGridPoints:		    		#303030
+// Palettes
+PaletteBackground:                  lite           // palette bg
+PaletteSelected:                    yellow         // palette selected
+ShapePaletteShape:                  grey7          // palette shape
+GraphOverviewBackground:            GREY(0.10)     // overview bg
+GraphOverviewViewRegion:            0.5 0.3 0.5    // overview region
+GraphOverviewBorder:                black        // overview border
 
-GraphNameText:		    	   		#a0a0a0
-GraphNodeTypeText:		       		grey7
-GraphCommentText:		       		grey7
-GraphDescriptiveNameText:	   		grey7
-GraphContextOptionDepsText:	   		#6DB4BD
-GraphLopLastModifiedPrimText:  		        #6DB4BD
-GraphLopLayerCountText:	       		        #6DB4BD
-GraphOutputForViewText:		   		#6DB4BD
-GraphDetailIdText:		       		grey7
-GraphNetworkBoxText:		   		grey9
-GraphNetworkBoxTextDark:	   		grey0
-GraphNetworkBoxNameText:       		        #76A8E1
-GraphIndirectText:		       		grey9
-GraphIndirectTextDark:		   		grey0
+// BG Image
+BackgroundImageLocate:              white
+BackgroundImageBorder:              yellow
+BackgroundImageBrightness:          yellow
+BackgroundImageLink:                GREY(0.8)
 
-GraphItemBorder:		       		green
-GraphMinimizeButton:		   		GREY(0.8)
+// Overlay Text
+GraphOverlayLeftText:               0.2 0.9 0.9
+GraphOverlayCenterText:             #a0a0a0
+GraphOverlayRightText:              #a0a0a0
 
-GraphTemplateFlag:		       		#606060
-GraphSelectableTemplateFlag:   		        #606060
-GraphBypassFlag:		       		#606060
-GraphRenderFlag:		       		#606060
-GraphDisplayFlag:		       		#606060
-GraphOutputFlag:		       		#606060
-GraphSelectableFlag:		   		#606060
-GraphExportFlag:		       		#FFA600
-GraphHiddenFlag:		       		#90BECD
-GraphAudioFlag:			       		0.0 0.5 0.5
-GraphThumbnailFlag:		       		0.35 0.6 0.2
-GraphLockFlag:			       		#FF 33 00
-GraphSoftLockFlag:		       		#C4 E3 61
-GraphDebugFlag:			       		#6CC6B2
-GraphMaterialFlag:		       		0.75 0.4 0.0
-GraphDisplayAndRenderFlag:	   		#606060
-GraphDisplayAndOutputFlag:	   		#606060
-GraphFilterFlag:		       		#55FFC1
+// Flags
+GraphTemplateFlag:                  mud            // flag template
+GraphSelectableTemplateFlag:        mud            // flag selectable template
+GraphBypassFlag:                    mud            // flag bypass
+GraphRenderFlag:                    mud            // flag render
+GraphDisplayFlag:                   mud            // flag display
+GraphOutputFlag:                    mud            // flag output
+GraphSelectableFlag:                mud            // flag selectable
+GraphExportFlag:                    mud            // flag export
+GraphHiddenFlag:                    #90BECD        // flag hidden
+GraphAudioFlag:                     0.00 0.50 0.50 // flag audio
+GraphThumbnailFlag:                 0.35 0.60 0.20 // flag thumbnail
+GraphLockFlag:                      #FF 33 00      // flag lock
+GraphSoftLockFlag:                  #C4 E3 61      // flag softlock
+GraphDebugFlag:                     #6CC6B2        // flag debug
+GraphMaterialFlag:                  0.75 0.40 0.00 // flag material
+GraphDisplayAndRenderFlag:          mud            // flag display and render
+GraphDisplayAndOutputFlag:          mud            // flag display and output
+GraphFilterFlag:                    #55FFC1        // flag filter
+GraphDisplayHighlight:              mud_dim        // circle hilite display
+GraphExportHighlight:               mud_dim        // circle hilite export
+GraphRenderHighlight:               mud_dim        // circle hilite render
+GraphOutputHighlight:               mud_dim        // circle hilite output
+GraphTemplateHighlight:             mud_dim        // circle hilite template
+GraphFilterHighlight:               mud_dim        // circle hilite filder
 
-GraphDisplayHighlight:				#606060
-GraphExportHighlight:				#606060
-GraphRenderHighlight:				#606060
-GraphOutputHighlight:				#606060
-GraphTemplateHighlight:				#606060
-GraphFilterHighlight:				#606060
+// DOPs
+GraphDopObjectData:                 0.65 0.65 0.65 // DOP object data
+GraphDopData:                       0.50 0.80 0.50 // DOP data
+GraphDopRelData:                    0.20 0.60 0.20 // DOP rel data
+GraphDopSolverData:                 0.70 0.50 0.90 // DOP solver data
+GraphDopAnyData:                    0.90 0.90 0.90 // DOP any data
 
-GraphDopObjectData:				0.65 0.65 0.65
-GraphDopData:					0.50 0.80 0.50
-GraphDopRelData:				0.20 0.60 0.20
-GraphDopSolverData:				0.7	0.5	0.9
-GraphDopAnyData:				0.9	0.9	0.9
-GraphSopHeightfield:				#25aa8e
-GraphSopConstraints:				#D879D8
-GraphSopDomain:		        		#6bcae2
-GraphSopRestGeometry:				0.584 0.776 1.0
-GraphSopCapturePose:				0.6 0.6 0.6
-GraphSopAnimatedPose:				1.0 0.725 0.0
+// SOPs
+GraphSopHeightfield:                #25aa8e        // SOP heightfield
+GraphSopConstraints:                #D879D8        // SOP constraint
+GraphSopDomain:                     #6bcae2        // SOP domain
+GraphSopRestGeometry:               0.584 0.776 1.0// SOP rest geo
+GraphSopCapturePose:                0.60 0.60 0.60 // SOP capture pose
+GraphSopAnimatedPose:               1.00 0.725 0.00// SOP anim pose
 
-GraphConnector:					#4e4e4e
-GraphConnectorLabel:				GREY(0.70)
-GraphConnectorError:				#CE5E5E
-GraphCopMaskInput:				0.50 0.80 0.50
-GraphWire:					#4e4e4e
-GraphWireUnused:				0.4 0.4 0.4
-GraphWireError:					RED
-GraphWireLoopBack:				0.3 0.3 1.0
-GraphWireSelection:				YELLOW
-GraphWireNodeSelection:				YELLOW
-GraphWireLongFaded:				0.5 0.5 0.5
-GraphWireLongerFaded:				0.5 0.5 0.5
-GraphWireStub:					GREY(0.70)
-GraphWireStubSelection:				YELLOW
-GraphWireCut:					RED
-GraphWireCutPath:				0.95 0.3 0.0
-GraphWireStitchStart:				#B8E986
-GraphWireStitchEnd:				#B8E986
-GraphSpareWire:					#8967D9
-GraphParmOverrideWire:				#FFA500
+// Subnet
+GraphSubnetShadow1:                 mud        // subnet shadow1
+GraphSubnetShadowBlend1:            0.9            // subnet shadow1 blend
+GraphSubnetShadow2:                 mud          // subnet shadow2
+GraphSubnetShadowBlend2:            0.9            // subnet shadow2 blend
 
-GraphDependency:				#9A6955
-GraphDependencyEndAffector:			#668E4A
-GraphDependencyExternalIn:			GREY(0.8)
-GraphDependencyExternalOut:			GREY(0.8)
+// Flyout
+GraphFlyoutBackgroundFlagOn:        black        // flyout
+GraphFlyoutBackgroundFlagOff:       black        // flyout
+GraphFlyoutEdgeFlagOff:             GREY(0.3)      // flyout
+GraphFlyoutInfo:                    GREY(0.1)      // flyout
+GraphFlyoutWarning:                 0.2 0.2 0.0    // flyout
+GraphFlyoutError:                   0.2 0.0 0.0    // flyout
 
-GraphPickFill:					0.9 0.9 0.9
-GraphPreSelection:				0.75 0.86 1.0
-GraphItemCurrent:				#a06060
-GraphItemCurrentNonSelected:		        #C89C9C
-GraphItemSelection:				#EEF81C
-GraphItemSelectionContrast:			grey0
-GraphItemContentsSelection:			#6E780C
-GraphSnapLine:					#5C704D
+// COPs
+GraphCopMaskInput:                  0.50 0.80 0.50 // COP mask input
+GraphCopPreviewBackground:          GREY(0.1)      // COP preview bg
+GraphCopBottomButtonEnabled:        GREY(0.1)      // COP
 
-GraphFlyoutBackgroundFlagOn:		        grey0
-GraphFlyoutBackgroundFlagOff:		        grey0
-GraphFlyoutEdgeFlagOff:				GREY(0.3)
-GraphFlyoutInfo:				GREY(0.1)
-GraphFlyoutWarning:				0.2 0.2 0.0
-GraphFlyoutError:				0.2 0.0 0.0
+// VOPs
+GraphVopConnectorGroupName:         white          // VOP
+GraphVopConnectorBackground:        grey4          // VOP node bg
+GraphVopBottomButtonEnabled:        GREY(0.1)      // VOP
+GraphVopBottomButtonDisabled:       GREY(0.6)      // VOP
 
-GraphDotPinAccent:				GREY(0.3)
+// SHOPs
+GraphShopConnectorBackground:       GREY(0.1)      // SHOP connector bg
 
-GraphCopPreviewBackground:			GREY(0.1)
-GraphCopBottomButtonEnabled:		        GREY(0.1)
+// Badges
+GraphErrorBadgeDot:                 red            // badge error
+GraphChildErrorBadgeDot:            1.00 0.00 0.00 // badge child error
+GraphWarningBadgeDot:               0.77 0.60 0.04 // badge warning
+GraphMessageBadgeDot:               0.05 0.45 1.00 // badge message
+GraphCommentBadgeDot:               0.15 0.67 0.64 // badge comment
+GraphNodeLockedBadgeDot:            1.00 0.35 0.43 // badge locked
+GraphNodeUnloadBadgeDot:            0.60 0.65 0.73 // badge unload
+GraphNodeHasDataBadgeDot:           0.45 0.75 0.45 // badge has data
+GraphNeedsCookBadgeDot:             0.97 0.91 0.11 // badge needs cook
+GraphHdaLockedBadgeDot:             0.43 0.47 0.48 // badge hda locked
+GraphHdaUnlockedBadgeDot:           0.98 0.49 0.55 // badge hda unlocked
+GraphHdaDelaySyncBadgeDot:          0.70 0.70 0.70 // badge hda delay sync
+GraphTimeDependentBadgeDot:         0.72 0.91 0.53 // badge time dependent
+GraphVexCachedBadgeDot:             #FF5AD2        // badge cached vex
+GraphVexCachableBadgeDot:           #AA3E8C        // badge cachable vex
+GraphNotCompilableBadgeDot:         #E5B985        // badge not compilable
+GraphConstraintsBadgeDot:           #97C473        // badge constraints
+GraphKinematicsBadgeDot:            #FF9370        // badge kinematics
+GraphHasTakeDataBadgeDot:           #979797        // badge has take data
+GraphNodeUnloadBadgeDot:            #D19F9F        // badge node unload
+GraphNodeHasDataBadgeDot:           #9FABD1        // badge has data
+Graph64bitBadgeDot:                 #AC68CC        // badge 64 bit
+GraphPdgDynamicBadgeDot:            #E5C8FF        // badge pdg dynamic
+GraphUnloadedPayloadsBadgeDot:      #EDC486        // badge unloaded payloads
+GraphPopulationMaskBadgeDot:        #A06B9A        // badge population mask
+GraphDiveableBadgeDot:              #73d216        // badge diveable
+GraphLoadFromDiskBadgeDot:          #dceefaff      // badge load from disk
 
-GraphVopConnectorGroupName:			grey9
-GraphVopConnectorBackground:		        grey4 // VOP node bg
-GraphVopBottomButtonEnabled:		        GREY(0.1)
-GraphVopBottomButtonDisabled:		        GREY(0.6)
+// LOPs
+GraphLopLayerOutline:               GREY(0.6)      // LOP layer outline
+GraphLopLayerColor1:                0.30 0.70 0.20 // LOP layer color 1
+GraphLopLayerColor2:                0.60 0.40 0.20 // LOP layer color 2
+GraphLopLayerColor3:                0.90 0.10 0.20 // LOP layer color 3
+GraphLopLayerColor4:                0.30 0.20 0.30 // LOP layer color 4
+GraphLopLayerColor5:                0.60 0.20 0.60 // LOP layer color 5
+GraphLopLayerColor6:                0.90 0.20 0.90 // LOP layer color 6
+GraphLopLayerColor7:                0.20 0.70 0.30 // LOP layer color 7
+GraphLopLayerColor8:                0.20 0.40 0.60 // LOP layer color 8
+GraphLopLayerColor9:                0.20 0.10 0.90 // LOP layer color 9
+GraphLopLastModifiedPrimText:       #6DB4BD
+GraphLopLayerCountText:             #6DB4BD
 
-GraphShopConnectorBackground:		        GREY(0.1)
-
-GraphSubnetShadow1:				grey0
-GraphSubnetShadowBlend1:			0.6
-GraphSubnetShadow2:				grey9
-GraphSubnetShadowBlend2:			0.3
-
-GraphErrorBadgeDot:				err
-GraphChildErrorBadgeDot:			1.00 0.00 0.00
-GraphWarningBadgeDot:				0.77 0.60 0.04
-GraphMessageBadgeDot:				0.05 0.45 1.00
-GraphCommentBadgeDot:				0.15 0.67 0.64
-GraphNodeLockedBadgeDot:			1.00 0.35 0.43
-GraphNodeUnloadBadgeDot:			0.60 0.65 0.73
-GraphNodeHasDataBadgeDot:			0.45 0.75 0.45
-GraphNeedsCookBadgeDot:				0.97 0.91 0.11
-GraphHdaLockedBadgeDot:				0.43 0.47 0.48
-GraphHdaUnlockedBadgeDot:			0.98 0.49 0.55
-GraphHdaDelaySyncBadgeDot:			0.70 0.70 0.70
-GraphTimeDependentBadgeDot:			0.72 0.91 0.53
-GraphVexCachedBadgeDot:				#FF5AD2
-GraphVexCachableBadgeDot:			#AA3E8C
-GraphNotCompilableBadgeDot:			#E5B985
-GraphConstraintsBadgeDot:			#97C473
-GraphKinematicsBadgeDot:			#FF9370
-GraphHasTakeDataBadgeDot:			#979797
-GraphNodeUnloadBadgeDot:        	        #D19F9F
-GraphNodeHasDataBadgeDot:       	        #9FABD1
-Graph64bitBadgeDot:       			#AC68CC
-GraphPdgDynamicBadgeDot:			#E5C8FF
-GraphUnloadedPayloadsBadgeDot:		        #EDC486
-GraphPopulationMaskBadgeDot:		        #A06B9A
-GraphDiveableBadgeDot:				#73d216
-GraphLoadFromDiskBadgeDot:			#dceefaff
-
-GraphPdgProgressOutline:			grey9
-GraphPdgProgressPrecook:			#324D59
-GraphPdgProgressCooking:			#B8E986
-GraphPdgProgressCooked:				#4D623F
-GraphPdgProgressWarning:			#EBF802
-GraphPdgProgressError:				#FF3300
-GraphPdgProgressIncomplete: 		        #75876A
-
-GraphPdgProgressErrorCircle:		        #D0021B
-GraphPdgProgressErrorFill:			#730000
-GraphPdgProgressNormalFill:			#232323
-
-GraphPdgSummaryBackground:  		        GREY(0.18)
-GraphPdgSummaryFilterOn:    		        FFD42A
-GraphPdgSummaryWorkItemCooked:		        #73945D
-GraphPdgSummaryWorkItemCooking:		        #B8E986
-GraphPdgSummaryWorkItemWaiting:		        #879889
-GraphPdgSummaryWorkItemUncooked:	        GREY(0.5)
-GraphPdgSummaryWorkItemFailed:		        #EE5A6C
-GraphPdgSummaryWorkItemCancelled:	        #EBB502
-
-GraphTaskGraphBackground:			GREY(0.1)
-GraphTaskGraphBorder:				GREY(0.7)
-GraphTaskGraphSeeMore:				GREY(0.9)
-GraphTaskGraphWorkItemCooked:		        #529232
-GraphTaskGraphWorkItemCached:		        #529232
-GraphTaskGraphWorkItemCooking:		        #ADFF49
-GraphTaskGraphWorkItemWaiting:		        #354B60
-GraphTaskGraphWorkItemUncooked:		        GREY(0.5)
-GraphTaskGraphWorkItemFailed:		        #FF3300
-GraphTaskGraphWorkItemCancelled:	        #69511B
-GraphTaskGraphWorkItemSelected:		        #FFD42A
-GraphTaskGraphWorkItemHovered:		        #33EEFF
-GraphTaskGraphWorkItemAncestor:		        #99FF79
-GraphTaskGraphWorkItemDescendant:	        #2AFFCB
-GraphTaskGraphNormalWire:			GREY(0.9)
-GraphTaskGraphMappedWire:			#80FFA2
-GraphTaskGraphIndirectWire:			#D9DD70
-
-GraphTaskGraphWorkItemPerfFast:                 #009166
-GraphTaskGraphWorkItemPerfMed:                  #f6ff00
-GraphTaskGraphWorkItemPerfSlow:                 #ff9000
-GraphTaskGraphWorkItemPerfNA:		        GREY(0.35)
-
-GraphTaskGraphStatusBarFailed:	                #FF9C9C
-GraphTaskGraphStatusBarCancelled:               #F7DF1B
-GraphTaskGraphStatusBarCooked:	                #529232
-GraphTaskGraphStatusBarCooking:	                #B7DF86
-GraphTaskGraphStatusBarWaiting:	                GREY(0.6)
-GraphTaskGraphStatusBarEmpty:	                GREY(0.2)
-
-GraphTaskGraphLogError:		    	        #D04548
-GraphTaskGraphLogWarning:	    	        #B8B834
-
-GraphTaskPageRect:              	        #D8D8D8
-
-GraphTopBottomButtonEnabled:		        GREY(0.1)
-GraphTopBottomButtonDisabled:		        GREY(0.6)
-
-GraphLopLayerOutline:				GREY(0.6)
-GraphLopLayerColor1:				0.30 0.70 0.20
-GraphLopLayerColor2:				0.60 0.40 0.20
-GraphLopLayerColor3:				0.90 0.10 0.20
-GraphLopLayerColor4:				0.30 0.20 0.30
-GraphLopLayerColor5:				0.60 0.20 0.60
-GraphLopLayerColor6:				0.90 0.20 0.90
-GraphLopLayerColor7:				0.20 0.70 0.30
-GraphLopLayerColor8:				0.20 0.40 0.60
-GraphLopLayerColor9:				0.20 0.10 0.90
+// TOPs
+GraphPdgProgressOutline:            white          // PDG progress outline
+GraphPdgProgressPrecook:            #324D59        // PDG progress precook
+GraphPdgProgressCooking:            #B8E986        // PDG progress cooking
+GraphPdgProgressCooked:             #4D623F        // PDG progress cooked
+GraphPdgProgressWarning:            #EBF802        // PDG progress warning
+GraphPdgProgressError:              #FF3300        // PDG progress error
+GraphPdgProgressIncomplete:         #75876A        // PDG progress incomplete
+GraphPdgProgressErrorCircle:        #D0021B        // PDG progress error circle
+GraphPdgProgressErrorFill:          #730000        // PDG progress error fill
+GraphPdgProgressNormalFill:         #232323        // PDG progress normal fill
+GraphPdgSummaryBackground:          GREY(0.18)     // PDG summary bg
+GraphPdgSummaryFilterOn:            FFD42A         // PDG summary filter on
+GraphPdgSummaryWorkItemCooked:      #73945D        // PDG summary work item cooked
+GraphPdgSummaryWorkItemCooking:     #B8E986        // PDG summary work item cooking
+GraphPdgSummaryWorkItemWaiting:     #879889        // PDG summary work item waiting
+GraphPdgSummaryWorkItemUncooked:    GREY(0.5)      // PDG summary work item uncooked
+GraphPdgSummaryWorkItemFailed:      #EE5A6C        // PDG summary work item failed
+GraphPdgSummaryWorkItemCancelled:   #EBB502        // PDG summary work item cancelled
+GraphTaskGraphBackground:           GREY(0.1)      // task graph bg
+GraphTaskGraphBorder:               GREY(0.7)      // task graph border
+GraphTaskGraphSeeMore:              GREY(0.9)      // task graph see more
+GraphTaskGraphWorkItemCooked:       #529232        // task graph work item cooked
+GraphTaskGraphWorkItemCached:       #529232        // task graph work item cached
+GraphTaskGraphWorkItemCooking:      #ADFF49        // task graph work item cooking
+GraphTaskGraphWorkItemWaiting:      #354B60        // task graph work item waiting
+GraphTaskGraphWorkItemUncooked:     GREY(0.5)      // task graph work item uncooked
+GraphTaskGraphWorkItemFailed:       #FF3300        // task graph work item failed
+GraphTaskGraphWorkItemCancelled:    #69511B        // task graph work item cancelled
+GraphTaskGraphWorkItemSelected:     #FFD42A        // task graph work item selected
+GraphTaskGraphWorkItemHovered:      #33EEFF        // task graph work item hovered
+GraphTaskGraphWorkItemAncestor:     #99FF79        // task graph work item ancestor
+GraphTaskGraphWorkItemDescendant:   #2AFFCB        // task graph work item descendant
+GraphTaskGraphNormalWire:           GREY(0.9)      // task graph wire normal
+GraphTaskGraphMappedWire:           #80FFA2        // task graph wire mapped
+GraphTaskGraphIndirectWire:         #D9DD70        // task graph wire indirect
+GraphTaskGraphWorkItemPerfFast:     #009166        // task graph work item performance fast
+GraphTaskGraphWorkItemPerfMed:      #f6ff00        // task graph work item performance med
+GraphTaskGraphWorkItemPerfSlow:     #ff9000        // task graph work item performance slow
+GraphTaskGraphWorkItemPerfNA:       GREY(0.35)     // task graph work item performance NA
+GraphTaskGraphStatusBarFailed:      #FF9C9C        // task graph status bar failed
+GraphTaskGraphStatusBarCancelled:   #F7DF1B        // task graph satus bar cancelled
+GraphTaskGraphStatusBarCooked:      #529232        // task graph status bar cooked
+GraphTaskGraphStatusBarCooking:     #B7DF86        // task graph status bar cooking
+GraphTaskGraphStatusBarWaiting:     GREY(0.6)      // task graph status bar waiting
+GraphTaskGraphStatusBarEmpty:       GREY(0.2)      // task graph status bar empty
+GraphTaskGraphLogError:             #D04548        // task graph log error
+GraphTaskGraphLogWarning:           #B8B834        // task graph log warning
+GraphTaskPageRect:                  #D8D8D8
+GraphTopBottomButtonEnabled:        GREY(0.1)
+GraphTopBottomButtonDisabled:       GREY(0.6BADGES)

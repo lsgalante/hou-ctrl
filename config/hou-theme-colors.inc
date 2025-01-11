@@ -1,37 +1,45 @@
-#define error       HSV 20 0.5 0.5
-#define blue        #3047ba
-#define green       #00ff00
-#define red	    #ff0000
+#define lite           #151515
 
-#define blue0       #000036
-#define blue1       #114BD3
-#define blue2       #116CD3
-#define blue3       #03022B
-#define blue7       #6284ff
+#define error          HSV 20 0.5 0.5
+#define blue           #3047ba
+#define green          #00ff00
+#define red	           #ff0000
+#define white          #ffffff
+#define pink           #f080f0
+#define yellow         #ffff00
+#define black          #000000
 
-#define brown1      #161414
+#define grey1          #101010
+#define grey3          #181818
+#define grey4          #202020
+#define grey7          #909090
 
-#define grey0       #000000
-#define grey1       #101010
-#define grey2       #151515
-#define grey3       #181818
-#define grey4       #202020
-#define grey5       #404040
-#define grey6       #505050
-#define grey7       #909090
-#define grey8       #a0a0a0
-#define grey9       #ffffff
+#define fg_lite        #a0a0a0
+#define fg_mid         #c0c0c0
+#define fg_dim         #404040
 
-#define red1        #2e2525
-#define red2        #4e3e38
-#define red9        #ff0000
+#define main_sep       #2e2525
+#define main_lo        #000000
 
-#define yellow0     #c4b8a0
-#define yellow1     #6A5148
+#define separator      #505000
 
-#define main_text   #c0c0c0
-#define main_sep    #2e2525
-#define main_hi     #c0c0c0
-#define dim_hi      #606060
-#define main_hilite #4c2513
-#define main_lo     #000000
+#define selected       #6060f0
+#define unselected     #505080
+
+#define hilite_blue    #c0c0ff
+
+#define hilite_red     #ff80a0
+#define hilite_dim_red #a070a0
+
+#define mud_dim        #201b00
+#define mud            #302b00
+#define mud_lite       #605b00
+
+#define mud_textbox    #201b00
+#define mud_border_selected #c0a000
+#define mud_hover_bg   #302b00
+
+#define button_bg      #303000
+#define button_fg      #605000
+
+#define button_pressed_bg #505000

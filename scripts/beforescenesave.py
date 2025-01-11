@@ -2,7 +2,7 @@ import os.path
 
 this_path = hou.hipFile.path()
 
-path = "~/src/hou-ctrl/recent_paths"
+path = "~/src/hou-ctl/recent_paths"
 path = os.path.expanduser(path)
 file = open(path, "r")
 path_arr = file.read().split("\n")

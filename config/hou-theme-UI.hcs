@@ -1,4 +1,4 @@
-Scheme: hou-theme
+Sceme: hou-theme
 
 #include "basic_colors.inc"
 #include "hou-theme-NodeGraph.inc"
@@ -9,11 +9,7 @@ Scheme: hou-theme
 #define PRESSED_LOW                     #768EA7
 #define EDIT_BG                         GREY(0.075)
 
-#define lite                            #1a1a1a
-#define dark                            #000000
 #define dark_b                          #010101
-#define text                            #a0a0a0
-#define text_dim                        #404040
 
 // icons
 
@@ -24,156 +20,158 @@ IconSaturation: 0.0
 
 // new ui resources 
 
-BackColor:                              dark         // if white lines appear, adjust the BorderDark (auto contrast code)
-BorderLight:                            lite
-BorderDark:                             dark_b
+BackColor:                              black           // if white lines appear, adjust the BorderDark (auto contrast code)
+BorderLight:                            mud
+BorderDark:                             mud
 
-DialogBlendBG:                          dark           // messages, etc
-
+DialogBlendBG:                          black           // messages, etc
 DropIndicator                           0.0 0.0 1.0
+GalleryBackground:                      black
+SnapshotGalleryBackground:              black
 
-GalleryBackground:                      dark
-SnapshotGalleryBackground:              dark
+// Spreadsheet
 
-ListShadow:                             dark
-ListHighlight:                          dark
-ListBorder:                             dark
-ListBG:                                 dark         // Bg in some random windows
-ListEntry1:                             dark
-ListEntry2:                             #0e0e0e
-ListEntrySelected:                      #606060
-ListTitleShadow:                        lite
-ListTitleHighlight:                     dark
-ListTitleGradHi:                        dark
-ListTitleGradLow:                       dark
+ListShadow:                             #202000
+ListHighlight:                          #202000
+ListBorder:                             #202000
+ListBG:                                 black           // bg in some random windows
+ListEntry1:                             black
+ListEntry2:                             #101000
+ListEntrySelected:                      mud_lite
+ListTitleShadow:                        #202000         // border
+ListTitleHighlight:                     #202000         // border
+ListTitleGradHi:                        black
+ListTitleGradLow:                       black
 ListTitleHighlightGradHi:               blue
 ListTitleHighlightGradLow:              blue
-ListTitleFilteredText:                  text
-ListText:                               text         // Fg in download color scheme window
-ListAltText:                            text
-ListHoverHighlight:                     lite
+ListTitleFilteredText:                  fg_lite
+ListText:                               fg_lite         // fg in download color scheme window
+ListAltText:                            fg_lite
+ListHoverHighlight:                     mud_hover_bg
+SSBorder:                               #404000         // spreadsheet column divider
 
-MenuBG:                                 dark
-MenuText:                               text
-MenuTextDisabled:                       text_dim
-MenuTextHotkey:                         text_dim
-MenuHighlight:                          lite
-MenuShadow:                             lite
-MenuTextSelected:                       text
-MenuSelectedBG:                         lite
+// Menu
+
+MenuBG:                                 black
+MenuText:                               fg_lite
+MenuTextDisabled:                       fg_dim
+MenuTextHotkey:                         fg_dim
+MenuHighlight:                          mud_lite
+MenuShadow:                             mud_lite
+MenuTextSelected:                       fg_lite
+MenuSelectedBG:                         mud_hover_bg
 MenuTitleBG:                            lite
-InvertedMenuBackground:                 green
+InvertedMenuBackground:                 red
 
-TextColor:                              text
-HiliteTextColor:                        green
-HiliteTextBG:                           green
-SecondaryText:                          dim_hi
+TextColor:                              fg_lite
+HiliteTextBG:                           red
+SecondaryText:                          separator
 LinkText:                               #64ACFF
 
 ToolbarBevelLight:                      lite
 ToolbarBevelDark:                       lite
-ToolbarFlatGradHi:                      dark
-ToolbarFlatGradLo:                      dark
+ToolbarFlatGradHi:                      black
+ToolbarFlatGradLo:                      black
 
-// ladder
+// Ladder
 
-LadderBG:                               dark
-LadderText:                             text
+LadderBG:                               black
+LadderText:                             fg_lite
 LadderHighlight:                        lite
 LadderOutline:                          lite
-LadderShadow:                           green
+LadderShadow:                           red
 
-// parameter controls
+// parameters
 
-ButtonGradHi:                           lite
-ButtonGradLow:                          lite
-ButtonNonActiveGradLow:                 dark
+ButtonGradHi:                           button_bg
+ButtonGradLow:                          button_bg
+ButtonNonActiveGradLow:                 button_bg
 ButtonShadowLight:                      lite
 ButtonShadowMed:                        lite
 ButtonShadowMedDark:                    lite
 ButtonShadowDark:                       lite
 ButtonShadow:                           lite
-ButtonText:                             text
-ButtonHoverHighlight:                   text_dim
-ButtonPressedText:                      text
-ButtonPressedText2:                     text
-ButtonPressedGradHi:                    lite
-ButtonPressedGradLow:                   lite
-ButtonMenuArrowHi:                      lite
-ButtonMenuArrowLow:                     lite
-ButtonMenuArrow:                        text_dim
-ButtonArrow:                            text_dim
+ButtonText:                             fg_lite
+ButtonHoverHighlight:                   mud_hover_bg
+ButtonPressedText:                      fg_lite
+ButtonPressedText2:                     fg_lite
+ButtonPressedGradHi:                    button_pressed_bg
+ButtonPressedGradLow:                   button_pressed_bg
+ButtonMenuArrowHi:                      button_bg
+ButtonMenuArrowLow:                     button_bg
+ButtonMenuArrow:                        button_fg
+ButtonArrow:                            fg_dim
 ButtonArrowDisabled:                    lite
-ButtonArrowPressed:                     text_dim
-ButtonArrowModified:                    text_dim
+ButtonArrowPressed:                     fg_dim
+ButtonArrowModified:                    fg_dim
 
-CheckBG:                                dark
-CheckLocated:                           text
-CheckColor:                             text
+CheckBG:                                mud_textbox
+CheckLocated:                           fg_lite
+CheckColor:                             fg_lite
 
-RadioBG:                                dark
-RadioBorder:                            text_dim
-RadioDot:                               text_dim
-RadioDotHighlight:                      text)dim
+RadioBG:                                black
+RadioBorder:                            fg_dim
+RadioDot:                               fg_dim
+RadioDotHighlight:                      fg_dim
 
-RampBG:                                 grey4
-RampFG:                                 grey4
+RampBG:                                 black
+RampFG:                                 #101030
 RampBGDisabled:                         GREY(0.3)
 RampFGDisabled:                         GREY(0.45)
 RampGrid:                               GREY(0.3)
-RampCurve:                              #b0b0b0
+RampCurve:                              selected
 RampCurveDisabled:                      #202020
-RampKeyBG:                              #b0b0b0
-RampKeyFG:                              #b0b0b0
-RampKeyDisabled:                        green
-RampKeyHoverBG:                         #b0b0b0
-RampKeyHoverFG:                         #b0b0b0
-RampHandleBG:                           #404040
-RampHandleFG:                           #b0b0b0
-RampHandleHoverBG:                      #b0b0b0
-RampHandleHoverFG:                      #b0b0b0
-RampHandleLines:                        grey5
-RampHandleLinesHover:                   grey5
-RampBoxSelect:                          GREY(0.3)
-RampMarkerHover:                        #b0b0b0
-RampConstraintGuide:                    #b0b0b0
+RampKeyBG:                              unselected
+RampKeyFG:                              #a06060              // ramp selected key
+RampKeyDisabled:                        #404040
+RampKeyHoverBG:                         selected
+RampKeyHoverFG:                         selected
+RampHandleBG:                           #ff0000
+RampHandleFG:                           unselected
+RampHandleHoverBG:                      selected
+RampHandleHoverFG:                      selected
+RampHandleLines:                        unselected
+RampHandleLinesHover:                   selected
+RampBoxSelect:                          #ff0000
+RampMarkerHover:                        unselected
+RampConstraintGuide:                    #ff0000
 
 SliderTopBorder:                        lite
 SliderBottomBorder:                     lite
-SliderAdvancedBevel:                    text_dim
-SliderAdvancedGroove:                   text_dim
-SliderRemainingBevel:                   lite
-SliderRemainingGroove:                  lite
-SliderTick:                             text_dim
-SliderTickLabel:                        text_dim
-SliderRangeBrackets:                    text_dim
+SliderAdvancedBevel:                    #383800
+SliderAdvancedGroove:                   #383800
+SliderRemainingBevel:                   #201800
+SliderRemainingGroove:                  #201800
+SliderTick:                             mud_lite
+SliderTickLabel:                        fg_dim
+SliderRangeBrackets:                    fg_dim
 SliderThumbGradHi:                      lite
 SliderThumbGradLow:                     lite
 SliderThumbPressedGradHi:               lite
 SliderThumbPressedGradLow:              lite
-SliderThumbTopBorder:                   text_dim
+SliderThumbTopBorder:                   fg_dim
 SliderThumbTopBevel:                    lite
 SliderThumbBottomBevel                  lite
-SliderThumbBottomBorder:                text_dim
-SliderThumbRangeArrow:                  text_dim
+SliderThumbBottomBorder:                fg_dim
+SliderThumbRangeArrow:                  fg_dim
 
-TextboxBG:                              dark
+TextboxBG:                              button_bg
 TextboxInvalidBG:                       red
-TextboxBorderPrimary:                   lite
-TextboxBorderHighlight:                 dark
-TextboxBorderStippled:                  green
-TextboxBorderKeyFocus:                  text_dim
+TextboxBorderPrimary:                   #000000
+TextboxBorderHighlight:                 button_bg
+TextboxBorderStippled:                  red
+TextboxBorderKeyFocus:                  mud_border_selected  // Textbox border when selected
 TextboxError:                           red
 TextboxGutter:                          #602020
 TextboxDropMarker:                      HSV  238  0.40  0.88
 
-TextboxFeedbackFG:                      dim_hi
-TextboxFeedbackBG:                      green
-SelectedTextFG:                         text
-SelectedTextBG:                         text_dim
+TextboxFeedbackFG:                      separator
+TextboxFeedbackBG:                      red
+SelectedTextFG:                         #404040
+SelectedTextBG:                         #a0a0a0              // cursor
 SelectedTextDisabledBG:                 GREY(0.3)
 
-// other ui controls
+// Other UI Controls
 
 KeyframeButtonSelectedGradHi:           GREY(0.5067645)
 KeyframeButtonSelectedGradLow:          GREY(0.3429417)
@@ -181,12 +179,12 @@ KeyframeButtonLocatedGradHi:            GREY(0.4054116)
 KeyframeButtonLocatedGradLow:           GREY(0.27435336)
 KeyframeButtonGradHi:                   lite
 KeyframeButtonGradLow:                  lite
-KeyframeButtonCircleKey:                text_dim
-KeyframeButtonCircleSomeKey:            text_dim
-KeyframeButtonCircleNoKey:              text_dim
-KeyframeButtonCirclePending:            text_dim
-KeyframeButtonBorder:                   text_dim
-KeyframeButtonCircleFillOpacity:        text_dim
+KeyframeButtonCircleKey:                fg_dim
+KeyframeButtonCircleSomeKey:            fg_dim
+KeyframeButtonCircleNoKey:              fg_dim
+KeyframeButtonCirclePending:            fg_dim
+KeyframeButtonBorder:                   fg_dim
+KeyframeButtonCircleFillOpacity:        fg_dim
 
 LeverSliderBG:                           GREY(0.12)
 LeverSliderTopBevel:                     GREY(0.16)
@@ -202,76 +200,76 @@ LeverSliderThumbText:                    GREY(0.77)
 LeverSliderThumbTopBevel:                GREY(0.36)
 LeverSliderThumbBottomBevel:             GREY(0.09)
 LeverSliderThumbTopBorder:               GREY(0.2)
-LeverSliderThumbBottomBorder:            grey0
+LeverSliderThumbBottomBorder:            black
 LeverSliderThumbGradBottom:              GREY(0.22)
 LeverSliderThumbGradTop:                 GREY(0.36)
-LeverSliderThumbRangeArrow:              grey0
+LeverSliderThumbRangeArrow:              black
 LeverSliderThumbPressedGradBottom:       PRESSED_HIGH
 LeverSliderThumbPressedGradTop:          PRESSED_LOW
 
-ProgressMeterPercentLabelLeft:           grey0
-ProgressMeterPercentLabelRight:          grey9
+ProgressMeterPercentLabelLeft:           black
+ProgressMeterPercentLabelRight:          white
 ProgressMeterTopBorder:                  grey1
 ProgressMeterBottomBorder:               grey1
-ProgressMeterWellGradHi:                 grey0
-ProgressMeterWellGradLo:                 grey0
-ProgressMeterBevelTop:                   grey9
+ProgressMeterWellGradHi:                 black
+ProgressMeterWellGradLo:                 black
+ProgressMeterBevelTop:                   white
 ProgressMeterBevelBottom:                grey4
-ProgressMeterGradHi:                     grey5
-ProgressMeterGradLo:                     grey5
-ProgressMeterText:                       grey8
+ProgressMeterGradHi:                     fg_dim
+ProgressMeterGradLo:                     fg_dim
+ProgressMeterText:                       fg_lite
 
-RangeSliderBackground:                   grey0
-RangeSliderRect:                         grey6
-RangeSliderRectLocated:                  grey6
-RangeSliderRectSelected:                 grey6
-RangeSliderArrow:                        grey6
-RangeSliderArrowLocated:                 grey6
-RangeSliderArrowSelected:                grey6
+RangeSliderBackground:                   black
+RangeSliderRect:                         #504000
+RangeSliderRectLocated:                  separator
+RangeSliderRectSelected:                 separator
+RangeSliderArrow:                        separator
+RangeSliderArrowLocated:                 separator
+RangeSliderArrowSelected:                separator
 
 ScrollbarUpperBorder:                    lite
 ScrollbarBottomBorder:                   lite
-ScrollbarWell:                           dark
-ScrollbarWellShadow1:                    dark
-ScrollbarWellShadow2:                    dark
-ScrollbarWellShadow3:                    dark
-ScrollbarWellShadowBlend12:              dark
-ScrollbarWellShadowBlend13:              dark
-ScrollbarWellShadowBlend22:              dark
-ScrollbarWellShadowBlend23:              dark
-ScrollbarWellShadowBlend32:              dark
-ScrollbarWellShadowBlend33:              dark
+ScrollbarWell:                           black
+ScrollbarWellShadow1:                    black
+ScrollbarWellShadow2:                    black
+ScrollbarWellShadow3:                    black
+ScrollbarWellShadowBlend12:              black
+ScrollbarWellShadowBlend13:              black
+ScrollbarWellShadowBlend22:              black
+ScrollbarWellShadowBlend23:              black
+ScrollbarWellShadowBlend32:              black
+ScrollbarWellShadowBlend33:              black
 ScrollbarThumbTopBorder:                 lite
 ScrollbarThumbBottomBorder:              lite
 ScrollbarThumbBevel:                     lite
-ScrollbarThumbGrippyBase:                lite
-ScrollbarThumbGrippyEdge:                lite
+ScrollbarThumbGrippyBase:                button_bg
+ScrollbarThumbGrippyEdge:                button_bg
 ScrollbarButtonTopBorder:                lite
 ScrollbarButtonBottomBorder:             lite
 ScrollbarButtonBetweenBorder:            lite
 ScrollbarButtonBevel:                    lite
-ScrollbarButtonArrow:                    text_dim
+ScrollbarButtonArrow:                    button_fg
 
 ScrollArrow:                             lite
 ScrollArrowSelected:                     lite
-ScrollArrowDisabled:                     dark
-Separator:                               lite
+ScrollArrowDisabled:                     black
+Separator:                               button_bg
 
-SwitchButtonSelected:                    green
-SwitchButtonLocated:                     green
+SwitchButtonSelected:                    red
+SwitchButtonLocated:                     red
 
-// spreadsheet
+// Spreadsheet
 
-SSBorder:                                lite               // Spreadsheet column divider
-SSOutline:                               DropIndicator       // Spreadsheet drag & drop outline
+SSOutline:                               DropIndicator     // spreadsheet drag & drop outline
 
 // Highlight Alpha in the channel lister
 // Red for the Displayed Channel Alpha
 // Green for the Graph Selected Channel Alpha
-SSHighlightAlpha:                        0.25 0.55 0.0
-SSHeader:                                green
 
-// parameter pane
+SSHighlightAlpha:                        0.25 0.55 0.0
+SSHeader:                                red
+
+// Parameter Pane
 
 GroupBorder:                             lite
 
@@ -279,11 +277,11 @@ GroupHeader0:                            lite
 GroupHeaderTop0:                         lite
 GroupHeaderHi0:                          lite
 GroupHeaderHiTop0:                       lite
-GroupHeaderOpen0:                        lite
-GroupHeaderOpenTop0:                     lite
+GroupHeaderOpen0:                        button_pressed_bg // selected tab
+GroupHeaderOpenTop0:                     button_pressed_bg // selected tab
 GroupHeaderDisabled0:                    lite
 GroupHeaderDisabledTop0:                 lite
-GroupBody0:                              dark
+GroupBody0:                              black
 
 GroupHeader1:                            lite
 GroupHeaderTop1:                         lite
@@ -324,238 +322,238 @@ CreateAssetBasename:                     #ffffcc        // yellow
 CreateAssetVersion:                      #ffcccc        // pink
 
 InfoBG:                                  dim
-InfoText:                                green
+InfoText:                                red
 
-// popup
+// Popup
 
-PopupHelpBG:                            dark
-PopupHelpFG:                            text
-PopupHelpHotkeyFG:                      text_dim
-PopupExtraHelpFG:                       text
-PopupExtraHelpBG:                       lite
+PopupHelpBG:                             black
+PopupHelpFG:                             fg_lite
+PopupHelpHotkeyFG:                       fg_dim
+PopupExtraHelpFG:                        fg_lite
+PopupExtraHelpBG:                        lite
 
-// tool shelf
+// Tool Shelf
 
-ShelfGradHi:                            dark
-ShelfGradMidHi:                         dark
-ShelfGradMidLow:                        dark
-ShelfGradLow:                           dark
-ShelfBG:                                dim     // This does not appear to be used
-ShelfEmptyBG:                           dark
-ShelfTabActiveHi:                       lite
-ShelfTabActiveLow:                      lite
-ShelfTabInactiveHi:                     dark
-ShelfTabInactiveLow:                    dark
+ShelfGradHi:                             black
+ShelfGradMidHi:                          black
+ShelfGradMidLow:                         black
+ShelfGradLow:                            black
+ShelfBG:                                 dim           // does not appear to be used
+ShelfEmptyBG:                            black
+ShelfTabActiveHi:                        lite
+ShelfTabActiveLow:                       lite
+ShelfTabInactiveHi:                      black
+ShelfTabInactiveLow:                     black
 
-// pane tabs
+// Pane Tabs
 
-PaneTabActiveHi:                        lite
-PaneTabActiveLow:                       lite
-PaneTabInactiveHi:                      dark
-PaneTabInactiveLow:                     dark
-PaneTabEdges:                           dark
-PaneEmptyBG:                            dark
-PaneBorder:                             dark
-PaneHeaderGradHi:                       dark
-PaneHeaderGradLow:                      dark
-PaneTabShadow:                          dark
-PaneTabMarker:                          lite
+PaneTabActiveHi:                         lite
+PaneTabActiveLow:                        lite
+PaneTabInactiveHi:                       black
+PaneTabInactiveLow:                      black
+PaneTabEdges:                            black
+PaneEmptyBG:                             black
+PaneBorder:                              black
+PaneHeaderGradHi:                        black
+PaneHeaderGradLow:                       black
+PaneTabShadow:                           black
+PaneTabMarker:                           lite
 
-// Used on pane tabs to indicate data type
-// Tints, not colors
+// used on pane tabs to indicate data type
+// tints, not colors
 
-ObjectColor:                            HSV 210 0.20 1.75
-SopColor:                               HSV 100 0.20 2
-DopColor:                               HSV 0 0.20 2
-PopNetColor:                            HSV 170 0.20 1.75
-PopColor:                               HSV 170 0.20 1.75
-ShopColor:                              HSV 340 0.20 1.75
-VopNetColor:                            HSV 260 0.20 1.75
-VopColor:                               HSV 260 0.20 1.75
-ChopNetColor:                           HSV 60 0.20 1.75
-ChopColor:                              HSV 60 0.20 1.75
-CopNet2Color:                           HSV 40 0.20 2
-Cop2Color:                              HSV 40 0.20 2
-OutputColor:                            HSV 20 0.20 2
-RootColor:                              HSV 0 0 1
+ObjectColor:                             HSV  210  0.20  1.75
+SopColor:                                HSV  100  0.20  2
+DopColor:                                HSV  0    0.20  2
+PopNetColor:                             HSV  170  0.20  1.75
+PopColor:                                HSV  170  0.20  1.75
+ShopColor:                               HSV  340  0.20  1.75
+VopNetColor:                             HSV  260  0.20  1.75
+VopColor:                                HSV  260  0.20  1.75
+ChopNetColor:                            HSV  60   0.20  1.75
+ChopColor:                               HSV  60   0.20  1.75
+CopNet2Color:                            HSV  40   0.20  2
+Cop2Color:                               HSV  40   0.20  2
+OutputColor:                             HSV  20   0.20  2
+RootColor:                               HSV  0    0     1
 
-// path gadget
+// Path Gadget
 
-PathGadgetArrow1:                       text_dim
-PathGadgetArrow2:                       dark
-PathGadgetArrow3:                       dark
-PathGadgetArrow1Selected:               text_dim
-PathGadgetArrow2Selected:               dark
-PathGadgetArrow3Selected:               dark
-PathGadgetPrimaryBorder:                dark
-PathGadgetSecondaryBorder:              dark
-PathGadgetPrimaryBorderSelected:        lite
-PathGadgetSecondaryBorderSelected:      lite
-PathGadgetBevel:                        dark
-PathGadgetBevelSelected:                lite
-PathGadgetText:                         text
-PathGadgetGradHi:                       dark
-PathGadgetGradLow:                      dark
-PathGadgetGradHiSelected:               lite
-PathGadgetGradLowSelected:              lite
-PathGadgetHistoryButtonBevel:           lite
-PathGadgetHistoryButtonBevelSelected:   lite
+PathGadgetArrow1:                        fg_dim
+PathGadgetArrow2:                        black
+PathGadgetArrow3:                        black
+PathGadgetArrow1Selected:                fg_dim
+PathGadgetArrow2Selected:                black
+PathGadgetArrow3Selected:                black
+PathGadgetPrimaryBorder:                 black
+PathGadgetSecondaryBorder:               black
+PathGadgetPrimaryBorderSelected:         lite
+PathGadgetSecondaryBorderSelected:       lite
+PathGadgetBevel:                         black
+PathGadgetBevelSelected:                 lite
+PathGadgetText:                          fg_lite
+PathGadgetGradHi:                        black
+PathGadgetGradLow:                       black
+PathGadgetGradHiSelected:                lite
+PathGadgetGradLowSelected:               lite
+PathGadgetHistoryButtonBevel:            lite
+PathGadgetHistoryButtonBevelSelected:    lite
 
-// viewport
+// Viewport
 
-ViewportBorder:                         text_dim
-ViewportDividers:                       text_dim
-ViewportInspectBox:                     GREY(0.8)
-ViewportInspectBorder:                  GREY(0.3)
-ViewportInspectText:                    grey4
-ImageViewportBorder:                    GREY(0.2)
-ImageViewportBorderCurrent:             0.0 0.6 0.0
+ViewportBorder:                          fg_dim
+ViewportDividers:                        fg_dim
+ViewportInspectBox:                      GREY(0.8)
+ViewportInspectBorder:                   GREY(0.3)
+ViewportInspectText:                     grey4
+ImageViewportBorder:                     GREY(0.2)
+ImageViewportBorderCurrent:              0.0 0.6 0.0
 
-// tree
+// Tree
 
-TreeNodeBG:                             grey3
-TreeNodeAlternateBG:                    grey1
-TreeNodeSelectedBG:                     grey5
-TreeNodeSelectedFG:                     grey9
-TreeNodeReservedParmFG:                 grey1
-TreeNodeInvisibleParmFG:                grey7
-TreeNodeInvisibleReservedParmFG:        grey1
-#TreeNodeInvisibleParmFG:                0.70 0.80 0.95
-#TreeNodeInvisibleReservedParmFG:        0.45 0.50 0.58
-TreeLine:                               dim
+TreeNodeBG:                              grey3
+TreeNodeAlternateBG:                     grey1
+TreeNodeSelectedBG:                      fg_dim
+TreeNodeSelectedFG:                      white
+TreeNodeReservedParmFG:                  grey1
+TreeNodeInvisibleParmFG:                 grey7
+TreeNodeInvisibleReservedParmFG:         grey1
+#TreeNodeInvisibleParmFG:                 0.70 0.80 0.95
+#TreeNodeInvisibleReservedParmFG:         0.45 0.50 0.58
+TreeLine:                                dim
 
-// performance
+// Performance
 
-PerformanceGood:                        0.45 0.82 0.08
-PerformanceBad:                         0.8 0 0
-PerformanceWarn:                        #F8 74 31
-RecordBtnFlash:                         #E6 17 17
-NetworkPerformanceGood:                 #95 A0 84
-NetworkPerformanceBad:                  #D4 AA 9E
-NetworkPerformanceWarn:                 #B0 A9 57
+PerformanceGood:                         0.45 0.82 0.08
+PerformanceBad:                          0.8 0 0
+PerformanceWarn:                         #F87431
+RecordBtnFlash:                          #E61717
+NetworkPerformanceGood:                  #95A084
+NetworkPerformanceBad:                   #D4AA9E
+NetworkPerformanceWarn:                  #B0A957
 
-// status bar
+// Status Bar
 
-StatusBarMessageFG:                     text
-StatusBarMessageBG:                     dark
-StatusBarPromptFG:                      text
-StatusBarPromptBG:                      dark
-StatusBarWarningFG:                     text
-StatusBarWarningBG:                     dark
-StatusBarErrorFG:                       text
-StatusBarErrorBG:                       dark
+StatusBarMessageFG:                      fg_lite
+StatusBarMessageBG:                      black
+StatusBarPromptFG:                       fg_lite
+StatusBarPromptBG:                       black
+StatusBarWarningFG:                      fg_lite
+StatusBarWarningBG:                      black
+StatusBarErrorFG:                        fg_lite
+StatusBarErrorBG:                        black
 
-// old status bar //
+// Old Status Bar
 
-MessageColor:                           green
-PromptColor:                            green
-WarningColor:                           green
-ErrorColor:                             red
+MessageColor:                            red
+PromptColor:                             red
+WarningColor:                            red
+ErrorColor:                              red
 
-// dope sheet
+// Dope Sheet
 
-DopeSheetCurrentFrameFG:                grey9
-DopeSheetCurrentFrameBG:                grey0
-DopeSheetHoverFrameFG:                  grey9
-DopeSheetHoverFrameBG:                  grey4
-DopeSheetHoverLine:                     GREY(0.5)
-DopeSheetIndicatorLine:                 grey0
-DopeSheetIndicatorClickLine:            grey9
-DopeSheetIndicatorOverLine:             GREY(0.5)
-DopeSheetKnob:                          grey0
-DopeSheetKnobClick:                     grey9
-DopeSheetKnobOver:                      GREY(0.5)
-DopeSheetKnobPendingKey:                grey5
-DopeSheetKnobOutlier:                   1 1 0
-DopeSheetKeyActive:                     HSV 88 0.96 0.46
-DopeSheetKeyPartial2:                   HSV 88 1.0 0.3
-DopeSheetKeyPartial:                    HSV 88 0.96 0.7
-DopeSheetKeyPending:                    grey5
-DopeSheetKeyMuted:                      GREY(0.2)
-DopeSheetKeyOverlay:                    1 0 0
-DopeSheetKeyDisabled:                   0.5 0 1
-DopeSheetKeySelected:                   grey5
-DopeSheetKeySelectedBorder:             grey0
-DopeSheetKeySelecting:                  1 0.45 0.25
-DopeSheetKeySelectingBorder:            1 0 0 // RED
-DopeSheetOutsideRangeBG:                GREY(0.3)
-DopeSheetSimulation:                    main_hilite
-DopeSheetSimulationReset:               main_sep
-DopeSheetSimulationPlaying:             0.59 0.48 0.7
-DopeSheetTimeline:                      grey6
-DopeSheetTimelineAudio:                 grey6
-DopeSheetTickLarge:                     grey7
-DopeSheetTickSmall:                     grey6
-DopeSheetTickSmallAudio:                GREY(0.35)
-DopeSheetTickNumber:                    grey7
-DopeSheetRangeNumber:                   grey8
-DopeSheetRowDisabled:                   grey0
-DopeSheetRowLight:                      grey3
-DopeSheetRowDark:                       grey1
-DopeSheetColLine:                       grey0
-DopeSheetRowLine:                       grey0
-DopeSheetViewLock:                      GREY(0.5)
-DopeSheetSelection:                     HSV 60 1.0 0.5
-DopeSheetSelectionHover:                HSV 60 0.5 0.9
-DopeSheetSelectionActive:               HSV 60 0.5 0.9
-DopeSheetSelectionInactive:             HSV 60 0.9 0.7
-DopeSheetSelectionInactiveLock:         1 0 1
-DopeSheetSelectionText:                 grey0
-DopeSheetSelectionRemove:               1 0 0
-DopeSheetOverwriteHover:                1 0 0
-DopeSheetOverwriteActive:               0.7 0 0
-DopeSheetOverwriteInactive:             0.9 0 0
-DopeSheetSpreadSheetText:               grey0
-DopeSheetSpreadSheetDisabled:           0.07 0 0
-DopeSheetRippleTool:                    1 1 0
+DopeSheetCurrentFrameFG:                 #808000
+DopeSheetCurrentFrameBG:                 black
+DopeSheetHoverFrameFG:                   white
+DopeSheetHoverFrameBG:                   grey4
+DopeSheetHoverLine:                      GREY(0.5)
+DopeSheetIndicatorLine:                  black
+DopeSheetIndicatorClickLine:             white
+DopeSheetIndicatorOverLine:              GREY(0.5)
+DopeSheetKnob:                           black
+DopeSheetKnobClick:                      white
+DopeSheetKnobOver:                       GREY(0.5)
+DopeSheetKnobPendingKey:                 fg_dim
+DopeSheetKnobOutlier:                    1 1 0
+DopeSheetKeyActive:                      HSV 88 0.96 0.46
+DopeSheetKeyPartial2:                    HSV 88 1.0 0.3
+DopeSheetKeyPartial:                     HSV 88 0.96 0.7
+DopeSheetKeyPending:                     fg_dim
+DopeSheetKeyMuted:                       GREY(0.2)
+DopeSheetKeyOverlay:                     1 0 0
+DopeSheetKeyDisabled:                    0.5 0 1
+DopeSheetKeySelected:                    fg_dim
+DopeSheetKeySelectedBorder:              black
+DopeSheetKeySelecting:                   1 0.45 0.25
+DopeSheetKeySelectingBorder:             1 0 0               // RED
+DopeSheetOutsideRangeBG:                 GREY(0.3)
+DopeSheetSimulation:                     mud_textbox         // Cached simulation 
+DopeSheetSimulationReset:                main_sep
+DopeSheetSimulationPlaying:              0.59 0.48 0.7
+DopeSheetTimeline:                       separator
+DopeSheetTimelineAudio:                  separator
+DopeSheetTickLarge:                      grey7
+DopeSheetTickSmall:                      separator
+DopeSheetTickSmallAudio:                 GREY(0.35)
+DopeSheetTickNumber:                     grey7
+DopeSheetRangeNumber:                    fg_lite
+DopeSheetRowDisabled:                    black
+DopeSheetRowLight:                       grey3
+DopeSheetRowDark:                        grey1
+DopeSheetColLine:                        black
+DopeSheetRowLine:                        black
+DopeSheetViewLock:                       GREY(0.5)
+DopeSheetSelection:                      HSV 60 1.0 0.5
+DopeSheetSelectionHover:                 HSV 60 0.5 0.9
+DopeSheetSelectionActive:                HSV 60 0.5 0.9
+DopeSheetSelectionInactive:              HSV 60 0.9 0.7
+DopeSheetSelectionInactiveLock:          1 0 1
+DopeSheetSelectionText:                  black
+DopeSheetSelectionRemove:                1 0 0
+DopeSheetOverwriteHover:                 1 0 0
+DopeSheetOverwriteActive:                0.7 0 0
+DopeSheetOverwriteInactive:              0.9 0 0
+DopeSheetSpreadSheetText:                black
+DopeSheetSpreadSheetDisabled:            0.07 0 0
+DopeSheetRippleTool:                     1 1 0
 
-// playbar bookmarks
+// Playbar Bookmarks
 
-Bookmark1:                              0.11 0.62 0.47
-Bookmark2:                              0.85 0.37 0.10
-Bookmark3:                              0.46 0.44 0.70
-Bookmark4:                              0.91 0.16 0.54
-Bookmark5:                              0.40 0.65 0.12
-Bookmark6:                              0.90 0.67 0.10
-Bookmark7:                              0.65 0.46 0.11
+Bookmark1:                               0.11 0.62 0.47
+Bookmark2:                               0.85 0.37 0.10
+Bookmark3:                               0.46 0.44 0.70
+Bookmark4:                               0.91 0.16 0.54
+Bookmark5:                               0.40 0.65 0.12
+Bookmark6:                               0.90 0.67 0.10
+Bookmark7:                               0.65 0.46 0.11
 
-// assets
+// Assets
 
-AssetBannerBackground:                  GREY(0.12)
-AssetUpdateStatusBackground:            0.19 0.28 0.38
-AssetUpdateStatusText:                  grey9
-OrboltSplashscreenProgressbar:          0.19 0.28 0.38
+AssetBannerBackground:                   GREY(0.12)
+AssetUpdateStatusBackground:             0.19 0.28 0.38
+AssetUpdateStatusText:                   white
+OrboltSplashscreenProgressbar:           0.19 0.28 0.38
 
-// mplay
+// Mplay
 
-MplayInspectBox:                        GREY(0.8)
-MplayInspectBorder:                     GREY(0.3)
-MplayInspectText:                       grey0
-MplayColorCorrectWarn:                  1 1 0.75
+MplayInspectBox:                         GREY(0.8)
+MplayInspectBorder:                      GREY(0.3)
+MplayInspectText:                        black
+MplayColorCorrectWarn:                   1 1 0.75
 
 
-// channel editor
+// Channel Editor
 
-ChannelEditorBackground:                0.00 0.00 0.00    // Background of the graph
-ChannelEditorBGOutsideGlobal:           GREY(0.1)         // Background of the graph outside the global time range
-ChannelEditorBGOutsidePlayback:         0.093 0.086 0.051 // Background of the graph outside the playback range
-ChannelEditorTimebar:                   1.00 1.00 1.00    // Color of timebar to be xored on top
-ChannelEditorGridLine:                  0.20 0.20 0.20    // Graph grid line
-ChannelEditorGridDashedLine:            0.20 0.20 0.20    // Graph grid dashed line
-ChannelEditorHandleDefault:             0.50 0.50 0.50    // Handles
-ChannelEditorHandleSelected:            1.00 1.00 0.00    // Selected handle
-ChannelEditorHandleLocated:             0.80 0.80 0.80    // Handle when mouse is on top
-ChannelEditorHandleSelectedLocated:     1.00 1.00 0.80    // Selected handle when mouse is on top
-ChannelEditorStatsText:                 1.00 1.00 1.00    // Color of the stats text
-ChannelEditorTimeText:                  EDIT_BG               // Color of the bottom time text
-ChannelEditorViewLock:                  GREY(0.5)
-ChannelListCircleOutline:               grey0
+ChannelEditorBackground:                 0.00 0.00 0.00        // graph bg
+ChannelEditorBGOutsideGlobal:            GREY(0.1)             // graph bg outside global time range
+ChannelEditorBGOutsidePlayback:          0.093 0.086 0.051     // graph bg outside the playback range
+ChannelEditorTimebar:                    1.00 1.00 1.00        // Color of timebar to be xored on top
+ChannelEditorGridLine:                   0.20 0.20 0.20        // graph grid line
+ChannelEditorGridDashedLine:             0.20 0.20 0.20        // graph grid dashed line
+ChannelEditorHandleDefault:              0.50 0.50 0.50        // handles
+ChannelEditorHandleSelected:             1.00 1.00 0.00        // selected handle
+ChannelEditorHandleLocated:              0.80 0.80 0.80        // handle when mouse is on top
+ChannelEditorHandleSelectedLocated:      1.00 1.00 0.80        // selected handle when mouse is on top
+ChannelEditorStatsText:                  1.00 1.00 1.00        // color of the stats text
+ChannelEditorTimeText:                   EDIT_BG               // color of the bottom time text
+ChannelEditorViewLock:                   GREY(0.5)
+ChannelListCircleOutline:                black
 
-// chop editor colors
+// Chop Editor Colors
 
-ChopEditorTimeBar:                      0.00 0.00 0.00
+ChopEditorTimeBar:                       0.00 0.00 0.00
 
-// channel colors
+// Channel Colors
 
 // These colors are for coloring channels in various places in Houdini
 // (eg. the Channel Editor and Channel List panes).
@@ -571,252 +569,252 @@ ChopEditorTimeBar:                      0.00 0.00 0.00
 // particular channel, both its node and channel name is used. For example,
 // point1/tx and point1/vx will be both be reds of different hues, which in turn
 // will also differ from point2/tx and point2/vx.
-ChannelColorRed1:               0.8 0.15 0.15       // red
-ChannelColorRed2:               hsv 320.0 1.0 0.75  // before red
-ChannelColorRed3:               hsv 340.0 1.0 0.75
-ChannelColorRed4:               hsv  20.0 1.0 0.75  // after red
-ChannelColorRed5:               hsv  40.0 1.0 0.75
-ChannelColorGreen1:             0.15 0.8 0.15       // green
-ChannelColorGreen2:             hsv  80.0 1.0 0.75  // before green
-ChannelColorGreen3:             hsv 100.0 1.0 0.75
-ChannelColorGreen4:             hsv 140.0 1.0 0.75  // after green
-ChannelColorGreen5:             hsv 160.0 1.0 0.75
-ChannelColorBlue1:              0.15 0.15 0.8       // blue
-ChannelColorBlue2:              hsv 200.0 1.0 0.75  // before blue
-ChannelColorBlue3:              hsv 220.0 1.0 0.75
-ChannelColorBlue4:              hsv 260.0 1.0 0.75  // after blue
-ChannelColorBlue5:              hsv 280.0 1.0 0.75
-ChannelColorOther1:             hsv  60.0 1.0 0.75  // Yellow
-ChannelColorOther2:             hsv 180.0 1.0 0.75  // Aqua
-ChannelColorOther3:             hsv 300.0 1.0 0.75  // Purple
-ChannelColorOther4:             hsv  60.0 1.0 0.50  // Dark Yellow
-ChannelColorOther5:             hsv 180.0 1.0 0.50  // Dark Aqua
-ChannelColorOther6:             hsv 300.0 1.0 0.50  // Dark Purple
+ChannelColorRed1:                        0.8 0.15 0.15           // red
+ChannelColorRed2:                        hsv 320.0 1.0 0.75      // before red
+ChannelColorRed3:                        hsv 340.0 1.0 0.75
+ChannelColorRed4:                        hsv  20.0 1.0 0.75      // after red
+ChannelColorRed5:                        hsv  40.0 1.0 0.75
+ChannelColorGreen1:                      0.15 0.8 0.15           // green
+ChannelColorGreen2:                      hsv  80.0 1.0 0.75      // before green
+ChannelColorGreen3:                      hsv 100.0 1.0 0.75
+ChannelColorGreen4:                      hsv 140.0 1.0 0.75      // after green
+ChannelColorGreen5:                      hsv 160.0 1.0 0.75
+ChannelColorBlue1:                       0.15 0.15 0.8           // blue
+ChannelColorBlue2:                       hsv 200.0 1.0 0.75      // before blue
+ChannelColorBlue3:                       hsv 220.0 1.0 0.75
+ChannelColorBlue4:                       hsv 260.0 1.0 0.75      // after blue
+ChannelColorBlue5:                       hsv 280.0 1.0 0.75
+ChannelColorOther1:                      hsv  60.0 1.0 0.75      // Yellow
+ChannelColorOther2:                      hsv 180.0 1.0 0.75      // Aqua
+ChannelColorOther3:                      hsv 300.0 1.0 0.75      // Purple
+ChannelColorOther4:                      hsv  60.0 1.0 0.50      // Dark Yellow
+ChannelColorOther5:                      hsv 180.0 1.0 0.50      // Dark Aqua
+ChannelColorOther6:                      hsv 300.0 1.0 0.50      // Dark Purple
 
-// geometry groups
+// Geometry Groups
 
 // Specify opposing corners of a quadrilateral in HSV space
 // Colors for geo groups are sampled from within this quad
-GeoGroupColor1:                 hsv  90.0 0.3 1.0
-GeoGroupColor2:                 hsv 330.0 0.6 1.0
+GeoGroupColor1:                          hsv  90.0 0.3 1.0
+GeoGroupColor2:                          hsv 330.0 0.6 1.0
 
-// syntax
+// Syntax
 
 // Editors and input boxes
-ParmSyntaxPlainColor:                   grey9
-ParmSyntaxStringColor:                  HSV 120 0.5  0.80       // Green            #66cc66
-ParmSyntaxVarColor:                     HSV 60  0.5  0.93       // Pale Yellow  #eded77
-ParmSyntaxFuncColor:                    HSV 180 0.5  0.80       // Cyan             #66cccc
-ParmSyntaxKeywordColor:                 HSV 300 0.5  0.93       // Magenta          #ed77ed
-ParmSyntaxQuoteColor:                   HSV 238 0.40 0.88       // Pale Blue    #3a3b61
-ParmSyntaxNumberColor:                  HSV 150 0.5  0.90       // Pale Green   #73e5ac
-ParmSyntaxRefColor:                     HSV 34  0.5  0.87       // Pale Orange  #deae6f
-ParmSyntaxCommentColor:                 HSV 60  0.5  0.93       // Pale Yellow  #eded77
-ParmSyntaxErrorColor:                   HSV 0   0.8     1           // Red                  #ff3333
-ParmSyntaxTypeColor:                    #A08EB4             // Purple
-ParmSyntaxExtraColor:                   #D08770             // Rusty Orange
-ParmParenMatchColor:                    HSV 120 0.6     0.6         // Medium Green     #66ff66
-ParmQuoteMatchColor:                    HSV 180 0.6     0.6         // Medium Cyan      #66ffff
-ParmMisMatchColor:                      HSV 0   0.6     0.6         // Pale Red     #ff6666
-PreEditUnderlineColor:                  grey4
-TextboxLineNumberFG:                    grey5
-TextboxLineNumberBG:                    grey4
-TextboxLineNumberHighlight:             grey8
 
-// old ui resources
+ParmSyntaxPlainColor:                    white
+ParmSyntaxStringColor:                   HSV 120 0.5  0.80       // Green        #66cc66
+ParmSyntaxVarColor:                      HSV 60  0.5  0.93       // Pale Yellow  #eded77
+ParmSyntaxFuncColor:                     HSV 180 0.5  0.80       // Cyan         #66cccc
+ParmSyntaxKeywordColor:                  HSV 300 0.5  0.93       // Magenta      #ed77ed
+ParmSyntaxQuoteColor:                    HSV 238 0.40 0.88       // Pale Blue    #3a3b61
+ParmSyntaxNumberColor:                   HSV 150 0.5  0.90       // Pale Green   #73e5ac
+ParmSyntaxRefColor:                      HSV 34  0.5  0.87       // Pale Orange  #deae6f
+ParmSyntaxCommentColor:                  HSV 60  0.5  0.93       // Pale Yellow  #eded77
+ParmSyntaxErrorColor:                    HSV 0   0.8     1       // Red          #ff3333
+ParmSyntaxTypeColor:                     #A08EB4                 // Purple
+ParmSyntaxExtraColor:                    #D08770                 // Rusty Orange
+ParmParenMatchColor:                     HSV 120 0.6     0.6     // Medium Green #66ff66
+ParmQuoteMatchColor:                     HSV 180 0.6     0.6     // Medium Cyan  #66ffff
+ParmMisMatchColor:                       HSV 0   0.6     0.6     // Pale Red     #ff6666
+PreEditUnderlineColor:                   grey4
+TextboxLineNumberFG:                     fg_dim
+TextboxLineNumberBG:                     grey4
+TextboxLineNumberHighlight:              fg_lite
 
-ForegroundColor:                        dark_b
-BackgroundColor:                        dark
-PaperColor:                             dark
-TextHighlightColor:                     green
-ButtonColor:                            dark # bg of node list in change node type dialogue
-ButtonStripColor:                       green
-ListTitleColor:                         green
-ListEntryColor:                         green
-ListEntrySelectedColor:                 green
-MenuBarColor:                           dark
-MenuColor:                              dark
-BlueSelectedMenuColor:                  green
-SliderColor:                            green
-SliderThumbColor:                       green
-InputColor:                             green
-RadioColor:                             dim_hi  # status line hilite on text editor
-IconBackgroundColor:                    red
-IconOutlineColor:                       red
-IconShadowColor:                        red
-IconLocatedColor:                       red
-DisabledTextColor:                      text_dim
-DisabledTextDropShadowColor:            red
-PopupHelpBackgroundColor:               dark
+// Old UI Resources
+
+ForegroundColor:                         dark_b
+BackgroundColor:                         black
+PaperColor:                              black
+TextHighlightColor:                      red
+ButtonColor:                             black                    // bg of node list in change node type dialogue
+ButtonStripColor:                        red
+ListTitleColor:                          red
+ListEntryColor:                          red
+ListEntrySelectedColor:                  red
+MenuBarColor:                            black
+MenuColor:                               black
+BlueSelectedMenuColor:                   red
+SliderColor:                             red
+SliderThumbColor:                        red
+InputColor:                              red
+RadioColor:                              separator                  // text editor status line hilite
+IconBackgroundColor:                     red
+IconOutlineColor:                        red
+IconShadowColor:                         red
+IconLocatedColor:                        red
+DisabledTextColor:                       fg_dim                     // disabled text
+DisabledTextDropShadowColor:             red
+PopupHelpBackgroundColor:                black
 
 // New colors for Popup windows (Ex. Anonymous Usage Stats Window)
-PopupWindowTextColor:                   grey9
-BlueTextLinkColor:                      #FF00FF
+PopupWindowTextColor:                    white
+BlueTextLinkColor:                       #FF00FF
 
-// The luminance levels of most of these colors should be similar
-// so that none of them stands out too much and the text
-// in the parameter fields will be readable.
-NormalColor:                            0.0  0.0  0.0                 // Not used
-LockedColor:                            HSV  200  0.3   0.3       // Parameter is locked
-PendingColor:                           HSV  60   0.5   0.5       // Pending change
-IsKeyColor:                             HSV  120  0.5   0.55      // Keyframe
-IsSoftKeyColor:                         #0D3D28                   // constant() or raw() usually.
-IsNotKeyColor:                          HSV  180  0.5   0.5       // Channel, not at a key. (Expression)
-DisabledColor:                          HSV  207  0.27  0.75      // Channel is disabled (muted) from dopesheet
-ChannelLockedColor:                     HSV  0   0   0.2          // Has "lock()" expression
-OverrideColor:                          HSV  45  1     0.65      // Parameter is overridden by chop
-OtherLanguageColor:                     #653D66                   // Expr language differs from node lang.
-AutoTakeExcluded:                       HSV  42   0.17  0.31      // Exluded from take, and auto-take is on.
-NonDefAccentColor:                      green                     // Accent for non-default parms
-ChanRefAccentColor:                     green                                     // Accent for !!ch()!! parms
-DisabledAccentColor:                    green                                 // Accents are this color when disabled
-ScopedBlend:                            0.9  0.25  0.97
-ScopedBaseColor:                        EDIT_BG
-ScopedColor:                            HSV  40  0.825  0.525
-ScopedBaseSelectedColor:                EDIT_BG
-ScopedSelectedColor:                    grey9
-#AutoScopedColor:                       HSV  40  0.125  0.375  // Low saturation orange grey, This matches the orange selection Hue.
-AutoScopedColor:                        HSV  210 0.125  0.375 // Low saturation blue grey, This matches the blue slider Hue.
-ScopedAlpha:                            1.0 1.0 1.0
+// luminance of most colors should be similar
+// so none stands out and the text will be readable.
+NormalColor:                             0.0  0.0  0.0           // not used
+LockedColor:                             HSV  200  0.3   0.3     // locked parameter
+PendingColor:                            HSV  60   0.5   0.5     // pending change
+IsKeyColor:                              HSV  120  0.5   0.55    // keyframe
+IsSoftKeyColor:                          #0D3D28                 // constant() or raw() usually.
+IsNotKeyColor:                           HSV  180  0.5   0.5     // channel, not at a key. (Expression)
+DisabledColor:                           HSV  207  0.27  0.75    // channel is disabled (muted) from dopesheet
+ChannelLockedColor:                      HSV  0    0     0.2     // has "lock()" expression
+OverrideColor:                           HSV  45   1     0.65    // parameter is overridden by chop
+OtherLanguageColor:                      #653D66                 // expr language differs from node lang.
+AutoTakeExcluded:                        HSV  42   0.17  0.31    // exluded from take, and auto-take is on.
+NonDefAccentColor:                       red                   // accent for non-default parms
+ChanRefAccentColor:                      red                   // accent for !!ch()!! parms
+DisabledAccentColor:                     red                   // accents are this color when disabled
+ScopedBlend:                             0.9  0.25  0.97
+ScopedBaseColor:                         EDIT_BG
+ScopedColor:                             HSV  40  0.825  0.525
+ScopedBaseSelectedColor:                 EDIT_BG
+ScopedSelectedColor:                     white
+#AutoScopedColor:                         HSV  40  0.125  0.375  // Low saturation orange grey, This matches the orange selection Hue.
+AutoScopedColor:                         HSV  210 0.125  0.375   // Low saturation blue grey, This matches the blue slider Hue.
+ScopedAlpha:                             1.0 1.0 1.0
 
-// PARM BORDERS indicating that the parm has a handle associated with it //
+// Parm Borderes indicating that the parm has a handle associated with it
 
-InvisibleHandleColor:                   0.70  0.00  0.00  // See rows/columns in Torus SOP
-VisibleHandleColor:                     0.00  0.50  0.50
-ActiveHandleColor:                      grey5
+InvisibleHandleColor:                    0.70  0.00  0.00        // See rows/columns in Torus SOP
+VisibleHandleColor:                      0.00  0.50  0.50
+ActiveHandleColor:                       fg_dim
 
-// FLAG BUTTONS group and node tiles and listers //
+// Flag Buttons group and node tiles and listers 
 
-SelectOnColor:                          0.75  0.75  0
-SelectOffColor:                         0.56  0.56  0
-DisplayOnColor:                         0.3   0.5   1
-DisplayOffColor:                        0.2   0.3   0.6
-TemplateOnColor:                        1     0.5   1
-TemplateOffColor:                       0.75  0.37  0.75
-BypassOnColor:                          1     0.5   0
-BypassOffColor:                         0.5   0.25  0
-SelectableOnColor:                      0.6   0.35  0.2
-SelectableOffColor:                     0.4   0.2   0.15
-ExposeOnColor:                          1     0     0
-ExposeOffColor:                         0.6   0     0
-CurrentColor:                           0.25  0.85  0.25
+SelectOnColor:                           0.75  0.75  0
+SelectOffColor:                          0.56  0.56  0
+DisplayOnColor:                          0.3   0.5   1
+DisplayOffColor:                         0.2   0.3   0.6
+TemplateOnColor:                         1     0.5   1
+TemplateOffColor:                        0.75  0.37  0.75
+BypassOnColor:                           1     0.5   0
+BypassOffColor:                          0.5   0.25  0
+SelectableOnColor:                       0.6   0.35  0.2
+SelectableOffColor:                      0.4   0.2   0.15
+ExposeOnColor:                           1     0     0
+ExposeOffColor:                          0.6   0     0
+CurrentColor:                            0.25  0.85  0.25
 
-// split bar
+// Split Bar
 
-SplitBarBackground:                     lite
-SplitBarEdgeColor:                      lite
-SplitBarLightColor:                     lite
-SplitBarDarkColor:                      lite
-SplitBarPaneOutline:                    lite
-SplitBarGrippyColor:                    text_dim
-SplitBarHighlight:                      text_dim
-SplitBarHighlight2:                     text_dim
+SplitBarBackground:                      button_bg         // bg
+SplitBarEdgeColor:                       black           // grabber
+SplitBarLightColor:                      mud               // edge -- shown when stowbars are collapsed
+SplitBarDarkColor:                       black               // edge
+SplitBarPaneOutline:                     red               // edge
+SplitBarGrippyColor:                     fg_dim
+SplitBarHighlight:                       fg_dim
+SplitBarHighlight2:                      fg_dim
 
-// play bar
+// Playbar
 
-PlayBarOnColor:                         0.05  0.8   0.05
-PlayBarOffColor:                        0.25  0.25  0.25
-PlayBarDisabledColor:                   0.4   0.4   0.4
-PlayBarResetColor:                      1     1     0.0
-PlayBarNoPending:                       0     0.8   0
-PlayBarNoPending2:                      0     1         0
-PlayBarPending:                         0.75  0.75  0.5
-PlayBarPending2:                        1     1     0.5
-PlayBarAudioWaveColor:                  0.64  0.64  0.64
-PlayBarStartEndFieldBG:                 EDIT_BG
-PlayBarGStartEndFieldBG:                GREY(0.125)
+PlayBarOnColor:                          0.05  0.8   0.05
+PlayBarOffColor:                         0.25  0.25  0.25
+PlayBarDisabledColor:                    0.4   0.4   0.4
+PlayBarResetColor:                       1     1     0.0
+PlayBarNoPending:                        0     0.8   0
+PlayBarNoPending2:                       0     1     0
+PlayBarPending:                          0.75  0.75  0.5
+PlayBarPending2:                         1     1     0.5
+PlayBarAudioWaveColor:                   0.64  0.64  0.64
+PlayBarStartEndFieldBG:                  EDIT_BG
+PlayBarGStartEndFieldBG:                 GREY(0.125)
 
-// info button
+// Info Button
 
-ErrorFlag:                              0.9  0.1  0.1
-WarningFlag:                            1        1        0
-MessageFlag:                            0.8      0.8  0.8
-FilteredFlag:                           0.6      0.6  0.6
+ErrorFlag:                               0.9  0.1  0.1
+WarningFlag:                             1    1    0
+MessageFlag:                             0.8  0.8  0.8
+FilteredFlag:                            0.6  0.6  0.6
 
 // Used in resource managers for .nosave files
 
-NoSaveFlag:                             0.0  0.4  0.1
+NoSaveFlag:                              0.0  0.4  0.1
 
-// shop viewer
+// Shop viewer
 
-ShopViewTitleColor                      1.0 1.0     0.0
+ShopViewTitleColor                       1.0 1.0   0.0
 
 // vop input/output labels
 
-VopInOutVectorColor:                    #60C279
-VopInOutVectorArrayColor:               #448C69
-VopInOutVector2Color:                   #27FF00
-VopInOutVector2ArrayColor:              #178902
-VopInOutVector4Color:                   #C6FF00
-VopInOutVector4ArrayColor:              #6F8F00
-VopInOutNormalColor:                    #A4A4FF
-VopInOutColorColor:                     #FF24FF
-VopInOutFloatColor:                     #55D2C5
-VopInOutFloatArrayColor:                #218278
-VopInOutIntColor:                       #45B5FF
-VopInOutIntArrayColor:                  #21668A
-VopInOutStringColor:                    #CCB299
-VopInOutStringArrayColor:               #A97442
-VopInOutMatrix2Color:                   #D367FF
-VopInOutMatrix2ArrayColor:              #783A91
-VopInOutMatrix3Color:                   #B367FF
-VopInOutMatrix3ArrayColor:              #6A488C
-VopInOutMatrix4Color:                   #7F68FE
-VopInOutMatrix4ArrayColor:              #5B5195
-VopInOutPointColor:                     #EF99D5
-VopInOutBsdfColor:                      #F8E71C
-VopInOutStructColor:                    #DE796E
-VopInOutMethodColor:                    #FF9900
-VopInOutMultiColor:                     #E5E5E5
-VopErrorColor:                          error
-VopInOutDictColor:                      #D29628
-VopInOutDictArrayColor:                 #B5700A
+VopInOutVectorColor:                     #60C279
+VopInOutVectorArrayColor:                #448C69
+VopInOutVector2Color:                    #27FF00
+VopInOutVector2ArrayColor:               #178902
+VopInOutVector4Color:                    #C6FF00
+VopInOutVector4ArrayColor:               #6F8F00
+VopInOutNormalColor:                     #A4A4FF
+VopInOutColorColor:                      #FF24FF
+VopInOutFloatColor:                      #55D2C5
+VopInOutFloatArrayColor:                 #218278
+VopInOutIntColor:                        #45B5FF
+VopInOutIntArrayColor:                   #21668A
+VopInOutStringColor:                     #CCB299
+VopInOutStringArrayColor:                #A97442
+VopInOutMatrix2Color:                    #D367FF
+VopInOutMatrix2ArrayColor:               #783A91
+VopInOutMatrix3Color:                    #B367FF
+VopInOutMatrix3ArrayColor:               #6A488C
+VopInOutMatrix4Color:                    #7F68FE
+VopInOutMatrix4ArrayColor:               #5B5195
+VopInOutPointColor:                      #EF99D5
+VopInOutBsdfColor:                       #F8E71C
+VopInOutStructColor:                     #DE796E
+VopInOutMethodColor:                     #FF9900
+VopInOutMultiColor:                      #E5E5E5
+VopErrorColor:                           error
+VopInOutDictColor:                       #D29628
+VopInOutDictArrayColor:                  #B5700A
 
-// shop input/output labels
+// Shop input/output labels
 
-ShopInOutSurfaceColor:                  #e5b299
-ShopInOutShadowColor:                   #33334c
-ShopInOutDisplaceColor:                 #99b2e5
-ShopInOutGeometryColor:                 #b2e5b2
-ShopInOutLightColor:                    #e5e599
-ShopInOutFogColor:                      #b2b2b2
-ShopInOutPropertiesColor:               #7fcce5
-ShopInOutShaderColor:                   #e5e5e5
-ShopInOutImage3dColor:                  #66e5b2
-ShopInOutImage3dArrayColor:             #4cb299
+ShopInOutSurfaceColor:                   #e5b299
+ShopInOutShadowColor:                    #33334c
+ShopInOutDisplaceColor:                  #99b2e5
+ShopInOutGeometryColor:                  #b2e5b2
+ShopInOutLightColor:                     #e5e599
+ShopInOutFogColor:                       #b2b2b2
+ShopInOutPropertiesColor:                #7fcce5
+ShopInOutShaderColor:                    #e5e5e5
+ShopInOutImage3dColor:                   #66e5b2
+ShopInOutImage3dArrayColor:              #4cb299
 
-// dop input/output labels
+// Dop input/output labels
 
-DopInOutObjectColor:                    #a5a5a5
-DopInOutDataColor:                      #7fcc7f
-DopInOutRelDataColor:                   #339933
-DopInOutSolverColor:                    #b27fe5
-DopInOutAnyColor:                       #e5e5e5
+DopInOutObjectColor:                     #a5a5a5
+DopInOutDataColor:                       #7fcc7f
+DopInOutRelDataColor:                    #339933
+DopInOutSolverColor:                     #b27fe5
+DopInOutAnyColor:                        #e5e5e5
 
-// top graph nodes
+// Top graph nodes
 
-TopInOutColor_file:                     #919191
-TopInOutColor_file/image:               #55D2C5
-TopInOutColor_file/geo:                 #008FEE
-TopInOutColor_file/csv:                 #FF6600
-TopInOutColor_file/movie:               #5AAA00
-TopInOutColor_file/archive:             #BEC43F
-TopInOutColor_nonfile:                  #D05ADD
+TopInOutColor_file:                      #919191
+TopInOutColor_file/image:                #55D2C5
+TopInOutColor_file/geo:                  #008FEE
+TopInOutColor_file/csv:                  #FF6600
+TopInOutColor_file/movie:                #5AAA00
+TopInOutColor_file/archive:              #BEC43F
+TopInOutColor_nonfile:                   #D05ADD
 
-// simple spreadsheet (ie. tables)
+// Simple spreadsheet (ie. tables)
 
-SSTableBackgroundColor:                 0.9     0.9     0.9
-SSTableSelectedColor:                   0.125   0.125   1.0
+SSTableBackgroundColor:                  0.9     0.9     0.9
+SSTableSelectedColor:                    0.125   0.125   1.0
 
-// parameter spreadsheet
+// Parameter spreadsheet
 
-ParmSheetEmptyColor:                    0.65    0.65    0.65
-ParmSheetHeaderColor:                   0.60    0.60    0.60
+ParmSheetEmptyColor:                     0.65    0.65    0.65
+ParmSheetHeaderColor:                    0.60    0.60    0.60
 
 // The following color is used for buttons that simulate a hyper-text link
-HyperTextLinkColor:                     1.0 0.0 1.0
+HyperTextLinkColor:                      1.0  0.0  1.0
 
-// old op hilite colors
+// Old op hilite colors
 
 // Following used to hilite names of operators that have
 // a given property (e.g. modified parameters)
@@ -824,188 +822,185 @@ HyperTextLinkColor:                     1.0 0.0 1.0
 // some arbitrary thing.  (Network BG color?)  Anyway, leaving the value
 // at one seems to force it into a happy state.
 
-OpNameNoneColor:                        grey8
-OpNameCommentsColor:                    HSV 240 0.6 1
-OpNameAnimatedColor:                    red
-OpNameModifiedColor:                    red
-OpNameChoppedColor:                     red
-OpNameSyncedColor:                      HSV 200 0.6 1
-OpNameUnsyncedColor:                    HSV 0   0.6 1
-OpNameSubnetColor:                      HSV 240 0.3 1
+OpNameNoneColor:                         fg_lite
+OpNameCommentsColor:                     HSV 240 0.6 1
+OpNameAnimatedColor:                     red
+OpNameModifiedColor:                     red
+OpNameChoppedColor:                      red
+OpNameSyncedColor:                       HSV 200 0.6 1
+OpNameUnsyncedColor:                     HSV 0   0.6 1
+OpNameSubnetColor:                       HSV 240 0.3 1
 
-// Text in parameter title bar, indicates how many nodes are selected
-ParmTitleBarNumSelectedColor:           1.0     1.0     0.0
+ParmTitleBarNumSelectedColor:            1.0     1.0     0.0  // text in parameter title bar, indicates how many nodes are selected
+AutoTakeModeColor:                       0.40    0.70    0.40 // take label
 
-// take label
+// Operator type manager
 
-AutoTakeModeColor:                      0.40        0.70    0.40
+OTLUnusedColor:                          0.70    0.10    0.10
+OTLOutOfDateColor:                       0.70    0.70    0.10
+OTLPreferredColor:                       0.20    0.70    0.20
 
-// operator type manager
+// Simulation tree
 
-OTLUnusedColor:                         0.70    0.10    0.10
-OTLOutOfDateColor:                      0.70        0.70    0.10
-OTLPreferredColor:                      0.20        0.70    0.20
+SIMAltRepColor:                          0.20    0.70    0.20
+SIMObjectColor:                          0.00    0.00    0.00
+SIMDataColor:                            0.00    0.00    0.00
+SIMRelDataColor:                         0.00    0.00    0.00
+SIMRecordColor:                          0.00    0.00    0.00
+SIMAffectorsColor:                       0.00    0.00    0.00
+SIMGroupsColor:                          0.00    0.00    0.00
+SIMEngineColor:                          0.00    0.00    0.00
+SIMEngineInterpColor:                    0.70    0.70    0.10
+SIMAffectorColor:                        0.10    0.10    0.60
+SIMMutualColor:                          0.20    0.70    0.20
+SIMAlmostMutualColor:                    0.70    0.70    0.10
 
-// simulation tree
+// Linker tree view
 
-SIMAltRepColor:                         0.20        0.70    0.20
-SIMObjectColor:                         0.00        0.00    0.00
-SIMDataColor:                           0.00        0.00    0.00
-SIMRelDataColor:                        0.00        0.00    0.00
-SIMRecordColor:                         0.00        0.00    0.00
-SIMAffectorsColor:                      0.00        0.00    0.00
-SIMGroupsColor:                         0.00        0.00    0.00
-SIMEngineColor:                         0.00        0.00    0.00
-SIMEngineInterpColor:                   0.70    0.70    0.10
-SIMAffectorColor:                       0.10        0.10    0.60
-SIMMutualColor:                         0.20        0.70    0.20
-SIMAlmostMutualColor:                   0.70    0.70    0.10
+LinkerPartialLinkColor:                  GREY(0.8)
 
-// linker tree view
+// Network editor list mode
 
-LinkerPartialLinkColor:                 GREY(0.8)
+OpListHeaderBGColor:                     GREY(0.7)
+OpListSplitterColor:                     black
+OpListSelectionBGColor:                  fg_dim
+OpListSelectionFGColor:                  white
 
-// network editor list mode
+// File dependency dialog
 
-OpListHeaderBGColor:                    GREY(0.7)
-OpListSplitterColor:                    grey0
-OpListSelectionBGColor:                 grey5
-OpListSelectionFGColor:                 grey9
+FileDepAcceptColor:                      0.0  1.0  0.0
+FileDepRejectColor:                      1.0  0.0  0.0
 
-// file dependency dialog
+// Shaded pick box
 
-FileDepAcceptColor:                     0.0 1.0 0.0
-FileDepRejectColor:                     1.0 0.0 0.0
+ShadedPickOutline:                       red
+ShadedPickInnerLine:                     0.3  0.3  0.3
+ShadedPickFill:                          0.2  0.2  0.2
 
-// shaded pick box
+// Hotkey
 
-ShadedPickOutline:                      red
-ShadedPickInnerLine:                    0.3 0.3 0.3
-ShadedPickFill:                         0.2 0.2 0.2
-
-// hotkey
-
-KeyCapUnavailableFill:                  #323232
-KeyCapUnavailableHover:                 #424242
-KeyCapAssignedFill:                     #515151
-KeyCapAssignedHover:                    #616161
-KeyCapDefaultFill:                      #656565
-KeyCapDefaultHover:                     #959595
-ModifierKeyOffFill:                     #292929
-ModifierKeyOffHover:                    #393939
-KeyCapSelectionBorder:                  grey9
-KeyCapSelectionText:                    grey9
-ShiftKeyBorder:                         #7F5050
-ShiftKeyFill:                           #AF7070
-ShiftKeyHilite:                         #CF9090
-CtrlKeyBorder:                          #436892
-CtrlKeyFill:                            #5883B4
-CtrlKeyHilite:                          #78A3D4
-AltKeyBorder:                           #658245
-AltKeyFill:                             #8EA37D
-AltKeyHilite:                           #AEC39D
-CmdKeyBorder:                           #9A7B49
-CmdKeyFill:                             #BBAB28
-CmdKeyHilite:                           #DBCB48
-HotkeyMgrUnboundActionFG:               grey1
+HiliteTextColor:                         fg_lite          // fg key assigned in current context
+KeyCapUnavailableFill:                   #151515       // bg key non-bindable
+KeyCapUnavailableHover:                  #424242
+KeyCapAssignedFill:                      #515151
+KeyCapAssignedHover:                     #616161
+KeyCapDefaultFill:                       #656565
+KeyCapDefaultHover:                      #959595
+ModifierKeyOffFill:                      #292929
+ModifierKeyOffHover:                     #393939
+KeyCapSelectionBorder:                   white
+KeyCapSelectionText:                     white
+ShiftKeyBorder:                          #7F5050
+ShiftKeyFill:                            #AF7070
+ShiftKeyHilite:                          #CF9090
+CtrlKeyBorder:                           #436892
+CtrlKeyFill:                             #5883B4
+CtrlKeyHilite:                           #78A3D4
+AltKeyBorder:                            #658245
+AltKeyFill:                              #8EA37D
+AltKeyHilite:                            #AEC39D
+CmdKeyBorder:                            #9A7B49
+CmdKeyFill:                              #BBAB28
+CmdKeyHilite:                            #DBCB48
+HotkeyMgrUnboundActionFG:                red
 
 // USD
 
-UsdLocationHasArcs                      #3E9E2E
-UsdLocationIsInstance                   #87CEFA
-UsdLocationInPrototype                  #7688D9
-UsdLocationUnloaded                     #5E2E15
-UsdLocationLoaded                       #DE9E2E
-UsdLayerMuted                           #9090E0
-UsdLayerHasOpinion                      #E07000
-UsdLayerChildHasOpinion                 #A04000
-UsdLayerModifiedByCurrentLop            #40A000
+UsdLocationHasArcs                       #3E9E2E
+UsdLocationIsInstance                    #87CEFA
+UsdLocationInPrototype                   #7688D9
+UsdLocationUnloaded                      #5E2E15
+UsdLocationLoaded                        #DE9E2E
+UsdLayerMuted                            #9090E0
+UsdLayerHasOpinion                       #E07000
+UsdLayerChildHasOpinion                  #A04000
+UsdLayerModifiedByCurrentLop             #40A000
 
-UsdAttrResolveFallback:                 #DE9E2E
-UsdAttrResolveDefault:                  #87CEFA
-UsdAttrResolveValueClips:               #E696E6
-UsdAttrResolveTimeSamples:              #B1CF99
-UsdAttrResolveNone:                     grey50
-UsdRelationship:                        #E68484
-UsdComputed:                            #8484E6
+UsdAttrResolveFallback:                  #DE9E2E
+UsdAttrResolveDefault:                   #87CEFA
+UsdAttrResolveValueClips:                #E696E6
+UsdAttrResolveTimeSamples:               #B1CF99
+UsdAttrResolveNone:                      fg_dim
+UsdRelationship:                         #E68484
+UsdComputed:                             #8484E6
 
-UsdPrimSelected:                        grey5
-UsdPrimSelectedAlpha:                   0.4
-UsdChildPrimSelected:                   0.44 0.22 0.11
-UsdChildPrimSelectedAlpha:              0.4
-UsdPrimModified:                        0.30 0.80 0.80
-UsdPrimModifiedAlpha:                   0.4
-UsdChildPrimModified:                   0.15 0.40 0.40
-UsdChildPrimModifiedAlpha:              0.4
+UsdPrimSelected:                         fg_dim
+UsdPrimSelectedAlpha:                    0.4
+UsdChildPrimSelected:                    0.44  0.22  0.11
+UsdChildPrimSelectedAlpha:               0.4
+UsdPrimModified:                         0.30  0.80  0.80
+UsdPrimModifiedAlpha:                    0.4
+UsdChildPrimModified:                    0.15  0.40  0.40
+UsdChildPrimModifiedAlpha:               0.4
 
-// old node graph
+// Old node graph
 
-NodeConnectionDefaultBG:                red
-NodeConnectionTextBG:                   red
-NodeConnectionGlow:                     red
-NodeConnectionArrowLight:               red
-NodeConnectionArrowDark:                red
-NodeConnectionBevel:                    red
-NodeConnectionTopBorder:                red
-NodeConnectionBottomBorder:             red
+NodeConnectionDefaultBG:                 red
+NodeConnectionTextBG:                    red
+NodeConnectionGlow:                      red
+NodeConnectionArrowLight:                red
+NodeConnectionArrowDark:                 red
+NodeConnectionBevel:                     red
+NodeConnectionTopBorder:                 red
+NodeConnectionBottomBorder:              red
 
-NodeButtonGrad:                         red
-NodeButtonSelectedGrad:                 red
-NodeButtonBevel:                        red
-NodeButtonBevelSelected:                red
-NodeSeparator:                          red
-NodeSeparatorEnabled:                   red
-NodeError:                              red
-NodeWarningBG:                          red
-NodeWarningFG:                          red
-NodeDefaultBG:                          red
-NodeHighlight:                          red
-NodeDebugFG:                            red
+NodeButtonGrad:                          red
+NodeButtonSelectedGrad:                  red
+NodeButtonBevel:                         red
+NodeButtonBevelSelected:                 red
+NodeSeparator:                           red
+NodeSeparatorEnabled:                    red
+NodeError:                               red
+NodeWarningBG:                           red
+NodeWarningFG:                           red
+NodeDefaultBG:                           red
+NodeHighlight:                           red
+NodeDebugFG:                             red
 
-NodeTemplateFlag:                       red
-NodeSelectableTemplateFlag:             red
-NodeBypassFlag:                         red
-NodeRenderFlag:                         red
-NodeDisplayFlag:                        red
-NodeDisplayAndRenderFlag:               red
-NodeOutputFlag:                         red
-NodeSelectableFlag:                     red
-NodeExportFlag:                         red
-NodeHiddenFlag:                         red
-NodeAudioFlag:                          red
-NodeThumbnailFlag:                      red
-NodeLockFlag:                           red
-NodeSoftLockFlag:                       red
-NodeLoadedWithUnloadFlagOn:             red
-NodeDebugFlag:                          red
+NodeTemplateFlag:                        red
+NodeSelectableTemplateFlag:              red
+NodeBypassFlag:                          red
+NodeRenderFlag:                          red
+NodeDisplayFlag:                         red
+NodeDisplayAndRenderFlag:                red
+NodeOutputFlag:                          red
+NodeSelectableFlag:                      red
+NodeExportFlag:                          red
+NodeHiddenFlag:                          red
+NodeAudioFlag:                           red
+NodeThumbnailFlag:                       red
+NodeLockFlag:                            red
+NodeSoftLockFlag:                        red
+NodeLoadedWithUnloadFlagOn:              red
+NodeDebugFlag:                           red
 
-NetworkSelection:                       red
-NetworkCurrent:                         red
-NetworkCurrentNonSelected:              red
-NetworkBackground:                      red
-NetworkDisplayHighlight:                red
-NetworkRenderHighlight:                 red
-NetworkOutputHighlight:                 red
-NetworkTemplateHighlight:               red
-NetworkLegacyHighlight:                 red
-NetworkOverviewDragger:                 red
-NetworkTimeDependent:                   red
+NetworkSelection:                        red
+NetworkCurrent:                          red
+NetworkCurrentNonSelected:               red
+NetworkBackground:                       red
+NetworkDisplayHighlight:                 red
+NetworkRenderHighlight:                  red
+NetworkOutputHighlight:                  red
+NetworkTemplateHighlight:                red
+NetworkLegacyHighlight:                  red
+NetworkOverviewDragger:                  red
+NetworkTimeDependent:                    red
 
-NetworkGrid:                            red
+NetworkGrid:                             red
 
-NetworkWireNormal:                      red
-NetworkWireActive:                      red
-NetworkWireActiveLight:                 red
-NetworkWireHighlight:                   red
-NetworkWireShadow:                      red
-NetworkWireExtraNormal:                 red
-NetworkWireExtraActive:                 red
-NetworkWireExtraActiveLight:            red
-NetworkWireIKNormal:                    red
-NetworkWireIKActive:                    red
-NetworkWireIKActiveLight:               red
-NetworkWireOutputOverrideNormal:        red
-NetworkWireOutputOverrideHighlight:     red
-NetworkWireTimeDepNormal:               red
-NetworkWireLoopBack:                    red
-NetworkWirePassThrough:                 red
+NetworkWireNormal:                       red
+NetworkWireActive:                       red
+NetworkWireActiveLight:                  red
+NetworkWireHighlight:                    red
+NetworkWireShadow:                       red
+NetworkWireExtraNormal:                  red
+NetworkWireExtraActive:                  red
+NetworkWireExtraActiveLight:             red
+NetworkWireIKNormal:                     red
+NetworkWireIKActive:                     red
+NetworkWireIKActiveLight:                red
+NetworkWireOutputOverrideNormal:         red
+NetworkWireOutputOverrideHighlight:      red
+NetworkWireTimeDepNormal:                red
+NetworkWireLoopBack:                     red
+NetworkWirePassThrough:                  red

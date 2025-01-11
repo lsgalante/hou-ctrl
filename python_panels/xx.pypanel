@@ -10,6 +10,14 @@
 import os
 from PySide2 import QtCore, QtGui, QtWidgets
 from fuzzyfinder import fuzzyfinder
+       
+class win(hou.qt.Window):
+    def __init_(s, parent=hou.qt.mainWindow()):
+        print("ss")
+        x = 1
+        
+    def closeEvent(s, event):
+        s.setParent(None)
 
 class Dialog(QtWidgets.QFrame):
     def __init__(s, parent=None):
@@ -76,6 +84,10 @@ class Dialog(QtWidgets.QFrame):
         s.update_mode_manual_b.clicked.connect(hcu.update_mode_manual)
         s.buttons.append("update_mode_manual")
         
+        s.overlay_b = QtWidgets.QPushButton("overlay")
+        s.overlay_b.clicked.connect(s.overlay)
+        s.buttons.append("overlay")
+        
         # layout
         s.layout0 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.TopToBottom)
         s.layout0.addWidget(s.input)
@@ -94,12 +106,16 @@ class Dialog(QtWidgets.QFrame):
         s.layout1.addWidget(s.toggle_viewer_toolbars_b)
         s.layout1.addWidget(s.update_mode_auto_b)
         s.layout1.addWidget(s.update_mode_manual_b)
+        s.layout1.addWidget(s.overlay_b)
         
         s.layout2 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.TopToBottom)
         s.layout2.addLayout(s.layout0)
         s.layout2.addLayout(s.layout1)
         s.setLayout(s.layout2)
         
+    def overlay(s):
+        newwin = win()
+        newwin.show()
         
     def fltr(s):
         text = s.input.text()
@@ -132,8 +148,8 @@ class Dialog(QtWidgets.QFrame):
             viewer.showOperationBar(1)
             viewer.showDisplayOptionsBar(1)
             viewer.showSelectionBar(1)
+
             
-       
 def onCreateInterface():
     # Create the dialog to display and edit the color information.
     root = Dialog()

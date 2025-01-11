@@ -6,15 +6,13 @@ from PySide2.QtCore import Qt, QRect
 from PySide2.QtGui import QColor, QCursor, QPen, QPixmap
 from PySide2.QtWidgets import QGraphicsScene, QGraphicsView
 
-
 def action(uievent):
+    print("xxx")
 
     if isinstance(uievent, ContextEvent):
         x = 1
 
-    if isinstance(uievent, KeyboardEvent) and\
-        uievent.eventtype == 'keyhit':
-
+    if isinstance(uievent, KeyboardEvent) and uievent.eventtype == 'keyhit':
 #        print(uievent.key)
 
         editor       = uievent.editor
@@ -28,61 +26,53 @@ def action(uievent):
         view_xform   = [0, 0]
         view_step    = 160
 
-        # Move node left
+        # move node left
         if key == 'Ctrl+Shift+H':
-            if round ((x%1), 1) <= 0.5:
-                x = math.floor(x) - 0.5
-            else:
-                x = math.ceil(x) - 0.5
-        # Layout nodes
-        elif key == "Ctrl+Shift+A":
-            node.parent().layoutChildren(horizontal_spacing=5, vertical_spacing=5), 
-        # Move node down
+            if round (x%1, 1) <= 0.5: x = math.floor(x) - 0.5
+            else:                     x = math.ceil(x) - 0.5
+        # move node down
         elif key == 'Ctrl+Shift+J':
-            if round ((y%1), 2) > 0.85:
-                y = math.ceil(y) - 0.15
-            else:
-                y = math.floor(y) - 0.15
-        # Move node up
+            if round (y%1, 2) > 0.85: y = math.ceil(y) - 0.15
+            else:                     y = math.floor(y) - 0.15
+        # move node up
         elif key == 'Ctrl+Shift+K':
-            if round((y%1), 2) < 0.85:
-                y = math.floor(y) + 0.85
-            else:
-                y = math.ceil(y) + 0.85
-        # Move node right
+            if round(y%1, 2) < 0.85:  y = math.floor(y) + 0.85
+            else:                     y = math.ceil(y) + 0.85
+        # move node right
         elif key == 'Ctrl+Shift+L':
-            if round( (x%1), 1) >= 0.5:
-                x = math.ceil(x) + 0.5
-            else:
-                x = math.floor(x) + 0.5
-        # Place dot
+            if round(x%1, 1) >= 0.5:  x = math.ceil(x) + 0.5
+            else:                     x = math.floor(x) + 0.5
+        # lay out nodes
+        elif key == "Ctrl+Shift+A":   node.parent().layoutChildren(horizontal_spacing=5, vertical_spacing=5), 
+        # place dot
         elif key == "Shift+D":
             selected = hou.selectedNodes()
             if len(selected) == 1:
                 context = node.parent()
-                dot = context.createNetworkDot()
+                dot     = context.createNetworkDot()
                 dot.setInput(node)
                 cursor_pos = editor.cursorPosition()
                 dot.setPosition(cursor_pos)
+        # set grid mode
         elif key == "Shift+G":
-            if editor.getPref("gridmode") == "0":
-                editor.setPref("gridmode", "2")
-            else:
-                editor.setPref("gridmode", "0")
-        # Pan left
-        elif key == 'H': view_xform[0] = -view_step * zoom_amt
-        # Pan down
-        elif key == 'J': view_xform[1] = -view_step * zoom_amt
-        # Pan up
+            mode = editor.getPref("gridmode")
+            modes = ("0", "2")
+            idx = (modes.index(mode) + 1) % 2
+            editor.setPref("gridmode", modes[idx]) 
+        # pan left
+        elif key == 'H': view_xform[0] = view_step * zoom_amt * -1
+        # pan down
+        elif key == 'J': view_xform[1] = view_step * zoom_amt * -1
+        # pan up
         elif key == 'K': view_xform[1] = view_step * zoom_amt
-        # Pan right
+        # pan right
         elif key == 'L': view_xform[0] = view_step * zoom_amt
-        # Change update mode
+        # set update mode
         elif key == "M":
-            if hou.updateModeSetting() == hou.updateMode.Manual:
-                hou.setUpdateMode(hou.updateMode.AutoUpdate)
-            else:
-                hou.setUpdateMode(hou.updateMode.Manual)
+            mode  = hou.updateModeSetting()
+            modes = (hou.updateMode.Manual, hou.updateMode.AutoUpdate)
+            idx   = (modes.index(mode) + 1) % 2
+            hou.setUpdateMode(modes[idx])
 
         node.setPosition( (x, y) )
         xform = hou.Vector2(view_xform[0], view_xform[1])

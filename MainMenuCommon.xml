@@ -5,46 +5,95 @@
      the original definitions found in $HFS/houdini/ -->
 <mainMenu>
   <menuBar>
-    <subMenu id="hou_ctrl_submenu">
-      <label>ctrl</label>
-        <scriptItem id="keycam">
-          <label>keycam</label>
-          <scriptCode><![CDATA[
-import hou_ctrl_utils as hcu
-hcu.keycam_toggle()
-          ]]></scriptCode>
-        </scriptItem>
-        <scriptItem id="color_palette">
-          <label>color palette</label>
-          <scriptCode><![CDATA[
-import hou_ctrl_utils as hcu
-hcu.color_editor_open()
-          ]]></scriptCode>
-        </scriptItem>
-        <separatorItem/>
-        <scriptItem id="reload_keycam">
-          <label>reload keycam</label>
-          <scriptCode><![CDATA[
-import hou_ctrl_utils as hcu
-hcu.keycam_reload()
-          ]]></scriptCode>
-        </scriptItem>
-        <scriptItem id="reload_color_scheme">
-          <label>reload color scheme</label>
-          <scriptCode><![CDATA[
-import hou_ctrl_utils as hcu
-hcu.color_scheme_reload()
-          ]]></scriptCode>
-        </scriptItem>
-        <scriptItem id="update_main_menu">
-          <label>update main menu</label>
-          <scriptCode><![CDATA[
-import hou_ctrl_utils as hcu
-hcu.main_menu_update()
-          ]]></scriptCode>
-        </scriptItem>
+    <subMenu id="hou_ctl_submenu">
+
+      <label>ctl</label>
+
+      <scriptItem id="toggle_all_menus">
+        <label>toggle_all_menus</label>
+        <scriptCode><![CDATA[
+import hou_ctl_utils as hcu
+hcu.toggle_all_menus()
+        ]]></scriptCode>
+      </scriptItem>
+
+      <scriptItem id="toggle_finder">
+        <label>toggle_finder</label>
+        <scriptCode><![CDATA[
+import hou_ctl_utils as hcu
+hcu.toggle_finder()
+        ]]></scriptCode>
+      </scriptItem>
+
+      <scriptItem id="toggle_keycam">
+        <label>toggle_keycam</label>
+        <scriptCode><![CDATA[
+import hou_ctl_utils as hcu
+hcu.toggle_keycam()
+        ]]></scriptCode>
+      </scriptItem>
+
+      <scriptItem id="toggle_panetabs">
+        <label>toggle_panetabs</label>
+        <scriptCode><![CDATA[
+import hou_ctl_utils as hcu
+hcu.toggle_panetabs()
+        ]]></scriptCode>
+      </scriptItem>
+
+      <scriptItem id="toggle_path">
+        <label>toggle_path</label>
+        <scriptCode><![CDATA[
+import hou_ctl_utils as hcu
+hcu.toggle_path()
+        ]]></scriptCode>
+      </scriptItem>
+
+      <scriptItem id="toggle_stowbars">
+        <label>toggle_stowbars</label>
+        <scriptCode><![CDATA[
+import hou_ctl_utils as hcu
+hcu.toggle_stowbars()
+        ]]></scriptCode>
+      </scriptItem>
+
+      <separatorItem/>
+
+      <scriptItem id="open_color_editor">
+        <label>open_color_editor</label>
+        <scriptCode><![CDATA[
+import hou_ctl_utils as hcu
+hcu.open_color_editor()
+        ]]></scriptCode>
+      </scriptItem>
+
+      <separatorItem/>
+
+      <scriptItem id="reload_keycam">
+        <label>reload_keycam</label>
+        <scriptCode><![CDATA[
+import hou_ctl_utils as hcu
+hcu.reload_keycam()
+        ]]></scriptCode>
+      </scriptItem>
+
+      <scriptItem id="reload_color_schemes">
+        <label>reload_color_schemes</label>
+        <scriptCode><![CDATA[
+import hou_ctl_utils as hcu
+hcu.reload_color_schemes()
+        ]]></scriptCode>
+      </scriptItem>
+
+      <separatorItem/>
+
+      <scriptItem id="update_main_menubar">
+        <label>update_main_menubar</label>
+        <scriptCode><![CDATA[
+import hou_ctl_utils as hcu
+hcu.update_main_menubar()
+        ]]></scriptCode>
+      </scriptItem>
+
     </subMenu>
-    <titleItem id="test">
-      <label>ass</label>
-    </titleItem>
 </mainMenu>
