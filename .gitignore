@@ -2,3 +2,4 @@ python3.11libs/__pycache__/*
 python3.11libs/fuzzyfinder/__pycache__/*
 scripts/python/__pycache__/*
 viewer_states/__pycache__/*
+recent_paths
