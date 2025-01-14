@@ -95,7 +95,7 @@ class State(object):
             "axis_pvt":           1,
             "bbox":               0,
             "cam_geo":            1,
-            "perim":              1,
+            "perim":              0,
             "pvt_2d":             0,
             "pvt_3d":             1,
             "ray":                1,
@@ -185,7 +185,6 @@ class State(object):
 
         self.cam_zoom(6)
         self.state_to_cam()
-
 
     def cam_move_pivot(self):
         target = self.nav_dict["target"]
@@ -407,7 +406,7 @@ class State(object):
             geo_type=hou.drawableGeometryType.Face,
             name="pvt_3d")
         self.guide_pvt_3d.setParams({
-            "color1": hou.Vector4(0.8, 0.0, 0.0, 1.0),
+            "color1": hou.Vector4(0.8, 0.8, 0.4, 0.7),
             "fade_factor": 0.5
         })
         # ray
@@ -527,7 +526,7 @@ class State(object):
         if self.guides["axis_pvt"]:
             P_pvt  = hou.Vector3(self.P_pvt)
             axes   = (hou.Vector3(1, 0, 0), hou.Vector3(0, 1, 0), hou.Vector3(0, 0, 1))
-            colors = ([1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.3, 0.3, 1.0])
+            colors = ([1.0, 0.7, 0.7], [0.7, 1.0, 0.7], [0.7, 0.7, 1.0])
             geo    = hou.Geometry()
             geo.addAttrib(hou.attribType.Point, "Cd", (0.1, 0.1, 0.1))
             for i in range(3):
@@ -560,8 +559,8 @@ class State(object):
     def update_guide_perim(self):
         self.guide_perim.show(self.guides["perim"])
         if self.guides["perim"]:
-            t    = hou.Vector3(self.t) - hou.Vector3(self.p)
-            rad  = self.P_pvt.distanceTo(self.P_ext)
+            rad  = self.P_pvt.distanceTo(self.P_cam)
+            self.log(str(rad) + "x")
             verb = hou.sopNodeTypeCategory().nodeVerb("circle")
             verb.setParms({
                 "divs":   128,
@@ -609,7 +608,7 @@ class State(object):
             verb.setParms({
                 "type":  1,
                 "t":     self.P_pvt,
-                "scale": self.P_cam.distanceTo(self.P_pvt) * 0.004
+                "scale": self.P_cam.distanceTo(self.P_pvt) * 0.002
             })
             geo = hou.Geometry()
             verb.execute(geo, [])
@@ -769,6 +768,7 @@ class State(object):
                 elif key == "=":       self.cam_zoom(-1)           # zoom in
                 elif key == "Shift+-": self.ow += 1                # orthowidth up
                 elif key == "Shift+=": self.ow -= 1                # orthowidth down
+                elif key == "f":       self.cam_frame()            # frame
                 self.state_to_cam()
                 
             else:                                                  # cam is default
@@ -790,7 +790,7 @@ class State(object):
                 elif key == "l": t[idx_arr[0]] -= delta
                 cam.setTranslation(t)
 
-        if key in ("m", "o", "h", "j", "k", "l", "-", "=", "Shift+h", "Shift+j", "Shift+k", "Shift+l", "Shift+-", "Shift+="): return True
+        if key in ("m", "o", "h", "j", "k", "l", "-", "=", "Shift+h", "Shift+j", "Shift+k", "Shift+l", "Shift+-", "Shift+=", "f"): return True
         else: return False
 
     def onMenuAction(self, kwargs):

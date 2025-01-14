@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menuDocument>
+    <menu>
+        <removeItem id="opmenu.outputs_menu"/>
+        <removeItem id="opmenu.help"/>
+    </menu>
+</menuDocument>

@@ -475,9 +475,9 @@ DopeSheetKeyDisabled:                    0.5 0 1
 DopeSheetKeySelected:                    fg_dim
 DopeSheetKeySelectedBorder:              black
 DopeSheetKeySelecting:                   1 0.45 0.25
-DopeSheetKeySelectingBorder:             1 0 0               // RED
+DopeSheetKeySelectingBorder:             1 0 0
 DopeSheetOutsideRangeBG:                 GREY(0.3)
-DopeSheetSimulation:                     mud_textbox         // Cached simulation 
+DopeSheetSimulation:                     #605000         // Cached simulation 
 DopeSheetSimulationReset:                main_sep
 DopeSheetSimulationPlaying:              0.59 0.48 0.7
 DopeSheetTimeline:                       separator

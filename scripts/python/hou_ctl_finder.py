@@ -54,6 +54,7 @@ class finder(QtWidgets.QDialog):
         s.list_widget.addItem("update_main_menubar")
         s.list_widget.addItem("update_mode_auto")
         s.list_widget.addItem("update_mode_manual")
+        s.list_widget.addItem("vectors")
         s.list_widget.addItem("viewer_toolbars")
         s.layout0.addWidget(s.list_widget) 
 
@@ -93,6 +94,7 @@ class finder(QtWidgets.QDialog):
         elif current_item == "update_main_menubar":  hcu.update_main_menubar()
         elif current_item == "update_mode_auto":     hcu.update_mode_auto()
         elif current_item == "update_mode_manual":   hcu.update_mode_manual()
+        elif current_item == "vectors":              hcu.toggle_vectors()
         elif current_item == "viewer_toolbars":      hcu.toggle_viewer_toolbars()
 
     def change_idx(s):

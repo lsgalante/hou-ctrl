@@ -204,6 +204,20 @@ def toggle_stowbars():
     hide = hou.ui.hideAllMinimizedStowbars()
     hou.ui.setHideAllMinimizedStowbars(not hide)
 
+def toggle_vectors():
+    viewers = get_scene_viewers()
+    for viewer in viewers:
+        viewports = viewer.viewports()
+        for viewport in viewports:
+            settings = viewport.settings()
+            vector_scale = settings.vectorScale()
+            if vector_scale == 1:
+                settings.setVectorScale(0)
+            elif vector_scale == 0:
+                settings.setVectorScale(1)
+            else:
+                settings.setVectorScale(1)
+
 def toggle_viewer_toolbars():
     viewer = get_scene_viewers[0]
     state1 = viewer.isShowingOperationBar()

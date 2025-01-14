@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menuDocument>
+    <menu>
+        <removeItem id="edit_render_parms"/>
+        <removeItem id="edit_node_parms"/>
+        <removeItem id="edit_delete_script"/>
+    </menu>
+</menuDocument>
