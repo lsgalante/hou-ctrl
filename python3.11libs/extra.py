@@ -7,14 +7,10 @@ from PySide2.QtGui import QColor, QCursor, QPen, QPixmap
 from PySide2.QtWidgets import QGraphicsScene, QGraphicsView
 
 def action(uievent):
-    print("xxx")
-
     if isinstance(uievent, ContextEvent):
-        x = 1
+        return
 
     if isinstance(uievent, KeyboardEvent) and uievent.eventtype == 'keyhit':
-#        print(uievent.key)
-
         editor       = uievent.editor
         node         = editor.currentNode()
         x            = node.position()[0]
@@ -26,25 +22,24 @@ def action(uievent):
         view_xform   = [0, 0]
         view_step    = 160
 
-        # move node left
-        if key == 'Ctrl+Shift+H':
-            if round (x%1, 1) <= 0.5: x = math.floor(x) - 0.5
-            else:                     x = math.ceil(x) - 0.5
-        # move node down
-        elif key == 'Ctrl+Shift+J':
-            if round (y%1, 2) > 0.85: y = math.ceil(y) - 0.15
-            else:                     y = math.floor(y) - 0.15
-        # move node up
-        elif key == 'Ctrl+Shift+K':
-            if round(y%1, 2) < 0.85:  y = math.floor(y) + 0.85
-            else:                     y = math.ceil(y) + 0.85
-        # move node right
+        # Move nodes
+        if key == "Ctrl+Shift+H":
+            if round(x % 1, 1) <= 0.5: x = math.floor(x) - 1.5
+            else:                      x = math.ceil(x)  - 1.5
+        elif key == "Ctrl+Shift+J":
+            if round(y % 1, 2) > 0.85: y = math.ceil(y)  - 0.15
+            else:                      y = math.floor(y) - 0.15
+        elif key == "Ctrl+Shift+K":
+            if round(y % 1, 2) < 0.85: y = math.floor(y) + 0.85
+            else:                      y = math.ceil(y)  + 0.85
         elif key == 'Ctrl+Shift+L':
-            if round(x%1, 1) >= 0.5:  x = math.ceil(x) + 0.5
-            else:                     x = math.floor(x) + 0.5
-        # lay out nodes
+            if round(x % 1, 1) >= 0.5: x = math.ceil(x)  + 1.5
+            else:                      x = math.floor(x) + 1.5
+
+        # Organize nodes
         elif key == "Ctrl+Shift+A":   node.parent().layoutChildren(horizontal_spacing=5, vertical_spacing=5), 
-        # place dot
+
+        # Place dot
         elif key == "Shift+D":
             selected = hou.selectedNodes()
             if len(selected) == 1:
@@ -53,21 +48,21 @@ def action(uievent):
                 dot.setInput(node)
                 cursor_pos = editor.cursorPosition()
                 dot.setPosition(cursor_pos)
-        # set grid mode
+
+        # Toggle grid mode
         elif key == "Shift+G":
             mode = editor.getPref("gridmode")
             modes = ("0", "2")
             idx = (modes.index(mode) + 1) % 2
             editor.setPref("gridmode", modes[idx]) 
-        # pan left
+
+        # Panning
         elif key == 'H': view_xform[0] = view_step * zoom_amt * -1
-        # pan down
         elif key == 'J': view_xform[1] = view_step * zoom_amt * -1
-        # pan up
         elif key == 'K': view_xform[1] = view_step * zoom_amt
-        # pan right
         elif key == 'L': view_xform[0] = view_step * zoom_amt
-        # set update mode
+
+        # Toggle update mode
         elif key == "M":
             mode  = hou.updateModeSetting()
             modes = (hou.updateMode.Manual, hou.updateMode.AutoUpdate)
