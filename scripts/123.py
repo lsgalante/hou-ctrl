@@ -14,3 +14,5 @@ try:
     )
     if len(i) > 0:
         hou.hipFile.load(choice_arr[i[0]])
+except:
+    x=1
