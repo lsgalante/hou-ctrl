@@ -11,12 +11,12 @@ class State(object):
             {"id": "divider",     "type":  "divider"},
             {"id": "hud",         "label": "hud"},
             {"id": "hud_g",       "type":  "choicegraph"},
+            {"id": "layout",      "label": "layout"},
+            {"id": "layout_g",    "type":  "choicegraph"},
             {"id": "vp_idx",      "label": "vp_idx"},
             {"id": "vp_idx_g",    "type":  "choicegraph"},
             {"id": "set_view",    "label": "set_view"},
-            {"id": "set_view_g",  "type":  "choicegraph"},
-            {"id": "layout",      "label": "layout"},
-            {"id": "layout_g",    "type":  "choicegraph"}
+            {"id": "set_view_g",  "type":  "choicegraph"}
         ]
     }
 
@@ -92,7 +92,7 @@ class State(object):
         self.guides={
             "axis_size":          1,
             "axis_cam":           1,
-            "axis_pvt":           1,
+            "axis_pvt":           0,
             "bbox":               0,
             "cam_geo":            1,
             "perim":              0,
@@ -117,15 +117,15 @@ class State(object):
 
         # hud dicts
         self.layout_dict={
-            "ctl_arr":      ("hud", "vp_idx", "set_view", "layout"),
+            "ctl_arr":      ("hud", "layout", "vp_idx", "set_view"),
             "ctl":          "hud",
-            "vp_idx_arr":   (),
+            # layouts: DoubleSide, DoubleStack, Quad, QuadBottomSplit, QuadLeftSplit, Single, TripleBottomSplit, TripleLeftSplit
+            "layout_arr":   ("Single", "DoubleSide", "TripleLeftSplit", "Quad"),
+            "layout":       "Single",
+            "vp_idx_arr":   ("0"),
             "vp_idx":       "0",
             "set_view_arr": ("top", "bottom", "left", "right", "front", "back", "persp", "none"),
-            "set_view":     "persp",
-            #"layout_arr":   ("DoubleSide", "DoubleStack", "Quad", "QuadBottomSplit", "QuadLeftSplit", "Single", "TripleBottomSplit", "TripleLeftSplit"),
-            "layout_arr":   ("Quad", "Single"),
-            "layout":       "Single"
+            "set_view":     "persp"
 
         }
     
@@ -438,12 +438,12 @@ class State(object):
     def set_view(self):
         set_view = self.layout_dict["set_view"]
         r = None
-        if   "top" in set_view: r = (270, 0, 0)
-        elif "bot" in set_view: r = (90, 0, 0)
-        elif "fro" in set_view: r = (0, 180, 0)
-        elif "bac" in set_view: r = (0, 0, 0)
-        elif "rig" in set_view: r = (0, 90, 0)
-        elif "lef" in set_view: r = (0, 270, 0)
+        if   set_view == "top":    r = (270, 0, 0)
+        elif set_view == "bottom": r = (90, 0, 0)
+        elif set_view == "front":  r = (0, 180, 0)
+        elif set_view == "back":   r = (0, 0, 0)
+        elif set_view == "right":  r = (0, 90, 0)
+        elif set_view == "left":   r = (0, 270, 0)
         #self.r = hou.Vector3(r)
         self.state_to_cam()
 
@@ -460,6 +460,23 @@ class State(object):
         layout = self.layout_dict["layout"]
         self.viewer.setViewportLayout(getattr(hou.geometryViewportLayout, layout))
 
+    
+
+        vp_ct = 0
+        if   layout == "DoubleSide":        vp_ct = 2
+        elif layout == "DoubleStack":       vp_ct = 2
+        elif layout == "Quad":              vp_ct = 4
+        elif layout == "QuadBottomSplit":   vp_ct = 4
+        elif layout == "QuadLeftSplit":     vp_ct = 4
+        elif layout == "Single":            vp_ct = 1
+        elif layout == "TripleBottomSplit": vp_ct = 3
+        elif layout == "TripleLeftSplit":   vp_ct = 3
+        vp_idx_arr = []
+        for i in range(vp_ct):
+            vp_idx_arr.append(str(i))
+        self.layout_dict["vp_idx_arr"] = vp_idx_arr
+        self.layout_dict["vp_idx"]     = vp_idx_arr[0]
+        
     def set_vp_type(self, vp_type_name):
         vp_type = eval("hou.geometryViewportType." + vp_type_name.capitalize())
         vp = self.viewer.findViewport(self.layout_dict["vp_idx"])
@@ -680,23 +697,6 @@ class State(object):
                 hud_dict["rows"][ct]["count"] = len(arr)
             ct += 1
 
-    def update_dict_layout(self):
-        layout = self.viewer.viewportLayout()
-        vp_ct = 0
-        if   layout == hou.geometryViewportLayout.DoubleSide:        vp_ct = 2
-        elif layout == hou.geometryViewportLayout.DoubleStack:       vp_ct = 2
-        elif layout == hou.geometryViewportLayout.Quad:              vp_ct = 4
-        elif layout == hou.geometryViewportLayout.QuadBottomSplit:   vp_ct = 4
-        elif layout == hou.geometryViewportLayout.QuadLeftSplit:     vp_ct = 4
-        elif layout == hou.geometryViewportLayout.Single:            vp_ct = 1
-        elif layout == hou.geometryViewportLayout.TripleBottomSplit: vp_ct = 3
-        elif layout == hou.geometryViewportLayout.TripleLeftSplit:   vp_ct = 3
-        vp_idx_arr = []
-        for i in range(vp_ct):
-            vp_idx_arr.append(str(i))
-        self.layout_dict["vp_idx_arr"] = vp_idx_arr
-        self.layout_dict["vp_idx"]     = vp_idx_arr[0]
-        
     def vp_frame(self):
         for vp in self.viewer.viewports():
             cam = vp.camera()
@@ -734,7 +734,7 @@ class State(object):
         # prevent exiting state when selecting nodes
         kwargs["state_flags"]["exit_on_node_select"] = False
         self.parms = kwargs["state_parms"]
-        self.update_dict_layout()
+        #self.update_dict_layout()
         self.init_cam()
         self.init_parms()
         self.update_hud()
@@ -744,14 +744,50 @@ class State(object):
     def onKeyEvent(self, kwargs):
         key = kwargs["ui_event"].device().keyString()
         self.log(key)
-
     
         if   key == "m": self.toggle_mode()                        # toggle hud mode
         elif key == "o": self.toggle_projection()                  # toggle_projection
         elif self.mode == "settings": self.hud_nav(key)            # hud_nav
     
         elif self.mode == "camera":                                # camera manipulation
-            vp = self.get_vp()
+            vp_idx = self.layout_dict["vp_idx"]
+            layout = self.layout_dict["layout"]
+            if   layout == "DoubleSide":        vp_idx = (2, 3)[int(vp_idx)]
+            #   2 3
+            elif layout == "DoubleStack":       vp_idx = (3, 0)[int(vp_idx)]
+            #   3
+            #   0
+            elif layout == "Quad":              vp_idx = (2, 3, 1, 0)[int(vp_idx)]
+            #   2 3
+            #   1 0
+            elif layout == "QuadBottomSplit":   vp_idx = (3, 2, 1, 0)[int(vp_idx)]
+            #     3
+            #   2 1 0
+            elif layout == "QuadLeftSplit":     vp_idx = (2, 1, 0, 3)[int(vp_idx)]
+            #   2
+            #   1 3
+            #   0
+            elif layout == "Single":            vp_idx = 3
+            #   setViewportLayout(layout, single=-1)
+            #   -1: current      vp (vp mouse is/was over)
+            #   0:  top left     vp from quad layout (default Top)
+            #   1:  top-right    vp from quad layout (default Perspective)
+            #   2:  bottom-left  vp from quad layout (default Front)
+            #   3:  bottom-right vp from quad layout (default Right) 
+            elif layout == "TripleBottomSplit": vp_idx = (3, 1, 0)[int(vp_idx)]
+            #     3
+            #   1   0
+            elif layout == "TripleLeftSplit":   vp_idx = (2, 3, 1)[int(vp_idx)]
+            #   2
+            #   0 3
+            #   1
+            #
+
+            vps = list(self.viewer.viewports())
+            self.log(vp_idx)
+            print([vp.type() for vp in vps])
+            vp = vps[vp_idx]
+            #vp = self.get_vp()
             vp_type = vp.type()
             self.log(vp_type)
             
@@ -788,6 +824,8 @@ class State(object):
                 elif key == "j": t[idx_arr[1]] += delta
                 elif key == "k": t[idx_arr[1]] -= delta
                 elif key == "l": t[idx_arr[0]] -= delta
+                elif key == "-": cam.setOrthoWidth(cam.orthoWidth() + 1)
+                elif key == "=": cam.setOrthoWidth(cam.orthoWidth() - 1)
                 cam.setTranslation(t)
 
         if key in ("m", "o", "h", "j", "k", "l", "-", "=", "Shift+h", "Shift+j", "Shift+k", "Shift+l", "Shift+-", "Shift+=", "f"): return True

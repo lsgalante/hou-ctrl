@@ -1,0 +1,20 @@
+guides
+   axis_size: 1
+    axis_cam: 1
+    axis_pvt: 1
+    bbox: 0
+    cam_geo: 1
+    perim: 0
+    pvt_2d: 0
+    pvt_3d: 0
+    ray: 1
+    tie_axis_to_radius: 0
+startup
+    center_on_geo: 1
+    lock_cam: 1
+    cam_reset: 1
+units
+    r: 7.5
+    t: 1
+    ow: 1
+    dist: 1

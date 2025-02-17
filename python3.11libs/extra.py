@@ -24,8 +24,8 @@ def action(uievent):
 
         # Move nodes
         if key == "Ctrl+Shift+H":
-            if round(x % 1, 1) <= 0.5: x = math.floor(x) - 1.5
-            else:                      x = math.ceil(x)  - 1.5
+            if round(x % 1, 1) <= 0.5: x = math.floor(x) - 0.5
+            else:                      x = math.ceil(x)  - 0.5
         elif key == "Ctrl+Shift+J":
             if round(y % 1, 2) > 0.85: y = math.ceil(y)  - 0.15
             else:                      y = math.floor(y) - 0.15
@@ -33,8 +33,8 @@ def action(uievent):
             if round(y % 1, 2) < 0.85: y = math.floor(y) + 0.85
             else:                      y = math.ceil(y)  + 0.85
         elif key == 'Ctrl+Shift+L':
-            if round(x % 1, 1) >= 0.5: x = math.ceil(x)  + 1.5
-            else:                      x = math.floor(x) + 1.5
+            if round(x % 1, 1) >= 0.5: x = math.ceil(x)  + 0.5
+            else:                      x = math.floor(x) + 0.5
 
         # Organize nodes
         elif key == "Ctrl+Shift+A":   node.parent().layoutChildren(horizontal_spacing=5, vertical_spacing=5), 
