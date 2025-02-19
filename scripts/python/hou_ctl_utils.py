@@ -2,7 +2,6 @@ import hou
 from importlib import reload
 import hou_ctl_finder
 
-
 # get
 
 def getAutosaveState():
