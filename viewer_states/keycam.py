@@ -78,7 +78,7 @@ class State(object):
         self.mode     = "camera"
         self.viewer   = scene_viewer
 
-        self.P_pvt    = hou.Vector3(0, 0, 0)
+        self.P_pivot  = hou.Vector3(0, 0, 0)
         self.P_cam    = hou.Vector3(0, 0, 0)
         self.r        = hou.Vector3(0, 0, 0)
         self.local_x  = hou.Vector3(1, 0, 0)
@@ -92,12 +92,12 @@ class State(object):
         self.guides={
             "axis_size":          1,
             "axis_cam":           1,
-            "axis_pvt":           0,
+            "axis_pivot":         0,
             "bbox":               0,
             "cam_geo":            1,
             "perim":              0,
-            "pvt_2d":             0,
-            "pvt_3d":             1,
+            "pivot_2d":           0,
+            "pivot_3d":           1,
             "ray":                1,
             "tie_axis_to_radius": 0
         }
@@ -158,40 +158,40 @@ class State(object):
             "focus_arr": ("test1", "test2", "test3"),
             "focus":     "test1"
         }
-        self.init_guides()
+        self.initGuides()
     
     ##
     ##
 
-    def arr_next(self, arr, sel):
+    def arrNext(self, arr, sel):
         idx = arr.index(sel)
         idx = (idx + 1) % len(arr)
         return idx
 
-    def arr_prev(self, arr, sel):
+    def arrPrev(self, arr, sel):
         idx = arr.index(sel)
         idx = (idx - 1) % len(arr)
         return idx
 
-    def cam_frame(self):
-        centroid = self.get_geo_centroid()
-        bbox = self.get_geo_bbox()
+    def camFrame(self):
+        centroid = self.getGeoCentroid()
+        bbox = self.getGeoBbox()
 
-        self.P_pvt = centroid
+        self.P_pivot = centroid
         P_cam = centroid
         #P_cam[2] = 6
         self.P_cam = P_cam
         self.ow = 10
 
-        self.cam_zoom(6)
-        self.state_to_cam()
+        self.camZoom(6)
+        self.stateToCam()
 
-    def cam_move_pivot(self):
+    def camMovePivot(self):
         target = self.nav_dict["target"]
         if target == "cam":
             t = list(self.parms["t"]["value"])
         elif target == "centroid":
-            centroid = self.get_geo_centroid()
+            centroid = self.getGeoCentroid()
         elif target == "origin":
             dist    = self.parm_dict["dist"]["value"]
             self.t  = [0, 0, dist]
@@ -201,19 +201,19 @@ class State(object):
             self.ow = 10
         elif target == "ray":
             return
-        self.state_to_cam()
-        self.update_guides()
+        self.stateToCam()
+        self.updateGuides()
 
-    def cam_to_state(self):
+    def camToState(self):
         self.t = list(self.cam.evalParmTuple("t"))
         self.p = list(self.cam.evalParmTuple("p"))
         self.r = hou.Vector3(self.cam.evalParmTuple("r"))
         self.pr = list(self.cam.evalParmTuple("pr"))
         self.ow = self.cam.evalParm("orthowidth")
 
-    def cam_reset(self):
-        self.P_ext    = hou.Vector3(0, 0, 0)
-        self.P_pvt    = hou.Vector3(0, 0, 0)
+    def camReset(self):
+        self.P_cam    = hou.Vector3(0, 0, 0)
+        self.P_pivot  = hou.Vector3(0, 0, 0)
         self.r        = hou.Vector3(0, 0, 0)
         self.local_x  = hou.Vector3(1, 0, 0)
         self.local_y  = hou.Vector3(0, 1, 0)
@@ -221,10 +221,10 @@ class State(object):
         self.global_x = hou.Vector3(1, 0, 0)
         self.global_y = hou.Vector3(0, 1, 0)
         self.global_z = hou.Vector3(0, 0, 1)
-        self.state_to_cam()
-        self.update_guides()
+        self.stateToCam()
+        self.updateGuides()
 
-    def cam_rotate(self, axis_name, deg):
+    def camRotate(self, axis_name, deg):
         axis = None
         if   axis_name == "x":
             axis = self.local_x
@@ -235,45 +235,45 @@ class State(object):
 
         m = hou.hmath.buildRotateAboutAxis(axis, deg)
 
-        self.P_cam   -= self.P_pvt
+        self.P_cam   -= self.P_pivot
         self.P_cam   *= m
-        self.P_cam   += self.P_pvt
+        self.P_cam   += self.P_pivot
         self.local_x *= m
         self.local_y *= m
         self.local_z *= m
-        self.state_to_cam()
+        self.stateToCam()
 
-    def cam_translate(self, axis_name, amt):
+    def camTranslate(self, axis_name, amt):
         axis = None
         if   axis_name == "x": axis = self.local_x
         elif axis_name == "y": axis = self.local_y
 
         move = axis * amt
-        self.P_pvt += move
+        self.P_pivot += move
         self.P_cam += move
-        self.state_to_cam()
+        self.stateToCam()
 
-    def cam_zoom(self, amt):
+    def camZoom(self, amt):
         move  = hou.Vector3(0, 0, 0)
         move  = self.local_z * amt
         self.P_cam += move
-        self.state_to_cam()
+        self.stateToCam()
 
-    def frame_default(self):
+    def frameDefault(self):
         vp_arr = self.viewer.viewports()
         for vp in vp_arr:
             cam = vp.camera()
             # is cam default or node
             if cam == None: vp.frameAll()
-        self.cam_to_state()
+        self.camToState()
 
-    def get_geo(self):
+    def getGeo(self):
         display_node = self.viewer.pwd().displayNode()
         geo = display_node.geometry()
         return geo
 
-    def get_geo_centroid(self):
-        geo_in = self.get_geo()
+    def getGeoCentroid(self):
+        geo_in = self.getGeo()
         geo_out = hou.Geometry()
         verb = hou.sopNodeTypeCategory().nodeVerb("extractcentroid")
         verb.setParms({"partitiontype": 2})
@@ -282,12 +282,12 @@ class State(object):
         centroid = pt.position()
         return centroid
 
-    def get_geo_bbox(self):
-        geo = self.get_geo()
+    def getGeoBbox(self):
+        geo = self.getGeo()
         bbox = geo.boundingBox()
         return bbox
 
-    def get_vp(self):
+    def getVp(self):
         vp_idx_arr = self.layout_dict["vp_idx_arr"]
         vp_idx     = self.layout_dict["vp_idx"]
         vp_idx     = vp_idx_arr.index(vp_idx)
@@ -296,7 +296,7 @@ class State(object):
         vp          = vp_arr[vp_idx]
         return vp
 
-    def hud_nav(self, key):
+    def hudNav(self, key):
         # source common variables
         ctl_dict            = getattr(self, self.hud + "_dict")
         ctl_dict["hud_arr"] = self.hud_arr
@@ -317,7 +317,7 @@ class State(object):
 
         # change control value
         elif key in ("h", "l"):
-            if ctl == "attr": self.set_focus_attr() 
+            if ctl == "attr": self.setFocusAttr() 
 
             else:
                 val_arr = ctl_dict[ctl + "_arr"] 
@@ -332,14 +332,14 @@ class State(object):
                 ctl_dict[ctl] = val
 
         # update dict 
-        if   ctl == "layout":   self.set_vp_layout()
+        if   ctl == "layout":   self.setVpLayout()
         #elif ctl == "vp_idx":   self.set_vp()
-        elif ctl == "set_view": self.set_view()
+        elif ctl == "set_view": self.setView()
 
         self.hud = ctl_dict["hud"]
-        self.update_hud()
+        self.updateHud()
 
-    def init_cam(self):
+    def initCam(self):
         vp_arr = list(self.viewer.viewports())
         vp_arr.reverse()
         vp = vp_arr[0]
@@ -372,17 +372,17 @@ class State(object):
         vp.setCamera(self.cam)
         vp.lockCameraToView(self.startup_dict["lock_cam"])
 
-    def init_guides(self):
+    def initGuides(self):
         # axis_cam
         self.guide_axis_cam = hou.GeometryDrawable(
             scene_viewer=self.viewer,
             geo_type=hou.drawableGeometryType.Line,
             name="axis_cam")
-        # axis_pvt
-        self.guide_axis_pvt = hou.GeometryDrawable(
+        # axis_pivot
+        self.guide_axis_pivot = hou.GeometryDrawable(
             scene_viewer=self.viewer,
             geo_type=hou.drawableGeometryType.Line,
-            name="axis_pvt",
+            name="axis_pivot",
             params={"color1": hou.Vector4((1, 1, 1, 0.5))})
         # bbox
         self.guide_bbox = hou.GeometryDrawable(
@@ -390,22 +390,22 @@ class State(object):
             geo_type=hou.drawableGeometryType.Line,
             name="bbox",
             params={"color1": hou.Vector4((1, 1, 1, 0.3))})
-        # pvt_2d
-        self.guide_pvt_2d = hou.GeometryDrawable(
+        # pivot_2d
+        self.guide_pivot_2d = hou.GeometryDrawable(
             scene_viewer=self.viewer,
             geo_type=hou.drawableGeometryType.Line,
-            name="pvt_2d")
+            name="pivot_2d")
         # perim
         self.guide_perim = hou.GeometryDrawable(
             scene_viewer=self.viewer,
             geo_type=hou.drawableGeometryType.Line,
             name="perim")
-        # pvt_3d
-        self.guide_pvt_3d = hou.GeometryDrawable(
+        # pivot_3d
+        self.guide_pivot_3d = hou.GeometryDrawable(
             scene_viewer=self.viewer,
             geo_type=hou.drawableGeometryType.Face,
-            name="pvt_3d")
-        self.guide_pvt_3d.setParams({
+            name="pivot_3d")
+        self.guide_pivot_3d.setParams({
             "color1": hou.Vector4(0.8, 0.8, 0.4, 0.7),
             "fade_factor": 0.5
         })
@@ -421,21 +421,21 @@ class State(object):
             name="text",
             label="test")
 
-    def init_parms(self):
+    def initParms(self):
         self.t = list(self.cam.evalParmTuple("t"))
         self.p = list(self.cam.evalParmTuple("p"))
         self.r = hou.Vector3(self.cam.evalParmTuple("r"))
         self.pr = list(self.cam.evalParmTuple("pr"))
         self.ow = self.cam.evalParm("orthowidth")
 
-    def init_settings(self):
+    def initSettings(self):
         # reset cam or else set state from cam
-        if self.startup_dict["cam_reset"]: self.cam_reset()
-        else: self.cam_to_state()
+        if self.startup_dict["cam_reset"]: self.camReset()
+        else: self.camToState()
         # keycam node display flag
         self.cam.setDisplayFlag(self.guides["cam_geo"])
 
-    def set_view(self):
+    def setView(self):
         set_view = self.layout_dict["set_view"]
         r = None
         if   set_view == "top":    r = (270, 0, 0)
@@ -445,9 +445,9 @@ class State(object):
         elif set_view == "right":  r = (0, 90, 0)
         elif set_view == "left":   r = (0, 270, 0)
         #self.r = hou.Vector3(r)
-        self.state_to_cam()
+        self.stateToCam()
 
-    def set_focus_attr(self):
+    def setFocusAttr(self):
         attr = hou.ui.readInput(
             "focus_attr",
             buttons=("OK", "Cancel"),
@@ -456,7 +456,7 @@ class State(object):
         if attr[0] == 0:
             self.focus_dict["focus_attr"] = attr[1]
 
-    def set_vp_layout(self):
+    def setVpLayout(self):
         layout = self.layout_dict["layout"]
         self.viewer.setViewportLayout(getattr(hou.geometryViewportLayout, layout))
 
@@ -477,53 +477,53 @@ class State(object):
         self.layout_dict["vp_idx_arr"] = vp_idx_arr
         self.layout_dict["vp_idx"]     = vp_idx_arr[0]
         
-    def set_vp_type(self, vp_type_name):
+    def setVpType(self, vp_type_name):
         vp_type = eval("hou.geometryViewportType." + vp_type_name.capitalize())
         vp = self.viewer.findViewport(self.layout_dict["vp_idx"])
         vp.changeType(vp_type)
     
-    def state_to_cam(self):
+    def stateToCam(self):
         self.cam.parmTuple("t").set(self.P_cam)
         self.cam.parmTuple("r").set(self.r)
         self.cam.parm("orthowidth").set(self.ow)
-        self.update_guides()
+        self.updateGuides()
 
-    def toggle_bbox(self, kwargs, action):
+    def toggleBbox(self, kwargs, action):
         enabled = kwargs["toggle_bbx"]
         self.update_bbox()
 
-    def toggle_mode(self):
+    def toggleMode(self):
         idx = self.mode_arr.index(self.mode)
         idx = (idx + 1) % 2
         self.mode = self.mode_arr[idx]
-        self.update_hud()
-        self.update_aspect_ratio()
+        self.updateHud()
+        self.updateAspectRatio()
 
-    def toggle_projection(self):
+    def toggleProjection(self):
         cam = self.cam
         proj_parm = cam.parm("projection")
         proj = proj_parm.evalAsString() 
         if proj == "ortho": proj_parm.set("perspective")
         elif proj == "perspective": proj_parm.set("ortho")
 
-    def update_aspect_ratio(self):
+    def updateAspectRatio(self):
         self.cam.parm("resx").set(1000)
         self.cam.parm("resy").set(1000)
         vp = self.viewer.findViewport("persp1")
         ratio = vp.size()[2] / vp.size()[3]
         self.cam.parm("aspect").set(ratio)
 
-    def update_guides(self):
-        self.update_guide_axis_cam()
-        self.update_guide_axis_pvt()
-        self.update_guide_bbox()
-        self.update_guide_perim()
-        self.update_guide_pvt_2d()
-        self.update_guide_pvt_3d()
-        self.update_guide_ray()
-        self.update_guide_text()
+    def updateGuides(self):
+        self.updateGuideAxisCam()
+        self.updateGuideAxisPvt()
+        self.updateGuideBbox()
+        self.updateGuidePerim()
+        self.updateGuidePvt2d()
+        self.updateGuidePvt3d()
+        self.updateGuideRay()
+        self.updateGuideText()
 
-    def update_guide_axis_cam(self):
+    def updateGuideAxisCam(self):
         self.guide_axis_cam.show(self.guides["axis_cam"])
 
         if self.guides["axis_cam"]:
@@ -538,27 +538,27 @@ class State(object):
                 poly.addVertex(pt_arr[1])
             self.guide_axis_cam.setGeometry(geo)
 
-    def update_guide_axis_pvt(self):
-        self.guide_axis_pvt.show(self.guides["axis_pvt"])
-        if self.guides["axis_pvt"]:
-            P_pvt  = hou.Vector3(self.P_pvt)
-            axes   = (hou.Vector3(1, 0, 0), hou.Vector3(0, 1, 0), hou.Vector3(0, 0, 1))
-            colors = ([1.0, 0.7, 0.7], [0.7, 1.0, 0.7], [0.7, 0.7, 1.0])
-            geo    = hou.Geometry()
+    def updateGuideAxisPvt(self):
+        self.guide_axis_pivot.show(self.guides["axis_pivot"])
+        if self.guides["axis_pivot"]:
+            P_pivot = hou.Vector3(self.P_pivot)
+            axes    = (hou.Vector3(1, 0, 0), hou.Vector3(0, 1, 0), hou.Vector3(0, 0, 1))
+            colors  = ([1.0, 0.7, 0.7], [0.7, 1.0, 0.7], [0.7, 0.7, 1.0])
+            geo     = hou.Geometry()
             geo.addAttrib(hou.attribType.Point, "Cd", (0.1, 0.1, 0.1))
             for i in range(3):
-                P0     = axes[i] *  1 + P_pvt
-                P1     = axes[i] * -1 + P_pvt
+                P0     = axes[i] *  1 + P_pivot
+                P1     = axes[i] * -1 + P_pivot
                 pt_arr = geo.createPoints((P0, P1))
                 pt_arr[0].setAttribValue("Cd", colors[i])
                 pt_arr[1].setAttribValue("Cd", colors[i])
                 poly = geo.createPolygon(is_closed=False)
                 poly.addVertex(pt_arr[0])
                 poly.addVertex(pt_arr[1])
-            self.guide_axis_pvt.setGeometry(geo)
-            self.guide_axis_pvt.setParams({"fade_factor": 0.0})
+            self.guide_axis_pivot.setGeometry(geo)
+            self.guide_axis_pivot.setParams({"fade_factor": 0.0})
 
-    def update_guide_bbox(self):
+    def updateGuideBbox(self):
         self.guide_bbox.show(self.guides["bbox"])
         if self.guides["bbox"]:
             geo  = self.get_get()
@@ -573,16 +573,16 @@ class State(object):
             P7   = (bbox[3], bbox[4], bbox[2])
             print(bbox)
     
-    def update_guide_perim(self):
+    def updateGuidePerim(self):
         self.guide_perim.show(self.guides["perim"])
         if self.guides["perim"]:
-            rad  = self.P_pvt.distanceTo(self.P_cam)
+            rad  = self.P_pivot.distanceTo(self.P_cam)
             self.log(str(rad) + "x")
             verb = hou.sopNodeTypeCategory().nodeVerb("circle")
             verb.setParms({
                 "divs":   128,
                 "type":   1,
-                "t":      self.P_pvt,
+                "t":      self.P_pivot,
                 #"r":      self.r,
                 "scale":  rad,
                 "orient": 2
@@ -595,9 +595,9 @@ class State(object):
                 "fade_factor": 1.0
             })
 
-    def update_guide_pvt_2d(self):
-        self.guide_pvt_2d.show(self.guides["pvt_2d"])
-        if self.guides["pvt_2d"]:
+    def updateGuidePvt2d(self):
+        self.guide_pivot_2d.show(self.guides["pivot_2d"])
+        if self.guides["pivot_2d"]:
             r    = list(self.r)
             t    = list(self.t)
             p    = list(self.p)
@@ -612,44 +612,44 @@ class State(object):
             })
             geo = hou.Geometry()
             verb.execute(geo, [])
-            self.guide_pvt_2d.setGeometry(geo)
-            self.guide_pvt_2d.setParams({
+            self.guide_pivot_2d.setGeometry(geo)
+            self.guide_pivot_2d.setParams({
                 "color1":      hou.Vector4(0.0, 0.0, 1, 1),
                 "fade_factor": 1.0
             })
 
-    def update_guide_pvt_3d(self):
-        self.guide_pvt_3d.show(self.guides["pvt_3d"])
-        if self.guides["pvt_3d"]:
+    def updateGuidePvt3d(self):
+        self.guide_pivot_3d.show(self.guides["pivot_3d"])
+        if self.guides["pivot_3d"]:
             verb = hou.sopNodeTypeCategory().nodeVerb("sphere")
             verb.setParms({
                 "type":  1,
-                "t":     self.P_pvt,
-                "scale": self.P_cam.distanceTo(self.P_pvt) * 0.002
+                "t":     self.P_pivot,
+                "scale": self.P_cam.distanceTo(self.P_pivot) * 0.002
             })
             geo = hou.Geometry()
             verb.execute(geo, [])
-            self.guide_pvt_3d.setGeometry(geo)
+            self.guide_pivot_3d.setGeometry(geo)
 
-    def update_guide_text(self):
+    def updateGuideText(self):
         return
 
-    def update_guide_ray(self):
+    def updateGuideRay(self):
         self.guide_ray.show(self.guides["ray"])
         if self.guides["ray"]:
-            P_pvt = self.P_pvt
+            P_pivot = self.P_pivot
             P_cam = self.P_cam
             geo   = hou.Geometry()
             geo.addAttrib(hou.attribType.Point, "Cd", (1, 0, 0))
-            pt_arr = geo.createPoints((P_pvt, P_cam))
+            pt_arr = geo.createPoints((P_pivot, P_cam))
             poly   = geo.createPolygon()
             poly.addVertex(pt_arr[0])
             poly.addVertex(pt_arr[1])
             self.guide_ray.setGeometry(geo)
 
-    def update_hud(self):
+    def updateHud(self):
         # update graph counts
-        self.update_hud_g_ct()
+        self.updateHudGCt()
         # find and apply to appropriate hud dictionary
         hud_dict = getattr(self, "HUD_" + self.hud.upper())
         self.viewer.hudInfo(template=hud_dict)
@@ -679,7 +679,7 @@ class State(object):
         # apply the updates
         self.viewer.hudInfo(hud_values=update_dict)
 
-    def update_hud_g_ct(self):
+    def updateHudGCt(self):
         # calculate number of bars in a graph based on the length of the corresponding array
         hud_name = self.hud
         d        = getattr(self, hud_name + "_dict")
@@ -697,15 +697,15 @@ class State(object):
                 hud_dict["rows"][ct]["count"] = len(arr)
             ct += 1
 
-    def vp_frame(self):
+    def vpFrame(self):
         for vp in self.viewer.viewports():
             cam = vp.camera()
             # check if camera is default or node
             if cam == None: vp.frameAll()
             else:           vp.frameAll()
-        self.cam_to_state()
+        self.camToState()
 
-    def vp_swap(self):
+    def vpSwap(self):
         vp_arr      = self.viewer.viewports()
         vp_name_arr = [vp.name() for vp in vp_arr]
         vp_arr      = vp_arr[1:] + [vp_arr[0]]
@@ -723,10 +723,10 @@ class State(object):
     def onDraw(self, kwargs):
         handle = kwargs["draw_handle"]
         self.guide_axis_cam.draw(handle, {})
-        self.guide_axis_pvt.draw(handle, {})
+        self.guide_axis_pivot.draw(handle, {})
         self.guide_perim.draw(handle, {})
-        self.guide_pvt_2d.draw(handle, {})
-        self.guide_pvt_3d.draw(handle, {})
+        self.guide_pivot_2d.draw(handle, {})
+        self.guide_pivot_3d.draw(handle, {})
         self.guide_ray.draw(handle, {})
         self.guide_text.draw(handle, {})
 
@@ -735,19 +735,19 @@ class State(object):
         kwargs["state_flags"]["exit_on_node_select"] = False
         self.parms = kwargs["state_parms"]
         #self.update_dict_layout()
-        self.init_cam()
-        self.init_parms()
-        self.update_hud()
-        self.init_settings()
-        self.cam_frame()
+        self.initCam()
+        self.initParms()
+        self.updateHud()
+        self.initSettings()
+        self.camFrame()
 
     def onKeyEvent(self, kwargs):
         key = kwargs["ui_event"].device().keyString()
         self.log(key)
     
-        if   key == "m": self.toggle_mode()                        # toggle hud mode
-        elif key == "o": self.toggle_projection()                  # toggle_projection
-        elif self.mode == "settings": self.hud_nav(key)            # hud_nav
+        if   key == "m": self.toggleMode()                        # toggle hud mode
+        elif key == "o": self.toggleProjection()                   # toggleProjection
+        elif self.mode == "settings": self.hudNav(key)            # hudNav
     
         elif self.mode == "camera":                                # camera manipulation
             vp_idx = self.layout_dict["vp_idx"]
@@ -787,25 +787,25 @@ class State(object):
             self.log(vp_idx)
             print([vp.type() for vp in vps])
             vp = vps[vp_idx]
-            #vp = self.get_vp()
+            #vp = self.getVp()
             vp_type = vp.type()
             self.log(vp_type)
             
             if vp_type == hou.geometryViewportType.Perspective:    # cam is node
-                if   key == "Shift+h": self.cam_translate("x", -1) # translate x down
-                elif key == "Shift+j": self.cam_translate("y", -1) # translate y down
-                elif key == "Shift+k": self.cam_translate("y", 1)  # translate y up
-                elif key == "Shift+l": self.cam_translate("x", 1)  # translate x up
-                elif key == "h":       self.cam_rotate("y", -15)   # rotate y down
-                elif key == "j":       self.cam_rotate("x", 15)    # rotate x up
-                elif key == "k":       self.cam_rotate("x", -15)   # rotate x down
-                elif key == "l":       self.cam_rotate("y", 15)    # rotate y up
-                elif key == "-":       self.cam_zoom(1)            # zoom out
-                elif key == "=":       self.cam_zoom(-1)           # zoom in
+                if   key == "Shift+h": self.camTranslate("x", -1)  # translate x down
+                elif key == "Shift+j": self.camTranslate("y", -1)  # translate y down
+                elif key == "Shift+k": self.camTranslate("y", 1)   # translate y up
+                elif key == "Shift+l": self.camTranslate("x", 1)   # translate x up
+                elif key == "h":       self.camRotate("y", -15)    # rotate y down
+                elif key == "j":       self.camRotate("x", 15)     # rotate x up
+                elif key == "k":       self.camRotate("x", -15)    # rotate x down
+                elif key == "l":       self.camRotate("y", 15)     # rotate y up
+                elif key == "-":       self.camZoom(1)             # zoom out
+                elif key == "=":       self.camZoom(-1)            # zoom in
                 elif key == "Shift+-": self.ow += 1                # orthowidth up
                 elif key == "Shift+=": self.ow -= 1                # orthowidth down
-                elif key == "f":       self.cam_frame()            # frame
-                self.state_to_cam()
+                elif key == "f":       self.camFrame()            # frame
+                self.stateToCam()
                 
             else:                                                  # cam is default
                 cam = vp.defaultCamera()
@@ -833,21 +833,21 @@ class State(object):
 
     def onMenuAction(self, kwargs):
         item = kwargs["menu_item"]
-        if   item == "cam_frame": self.cam_frame()
-        elif item == "cam_reset": self.cam_reset()
-        elif item == "vp_frame":  self.vp_frame()
+        if   item == "cam_frame": self.camFrame()
+        elif item == "cam_reset": self.camReset()
+        elif item == "vp_frame":  self.vpFrame()
 
         elif item == "axis_cam":  self.guides["axis_cam"]  = kwargs["axis_cam"]
-        elif item == "axis_pvt":  self.guides["axis_pvt"]  = kwargs["axis_pvt"]
+        elif item == "axis_pivot":  self.guides["axis_pivot"]  = kwargs["axis_pivot"]
         elif item == "perim":     self.guides["perim"]     = kwargs["perim"]
-        elif item == "pvt_2d":    self.guides["pvt_2d"]    = kwargs["pvt_2d"]
-        elif item == "pvt_3d":    self.guides["pvt_3d"]    = kwargs["pvt_3d"]
+        elif item == "pivot_2d":    self.guides["pivot_2d"]    = kwargs["pivot_2d"]
+        elif item == "pivot_3d":    self.guides["pivot_3d"]    = kwargs["pivot_3d"]
         elif item == "ray":       self.guides["ray"]       = kwargs["ray"]
-        self.update_guides()
+        self.updateGuides()
 
     def onParmChangeEvent(self, kwargs):
-        self.update_guides()
-        self.state_to_cam()
+        self.updateGuides()
+        self.stateToCam()
 
 def createViewerStateTemplate():
     template = hou.ViewerStateTemplate(
@@ -857,20 +857,20 @@ def createViewerStateTemplate():
         contexts=[hou.objNodeTypeCategory()])
     template.bindIcon("DESKTOP_application_sierra")
     template.bindFactory(State)
-    menu = make_menu()
+    menu = makeMenu()
     template.bindMenu(menu)
     return template
 
-def make_menu():
+def makeMenu():
     menu = hou.ViewerStateMenu("keycam_menu", "keycam_menu")
     menu.addActionItem("cam_frame", "cam_frame")
     menu.addActionItem("cam_reset", "cam_reset") 
     menu.addActionItem("vp_frame",  "vp_frame") 
 
     menu.addToggleItem("axis_cam",  "axis_cam", 1)
-    menu.addToggleItem("axis_pvt",  "axis_pvt", 1)
+    menu.addToggleItem("axis_pivot",  "axis_pivot", 1)
     menu.addToggleItem("perim",     "perim",    1)
-    menu.addToggleItem("pvt_2d",    "pvt_2d",   0)
-    menu.addToggleItem("pvt_3d",    "pvt_3d",   1)
+    menu.addToggleItem("pivot_2d",    "pivot_2d",   0)
+    menu.addToggleItem("pivot_3d",    "pivot_3d",   1)
     menu.addToggleItem("ray",       "ray",      1)
     return menu
