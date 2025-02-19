@@ -5,11 +5,11 @@ import hou_ctl_utils as hcu
 from importlib import reload
 #import os
 
-class line_edit(QtWidgets.QLineEdit):
-    on_tab = QtCore.Signal()
+class inputBox(QtWidgets.QLineEdit):
+    onTab = QtCore.Signal()
     def event(self, event):
         if event.type() == QtCore.QEvent.Type.KeyPress and event.key() == QtCore.Qt.Key_Tab:
-            self.on_tab.emit()
+            self.onTab.emit()
             return True
         else:
             return QtWidgets.QLineEdit.event(self, event)
@@ -22,45 +22,45 @@ class finder(QtWidgets.QDialog):
 
         # layout0
         self.layout0 = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.TopToBottom)
+        
 
         # input box
-        self.input = line_edit()
-        self.input.on_tab.connect(self.change_idx)
-        self.input.textEdited.connect(self.filter)
-        self.input.returnPressed.connect(self.exec_action)
-        self.layout0.addWidget(self.input)
+        self.inputBox = inputBox()
+        self.inputBox.onTab.connect(self.changeIndex)
+        self.inputBox.textEdited.connect(self.filter)
+        self.inputBox.returnPressed.connect(self.execAction)
+        self.layout0.addWidget(self.inputBox)
 
         # context label
-        self.context_label = QtWidgets.QLabel()
-        self.context_label.setText("Context: " + str(hou.ui.paneTabUnderCursor().type()))
-        self.layout0.addWidget(self.context_label)
+        self.contextLabel = QtWidgets.QLabel()
+        self.contextLabel.setText("Context: " + str(hou.ui.paneTabUnderCursor().type()))
+        self.layout0.addWidget(self.contextLabel)
 
         # list widget
-        self.list_widget = QtWidgets.QListWidget()
-        self.list_widget.itemClicked.connect(self.exec_action)
-
-        self.list_widget.addItem("all_menus")
-        self.list_widget.addItem("autosave")
-        self.list_widget.addItem("dim_unused_nodes")
-        self.list_widget.addItem("hide_shelf")
-        self.list_widget.addItem("hotkey_editor")
-        self.list_widget.addItem("main_menubar")
-        self.list_widget.addItem("network_menubar")
-        self.list_widget.addItem("overlay")
-        self.list_widget.addItem("panetabs")
-        self.list_widget.addItem("path")
-        self.list_widget.addItem("point_markers")
-        self.list_widget.addItem("reload_color_schemes")
-        self.list_widget.addItem("rename_node")
-        self.list_widget.addItem("show_shelf")
-        self.list_widget.addItem("stowbars")
-        self.list_widget.addItem("trigger_update")
-        self.list_widget.addItem("update_main_menubar")
-        self.list_widget.addItem("update_mode_auto")
-        self.list_widget.addItem("update_mode_manual")
-        self.list_widget.addItem("vectors")
-        self.list_widget.addItem("viewer_toolbars")
-        self.layout0.addWidget(self.list_widget) 
+        self.listWidget = QtWidgets.QListWidget()
+        self.listWidget.itemClicked.connect(self.execAction)
+        self.listWidget.addItem("Toggle All Menus")
+        self.listWidget.addItem("Toggle Panetabs")
+        self.listWidget.addItem("Dim Unused Nodes")
+        self.listWidget.addItem("Toggle Main Menubar")
+        self.listWidget.addItem("Toggle Path")
+        self.listWidget.addItem("Toggle Network Menubar")
+        self.listWidget.addItem("Toggle Viewer Toolbars")
+        self.listWidget.addItem("Toggle Point Markers")
+        self.listWidget.addItem("Rename Node")
+        self.listWidget.addItem("Hide Shelf")
+        self.listWidget.addItem("Show Shelf")
+        self.listWidget.addItem("Reload Color Schemes")
+        self.listWidget.addItem("Trigger Update")
+        self.listWidget.addItem("Update Mode Auto")
+        self.listWidget.addItem("Update Mode Manual")
+        self.listWidget.addItem("Update Main Menubar")
+        self.listWidget.addItem("Toggle Vectors")
+        #self.listWidget.addItem("Toggle Stowbars")
+        #self.listWidget.addItem("Autosave")
+        #self.listWidget.addItem("Toggle Overlay")
+        #self.listWidget.addItem("Open Hotkey Editor")
+        self.layout0.addWidget(self.listWidget) 
 
         # layout1
 
@@ -72,55 +72,55 @@ class finder(QtWidgets.QDialog):
 
         ## apply final layout
         self.setLayout(self.layout0)
-        self.set_selection(0)
+        self.setSelection(0)
 
     def closeEvent(self, event):
         print("closing")
         self.setParent(None)
 
-    def exec_action(self):
-        current_item = self.list_widget.selectedItems()[0].text()
-        if   current_item == "all_menus":            hcu.toggle_all_menus()
-        elif current_item == "dim_unused_nodes":     hcu.toggle_dim_unused_nodes()
-        elif current_item == "hide_shelf":           hcu.hide_shelf()
-        elif current_item == "hotkey_editor":        hcu.open_hotkey_editor()
-        elif current_item == "main_menubar":         hcu.toggle_main_menubar()
-        elif current_item == "network_controls":     hcu.toggle_network_controls()
-        elif current_item == "network_menubar":      hcu.toggle_network_menubar()
-        elif current_item == "overlay":              self.overlay()
-        elif current_item == "panetabs":             hcu.toggle_panetabs()
-        elif current_item == "point_markers":        hcu.toggle_point_markers()
-        elif current_item == "reload_color_schemes": hcu.reload_color_schemes()
-        elif current_item == "rename_node":          hcu.rename_node()
-        elif current_item == "show_shelf":           hcu.show_shelf()
-        elif current_item == "stowbars":             hcu.toggle_stowbars()
-        elif current_item == "trigger_update":       hcu.trigger_update()
-        elif current_item == "update_main_menubar":  hcu.update_main_menubar()
-        elif current_item == "update_mode_auto":     hcu.update_mode_auto()
-        elif current_item == "update_mode_manual":   hcu.update_mode_manual()
-        elif current_item == "vectors":              hcu.toggle_vectors()
-        elif current_item == "viewer_toolbars":      hcu.toggle_viewer_toolbars()
+    def execAction(self):
+        currentItem = self.listWidget.selectedItems()[0].text()
+        if   currentItem == "Dim Unused Nodes":        hcu.toggleDimUnusedNodes()
+        elif currentItem == "Hide Shelf":              hcu.hideShelf()
+        elif currentItem == "Open Hotkey Editor":      hcu.openHotkeyEditor()
+        elif currentItem == "Reload Color Schemes":    hcu.reloadColorSchemes()
+        elif currentItem == "Rename Node":             hcu.renameNode()
+        elif currentItem == "Show Shelf":              hcu.showShelf()
+        elif currentItem == "Toggle All Menus":        hcu.toggleAllMenus()
+        elif currentItem == "Toggle Main Menubar":     hcu.toggleMainMenubar()
+        elif currentItem == "Toggle Network Controls": hcu.toggleNetworkControls()
+        elif currentItem == "Toggle Network Menubar":  hcu.toggleNetworkMenubar()
+        elif currentItem == "Toggle Overlay":          self.overlay()
+        elif currentItem == "Toggle Panetabs":         hcu.togglePanetabs()
+        elif currentItem == "Toggle Point Markers":    hcu.togglePointMarkers()
+        elif currentItem == "Toggle Stowbars":         hcu.toggleStowbars()
+        elif currentItem == "Toggle Vectors":          hcu.toggleVectors()
+        elif currentItem == "Toggle Viewer Toolbars":  hcu.toggleViewerToolbars()
+        elif currentItem == "Trigger Update":          hcu.triggerUpdate()
+        elif currentItem == "Update Main Menubar":     hcu.updateMainMenubar()
+        elif currentItem == "Update Mode Auto":        hcu.updateModeAuto()
+        elif currentItem == "Update Mode Manual":      hcu.updateModeManual()
         self.accept()
 
-    def change_idx(self):
-        item = self.list_widget.selectedItems()[0]
-        idx = self.list_widget.indexFromItem(item).row()
-        self.set_selection(idx + 1)
+    def changeIndex(self):
+        item = self.listWidget.selectedItems()[0]
+        idx = self.listWidget.indexFromItem(item).row()
+        self.setSelection(idx + 1)
 
-    def set_selection(self, idx):
-        ct = self.list_widget.count()
-        items = [self.list_widget.item(i) for i in range(ct)]
-        ctr = 0
+    def setSelection(self, idx):
+        item_ct = self.listWidget.count()
+        items = [self.listWidget.item(i) for i in range(item_ct)]
+        counter = 0
         for item in items:
             if not item.isHidden():
-                if ctr == idx:
-                    self.list_widget.setItemSelected(item, 1)
-                ctr += 1
+                if counter == idx:
+                    self.listWidget.setItemSelected(item, 1)
+                counter += 1
 
-    def filter(s):
-        text = self.input.text()
-        ct = self.list_widget.count()
-        items = [self.list_widget.item(i) for i in range(ct)]
+    def filter(self):
+        text = self.inputBox.text()
+        ct = self.listWidget.count()
+        items = [self.listWidget.item(i) for i in range(ct)]
         names = [item.text() for item in items]
         suggestions = fuzzyfinder(text, names)
         suggestions = list(suggestions)
@@ -130,7 +130,7 @@ class finder(QtWidgets.QDialog):
                 ct += 1
             else:
                 item.setHidden(1)
-        self.set_selection(0)
+        self.setSelection(0)
                 
-    def overlay(s):
+    def overlay(self):
         print("overlay")
