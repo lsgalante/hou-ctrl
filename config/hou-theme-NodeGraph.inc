@@ -37,7 +37,7 @@ GraphItemContentsSelection:         #6E780C        // item selection contents
 GraphSnapLine:                      #5C704D        // item snap line
 GraphDotPinAccent:                  GREY(0.3)      // dot accent
 
-// General
+// Generanl
 GraphBackground:                    #000000        // bg
 GraphPromptText:                    #404040
 GraphGridLines:                     #403000        // grid lines

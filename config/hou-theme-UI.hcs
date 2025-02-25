@@ -11,20 +11,20 @@ Sceme: hou-theme
 
 #define dark_b                          #010101
 
-// icons
+// Icons
 
 IconBrightness: 0.6
 IconContrast:   1
 IconGamma:      1
 IconSaturation: 0.0
 
-// new ui resources 
+// New ui resources 
 
-BackColor:                              black           // if white lines appear, adjust the BorderDark (auto contrast code)
-BorderLight:                            mud
-BorderDark:                             mud
+BackColor:                              bg               // if white lines appear, adjust the BorderDark (auto contrast code)
+BorderLight:                            button_bg
+BorderDark:                             button_bg
 
-DialogBlendBG:                          black           // messages, etc
+DialogBlendBG:                          black               // messages, etc
 DropIndicator                           0.0 0.0 1.0
 GalleryBackground:                      black
 SnapshotGalleryBackground:              black
@@ -34,25 +34,25 @@ SnapshotGalleryBackground:              black
 ListShadow:                             #202000
 ListHighlight:                          #202000
 ListBorder:                             #202000
-ListBG:                                 black           // bg in some random windows
+ListBG:                                 black                // bg in some random windows
 ListEntry1:                             black
 ListEntry2:                             #101000
-ListEntrySelected:                      mud_lite
-ListTitleShadow:                        #202000         // border
-ListTitleHighlight:                     #202000         // border
-ListTitleGradHi:                        black
-ListTitleGradLow:                       black
-ListTitleHighlightGradHi:               blue
-ListTitleHighlightGradLow:              blue
+ListEntrySelected:                      button_bg
+ListTitleShadow:                        #202000              // border
+ListTitleHighlight:                     #202000              // border
+ListTitleGradHi:                        bg
+ListTitleGradLow:                       bg
+ListTitleHighlightGradHi:               button_bg_hi         // elemnum
+ListTitleHighlightGradLow:              button_bg            // elemnum
 ListTitleFilteredText:                  fg_lite
-ListText:                               fg_lite         // fg in download color scheme window
+ListText:                               fg_lite              // fg in download color scheme window
 ListAltText:                            fg_lite
-ListHoverHighlight:                     mud_hover_bg
-SSBorder:                               #404000         // spreadsheet column divider
+ListHoverHighlight:                     button_bg_hi         // hover hilite
+SSBorder:                               button_bg_hi         // column divider
 
 // Menu
 
-MenuBG:                                 black
+MenuBG:                                 bg
 MenuText:                               fg_lite
 MenuTextDisabled:                       fg_dim
 MenuTextHotkey:                         fg_dim
@@ -68,10 +68,10 @@ HiliteTextBG:                           red
 SecondaryText:                          separator
 LinkText:                               #64ACFF
 
-ToolbarBevelLight:                      lite
+ToolbarBevelLight:                      button_bg
 ToolbarBevelDark:                       lite
-ToolbarFlatGradHi:                      black
-ToolbarFlatGradLo:                      black
+ToolbarFlatGradHi:                      bg
+ToolbarFlatGradLo:                      bg
 
 // Ladder
 
@@ -81,31 +81,31 @@ LadderHighlight:                        lite
 LadderOutline:                          lite
 LadderShadow:                           red
 
-// parameters
+// Parameters
 
-ButtonGradHi:                           button_bg
+ButtonGradHi:                           button_bg_hi
 ButtonGradLow:                          button_bg
 ButtonNonActiveGradLow:                 button_bg
-ButtonShadowLight:                      lite
-ButtonShadowMed:                        lite
-ButtonShadowMedDark:                    lite
-ButtonShadowDark:                       lite
-ButtonShadow:                           lite
-ButtonText:                             fg_lite
+ButtonShadowLight:                      button_bg
+ButtonShadowMed:                        fg_blue
+ButtonShadowMedDark:                    fg_blue
+ButtonShadowDark:                       button_bg
+ButtonShadow:                           button_bg
+ButtonText:                             fg_lite             // button text
 ButtonHoverHighlight:                   mud_hover_bg
 ButtonPressedText:                      fg_lite
 ButtonPressedText2:                     fg_lite
-ButtonPressedGradHi:                    button_pressed_bg
-ButtonPressedGradLow:                   button_pressed_bg
-ButtonMenuArrowHi:                      button_bg
+ButtonPressedGradHi:                    button_bg_hi        // some selected bg
+ButtonPressedGradLow:                   button_bg_hi        // some selected bg
+ButtonMenuArrowHi:                      button_bg_hi
 ButtonMenuArrowLow:                     button_bg
 ButtonMenuArrow:                        button_fg
-ButtonArrow:                            fg_dim
+ButtonArrow:                            fg_blue
 ButtonArrowDisabled:                    lite
 ButtonArrowPressed:                     fg_dim
 ButtonArrowModified:                    fg_dim
 
-CheckBG:                                mud_textbox
+CheckBG:                                button_bg
 CheckLocated:                           fg_lite
 CheckColor:                             fg_lite
 
@@ -248,12 +248,12 @@ ScrollbarButtonTopBorder:                lite
 ScrollbarButtonBottomBorder:             lite
 ScrollbarButtonBetweenBorder:            lite
 ScrollbarButtonBevel:                    lite
-ScrollbarButtonArrow:                    button_fg
+ScrollbarButtonArrow:                    fg_blue
 
 ScrollArrow:                             lite
 ScrollArrowSelected:                     lite
-ScrollArrowDisabled:                     black
-Separator:                               button_bg
+ScrollArrowDisabled:                     fg_blue
+Separator:                               fg_blue
 
 SwitchButtonSelected:                    red
 SwitchButtonLocated:                     red
@@ -273,15 +273,15 @@ SSHeader:                                red
 
 GroupBorder:                             lite
 
-GroupHeader0:                            lite
-GroupHeaderTop0:                         lite
-GroupHeaderHi0:                          lite
-GroupHeaderHiTop0:                       lite
-GroupHeaderOpen0:                        button_pressed_bg // selected tab
-GroupHeaderOpenTop0:                     button_pressed_bg // selected tab
+GroupHeader0:                            button_bg
+GroupHeaderTop0:                         button_bg
+GroupHeaderHi0:                          button_bg
+GroupHeaderHiTop0:                       button_bg
+GroupHeaderOpen0:                        button_bg // selected tab
+GroupHeaderOpenTop0:                     button_bg_hi // selected tab
 GroupHeaderDisabled0:                    lite
 GroupHeaderDisabledTop0:                 lite
-GroupBody0:                              black
+GroupBody0:                              lite
 
 GroupHeader1:                            lite
 GroupHeaderTop1:                         lite
@@ -347,15 +347,15 @@ ShelfTabInactiveLow:                     black
 
 // Pane Tabs
 
-PaneTabActiveHi:                         lite
-PaneTabActiveLow:                        lite
+PaneTabActiveHi:                         button_bg_hi
+PaneTabActiveLow:                        button_bg
 PaneTabInactiveHi:                       black
 PaneTabInactiveLow:                      black
 PaneTabEdges:                            black
-PaneEmptyBG:                             black
+PaneEmptyBG:                             bg
 PaneBorder:                              black
-PaneHeaderGradHi:                        black
-PaneHeaderGradLow:                       black
+PaneHeaderGradHi:                        bg
+PaneHeaderGradLow:                       bg
 PaneTabShadow:                           black
 PaneTabMarker:                           lite
 
@@ -379,25 +379,25 @@ RootColor:                               HSV  0    0     1
 
 // Path Gadget
 
-PathGadgetArrow1:                        fg_dim
-PathGadgetArrow2:                        black
-PathGadgetArrow3:                        black
-PathGadgetArrow1Selected:                fg_dim
-PathGadgetArrow2Selected:                black
-PathGadgetArrow3Selected:                black
-PathGadgetPrimaryBorder:                 black
-PathGadgetSecondaryBorder:               black
-PathGadgetPrimaryBorderSelected:         lite
-PathGadgetSecondaryBorderSelected:       lite
-PathGadgetBevel:                         black
-PathGadgetBevelSelected:                 lite
+PathGadgetArrow1:                        fg_blue
+PathGadgetArrow2:                        fg_blue
+PathGadgetArrow3:                        fg_blue
+PathGadgetArrow1Selected:                fg_blue
+PathGadgetArrow2Selected:                fg_blue
+PathGadgetArrow3Selected:                fg_blue
+PathGadgetPrimaryBorder:                 button_bg
+PathGadgetSecondaryBorder:               button_bg
+PathGadgetPrimaryBorderSelected:         button_bg
+PathGadgetSecondaryBorderSelected:       button_bg
+PathGadgetBevel:                         fg_blue
+PathGadgetBevelSelected:                 fg_blue
 PathGadgetText:                          fg_lite
-PathGadgetGradHi:                        black
-PathGadgetGradLow:                       black
-PathGadgetGradHiSelected:                lite
-PathGadgetGradLowSelected:               lite
-PathGadgetHistoryButtonBevel:            lite
-PathGadgetHistoryButtonBevelSelected:    lite
+PathGadgetGradHi:                        button_bg_hi
+PathGadgetGradLow:                       button_bg
+PathGadgetGradHiSelected:                button_bg_hi
+PathGadgetGradLowSelected:               button_bg_hi
+PathGadgetHistoryButtonBevel:            fg_blue
+PathGadgetHistoryButtonBevelSelected:    fg_blue
 
 // Viewport
 
@@ -435,13 +435,13 @@ NetworkPerformanceWarn:                  #B0A957
 // Status Bar
 
 StatusBarMessageFG:                      fg_lite
-StatusBarMessageBG:                      black
+StatusBarMessageBG:                      bg
 StatusBarPromptFG:                       fg_lite
-StatusBarPromptBG:                       black
+StatusBarPromptBG:                       bg
 StatusBarWarningFG:                      fg_lite
-StatusBarWarningBG:                      black
+StatusBarWarningBG:                      bg
 StatusBarErrorFG:                        fg_lite
-StatusBarErrorBG:                        black
+StatusBarErrorBG:                        bg
 
 // Old Status Bar
 
@@ -478,7 +478,7 @@ DopeSheetKeySelecting:                   1 0.45 0.25
 DopeSheetKeySelectingBorder:             1 0 0
 DopeSheetOutsideRangeBG:                 GREY(0.3)
 DopeSheetSimulation:                     #605000         // Cached simulation 
-DopeSheetSimulationReset:                main_sep
+DopeSheetSimulationReset:                separator
 DopeSheetSimulationPlaying:              0.59 0.48 0.7
 DopeSheetTimeline:                       separator
 DopeSheetTimelineAudio:                  separator
@@ -531,7 +531,6 @@ MplayInspectBorder:                      GREY(0.3)
 MplayInspectText:                        black
 MplayColorCorrectWarn:                   1 1 0.75
 
-
 // Channel Editor
 
 ChannelEditorBackground:                 0.00 0.00 0.00        // graph bg
@@ -549,11 +548,11 @@ ChannelEditorTimeText:                   EDIT_BG               // color of the b
 ChannelEditorViewLock:                   GREY(0.5)
 ChannelListCircleOutline:                black
 
-// Chop Editor Colors
+// Chop Editor
 
 ChopEditorTimeBar:                       0.00 0.00 0.00
 
-// Channel Colors
+// Channels
 
 // These colors are for coloring channels in various places in Houdini
 // (eg. the Channel Editor and Channel List panes).
@@ -599,7 +598,6 @@ GeoGroupColor1:                          hsv  90.0 0.3 1.0
 GeoGroupColor2:                          hsv 330.0 0.6 1.0
 
 // Syntax
-
 // Editors and input boxes
 
 ParmSyntaxPlainColor:                    white
@@ -624,7 +622,7 @@ TextboxLineNumberHighlight:              fg_lite
 
 // Old UI Resources
 
-ForegroundColor:                         dark_b
+ForegroundColor:                         button_bg_hi
 BackgroundColor:                         black
 PaperColor:                              black
 TextHighlightColor:                      red
@@ -702,11 +700,11 @@ CurrentColor:                            0.25  0.85  0.25
 // Split Bar
 
 SplitBarBackground:                      button_bg         // bg
-SplitBarEdgeColor:                       black           // grabber
+SplitBarEdgeColor:                       fg_blue           // grabber
 SplitBarLightColor:                      mud               // edge -- shown when stowbars are collapsed
-SplitBarDarkColor:                       black               // edge
+SplitBarDarkColor:                       black             // edge
 SplitBarPaneOutline:                     red               // edge
-SplitBarGrippyColor:                     fg_dim
+SplitBarGrippyColor:                     fg_blue
 SplitBarHighlight:                       fg_dim
 SplitBarHighlight2:                      fg_dim
 
@@ -803,13 +801,13 @@ TopInOutColor_nonfile:                   #D05ADD
 
 // Simple spreadsheet (ie. tables)
 
-SSTableBackgroundColor:                  0.9     0.9     0.9
-SSTableSelectedColor:                    0.125   0.125   1.0
+SSTableBackgroundColor:                  0.9    0.9    0.9
+SSTableSelectedColor:                    0.125  0.125  1.0
 
 // Parameter spreadsheet
 
-ParmSheetEmptyColor:                     0.65    0.65    0.65
-ParmSheetHeaderColor:                    0.60    0.60    0.60
+ParmSheetEmptyColor:                     0.65   0.65   0.65
+ParmSheetHeaderColor:                    0.60   0.60   0.60
 
 // The following color is used for buttons that simulate a hyper-text link
 HyperTextLinkColor:                      1.0  0.0  1.0
@@ -932,75 +930,3 @@ UsdPrimModified:                         0.30  0.80  0.80
 UsdPrimModifiedAlpha:                    0.4
 UsdChildPrimModified:                    0.15  0.40  0.40
 UsdChildPrimModifiedAlpha:               0.4
-
-// Old node graph
-
-NodeConnectionDefaultBG:                 red
-NodeConnectionTextBG:                    red
-NodeConnectionGlow:                      red
-NodeConnectionArrowLight:                red
-NodeConnectionArrowDark:                 red
-NodeConnectionBevel:                     red
-NodeConnectionTopBorder:                 red
-NodeConnectionBottomBorder:              red
-
-NodeButtonGrad:                          red
-NodeButtonSelectedGrad:                  red
-NodeButtonBevel:                         red
-NodeButtonBevelSelected:                 red
-NodeSeparator:                           red
-NodeSeparatorEnabled:                    red
-NodeError:                               red
-NodeWarningBG:                           red
-NodeWarningFG:                           red
-NodeDefaultBG:                           red
-NodeHighlight:                           red
-NodeDebugFG:                             red
-
-NodeTemplateFlag:                        red
-NodeSelectableTemplateFlag:              red
-NodeBypassFlag:                          red
-NodeRenderFlag:                          red
-NodeDisplayFlag:                         red
-NodeDisplayAndRenderFlag:                red
-NodeOutputFlag:                          red
-NodeSelectableFlag:                      red
-NodeExportFlag:                          red
-NodeHiddenFlag:                          red
-NodeAudioFlag:                           red
-NodeThumbnailFlag:                       red
-NodeLockFlag:                            red
-NodeSoftLockFlag:                        red
-NodeLoadedWithUnloadFlagOn:              red
-NodeDebugFlag:                           red
-
-NetworkSelection:                        red
-NetworkCurrent:                          red
-NetworkCurrentNonSelected:               red
-NetworkBackground:                       red
-NetworkDisplayHighlight:                 red
-NetworkRenderHighlight:                  red
-NetworkOutputHighlight:                  red
-NetworkTemplateHighlight:                red
-NetworkLegacyHighlight:                  red
-NetworkOverviewDragger:                  red
-NetworkTimeDependent:                    red
-
-NetworkGrid:                             red
-
-NetworkWireNormal:                       red
-NetworkWireActive:                       red
-NetworkWireActiveLight:                  red
-NetworkWireHighlight:                    red
-NetworkWireShadow:                       red
-NetworkWireExtraNormal:                  red
-NetworkWireExtraActive:                  red
-NetworkWireExtraActiveLight:             red
-NetworkWireIKNormal:                     red
-NetworkWireIKActive:                     red
-NetworkWireIKActiveLight:                red
-NetworkWireOutputOverrideNormal:         red
-NetworkWireOutputOverrideHighlight:      red
-NetworkWireTimeDepNormal:                red
-NetworkWireLoopBack:                     red
-NetworkWirePassThrough:                  red
