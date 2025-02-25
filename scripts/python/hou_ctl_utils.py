@@ -43,6 +43,26 @@ def openColorEditor():
 def openHotkeyEditor():
     print("open hotkey editor")
 
+# pane
+
+def paneThemeOne():
+    panes = hou.ui.panes()
+
+def paneExpand():
+    pane = hou.ui.paneUnderCursor()
+    fraction = pane.getSplitFraction()
+    fraction = round(fraction, 3) + 0.1
+    print("Pane fraction: ", fraction)
+    pane = 
+
+def paneContract():
+    pane = hou.ui.paneUnderCursor()
+    fraction = pane.getSplitFraction()
+    fraction = round(fraction, 3) - 0.1
+    print("Pane fraction": ", fraction")
+    pane.setSplit
+
+
 # reload
 
 def reloadColorSchemes():
