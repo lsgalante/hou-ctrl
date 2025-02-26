@@ -571,7 +571,7 @@ class State(object):
             P5   = (bbox[0], bbox[4], bbox[5])
             P6   = (bbox[3], bbox[4], bbox[5])
             P7   = (bbox[3], bbox[4], bbox[2])
-            print(bbox)
+            #print(bbox)
     
     def updateGuidePerim(self):
         self.guide_perim.show(self.guides["perim"])
@@ -785,7 +785,7 @@ class State(object):
 
             vps = list(self.viewer.viewports())
             self.log(vp_idx)
-            print([vp.type() for vp in vps])
+            #print([vp.type() for vp in vps])
             vp = vps[vp_idx]
             #vp = self.getVp()
             vp_type = vp.type()
