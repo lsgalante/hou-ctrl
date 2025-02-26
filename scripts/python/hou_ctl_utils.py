@@ -2,7 +2,8 @@ import hou
 from importlib import reload
 import hou_ctl_finder
 
-# get
+
+## get
 
 def getAutosaveState():
     return hou.getPreference("autoSave")
@@ -23,19 +24,22 @@ def getSceneViewers():
     viewers = [tab for tab in tabs if tab.type() == hou.paneTabType.SceneViewer]
     return viewers
 
-# hide
+
+## hide
 
 def hideShelf():
     desktop = hou.ui.curDesktop()
     desktop.shelfDock().show(0)
 
-# node
+
+## node
 
 def nodeRotateInputs():
     node = getCurrentNode()
     connectors = node.inputConnectors()
 
-# open
+
+## open
 
 def openColorEditor():
     hou.ui.selectColor()
@@ -43,7 +47,8 @@ def openColorEditor():
 def openHotkeyEditor():
     print("open hotkey editor")
 
-# pane
+
+## pane
 
 def paneThemeOne():
     panes = hou.ui.panes()
@@ -53,17 +58,17 @@ def paneExpand():
     fraction = pane.getSplitFraction()
     fraction = round(fraction, 3) + 0.1
     print("Pane fraction: ", fraction)
-    pane = 
+    pane = pane.setSplitFraction(fraction)
 
 def paneContract():
     pane = hou.ui.paneUnderCursor()
     fraction = pane.getSplitFraction()
     fraction = round(fraction, 3) - 0.1
-    print("Pane fraction": ", fraction")
-    pane.setSplit
+    print("Pane fraction ", fraction)
+    pane = pane.setSplitFraction(fraction)
 
 
-# reload
+## reload
 
 def reloadColorSchemes():
     hou.ui.reloadColorScheme()
@@ -72,7 +77,8 @@ def reloadColorSchemes():
 def reloadKeycam():
     hou.ui.reloadViewerState("keycam")
 
-# rename
+
+## rename
 
 def renameNode():
     node = getCurrentNode()
@@ -80,18 +86,44 @@ def renameNode():
     if name[0] == 0:
         node.setName(name[1])
 
-# restart
+
+## restart
 
 def restartHoudini():
     return
 
-# show
+
+## set
+
+def setTabTypeNetwork():
+    tab = hou.ui.paneTabUnderCursor()
+    tab.setType(hou.paneTabType.NetworkEditor)
+
+def setTabTypeParameters():
+    tab = hou.ui.paneTabUnderCursor()
+    tab.setType(hou.paneTabType.Parm)
+
+def setTabTypePython():
+    tab = hou.ui.paneTabUnderCursor()
+    tab.setType(hou.paneTabType.PythonShell)
+
+def setTabTypeSceneViewer():
+    tab = hou.ui.paneTabUnderCursor()
+    tab.setType(hou.paneTabType.SceneViewer)
+
+def setTabTypeSpreadsheet():
+    tab = hou.ui.paneTabUnderCursor()
+    tab.setType(hou.paneTabType.DetailsView)
+
+
+## show
 
 def showShelf():
     desktop = hou.ui.curDesktop()
     desktop.shelfDock().show(1)
 
-# toggle
+
+## toggle
 
 def toggleAllMenus():
     show_master = 1
@@ -174,10 +206,37 @@ def toggleKeycam():
         return
 
 def toggleMainMenubar():
-    val  = hou.getPreference("showmenu.val")
+    val = hou.getPreference("showmenu.val")
     vals = ("0", "1")
-    idx  = (vals.index(val) + 1) % 2
-    hou.setPreference("showmenu.val",["0","1"][vals[idx]])
+    idx = vals.index(val)
+    idx = (idx + 1) % 2
+    hou.setPreference("showmenu.val",["0","1"][idx])
+
+def toggleNetworkControls():
+    tabs = hou.ui.paneTabs()
+    show_path = 1
+    for tab in tabs:
+        if tab.isShowingNetworkControls():
+            show_path = 0
+    [tab.showNetworkControls(show_path) for tab in tabs]
+
+def toggleNetworkGridPoints():
+    networks = getNetworks()
+    for network in networks:
+        pref = network.getPref("gridmode")
+        if pref != "1":
+            network.setPref("gridmode", "1")
+        else:
+            network.setPref("gridmode", "0")
+
+def toggleNetworkGridLines():
+    networks = getNetworks()
+    for network in networks:
+        pref = network.getPref("gridmode")
+        if pref != "2":
+            network.setPref("gridmode", "2")
+        else:
+            network.setPref("gridmode", "0")
 
 def toggleNetworkLocating():
     networks = getNetworks()
@@ -205,14 +264,6 @@ def togglePanetabs():
             show = 0
     [pane.showPaneTabs(show) for pane in panes]
 
-def togglePath():
-    tabs = hou.ui.paneTabs()
-    show_path = 1
-    for tab in tabs:
-        if tab.isShowingNetworkControls():
-            show_path = 0
-    [tab.showNetworkControls(show_path) for tab in tabs]
-
 def togglePointMarkers():
     viewers = getSceneViewers()
     for viewer in viewers:
@@ -220,8 +271,8 @@ def togglePointMarkers():
         print(viewports)
 
 def toggleStowbars():
-    hide = hou.ui.hideAllMinimizedStowbars()
-    hou.ui.setHideAllMinimizedStowbars(not hide)
+    is_hidden = hou.ui.hideAllMinimizedStowbars()
+    hou.ui.setHideAllMinimizedStowbars(not is_hidden)
 
 def toggleVectors():
     viewers = get_scene_viewers()
@@ -251,12 +302,14 @@ def toggleViewerToolbars():
         viewer.showDisplayOptionsBar(1)
         viewer.showSelectionBar(1)
 
-# trigger
+
+## trigger
 
 def triggerUpdate():
     hou.ui.triggerUpdate()
 
-# update
+
+## update
 
 def updateMainMenubar():
     hou.ui.updateMainMenuBar()
