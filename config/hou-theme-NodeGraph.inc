@@ -40,8 +40,8 @@ GraphDotPinAccent:                  GREY(0.3)      // dot accent
 // Generanl
 GraphBackground:                    #000000        // bg
 GraphPromptText:                    #404040
-GraphGridLines:                     #403000        // grid lines
-GraphGridPoints:                    mud_lite       // grid points
+GraphGridLines:                     button_bg_hi   // grid lines
+GraphGridPoints:                    button_bg_hi   // grid points
 GraphNameText:                      #a0a0a0        // node label
 GraphNodeTypeText:                  grey7          // node type text
 GraphCommentText:                   grey7          // node comment

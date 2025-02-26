@@ -379,12 +379,12 @@ RootColor:                               HSV  0    0     1
 
 // Path Gadget
 
-PathGadgetArrow1:                        fg_blue
-PathGadgetArrow2:                        fg_blue
-PathGadgetArrow3:                        fg_blue
-PathGadgetArrow1Selected:                fg_blue
-PathGadgetArrow2Selected:                fg_blue
-PathGadgetArrow3Selected:                fg_blue
+PathGadgetArrow1:                        separator
+PathGadgetArrow2:                        separator
+PathGadgetArrow3:                        separator
+PathGadgetArrow1Selected:                separator
+PathGadgetArrow2Selected:                separator
+PathGadgetArrow3Selected:                separator
 PathGadgetPrimaryBorder:                 button_bg
 PathGadgetSecondaryBorder:               button_bg
 PathGadgetPrimaryBorderSelected:         button_bg
