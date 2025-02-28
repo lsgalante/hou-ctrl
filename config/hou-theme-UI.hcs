@@ -85,7 +85,7 @@ LadderShadow:                           red
 
 ButtonGradHi:                           button_bg_hi
 ButtonGradLow:                          button_bg
-ButtonNonActiveGradLow:                 button_bg
+ButtonNonActiveGradLow:                 bg
 ButtonShadowLight:                      button_bg
 ButtonShadowMed:                        fg_blue
 ButtonShadowMedDark:                    fg_blue
