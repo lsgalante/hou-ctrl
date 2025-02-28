@@ -440,7 +440,7 @@ StatusBarPromptFG:                       fg_lite
 StatusBarPromptBG:                       bg
 StatusBarWarningFG:                      fg_lite
 StatusBarWarningBG:                      bg
-StatusBarErrorFG:                        fg_lite
+StatusBarErrorFG:                        error
 StatusBarErrorBG:                        bg
 
 // Old Status Bar
