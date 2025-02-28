@@ -3,6 +3,22 @@ from importlib import reload
 import hou_ctl_finder
 
 
+## add
+
+def addStickyNote():
+    tab = hou.ui.paneTabUnderCursor()
+    if tab.type() == hou.paneTabType.NetworkEditor:
+        node = tab.pwd()
+        stickynote = node.createStickyNote()
+        cursor_pos =  tab.cursorPosition()
+        stickynote.setPosition(cursor_pos)
+        color = hou.Color(0.71, 0.784, 1.0)
+        stickynote.setColor(color)
+    else:
+        hou.ui.setStatusMessage("Focused tab is not a network editor.", hou.severityType.Error) 
+        
+
+
 ## get
 
 def getAutosaveState():
