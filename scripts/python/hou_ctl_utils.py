@@ -3,7 +3,7 @@ from importlib import reload
 import hou_ctl_finder
 
 
-## add
+## Add
 
 def addStickyNote():
     tab = hou.ui.paneTabUnderCursor()
@@ -19,7 +19,7 @@ def addStickyNote():
         
 
 
-## get
+## Get
 
 def getAutosaveState():
     return hou.getPreference("autoSave")
@@ -41,30 +41,42 @@ def getSceneViewers():
     return viewers
 
 
-## hide
+## Hide
 
 def hideShelf():
     desktop = hou.ui.curDesktop()
     desktop.shelfDock().show(0)
 
 
-## node
+## Node
+
+def nodeDeselectAll():
+    node = getCurrentNode()
+    node.setSelected(False)
 
 def nodeRotateInputs():
     node = getCurrentNode()
     connectors = node.inputConnectors()
 
 
-## open
+## Open
 
 def openColorEditor():
     hou.ui.selectColor()
+
+def openFloatingParameterEditor():
+    tab = hou.ui.paneTabUnderCursor()
+    if tab.type() == hou.paneTabType.NetworkEditor:
+        node = tab.currentNode()
+        hou.ui.showFloatingParameterEditor(node)
+    else:
+        hou.ui.setStatusMessage("Focused tab is not a network editor.", hou.severityType.Error) 
 
 def openHotkeyEditor():
     print("open hotkey editor")
 
 
-## pane
+## Pane
 
 def paneThemeOne():
     panes = hou.ui.panes()
@@ -72,19 +84,19 @@ def paneThemeOne():
 def paneExpand():
     pane = hou.ui.paneUnderCursor()
     fraction = pane.getSplitFraction()
-    fraction = round(fraction, 3) + 0.1
+    fraction = round(fraction, 3) - 0.1
     print("Pane fraction: ", fraction)
     pane = pane.setSplitFraction(fraction)
 
 def paneContract():
     pane = hou.ui.paneUnderCursor()
     fraction = pane.getSplitFraction()
-    fraction = round(fraction, 3) - 0.1
+    fraction = round(fraction, 3) + 0.1
     print("Pane fraction ", fraction)
     pane = pane.setSplitFraction(fraction)
 
 
-## reload
+## Reload
 
 def reloadColorSchemes():
     hou.ui.reloadColorScheme()
@@ -94,7 +106,7 @@ def reloadKeycam():
     hou.ui.reloadViewerState("keycam")
 
 
-## rename
+## Rename
 
 def renameNode():
     node = getCurrentNode()
@@ -103,13 +115,13 @@ def renameNode():
         node.setName(name[1])
 
 
-## restart
+## Restart
 
 def restartHoudini():
     return
 
 
-## set
+## Set
 
 def setTabTypeNetwork():
     tab = hou.ui.paneTabUnderCursor()
@@ -132,14 +144,14 @@ def setTabTypeSpreadsheet():
     tab.setType(hou.paneTabType.DetailsView)
 
 
-## show
+## Show
 
 def showShelf():
     desktop = hou.ui.curDesktop()
     desktop.shelfDock().show(1)
 
 
-## toggle
+## Toggle
 
 def toggleAllMenus():
     show_master = 1
@@ -208,6 +220,19 @@ def toggleFinder():
     finder = hou_ctl_finder.finder()
     finder.show()
 
+def toggleGroupList():
+    viewers = getSceneViewers()
+    is_visible = 0
+    for viewer in viewers:
+        if viewer.isGroupListVisible():
+            is_visible = 1
+    if is_visible:
+        for viewer in viewers:
+            viewer.setGroupListVisible(0)
+    else:
+        for viewer in viewers:
+            viewer.setGroupListVisible(1)
+
 def toggleKeycam():
     viewer = hou.ui.paneTabOfType(hou.paneTabType.SceneViewer)
     if viewer != None:
@@ -272,6 +297,13 @@ def toggleNetworkMenubar():
     for network in networks:
         network.setPref("showmenu",["0","1"][show_menu])
 
+def togglePaneMaximized():
+    pane = hou.ui.paneUnderCursor()
+    if pane.isMaximized():
+        pane.setIsMaximized(False)
+    else:
+        pane.setIsMaximized(True)
+
 def togglePanetabs():
     panes = hou.ui.curDesktop().panes()
     show = 1
@@ -285,6 +317,36 @@ def togglePointMarkers():
     for viewer in viewers:
         viewports = viewer.viewports()
         print(viewports)
+
+def togglePointNumbers():
+    viewers = getSceneViewers()
+    for viewer in viewers:
+        viewports = viewer.viewports()
+        is_showing = 0
+        for viewport in viewports:
+            settings = viewport.settings()
+            display_set = settings.displaySet(hou.displaySetType.DisplayModel)
+            if display_set.isShowingPointNumbers():
+                is_showing = 1
+        for viewport in viewports:
+            settings = viewport.settings()
+            display_set = settings.displaySet(hou.displaySetType.DisplayModel)
+            display_set.showPointNumbers((is_showing + 1) % 2)
+
+def togglePrimNumbers():
+    viewers = getSceneViewers()
+    for viewer in viewers:
+        viewports = viewer.viewports()
+        is_showing = 0
+        for viewport in viewports:
+            settings = viewport.settings()
+            display_set = settings.displaySet(hou.displaySetType.DisplayModel)
+            if display_set.isShowingPrimNumbers():
+                is_showing = 1 
+        for viewport in viewports:
+            settings = viewport.settings()
+            display_set = settings.displaySet(hou.displaySetType.DisplayModel)
+            display_set.showPrimNumbers((is_showing + 1) % 2)
 
 def toggleStowbars():
     is_hidden = hou.ui.hideAllMinimizedStowbars()
@@ -319,13 +381,13 @@ def toggleViewerToolbars():
         viewer.showSelectionBar(1)
 
 
-## trigger
+## Trigger
 
 def triggerUpdate():
     hou.ui.triggerUpdate()
 
 
-## update
+## Update
 
 def updateMainMenubar():
     hou.ui.updateMainMenuBar()
