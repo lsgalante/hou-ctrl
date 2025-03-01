@@ -96,6 +96,25 @@ def paneContract():
     pane = pane.setSplitFraction(fraction)
 
 
+## Print
+
+def printLayout():
+    message = "Layout:"
+    desktop = hou.ui.curDesktop()
+    panes = desktop.panes()
+    ct = 0
+    for pane in panes:
+        message += " Pane" + str(ct) + " -"
+        if pane.isSplit():
+            message += " split"
+        else:    
+            message += " whole"
+            message += "    "
+        ct += 1
+    message = message[0:-1]
+    hou.ui.setStatusMessage(message) 
+
+
 ## Reload
 
 def reloadColorSchemes():
@@ -367,7 +386,7 @@ def toggleVectors():
                 settings.setVectorScale(1)
 
 def toggleViewerToolbars():
-    viewer = get_scene_viewers[0]
+    viewer = getSceneViewers()[0]
     state1 = viewer.isShowingOperationBar()
     state2 = viewer.isShowingDisplayOptionsBar()
     state3 = viewer.isShowingSelectionBar()
