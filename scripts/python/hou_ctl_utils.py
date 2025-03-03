@@ -22,7 +22,8 @@ def addStickyNote():
 ## Get
 
 def getAutosaveState():
-    return hou.getPreference("autoSave")
+    state = hou.getPreference("autoSave")
+    return state
 
 def getCurrentNode():
     tabs = hou.ui.paneTabs()
@@ -78,22 +79,40 @@ def openHotkeyEditor():
 
 ## Pane
 
-def paneThemeOne():
-    panes = hou.ui.panes()
+def paneContract():
+    pane = hou.ui.paneUnderCursor()
+    fraction = pane.getSplitFraction()
+    fraction = round(fraction, 3) + 0.1
+    message = "Pane fraction: " + str(fraction)
+    hou.ui.setStatusMessage(message)
+    pane = pane.setSplitFraction(fraction)
 
 def paneExpand():
     pane = hou.ui.paneUnderCursor()
     fraction = pane.getSplitFraction()
     fraction = round(fraction, 3) - 0.1
-    print("Pane fraction: ", fraction)
+    message = "Pane fraction: " + str(fraction)
+    hou.ui.setStatusMessage(message)
     pane = pane.setSplitFraction(fraction)
 
-def paneContract():
+def paneSplitHorizontal():
     pane = hou.ui.paneUnderCursor()
-    fraction = pane.getSplitFraction()
-    fraction = round(fraction, 3) + 0.1
-    print("Pane fraction ", fraction)
-    pane = pane.setSplitFraction(fraction)
+    new_pane = pane.splitHorizontally()
+
+def paneSplitVertical():
+    pane = hou.ui.paneUnderCursor()
+    new_pane = pane.splitVertically()
+
+def paneSplitRotate():
+    pane = hou.ui.paneUnderCursor()
+    pane.splitRotate()
+
+def paneSplitSwap():
+    pane = hou.ui.paneUnderCursor()
+    pane.splitSwap()
+
+def paneThemeOne():
+    panes = hou.ui.panes()
 
 
 ## Print
@@ -170,6 +189,20 @@ def showShelf():
     desktop.shelfDock().show(1)
 
 
+## Tab
+
+def tabClose():
+    tab = hou.ui.paneTabUnderCursor()
+    tab.close()
+
+def tabTogglePin():
+    tab = hou.ui.paneTabUnderCursor()
+    if tab.isPin():
+        tab.setPin(False)
+    else:
+        tab.setPin(True)
+
+
 ## Toggle
 
 def toggleAllMenus():
@@ -219,10 +252,11 @@ def toggleAllMenus():
     return
 
 def toggleAutosave():
-    state  = hou.getPreference("autoSave")
-    states = ("0", "1")
-    idx    = (states.index(state) + 1) % 2
-    hou.setPreference("autosave", states[idx])
+    state = hou.getPreference("autoSave")
+    if state == "0":
+        hou.setPreference("autoSave", "1")
+    elif state == "1":
+        hou.setPreference("autoSave", "0");
 
 def toggleDimUnusedNodes():
     networks = getNetworks()
