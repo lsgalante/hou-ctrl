@@ -460,8 +460,6 @@ class State(object):
         layout = self.layout_dict["layout"]
         self.viewer.setViewportLayout(getattr(hou.geometryViewportLayout, layout))
 
-    
-
         vp_ct = 0
         if   layout == "DoubleSide":        vp_ct = 2
         elif layout == "DoubleStack":       vp_ct = 2
@@ -563,14 +561,14 @@ class State(object):
         if self.guides["bbox"]:
             geo  = self.get_get()
             bbox = geo.boundingBox()
-            P0   = (bbox[0], bbox[1], bbox[2])
-            P1   = (bbox[0], bbox[1], bbox[5])
-            P2   = (bbox[3], bbox[1], bbox[5])
-            P3   = (bbox[3], bbox[1], bbox[2])
-            P4   = (bbox[0], bbox[4], bbox[2])
-            P5   = (bbox[0], bbox[4], bbox[5])
-            P6   = (bbox[3], bbox[4], bbox[5])
-            P7   = (bbox[3], bbox[4], bbox[2])
+            P0 = (bbox[0], bbox[1], bbox[2])
+            P1 = (bbox[0], bbox[1], bbox[5])
+            P2 = (bbox[3], bbox[1], bbox[5])
+            P3 = (bbox[3], bbox[1], bbox[2])
+            P4 = (bbox[0], bbox[4], bbox[2])
+            P5 = (bbox[0], bbox[4], bbox[5])
+            P6 = (bbox[3], bbox[4], bbox[5])
+            P7 = (bbox[3], bbox[4], bbox[2])
             #print(bbox)
     
     def updateGuidePerim(self):
@@ -804,7 +802,7 @@ class State(object):
                 elif key == "=":       self.camZoom(-1)            # zoom in
                 elif key == "Shift+-": self.ow += 1                # orthowidth up
                 elif key == "Shift+=": self.ow -= 1                # orthowidth down
-                elif key == "f":       self.camFrame()            # frame
+                elif key == "f":       self.camFrame()             # frame
                 self.stateToCam()
                 
             else:                                                  # cam is default
@@ -833,16 +831,15 @@ class State(object):
 
     def onMenuAction(self, kwargs):
         item = kwargs["menu_item"]
-        if   item == "cam_frame": self.camFrame()
-        elif item == "cam_reset": self.camReset()
-        elif item == "vp_frame":  self.vpFrame()
-
-        elif item == "axis_cam":  self.guides["axis_cam"]  = kwargs["axis_cam"]
-        elif item == "axis_pivot":  self.guides["axis_pivot"]  = kwargs["axis_pivot"]
-        elif item == "perim":     self.guides["perim"]     = kwargs["perim"]
-        elif item == "pivot_2d":    self.guides["pivot_2d"]    = kwargs["pivot_2d"]
-        elif item == "pivot_3d":    self.guides["pivot_3d"]    = kwargs["pivot_3d"]
-        elif item == "ray":       self.guides["ray"]       = kwargs["ray"]
+        if   item == "cam_frame":  self.camFrame()
+        elif item == "cam_reset":  self.camReset()
+        elif item == "vp_frame":   self.vpFrame()
+        elif item == "axis_cam":   self.guides["axis_cam"]   = kwargs["axis_cam"]
+        elif item == "axis_pivot": self.guides["axis_pivot"] = kwargs["axis_pivot"]
+        elif item == "perim":      self.guides["perim"]      = kwargs["perim"]
+        elif item == "pivot_2d":   self.guides["pivot_2d"]   = kwargs["pivot_2d"]
+        elif item == "pivot_3d":   self.guides["pivot_3d"]   = kwargs["pivot_3d"]
+        elif item == "ray":        self.guides["ray"]        = kwargs["ray"]
         self.updateGuides()
 
     def onParmChangeEvent(self, kwargs):

@@ -5,6 +5,7 @@ import hou_ctl_utils as hcu
 from PySide2 import QtCore, QtGui, QtWidgets
 
 class inputBox(QtWidgets.QLineEdit):
+    # setup key events
     onTab = QtCore.Signal()
     def event(self, event):
         if event.type() == QtCore.QEvent.Type.KeyPress and event.key() == QtCore.Qt.Key_Tab:
@@ -13,63 +14,59 @@ class inputBox(QtWidgets.QLineEdit):
         else:
             return QtWidgets.QLineEdit.event(self, event)
 
-class visMenu(QtWidgets.QDialog):
-    def __init__(self):	
-        super(visMenu, self).__init__(hou.qt.mainWindow())
-        reload(hcu)
 
-        self.layout = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.TopToBottom)
+class visualizerMenu(QtWidgets.QDialog):
+    def __init__(self):	
+        super(visualizerMenu, self).__init__(hou.qt.mainWindow())
+        reload(hcu)
 
         # input box
         self.inputBox = inputBox() 
         self.inputBox.onTab.connect(self.nextItem)
         self.inputBox.textEdited.connect(self.filter)
         self.inputBox.returnPressed.connect(self.execAction)
-        self.layout.addWidget(self.inputBox)
-        self.itemArray = []
 
         # fetch list of visualizers
         category = hou.viewportVisualizerCategory.Scene
         self.vis_arr = hou.viewportVisualizers.visualizers(category)
+        self.items = []
         for vis in self.vis_arr:
             name = vis.label()
-            self.itemArray.append(name)
+            self.items.append(name)
 
-        # add list widget to layout
+        # add items to list widget
         self.listWidget = QtWidgets.QListWidget()
-        for item in self.itemArray:
+        for item in self.items:
             self.listWidget.addItem(item)
         self.listWidget.itemClicked.connect(self.execAction)
-        self.layout.addWidget(self.listWidget) 
 
+        # construct layout
+        self.layout = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.TopToBottom)
+        self.layout.addWidget(self.inputBox)
+        self.layout.addWidget(self.listWidget) 
         self.setLayout(self.layout)
         self.setIndex(0)
-
 
     def closeEvent(self, event):
         print("closing")
         self.setParent(None)
 
     def execAction(self):
-        viewports = []
-        viewers = hcu.getSceneViewers()
-        for viewer in viewers:
-            for viewport in viewer.viewports():
-                viewports.append(viewport)
-
+        viewports = hcu.getViewports()
         for viewport in viewports:
             for vis in self.vis_arr:
                 vis.setIsActive(False, viewport)
 
-
-        current_vis_name = self.listWidget.selectedItems()[0].text()
-        index = self.itemArray.index(current_vis_name)
-        current_vis = self.vis_arr[index]
+        vis_name = self.listWidget.selectedItems()[0].text()
+        index = self.items.index(vis_name)
+        vis = self.vis_arr[index]
         for viewport in viewports:
-            current_vis.setIsActive(True, viewport)
-        
-        self.accept()
+            vis.setIsActive(True, viewport)
 
+        viewer = hcu.getSceneViewers()[0]
+        viewer.openVisualizerEditor(vis)
+
+        self.accept()
 
     def filter(self):
         text = self.inputBox.text()

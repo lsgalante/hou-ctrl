@@ -2,6 +2,7 @@ import hou
 from importlib import reload
 import hou_ctl_finder
 import hou_ctl_vis_menu
+import hou_ctl_new_tab_menu
 
 
 ## Add
@@ -17,8 +18,7 @@ def addStickyNote():
         stickynote.setColor(color)
     else:
         hou.ui.setStatusMessage("Focused tab is not a network editor.", hou.severityType.Error) 
-        
-
+      
 
 ## Get
 
@@ -32,16 +32,34 @@ def getCurrentNode():
     node = tabs[0].currentNode()    
     return node
 
+def getDisplaySets():
+    displaySets = []
+    viewers = getSceneViewers()
+    for viewer in viewers:
+        viewports = viewer.viewports()
+        for viewport in viewports:
+            settings = viewport.settings()
+            displaySet = settings.displaySet(hou.displaySetType.DisplayModel)
+            displaySets.append(displaySet)
+    return(displaySets)
+    
 def getNetworks():
-    tabs     = hou.ui.paneTabs()
+    tabs = hou.ui.paneTabs()
     networks = [tab for tab in tabs if tab.type() == hou.paneTabType.NetworkEditor]
     return networks
 
 def getSceneViewers():
-    tabs    = hou.ui.paneTabs()
+    tabs  = hou.ui.paneTabs()
     viewers = [tab for tab in tabs if tab.type() == hou.paneTabType.SceneViewer]
     return viewers
 
+def getViewports():
+    viewports = []
+    viewers = getSceneViewers()
+    for viewer in viewers:
+        for viewport in viewer.viewports():
+            viewports.append(viewport)
+    return(viewports)
 
 ## Hide
 
@@ -57,13 +75,18 @@ def networkBox():
     if tab.type() == hou.paneTabType.NetworkEditor:
         parent = tab.pwd()
         node = tab.currentNode()
-
         box = parent.createNetworkBox()
         box.setPosition(node.position())
-
     else:
         hou.ui.setStatusMessage("Network editor not focused", hou.severityType.Error)
 
+
+## New tab
+
+def newTab():
+    reload(hou_ctl_new_tab_menu)
+    new_tab_menu = hou_ctl_new_tab_menu.newTabMenu()
+    new_tab_menu.show()
 
 
 ## Node
@@ -93,6 +116,10 @@ def openFloatingParameterEditor():
 def openHotkeyEditor():
     print("open hotkey editor")
 
+def openVisualizerMenu():
+    reload(hou_ctl_vis_menu)
+    visualizerMenu = hou_ctl_vis_menu.visualizerMenu()
+    visualizerMenu.show()
 
 ## Pane
 
@@ -290,6 +317,15 @@ def toggleAutosave():
     elif state == "1":
         hou.setPreference("autoSave", "0");
 
+def toggleBackface():
+    is_visible = 0
+    displaySets = getDisplaySets()
+    for displaySet in displaySets:
+        if displaySet.isShowingPrimBackfaces():
+            is_visible = 1
+    for displaySet in displaySets:
+        displaySet.showPrimBackfaces((is_visible + 1) % 2)
+
 def toggleDimUnusedNodes():
     networks = getNetworks()
     dim = "1"
@@ -398,40 +434,47 @@ def togglePanetabs():
     [pane.showPaneTabs(show) for pane in panes]
 
 def togglePointMarkers():
-    viewers = getSceneViewers()
-    for viewer in viewers:
-        viewports = viewer.viewports()
-        print(viewports)
+    is_visible = 0
+    displaySets = getDisplaySets()
+    for displaySet in displaySets:
+        if displaySet.isShowingPointMarkers():
+            is_visible = 1
+    for displaySet in displaySets:
+        displaySet.showPointMarkers((is_visible + 1) % 2)
+
+def togglePointNormals():
+    is_visible = 0
+    displaySets = getDisplaySets()
+    for displaySet in displaySets:
+        if displaySet.isShowingPointNormals():
+            is_visible = 1
+    for displaySet in displaySets:
+        displaySet.showPointNormals((is_visible + 1) % 2)
 
 def togglePointNumbers():
-    viewers = getSceneViewers()
-    for viewer in viewers:
-        viewports = viewer.viewports()
-        is_showing = 0
-        for viewport in viewports:
-            settings = viewport.settings()
-            display_set = settings.displaySet(hou.displaySetType.DisplayModel)
-            if display_set.isShowingPointNumbers():
-                is_showing = 1
-        for viewport in viewports:
-            settings = viewport.settings()
-            display_set = settings.displaySet(hou.displaySetType.DisplayModel)
-            display_set.showPointNumbers((is_showing + 1) % 2)
+    is_visible = 0
+    displaySets = getDisplaySets()
+    for displaySet in displaySets:
+        if displaySet.isShowingPointNumbers():
+            is_visible = 1
+    for displaySet in displaySets:
+        displaySet.showPointNumbers((is_visible + 1) % 2)
 
 def togglePrimNumbers():
-    viewers = getSceneViewers()
-    for viewer in viewers:
-        viewports = viewer.viewports()
-        is_showing = 0
-        for viewport in viewports:
-            settings = viewport.settings()
-            display_set = settings.displaySet(hou.displaySetType.DisplayModel)
-            if display_set.isShowingPrimNumbers():
-                is_showing = 1 
-        for viewport in viewports:
-            settings = viewport.settings()
-            display_set = settings.displaySet(hou.displaySetType.DisplayModel)
-            display_set.showPrimNumbers((is_showing + 1) % 2)
+    is_visible = 0
+    displaySets = getDisplaySets()
+    for displaySet in displaySets:
+        if displaySet.isShowingPrimNumbers():
+            is_visible = 1
+    for displaySet in displaySets:
+        displaySet.showPrimNumbers((is_visible + 1) % 2)
+
+def toggleSplitMaximized():
+    pane = hou.ui.paneUnderCursor()
+    is_maximized = 0
+    if pane.isSplitMaximized():
+        is_maximized = 1
+    pane.setIsSplitMaximized((is_maximized + 1) % 2)
 
 def toggleStowbars():
     is_hidden = hou.ui.hideAllMinimizedStowbars()
@@ -483,9 +526,5 @@ def updateModeAuto():
 def updateModeManual():
     hou.setUpdateMode(hou.updateMode.Manual)
 
-def visMenu():
-    reload(hou_ctl_vis_menu)
-    vis_menu = hou_ctl_vis_menu.visMenu()
-    vis_menu.show()
 
 
