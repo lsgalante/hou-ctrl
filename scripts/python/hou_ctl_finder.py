@@ -62,6 +62,7 @@ class finder(QtWidgets.QDialog):
         self.itemArray.append(("Group List",                     hcu.toggleGroupList))
         self.itemArray.append(("Hide Shelf",                     hcu.hideShelf))
         self.itemArray.append(("Main Menubar",                   hcu.toggleMainMenubar))
+        self.itemArray.append(("Network Box",                    hcu.networkBox))
         self.itemArray.append(("Network Controls",               hcu.toggleNetworkControls))
         self.itemArray.append(("Network Grid - Points",          hcu.toggleNetworkGridPoints))
         self.itemArray.append(("Network Grid - Lines",           hcu.toggleNetworkGridLines))
@@ -70,6 +71,9 @@ class finder(QtWidgets.QDialog):
         self.itemArray.append(("Pane Contract",                  hcu.paneContract))
         self.itemArray.append(("Pane Expand",                    hcu.paneExpand))
         self.itemArray.append(("Pane Maximize",                  hcu.togglePaneMaximized))
+        self.itemArray.append(("Pane Ratio Half",                hcu.paneRatioHalf))
+        self.itemArray.append(("Pane Ratio Quarter",             hcu.paneRatioQuarter))
+        self.itemArray.append(("Pane Ratio Third",               hcu.paneRatioThird))
         self.itemArray.append(("Pane Split Horizontal",          hcu.paneSplitHorizontal))
         self.itemArray.append(("Pane Split Rotate",              hcu.paneSplitRotate))
         self.itemArray.append(("Pane Split Swap",                hcu.paneSplitSwap))
@@ -81,6 +85,7 @@ class finder(QtWidgets.QDialog):
         self.itemArray.append(("Print Layout",                   hcu.printLayout))
         self.itemArray.append(("Reload Color Schemes",           hcu.reloadColorSchemes))
         self.itemArray.append(("Rename Node",                    hcu.renameNode))
+        self.itemArray.append(("Scene A",                        hcu.sceneSetA))
         self.itemArray.append(("Show Shelf",                     hcu.showShelf))
         self.itemArray.append(("Sticky Note",                    hcu.addStickyNote))
         self.itemArray.append(("Stowbars",                       hcu.toggleStowbars))
@@ -99,6 +104,7 @@ class finder(QtWidgets.QDialog):
         self.itemArray.append(("Viewer Toolbars",                hcu.toggleViewerToolbars))
         self.itemArray.append(("Open Hotkey Editor",             hcu.openHotkeyEditor))
         self.itemArray.append(("Toggle Overlay",                 self.overlay))
+        self.itemArray.append(("Vis Menu",                       hcu.visMenu))
         
         self.listWidget = QtWidgets.QListWidget()
         for item in self.itemArray:
@@ -119,7 +125,6 @@ class finder(QtWidgets.QDialog):
         currentItem = self.listWidget.selectedItems()[0]
         index = items.index(currentItem)
         self.itemArray[index][1]()
-        
         self.accept()
 
     def getItems(self):

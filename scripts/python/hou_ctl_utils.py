@@ -1,6 +1,7 @@
 import hou
 from importlib import reload
 import hou_ctl_finder
+import hou_ctl_vis_menu
 
 
 ## Add
@@ -49,6 +50,22 @@ def hideShelf():
     desktop.shelfDock().show(0)
 
 
+## Network
+
+def networkBox():
+    tab = hou.ui.paneTabUnderCursor()
+    if tab.type() == hou.paneTabType.NetworkEditor:
+        parent = tab.pwd()
+        node = tab.currentNode()
+
+        box = parent.createNetworkBox()
+        box.setPosition(node.position())
+
+    else:
+        hou.ui.setStatusMessage("Network editor not focused", hou.severityType.Error)
+
+
+
 ## Node
 
 def nodeDeselectAll():
@@ -95,6 +112,18 @@ def paneExpand():
     hou.ui.setStatusMessage(message)
     pane = pane.setSplitFraction(fraction)
 
+def paneRatioHalf():
+    pane = hou.ui.paneUnderCursor()
+    pane.setSplitFraction(0.5)
+
+def paneRatioQuarter():
+    pane = hou.ui.paneUnderCursor()
+    pane.setSplitFraction(0.25)
+
+def paneRatioThird():
+    pane.hou.ui.paneUnderCursor()
+    pane.setSplitFraction(0.333)
+
 def paneSplitHorizontal():
     pane = hou.ui.paneUnderCursor()
     new_pane = pane.splitHorizontally()
@@ -110,9 +139,6 @@ def paneSplitRotate():
 def paneSplitSwap():
     pane = hou.ui.paneUnderCursor()
     pane.splitSwap()
-
-def paneThemeOne():
-    panes = hou.ui.panes()
 
 
 ## Print
@@ -158,6 +184,12 @@ def renameNode():
 def restartHoudini():
     return
 
+
+## Scene
+
+def sceneSetA():
+    panes = hou.ui.panes()
+    print(panes)
 
 ## Set
 
@@ -450,4 +482,10 @@ def updateModeAuto():
 
 def updateModeManual():
     hou.setUpdateMode(hou.updateMode.Manual)
+
+def visMenu():
+    reload(hou_ctl_vis_menu)
+    vis_menu = hou_ctl_vis_menu.visMenu()
+    vis_menu.show()
+
 
