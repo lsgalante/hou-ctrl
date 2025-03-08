@@ -7,6 +7,18 @@
         <removeItem id="revert_factory_defs"/>
         <removeItem id="set_curr_as_def"/>
         <removeItem id="export_parm_type_props"/>
+        <scriptItem id="vector_set_x">
+            <label>Set to X</label>
+            <context>
+                <expression>len(kwargs["parms"])==3 and kwargs["parms"][0].parmTemplate().type()==hou.parmTemplateType.Float and kwargs["parms"][1].parmTemplate().type()==hou.parmTemplateType.Float and kwargs["parms"][2].parmTemplate().type()==hou.parmTemplateType.Float </expression>
+            </context>
+            <scriptCode><![CDATA[
+name = kwargs["parms"][0].name()
+name = name[:-1]
+node = kwargs["parms"][0].node()
+node.setParmExpressions({name+"x": 1, name+"y": 0, name+"z": 0})                    
+]]></scriptCode>
+        </scriptItem>
         <scriptItem id="vector_lock">
             <label>Lock Y and Z to X</label>
             <context>
