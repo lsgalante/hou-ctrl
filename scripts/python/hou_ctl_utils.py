@@ -265,56 +265,81 @@ def tabTogglePin():
 ## Toggle
 
 def toggleAllMenus():
-    show_master = 1
+    is_visible = 0
+
+    # gather contexts
+    networks = getNetworks()
+    tabs = hou.ui.paneTabs()
+    panes = hou.ui.curDesktop().panes()
+    viewers = getSceneViewers()
 
     # main menu
-    show_main_menu = int(hou.getPreference("showmenu.val"))
+    if hou.getPreference("showmenu.val") == "1":
+        is_visible = 1
+
     # network menu
-    show_network_menu = 0
-    networks = getNetworks()
     for network in networks:
-        show_network_menu += int(network.getPref("showmenu"))
-    # path
-    show_path = 0
-    tabs = hou.ui.paneTabs()
+        if network.getPref("showmenu") == "1":
+            is_visible = 1
+
+    # network controls
     for tab in tabs:
         if tab.isShowingNetworkControls():
-            show_path += 1
-    # panetabs
-    show_tabs = 0
-    panes = hou.ui.curDesktop().panes()
+            is_visible = 1
+
+    # tabs
     for pane in panes:
         if pane.isShowingPaneTabs():
-            show_tabs += 1
-    # viewer menus
-    show_viewer_menus = 0
-    viewer = getSceneViewers()[0]
-    if viewer.isShowingOperationBar():
-        show_viewer_menus += 1
-    elif viewer.isShowingDisplayOptionsBar():
-        show_viewer_menus += 1
-    elif viewer.isShowingSelectionBar():
-        show_viewer_menus += 1
+            is_visible = 1
 
-    if int(show_main_menu) + show_path + show_tabs + show_viewer_menus > 0: show_master = 0
-    else: show_master = 1
+    # scene viewer operation toolbar (top)
+    for viewer in viewers:
+        if viewer.isShowingOperationBar():
+            is_visible = 1
 
-    hou.setPreference("showmenu.val",["0","1"][show_master])
-    for network in networks: network.setPref("showmenu",["0","1"][show_master])
-    [tab.showNetworkControls(show_master) for tab in tabs]
-    [pane.showPaneTabs(show_master) for pane in panes]
-    viewer.showOperationBar(show_master)
-    viewer.showDisplayOptionsBar(show_master)
-    viewer.showSelectionBar(show_master)
+    # scene viewer display options toolbar (right)
+    for viewer in viewers:
+        if viewer.isShowingDisplayOptionsBar():
+            is_visible = 1
+
+    # scene viewer selection toolbar (left)
+    for viewer in viewers:
+        if viewer.isShowingSelectionBar():
+            is_visible = 1
     
-    hou.ui.setHideAllMinimizedStowbars(not show_master)
-    return
+    if is_visible:
+        hou.setPreference("showmenu.val", "0")
+        for network in networks:
+            network.setPref("showmenu", "0")
+        for tab in tabs:
+            tab.showNetworkControls(0)
+        for pane in panes:
+            pane.showPaneTabs(0)
+        for viewer in viewers:
+            viewer.showOperationBar(0)
+            viewer.showDisplayOptionsBar(0)
+            viewer.showSelectionBar(0)
+        hou.ui.setHideAllMinimizedStowbars(1)
+
+    else:
+        hou.setPreference("showmenu.val", "1")
+        for network in networks:
+            network.setPref("showment", "1")
+        for tab in tabs:
+            tab.showNetworkControls(1)
+        for pane in panes:
+            pane.showPaneTabs(1)
+        for viewer in viewers:
+            viewer.showOperationBar(1)
+            viewer.showDisplayOptionsBar(1)
+            viewer.showSelectionBar(1)
+        hou.ui.setHideAllMinimizedStowbars(0)
 
 def toggleAutosave():
-    state = hou.getPreference("autoSave")
-    if state == "0":
+    is_autosave = hou.getPreference("autoSave")
+    if is_autosave == "0":
         hou.setPreference("autoSave", "1")
-    elif state == "1":
+    else:
         hou.setPreference("autoSave", "0");
 
 def toggleBackface():
@@ -327,14 +352,25 @@ def toggleBackface():
         displaySet.showPrimBackfaces((is_visible + 1) % 2)
 
 def toggleDimUnusedNodes():
+    is_dim = "0"
     networks = getNetworks()
-    dim = "1"
     for network in networks:
-        pref = network.getPref("dimunusednodes")
-        if pref == "1":
-            dim = "0"
+        if network.getPref("dimunusednodes") == "1":
+            is_dim = "1"
     for network in networks:
-        network.setPref("dimunusednodes", dim) 
+        if is_dim == "0":
+            network.setPref("dimunusednodes", "1") 
+        else:
+            network.setPref("dimunusednodes", "0")
+
+def toggleDisplayOptionsToolbar():
+    is_visible = 0
+    viewers = getSceneViewers()
+    for viewer in viewers:
+        if viewer.isShowingDisplayOptionsBar():
+            is_visible = 1
+    for viewer in viewers:
+        viewer.showDisplayOptionsBar((is_visible + 1) % 2)
 
 def toggleFinder():
     reload(hou_ctl_finder)
@@ -342,17 +378,13 @@ def toggleFinder():
     finder.show()
 
 def toggleGroupList():
-    viewers = getSceneViewers()
     is_visible = 0
+    viewers = getSceneViewers()
     for viewer in viewers:
         if viewer.isGroupListVisible():
             is_visible = 1
-    if is_visible:
-        for viewer in viewers:
-            viewer.setGroupListVisible(0)
-    else:
-        for viewer in viewers:
-            viewer.setGroupListVisible(1)
+    for viewer in viewers:
+        viewer.setGroupListVisible((is_visible + 1) % 2)
 
 def toggleKeycam():
     viewer = hou.ui.paneTabOfType(hou.paneTabType.SceneViewer)
@@ -368,55 +400,64 @@ def toggleKeycam():
         return
 
 def toggleMainMenubar():
-    val = hou.getPreference("showmenu.val")
-    vals = ("0", "1")
-    idx = vals.index(val)
-    idx = (idx + 1) % 2
-    hou.setPreference("showmenu.val",["0","1"][idx])
+    if hou.getPreference("showmenu.val") == "1":
+        hou.setPreference("showmenu.val", "0")
+    else:
+        hou.setPreference("showmenu.val", "1")
 
 def toggleNetworkControls():
+    is_visible = 0
     tabs = hou.ui.paneTabs()
-    show_path = 1
     for tab in tabs:
         if tab.isShowingNetworkControls():
-            show_path = 0
-    [tab.showNetworkControls(show_path) for tab in tabs]
+            is_visible = 1
+    for tab in tabs:
+        tab.showNetworkControls((is_visible + 1) % 2)
 
 def toggleNetworkGridPoints():
+    is_visible = "0"
     networks = getNetworks()
     for network in networks:
-        pref = network.getPref("gridmode")
-        if pref != "1":
+        if network.getPref("gridmode") == "1":
+            is_visible = "1"
+    for network in networks:
+        if is_visible == "0":
             network.setPref("gridmode", "1")
         else:
             network.setPref("gridmode", "0")
 
 def toggleNetworkGridLines():
+    is_visible = "0"
     networks = getNetworks()
     for network in networks:
-        pref = network.getPref("gridmode")
-        if pref != "2":
-            network.setPref("gridmode", "2")
+        if network.getPref("gridmode") == "1":
+            is_visible = "1"
+    for network in networks:
+        if pref == "0":
+            network.setPref("gridmode", "1")
         else:
             network.setPref("gridmode", "0")
 
 def toggleNetworkLocating():
-    networks = getNetworks()
     is_locating = 0
+    networks = getNetworks()
     for network in networks:
         if network.locatingEnabled():
             is_locating = 1
     for network in networks:
-        network.setLocatingEnabled(is_locating)
+        network.setLocatingEnabled((is_locating + 1) % 2)
 
-def toggleNetworkMenubar():
+def toggleNetworkEditorMenu():
+    is_visible = 0
     networks = getNetworks()
-    show_menu = 1
     for network in networks:
         if network.getPref("showmenu") == "1":
-            show_menu = 0
+            is_visible = 1
     for network in networks:
-        network.setPref("showmenu",["0","1"][show_menu])
+        if is_visible:
+            network.setPref("showmenu", "0")
+        else:
+            network.setPref("showmenu", "1")
 
 def togglePaneMaximized():
     pane = hou.ui.paneUnderCursor()
