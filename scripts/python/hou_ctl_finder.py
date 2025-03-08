@@ -62,7 +62,7 @@ class finder(QtWidgets.QDialog):
         self.items.append(("Network Controls",               hcu.toggleNetworkControls))
         self.items.append(("Network Grid - Points",          hcu.toggleNetworkGridPoints))
         self.items.append(("Network Grid - Lines",           hcu.toggleNetworkGridLines))
-        self.items.append(("Network Menubar",                hcu.toggleNetworkMenubar))
+        self.items.append(("Network Editor Menu",            hcu.toggleNetworkEditorMenu))
         self.items.append(("New Tab",                        hcu.newTab))
         self.items.append(("Open Floating Parameter Editor", hcu.openFloatingParameterEditor))
         self.items.append(("Pane Contract",                  hcu.paneContract))
