@@ -54,6 +54,7 @@ class finder(QtWidgets.QDialog):
         self.items.append((pinItem,                          hcu.tabTogglePin))
         self.items.append(("Deselect All Nodes",             hcu.nodeDeselectAll))
         self.items.append(("Dim Unused Nodes",               hcu.toggleDimUnusedNodes))
+        self.items.append(("Display Options Toolbar",        hcu.toggleDisplayOptionsToolbar))
         self.items.append(("Group List",                     hcu.toggleGroupList))
         self.items.append(("Hide Shelf",                     hcu.hideShelf))
         self.items.append(("Main Menubar",                   hcu.toggleMainMenubar))
