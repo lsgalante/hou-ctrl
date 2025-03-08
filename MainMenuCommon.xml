@@ -6,94 +6,84 @@
 <mainMenu>
   <menuBar>
     <subMenu id="hou_ctl_submenu">
-
-      <label>hou-ctl</label>
+    <label>hou-ctl</label>
 
       <scriptItem id="toggle_all_menus">
         <label>Toggle All Menus</label>
-        <scriptCode><![CDATA[
-import hou_ctl_utils as hcu
-hcu.toggleAllMenus()
-        ]]></scriptCode>
+        <scriptCode><![CDATA[import hou_ctl_utils as hcu
+
+hcu.toggleAllMenus()]]></scriptCode>
       </scriptItem>
 
       <scriptItem id="toggle_finder">
         <label>Toggle Finder</label>
-        <scriptCode><![CDATA[
-import hou_ctl_utils as hcu
-hcu.toggleFinder()
-        ]]></scriptCode>
+        <scriptCode><![CDATA[import hou_ctl_utils as hcu
+          
+hcu.toggleFinder()]]></scriptCode>
       </scriptItem>
 
       <scriptItem id="toggle_keycam">
         <label>Toggle Keycam</label>
-        <scriptCode><![CDATA[
-import hou_ctl_utils as hcu
-hcu.toggleKeycam()
-        ]]></scriptCode>
+        <scriptCode><![CDATA[import hou_ctl_utils as hcu
+
+hcu.toggleKeycam()]]></scriptCode>
       </scriptItem>
 
       <scriptItem id="toggle_panetabs">
         <label>Toggle Panetabs</label>
-        <scriptCode><![CDATA[
-import hou_ctl_utils as hcu
-hcu.togglePanetabs()
-        ]]></scriptCode>
+        <scriptCode><![CDATA[import hou_ctl_utils as hcu
+
+hcu.togglePanetabs()]]></scriptCode>
       </scriptItem>
 
       <scriptItem id="toggle_path">
         <label>Toggle Path</label>
-        <scriptCode><![CDATA[
-import hou_ctl_utils as hcu
-hcu.togglePath()
-        ]]></scriptCode>
+        <scriptCode><![CDATA[import hou_ctl_utils as hcu
+
+hcu.togglePath()]]></scriptCode>
       </scriptItem>
 
       <scriptItem id="toggle_stowbars">
         <label>Toggle Stowbars</label>
-        <scriptCode><![CDATA[
-import hou_ctl_utils as hcu
-hcu.toggleStowbars()
-        ]]></scriptCode>
+        <scriptCode><![CDATA[import hou_ctl_utils as hcu
+
+hcu.toggleStowbars()]]></scriptCode>
       </scriptItem>
 
       <separatorItem/>
 
       <scriptItem id="open_color_editor">
         <label>Open Color Editor</label>
-        <scriptCode><![CDATA[
-import hou_ctl_utils as hcu
-hcu.openColorEditor()
-        ]]></scriptCode>
+        <scriptCode><![CDATA[import hou_ctl_utils as hcu
+
+hcu.openColorEditor()]]></scriptCode>
       </scriptItem>
 
       <separatorItem/>
 
       <scriptItem id="reload_keycam">
         <label>Reload Keycam</label>
-        <scriptCode><![CDATA[
-import hou_ctl_utils as hcu
-hcu.reloadKeycam()
-        ]]></scriptCode>
+        <scriptCode><![CDATA[import hou_ctl_utils as hcu
+
+hcu.reloadKeycam()]]></scriptCode>
       </scriptItem>
 
       <scriptItem id="reload_color_schemes">
         <label>Reload Color Schemes</label>
-        <scriptCode><![CDATA[
-import hou_ctl_utils as hcu
-hcu.reloadColorSchemes()
-        ]]></scriptCode>
+        <scriptCode><![CDATA[import hou_ctl_utils as hcu
+
+hcu.reloadColorSchemes()]]></scriptCode>
       </scriptItem>
 
       <separatorItem/>
 
       <scriptItem id="update_main_menubar">
         <label>Update Main Menubar</label>
-        <scriptCode><![CDATA[
-import hou_ctl_utils as hcu
-hcu.updateMainMenubar()
-        ]]></scriptCode>
+        <scriptCode><![CDATA[import hou_ctl_utils as hcu
+
+hcu.updateMainMenubar()]]></scriptCode>
       </scriptItem>
 
     </subMenu>
+  </menuBar>
 </mainMenu>
