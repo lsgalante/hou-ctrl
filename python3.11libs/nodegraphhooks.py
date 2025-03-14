@@ -6,11 +6,11 @@ import nodegraphview as view
 import math
 
 from importlib import reload
-import extra
+import nodegraphfunctions as ngf
 
 def createEventHandler(uievent, pending_actions):
-    reload(extra)
-    if extra.action(uievent):
+    reload(ngf)
+    if ngf.action(uievent):
         return None, True
     else:
         return None, False
