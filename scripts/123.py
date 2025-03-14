@@ -1,5 +1,7 @@
 import pathlib
 
+print("--BEGIN 123.py--")
+
 path_raw = "~/src/hou-ctl/recent_paths"
 path = pathlib.PosixPath(path_raw)
 path = path.expanduser()
@@ -10,14 +12,16 @@ if not path.is_file():
 choices_raw = path.read_text()
 choice_arr = choices_raw.split("\n")
 
-i = hou.ui.selectFromList(
-    choices=choice_arr,
-    exclusive=True,
-    message="Recent Files",
-    column_header="Path"
-)
+# i = hou.ui.selectFromList(
+#     choices=choice_arr,
+#     exclusive=True,
+#     message="Recent Files",
+#     column_header="Path"
+# )
 
-# on accept
-if len(i) > 0:
-    choice = choice_arr[i[0]]
-    hou.hipFile.load(choice)
+# # on accept
+# if len(i) > 0:
+#     choice = choice_arr[i[0]]
+#     hou.hipFile.load(choice)
+
+print("--END 123.py--")
