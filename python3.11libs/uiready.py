@@ -1,4 +1,11 @@
 import hou_ctl_utils as hcu
+from PySide2.QtCore import Qt
+
+print("--BEGIN uiready.py--")
+
+# Disable titlebar
+flags = Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
+# hou.qt.mainWindow().setWindowFlags(flags)
 
 # Houdini seems to start some menus and stowbars enabled by default,
 # regardless of the previous ui state.
@@ -12,3 +19,5 @@ hcu.togglePanetabs()
 networks = hcu.getNetworks()
 for network in networks:
     network.setPref("gridmode", "1")
+
+print("--END uiready.py--")
