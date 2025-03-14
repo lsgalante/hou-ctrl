@@ -20,6 +20,10 @@ class finder(QtWidgets.QDialog):
         super(finder, self).__init__(hou.qt.mainWindow())
         reload(hcu)
 
+        # file tag
+        self.filePathLabel = QtWidgets.QLabel()
+        self.filePathLabel.setText(hou.hipFile.name())
+
         # input box
         self.inputBox = inputBox() 
         self.inputBox.onTab.connect(self.nextItem)
@@ -114,6 +118,7 @@ class finder(QtWidgets.QDialog):
 
         # make layout
         self.layout = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.TopToBottom)
+        self.layout.addWidget(self.filePathLabel)
         self.layout.addWidget(self.inputBox)
         self.layout.addWidget(self.contextLabel)
         self.layout.addWidget(self.listWidget) 
