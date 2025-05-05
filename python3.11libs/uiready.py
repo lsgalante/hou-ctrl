@@ -1,23 +1,34 @@
-import hou_ctl_utils as hcu
+import hctl_utils as hcu
 from PySide2.QtCore import Qt
 
 print("--BEGIN uiready.py--")
 
-# Disable titlebar
-flags = Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
-# hou.qt.mainWindow().setWindowFlags(flags)
 
-# Houdini seems to start some menus and stowbars enabled by default,
-# regardless of the previous ui state.
-hcu.toggleAllMenus()
+qt_commands = 0
+ui_setup = 1
+hotkey_setup = 1
 
-# Re-enable main menu bar and pane tabs# Re-enable main menu bar and pane tabs# Re-enable main menu bar and pane tabs
-hcu.toggleMainMenubar()
-hcu.togglePanetabs()
+if qt_commands:
+    window = hou.qt.mainWindow()
+    flags = Qt.FramelessWindowHint
+    window.setWindowFlags(flags)
+    window.setFixedWidth(1710)
+    window.setFixedHeight(1100)
 
-# Set network grid points to on
-networks = hcu.getNetworks()
-for network in networks:
-    network.setPref("gridmode", "1")
+if ui_setup:
+    # Houdini starts with some ui elements visible regardless of desktop file.
+    hcu.desktopToggleMenus()
 
+    # Re-enable main menu bar and pane tabs
+    hcu.desktopToggleMainMenuBar()
+    # hcu.desktopTogglePaneTabs()
+
+    # Set network grid points to on
+    networkEditors = hcu.desktopGetNetworkEditors()
+    for networkEditor in networkEditors:
+        networkEditor.setPref("gridmode", "1")
+
+if hotkey_setup:
+    hcu.sessionReloadBindings()
+    
 print("--END uiready.py--")
