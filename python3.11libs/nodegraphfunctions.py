@@ -1,11 +1,11 @@
 import hou, labutils, math, os
-from   canvaseventtypes  import *
-import hou_ctl_utils     as     hcu
-import nodegraphdisplay  as     display
-import nodegraphview     as     view
-from   PySide2.QtCore    import Qt, QRect
-from   PySide2.QtGui     import QColor, QCursor, QPen, QPixmap
-from   PySide2.QtWidgets import QGraphicsScene, QGraphicsView
+from canvaseventtypes import *
+import hctl_utils as hcu
+import nodegraphdisplay as display
+import nodegraphview as view
+from PySide2.QtCore import Qt, QRect
+from PySide2.QtGui import QColor, QCursor, QPen, QPixmap
+from PySide2.QtWidgets import QGraphicsScene, QGraphicsView
 
 def action(uievent):
     if isinstance(uievent, ContextEvent):
