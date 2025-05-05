@@ -5,83 +5,73 @@
      the original definitions found in $HFS/houdini/ -->
 <mainMenu>
   <menuBar>
-    <subMenu id="hou_ctl_submenu">
-    <label>hou-ctl</label>
+    <subMenu id="hctl_submenu">
+    <label>hctl</label>
 
-      <scriptItem id="toggle_all_menus">
-        <label>Toggle All Menus</label>
-        <scriptCode><![CDATA[import hou_ctl_utils as hcu
-
-hcu.toggleAllMenus()]]></scriptCode>
+      <scriptItem id="desktopReloadColorSchemes">
+        <label>desktopReloadColorSchemes</label>
+        <scriptCode><![CDATA[import hctl_utils
+hctl_utils.desktopReloadColorSchemes()]]></scriptCode>
       </scriptItem>
 
-      <scriptItem id="toggle_finder">
-        <label>Toggle Finder</label>
-        <scriptCode><![CDATA[import hou_ctl_utils as hcu
-          
-hcu.toggleFinder()]]></scriptCode>
+      <scriptItem id="desktopToggleHctl">
+        <label>desktopToggleHctl</label>
+        <scriptCode><![CDATA[import hctl_utils
+hctl_utils.desktopToggleHctl()]]></scriptCode>
       </scriptItem>
 
-      <scriptItem id="toggle_keycam">
-        <label>Toggle Keycam</label>
-        <scriptCode><![CDATA[import hou_ctl_utils as hcu
-
-hcu.toggleKeycam()]]></scriptCode>
+      <scriptItem id="desktopToggleMenus">
+        <label>desktopToggleMenus</label>
+        <scriptCode><![CDATA[import hctl_utils
+hctl_utils.desktopToggleMenus()]]></scriptCode>
       </scriptItem>
 
-      <scriptItem id="toggle_panetabs">
-        <label>Toggle Panetabs</label>
-        <scriptCode><![CDATA[import hou_ctl_utils as hcu
-
-hcu.togglePanetabs()]]></scriptCode>
+      <scriptItem id="desktopToggleNetworkControls">
+        <label>desktopToggleNetworkControls</label>
+        <scriptCode><![CDATA[import hctl_utils
+hctl_utils.desktopToggleNetworkControls()]]></scriptCode>
       </scriptItem>
 
-      <scriptItem id="toggle_path">
-        <label>Toggle Path</label>
-        <scriptCode><![CDATA[import hou_ctl_utils as hcu
-
-hcu.togglePath()]]></scriptCode>
+      <scriptItem id="desktopTogglePaneTabs">
+        <label>desktopTogglePaneTabs</label>
+        <scriptCode><![CDATA[import hctl_utils
+hctl_utils.desktopTogglePaneTabs()]]></scriptCode>
       </scriptItem>
 
-      <scriptItem id="toggle_stowbars">
-        <label>Toggle Stowbars</label>
-        <scriptCode><![CDATA[import hou_ctl_utils as hcu
-
-hcu.toggleStowbars()]]></scriptCode>
+      <scriptItem id="desktopToggleStowbars">
+        <label>desktopToggleStowbars</label>
+        <scriptCode><![CDATA[import hctl_utils
+hctl_utils.desktopToggleStowbars()]]></scriptCode>
       </scriptItem>
-
-      <separatorItem/>
-
-      <scriptItem id="open_color_editor">
-        <label>Open Color Editor</label>
-        <scriptCode><![CDATA[import hou_ctl_utils as hcu
-
-hcu.openColorEditor()]]></scriptCode>
+      
+      <scriptItem id="desktopUpdateMainMenuBar">
+        <label>desktopUpdateMainMenuBar</label>
+        <scriptCode><![CDATA[import hctl_utils
+hctl_utils.desktopUpdateMainMenuBar()]]></scriptCode>
       </scriptItem>
 
       <separatorItem/>
 
-      <scriptItem id="reload_keycam">
-        <label>Reload Keycam</label>
-        <scriptCode><![CDATA[import hou_ctl_utils as hcu
-
-hcu.reloadKeycam()]]></scriptCode>
-      </scriptItem>
-
-      <scriptItem id="reload_color_schemes">
-        <label>Reload Color Schemes</label>
-        <scriptCode><![CDATA[import hou_ctl_utils as hcu
-
-hcu.reloadColorSchemes()]]></scriptCode>
+      <scriptItem id="openColorEditor">
+        <label>openColorEditor</label>
+        <scriptCode><![CDATA[import hctl_utils
+hctl_utils.openColorEditor()]]></scriptCode>
       </scriptItem>
 
       <separatorItem/>
 
-      <scriptItem id="update_main_menubar">
-        <label>Update Main Menubar</label>
-        <scriptCode><![CDATA[import hou_ctl_utils as hcu
+      <scriptItem id="sceneViewerToggleKeycam">
+        <label>sceneViewerToggleKeycam</label>
+        <scriptCode><![CDATA[import hctl_utils
+hctl_utils.sceneViewerToggleKeycam()]]></scriptCode>
+      </scriptItem>
 
-hcu.updateMainMenubar()]]></scriptCode>
+      <separatorItem/>
+
+      <scriptItem id="sessionReloadKeycam">
+        <label>sessionReloadKeycam</label>
+        <scriptCode><![CDATA[import hctl_utils
+hctl_utils.sessionReloadKeycam()]]></scriptCode>
       </scriptItem>
 
     </subMenu>
