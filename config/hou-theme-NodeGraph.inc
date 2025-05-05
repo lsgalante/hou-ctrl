@@ -27,21 +27,21 @@ GraphDependencyExternalIn:          GREY(0.8)      // dependency
 GraphDependencyExternalOut:         GREY(0.8)      // dependency
 
 // Selection
-GraphPickFill:                      #aa9000        // drag selection bg
-GraphPreSelection:                  0.75 0.86 1.0  // item pre selection
-GraphItemCurrent:                   #ffa000        // item current
-GraphItemCurrentNonSelected:        #aa7000        // item current non-selected
-GraphItemSelection:                 #aa7000        // multi-selection
-GraphItemSelectionContrast:         mud_lite       // item selection contrast
-GraphItemContentsSelection:         #6E780C        // item selection contents
-GraphSnapLine:                      #5C704D        // item snap line
-GraphDotPinAccent:                  GREY(0.3)      // dot accent
+GraphPickFill:                      #aa9000         // drag selection bg
+GraphPreSelection:                  0.75 0.86 1.0   // item pre selection
+GraphItemCurrent:                   node_current    // item current
+GraphItemSelectionContrast:         node_current    // item selection contrast
+GraphItemCurrentNonSelected:        #b0b0b0         // item current non-selected
+GraphItemSelection:                 #b0b0b0         // multi-selection
+GraphItemContentsSelection:         red         // item selection contents
+GraphSnapLine:                      #5C704D         // item snap line
+GraphDotPinAccent:                  GREY(0.3)       // dot accent
 
 // Generanl
 GraphBackground:                    #000000        // bg
 GraphPromptText:                    #404040
-GraphGridLines:                     button_bg_hi   // grid lines
-GraphGridPoints:                    button_bg_hi   // grid points
+GraphGridLines:                     #606060        // grid lines
+GraphGridPoints:                    #606060        // grid points
 GraphNameText:                      #a0a0a0        // node label
 GraphNodeTypeText:                  grey7          // node type text
 GraphCommentText:                   grey7          // node comment
@@ -50,7 +50,7 @@ GraphContextOptionDepsText:         #6DB4BD
 GraphOutputForViewText:             #6DB4BD
 GraphDetailIdText:                  grey7
 GraphNetworkBoxText:                white          // network box text
-GraphNetworkBoxTextDark:            black        // network box text dark
+GraphNetworkBoxTextDark:            black          // network box text dark
 GraphNetworkBoxNameText:            #76A8E1        // network box
 GraphIndirectText:                  white
 GraphIndirectTextDark:              black
@@ -63,7 +63,7 @@ PaletteSelected:                    yellow         // palette selected
 ShapePaletteShape:                  grey7          // palette shape
 GraphOverviewBackground:            GREY(0.10)     // overview bg
 GraphOverviewViewRegion:            0.5 0.3 0.5    // overview region
-GraphOverviewBorder:                black        // overview border
+GraphOverviewBorder:                black          // overview border
 
 // BG Image
 BackgroundImageLocate:              white
@@ -77,14 +77,14 @@ GraphOverlayCenterText:             #a0a0a0
 GraphOverlayRightText:              #a0a0a0
 
 // Flags
-GraphTemplateFlag:                  mud            // flag template
-GraphSelectableTemplateFlag:        mud            // flag selectable template
-GraphBypassFlag:                    mud            // flag bypass
-GraphRenderFlag:                    mud            // flag render
-GraphDisplayFlag:                   mud            // flag display
-GraphOutputFlag:                    mud            // flag output
-GraphSelectableFlag:                mud            // flag selectable
-GraphExportFlag:                    mud            // flag export
+GraphTemplateFlag:                  node_flag      // flag template
+GraphSelectableTemplateFlag:        node_flag      // flag selectable template
+GraphBypassFlag:                    node_flag      // flag bypass
+GraphRenderFlag:                    node_flag      // flag render
+GraphDisplayFlag:                   node_flag      // flag display
+GraphOutputFlag:                    node_flag      // flag output
+GraphSelectableFlag:                node_flag      // flag selectable
+GraphExportFlag:                    node_flag      // flag export
 GraphHiddenFlag:                    #90BECD        // flag hidden
 GraphAudioFlag:                     0.00 0.50 0.50 // flag audio
 GraphThumbnailFlag:                 0.35 0.60 0.20 // flag thumbnail
@@ -92,15 +92,15 @@ GraphLockFlag:                      #FF 33 00      // flag lock
 GraphSoftLockFlag:                  #C4 E3 61      // flag softlock
 GraphDebugFlag:                     #6CC6B2        // flag debug
 GraphMaterialFlag:                  0.75 0.40 0.00 // flag material
-GraphDisplayAndRenderFlag:          mud            // flag display and render
-GraphDisplayAndOutputFlag:          mud            // flag display and output
+GraphDisplayAndRenderFlag:          node_flag      // flag display and render
+GraphDisplayAndOutputFlag:          node_flag      // flag display and output
 GraphFilterFlag:                    #55FFC1        // flag filter
-GraphDisplayHighlight:              mud_dim        // circle hilite display
-GraphExportHighlight:               mud_dim        // circle hilite export
-GraphRenderHighlight:               mud_dim        // circle hilite render
-GraphOutputHighlight:               mud_dim        // circle hilite output
-GraphTemplateHighlight:             mud_dim        // circle hilite template
-GraphFilterHighlight:               mud_dim        // circle hilite filder
+GraphDisplayHighlight:              node_circle    // circle hilite display
+GraphExportHighlight:               node_circle    // circle hilite export
+GraphRenderHighlight:               node_circle    // circle hilite render
+GraphOutputHighlight:               node_circle    // circle hilite output
+GraphTemplateHighlight:             node_circle    // circle hilite template
+GraphFilterHighlight:               node_circle    // circle hilite filder
 
 // DOPs
 GraphDopObjectData:                 0.65 0.65 0.65 // DOP object data
@@ -113,19 +113,19 @@ GraphDopAnyData:                    0.90 0.90 0.90 // DOP any data
 GraphSopHeightfield:                #25aa8e        // SOP heightfield
 GraphSopConstraints:                #D879D8        // SOP constraint
 GraphSopDomain:                     #6bcae2        // SOP domain
-GraphSopRestGeometry:               0.584 0.776 1.0// SOP rest geo
+GraphSopRestGeometry:               0.58 0.77 1.0  // SOP rest geo
 GraphSopCapturePose:                0.60 0.60 0.60 // SOP capture pose
-GraphSopAnimatedPose:               1.00 0.725 0.00// SOP anim pose
+GraphSopAnimatedPose:               1.00 0.72 0.00 // SOP anim pose
 
 // Subnet
-GraphSubnetShadow1:                 mud        // subnet shadow1
+GraphSubnetShadow1:                 mud            // subnet shadow1
 GraphSubnetShadowBlend1:            0.9            // subnet shadow1 blend
-GraphSubnetShadow2:                 mud          // subnet shadow2
+GraphSubnetShadow2:                 mud            // subnet shadow2
 GraphSubnetShadowBlend2:            0.9            // subnet shadow2 blend
 
 // Flyout
-GraphFlyoutBackgroundFlagOn:        black        // flyout
-GraphFlyoutBackgroundFlagOff:       black        // flyout
+GraphFlyoutBackgroundFlagOn:        black          // flyout
+GraphFlyoutBackgroundFlagOff:       black          // flyout
 GraphFlyoutEdgeFlagOff:             GREY(0.3)      // flyout
 GraphFlyoutInfo:                    GREY(0.1)      // flyout
 GraphFlyoutWarning:                 0.2 0.2 0.0    // flyout
