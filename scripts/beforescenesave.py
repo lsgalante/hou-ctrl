@@ -1,6 +1,8 @@
 import os.path
 
 print("--BEGIN beforescenesave.py--")
+#####################################
+
 
 this_path = hou.hipFile.path()
 
@@ -16,4 +18,6 @@ path_arr.insert(0, this_path)
 file = open(path, "w")
 file.write("\n".join(path_arr))
 
+
+###################################
 print("--END beforescenesave.py--")
