@@ -20,362 +20,384 @@ IconSaturation: 0.0
 
 // New ui resources 
 
-BackColor:                              bg               // if white lines appear, adjust the BorderDark (auto contrast code)
-BorderLight:                            button_bg
-BorderDark:                             button_bg
+BackColor:                          bg // if white lines appear, adjust BorderDark
+BorderLight:                        button_bg
+BorderDark:                         button_bg
 
-DialogBlendBG:                          black               // messages, etc
-DropIndicator                           0.0 0.0 1.0
-GalleryBackground:                      black
-SnapshotGalleryBackground:              black
+DialogBlendBG:                      black           // messages, etc
+DropIndicator                       0.0 0.0 1.0
+GalleryBackground:                  black
+SnapshotGalleryBackground:          black
 
 // Spreadsheet
 
-ListShadow:                             #202000
-ListHighlight:                          #202000
-ListBorder:                             #202000
-ListBG:                                 black                // bg in some random windows
-ListEntry1:                             black
-ListEntry2:                             #101000
-ListEntrySelected:                      button_bg
-ListTitleShadow:                        #202000              // border
-ListTitleHighlight:                     #202000              // border
-ListTitleGradHi:                        bg
-ListTitleGradLow:                       bg
-ListTitleHighlightGradHi:               button_bg_hi         // elemnum
-ListTitleHighlightGradLow:              button_bg            // elemnum
-ListTitleFilteredText:                  fg_lite
-ListText:                               fg_lite              // fg in download color scheme window
-ListAltText:                            fg_lite
-ListHoverHighlight:                     button_bg_hi         // hover hilite
-SSBorder:                               button_bg_hi         // column divider
+ListShadow:                         #202000
+ListHighlight:                      #202000
+ListBorder:                         #202000
+ListBG:                             black           // bg in some random windows
+ListEntry1:                         black
+ListEntry2:                         #101000
+ListEntrySelected:                  #ffd700
+
+ListTitleShadow:                    #202000         // spreadsheet title border
+ListTitleHighlight:                 #202000         // spreadsheet title hilite
+ListTitleGradHi:                    bg              // spreadsheet title hi
+ListTitleGradLow:                   bg              // spreadsheet title lo
+ListTitleHighlightGradHi:           button_bg_hi    // spreadsheet title hilite hi
+ListTitleHighlightGradLow:          button_bg       // spreadsheet title hilite lo
+ListTitleFilteredText:              fg_lite         // spreadsheet title filtered
+
+ListText:                           fg_lite         // download color scheme fg
+ListAltText:                        fg_lite
+ListHoverHighlight:                 button_bg_hi    // hover hilite
+SSBorder:                           button_bg_hi    // column divider
 
 // Menu
 
-MenuBG:                                 bg
-MenuText:                               fg_lite
-MenuTextDisabled:                       fg_dim
-MenuTextHotkey:                         fg_dim
-MenuHighlight:                          mud_lite
-MenuShadow:                             mud_lite
-MenuTextSelected:                       fg_lite
-MenuSelectedBG:                         mud_hover_bg
-MenuTitleBG:                            lite
-InvertedMenuBackground:                 red
+MenuBG:                             bg              // menu bg
+MenuHighlight:                      border selected // menu hilite
+MenuShadow:                         border_selected // menu shadow
 
-TextColor:                              fg_lite
-HiliteTextBG:                           red
-SecondaryText:                          separator
-LinkText:                               #64ACFF
+MenuTitleBG:                        lite            // menu title bg
+MenuSelectedBG:                     border_selected // menu selected bg
+InvertedMenuBackground:             red             // menu inverted bg
 
-ToolbarBevelLight:                      button_bg
-ToolbarBevelDark:                       lite
-ToolbarFlatGradHi:                      bg
-ToolbarFlatGradLo:                      bg
+MenuText:                           fg_lite         // menu text
+MenuTextSelected:                   fg_lite         // menu text selected
+MenuTextHotkey:                     fg_dim          // menu text hotkey
+MenuTextDisabled:                   fg_dim          // menu text disabled
+
+TextColor:                          fg_lite         // text
+HiliteTextBG:                       red             // text hilite bg
+SecondaryText:                      separator       // text secondary
+LinkText:                           #64ACFF         // text link
+
+ToolbarBevelLight:                  button_bg       // toolbar bevel lite
+ToolbarBevelDark:                   lite            // toolbar bevel dark
+ToolbarFlatGradHi:                  bg              // toolbar flat hi
+ToolbarFlatGradLo:                  bg              // toolbar flat lo
 
 // Ladder
 
-LadderBG:                               black
-LadderText:                             fg_lite
-LadderHighlight:                        lite
-LadderOutline:                          lite
-LadderShadow:                           red
+LadderBG:                           black           // ladder bg
+LadderText:                         fg_lite         // ladder text
+LadderHighlight:                    lite            // ladder hilite
+LadderShadow:                       red             // ladder shadow
+LadderOutline:                      lite            // ladder outline
 
 // Parameters
 
-ButtonGradHi:                           button_bg_hi
-ButtonGradLow:                          button_bg
-ButtonNonActiveGradLow:                 bg
-ButtonShadowLight:                      button_bg
-ButtonShadowMed:                        fg_blue
-ButtonShadowMedDark:                    fg_blue
-ButtonShadowDark:                       button_bg
-ButtonShadow:                           button_bg
-ButtonText:                             fg_lite             // button text
-ButtonHoverHighlight:                   mud_hover_bg
-ButtonPressedText:                      fg_lite
-ButtonPressedText2:                     fg_lite
-ButtonPressedGradHi:                    button_bg_hi        // some selected bg
-ButtonPressedGradLow:                   button_bg_hi        // some selected bg
-ButtonMenuArrowHi:                      button_bg_hi
-ButtonMenuArrowLow:                     button_bg
-ButtonMenuArrow:                        button_fg
-ButtonArrow:                            fg_blue
-ButtonArrowDisabled:                    lite
-ButtonArrowPressed:                     fg_dim
-ButtonArrowModified:                    fg_dim
+ButtonGradHi:                       button_bg_hi    // button hi
+ButtonGradLow:                      button_bg       // button lo
+ButtonNonActiveGradLow:             bg              // button non-active lo
+ButtonHoverHighlight:               #f0f0f0         // button hover hilite
 
-CheckBG:                                button_bg
-CheckLocated:                           fg_lite
-CheckColor:                             fg_lite
+ButtonShadow:                       button_bg_hi    // button shadow
+ButtonShadowLight:                  button_bg_hi    // button shadow lite
+ButtonShadowMed:                    button_bg_hi    // button shadow med
+ButtonShadowMedDark:                separator       // button shadow med dark
+ButtonShadowDark:                   button_bg_hi    // button shadow dark
 
-RadioBG:                                black
-RadioBorder:                            fg_dim
-RadioDot:                               fg_dim
-RadioDotHighlight:                      fg_dim
+ButtonText:                         fg_lite         // button text
+ButtonPressedText:                  fg_lite         // button text pressed
+ButtonPressedText2:                 fg_lite         // button text pressed 2
+ButtonPressedGradHi:                button_bg_hi    // some selected bg
+ButtonPressedGradLow:               button_bg_hi    // some selected bg
 
-RampBG:                                 black
-RampFG:                                 #101030
-RampBGDisabled:                         GREY(0.3)
-RampFGDisabled:                         GREY(0.45)
-RampGrid:                               GREY(0.3)
-RampCurve:                              selected
-RampCurveDisabled:                      #202020
-RampKeyBG:                              unselected
-RampKeyFG:                              #a06060              // ramp selected key
-RampKeyDisabled:                        #404040
-RampKeyHoverBG:                         selected
-RampKeyHoverFG:                         selected
-RampHandleBG:                           #ff0000
-RampHandleFG:                           unselected
-RampHandleHoverBG:                      selected
-RampHandleHoverFG:                      selected
-RampHandleLines:                        unselected
-RampHandleLinesHover:                   selected
-RampBoxSelect:                          #ff0000
-RampMarkerHover:                        unselected
-RampConstraintGuide:                    #ff0000
+ButtonMenuArrowHi:                  button_bg_hi    // button menu arrow hi
+ButtonMenuArrowLow:                 button_bg       // button menu arrow lo
+ButtonMenuArrow:                    button_fg       // button menu arrow
+ButtonArrow:                        separator       // button arrow
+ButtonArrowDisabled:                lite            // button arrow disabled
+ButtonArrowPressed:                 fg_dim          // button arrow pressed
+ButtonArrowModified:                fg_dim          // button arrow modified
 
-SliderTopBorder:                        lite
-SliderBottomBorder:                     lite
-SliderAdvancedBevel:                    #383800
-SliderAdvancedGroove:                   #383800
-SliderRemainingBevel:                   #201800
-SliderRemainingGroove:                  #201800
-SliderTick:                             mud_lite
-SliderTickLabel:                        fg_dim
-SliderRangeBrackets:                    fg_dim
-SliderThumbGradHi:                      lite
-SliderThumbGradLow:                     lite
-SliderThumbPressedGradHi:               lite
-SliderThumbPressedGradLow:              lite
-SliderThumbTopBorder:                   fg_dim
-SliderThumbTopBevel:                    lite
-SliderThumbBottomBevel                  lite
-SliderThumbBottomBorder:                fg_dim
-SliderThumbRangeArrow:                  fg_dim
+//
 
-TextboxBG:                              button_bg
-TextboxInvalidBG:                       red
-TextboxBorderPrimary:                   #000000
-TextboxBorderHighlight:                 button_bg
-TextboxBorderStippled:                  red
-TextboxBorderKeyFocus:                  mud_border_selected  // Textbox border when selected
-TextboxError:                           red
-TextboxGutter:                          #602020
-TextboxDropMarker:                      HSV  238  0.40  0.88
+CheckBG:                            button_bg_hi    // check bg
+CheckLocated:                       fg_lite         // check located
+CheckColor:                         fg_lite         // check color
 
-TextboxFeedbackFG:                      separator
-TextboxFeedbackBG:                      red
-SelectedTextFG:                         #404040
-SelectedTextBG:                         #a0a0a0              // cursor
-SelectedTextDisabledBG:                 GREY(0.3)
+RadioBG:                            black           // radio bg
+RadioBorder:                        fg_dim          // radio border
+RadioDot:                           fg_dim          // radio dot
+RadioDotHighlight:                  fg_dim          // radio dot hilite
+
+//
+
+RampBG:                             black           // ramp bg
+RampFG:                             #151500         // ramp fg
+RampBGDisabled:                     GREY(0.3)       // ramp bg disabled
+RampFGDisabled:                     GREY(0.45)      // ramp fg disabled
+RampGrid:                           GREY(0.3)       // ramp grid
+RampCurve:                          #605800         // ramp curve
+RampCurveDisabled:                  #202020         // ramp curve disabled
+
+RampKeyBG:                          #b0b0b0         // ramp key (dots on graph)
+RampKeyFG:                          #ffa020         // ramp key selected
+RampKeyDisabled:                    #404040         // ramp key disabled
+RampKeyHoverBG:                     selected        // ramp key hover bg
+RampKeyHoverFG:                     selected        // ramp key hover fg
+
+RampHandleBG:                       #303030         // ramp handle bg
+RampHandleFG:                       unselected      // ramp handle fg
+RampHandleHoverBG:                  selected        // ramp handle hover bg
+RampHandleHoverFG:                  selected        // ramp handle hover fg
+RampHandleLines:                    unselected      // ramp handle lines
+RampHandleLinesHover:               selected        // ramp handle lines hover
+
+RampBoxSelect:                      #ff0000         // ramp box select
+RampMarkerHover:                    unselected      // ramp marker hover
+RampConstraintGuide:                #ff0000         // ramp constraint guide
+
+//
+
+SliderTopBorder:                    lite            // slider track top border
+SliderBottomBorder:                 lite            // slider track bottom border
+SliderAdvancedBevel:                #383800         // slider track advanced bevel
+SliderAdvancedGroove:               #383800         // slider track advanced groove
+SliderRemainingBevel:               #302800         // slider track remaining bevel
+SliderRemainingGroove:              #302800         // slider track remaining groove
+
+SliderThumbGradHi:                  button_bg_hi    // slider thumb hi
+SliderThumbGradLow:                 button_bg       // slider thumb lo
+SliderThumbPressedGradHi:           lite            // slider thumb pressed hi
+SliderThumbPressedGradLow:          lite            // slider thumb pressed lo
+SliderThumbTopBorder:               #606060         // slider thumb top border
+SliderThumbBottomBorder:            #404040         // slider thumb bottom border
+SliderThumbTopBevel:                #606060         // slider thumb top bevel
+SliderThumbBottomBevel              #404040         // slider thumb bottom bevel
+SliderThumbRangeArrow:              fg_dim          // slider thumb range arrow
+
+SliderTick:                         #808080         // slider tick
+SliderTickLabel:                    fg_dim          // slider tick label
+SliderRangeBrackets:                fg_dim          // slider range brackets
+
+//
+
+TextboxBG:                          button_bg_hi    // textbox bg
+TextboxInvalidBG:                   red             // textbox bg invalid
+
+TextboxBorderPrimary:               #000000         // textbox border
+TextboxBorderHighlight:             button_bg       // textbox border hilite
+TextboxBorderStippled:              red             // textbox border stippled
+TextboxBorderKeyFocus:              border_selected // textbox border selected
+
+TextboxError:                       red             // textbox error
+TextboxGutter:                      #602020         // textbox gutter
+TextboxDropMarker:                  HSV  238  0.40  0.88
+
+TextboxFeedbackFG:                  separator
+TextboxFeedbackBG:                  red
+SelectedTextFG:                     #404040
+SelectedTextBG:                     #a0a0a0              // cursor
+SelectedTextDisabledBG:             GREY(0.3)
 
 // Other UI Controls
 
-KeyframeButtonSelectedGradHi:           GREY(0.5067645)
-KeyframeButtonSelectedGradLow:          GREY(0.3429417)
-KeyframeButtonLocatedGradHi:            GREY(0.4054116)
-KeyframeButtonLocatedGradLow:           GREY(0.27435336)
-KeyframeButtonGradHi:                   lite
-KeyframeButtonGradLow:                  lite
-KeyframeButtonCircleKey:                fg_dim
-KeyframeButtonCircleSomeKey:            fg_dim
-KeyframeButtonCircleNoKey:              fg_dim
-KeyframeButtonCirclePending:            fg_dim
-KeyframeButtonBorder:                   fg_dim
-KeyframeButtonCircleFillOpacity:        fg_dim
+KeyframeButtonSelectedGradHi:       GREY(0.5067645)
+KeyframeButtonSelectedGradLow:      GREY(0.3429417)
+KeyframeButtonLocatedGradHi:        GREY(0.4054116)
+KeyframeButtonLocatedGradLow:       GREY(0.27435336)
+KeyframeButtonGradHi:               lite
+KeyframeButtonGradLow:              lite
+KeyframeButtonCircleKey:            fg_dim
+KeyframeButtonCircleSomeKey:        fg_dim
+KeyframeButtonCircleNoKey:          fg_dim
+KeyframeButtonCirclePending:        fg_dim
+KeyframeButtonBorder:               fg_dim
+KeyframeButtonCircleFillOpacity:    fg_dim
 
-LeverSliderBG:                           GREY(0.12)
-LeverSliderTopBevel:                     GREY(0.16)
-LeverSliderBottomBevel:                  GREY(0.32)
-LeverSliderLeftBevel:                    GREY(0.17)
-LeverSliderRightBevel:                   GREY(0.25)
-LeverSliderFilledBevelTop:               #3d4a60
-LeverSliderFilled:                       #4b5f7d
-LeverSliderFilledBevelBottom:            #272a30
-LeverSliderTick:                         GREY(0.17)
-LeverSliderValueText:                    GREY(0.75)
-LeverSliderThumbText:                    GREY(0.77)
-LeverSliderThumbTopBevel:                GREY(0.36)
-LeverSliderThumbBottomBevel:             GREY(0.09)
-LeverSliderThumbTopBorder:               GREY(0.2)
-LeverSliderThumbBottomBorder:            black
-LeverSliderThumbGradBottom:              GREY(0.22)
-LeverSliderThumbGradTop:                 GREY(0.36)
-LeverSliderThumbRangeArrow:              black
-LeverSliderThumbPressedGradBottom:       PRESSED_HIGH
-LeverSliderThumbPressedGradTop:          PRESSED_LOW
+LeverSliderBG:                      GREY(0.12)
+LeverSliderTopBevel:                GREY(0.16)
+LeverSliderBottomBevel:             GREY(0.32)
+LeverSliderLeftBevel:               GREY(0.17)
+LeverSliderRightBevel:              GREY(0.25)
+LeverSliderFilledBevelTop:          #3d4a60
+LeverSliderFilled:                  #4b5f7d
+LeverSliderFilledBevelBottom:       #272a30
+LeverSliderTick:                    GREY(0.17)
+LeverSliderValueText:               GREY(0.75)
+LeverSliderThumbText:               GREY(0.77)
+LeverSliderThumbTopBevel:           GREY(0.36)
+LeverSliderThumbBottomBevel:        GREY(0.09)
+LeverSliderThumbTopBorder:          GREY(0.2)
+LeverSliderThumbBottomBorder:       black
+LeverSliderThumbGradBottom:         GREY(0.22)
+LeverSliderThumbGradTop:            GREY(0.36)
+LeverSliderThumbRangeArrow:         black
+LeverSliderThumbPressedGradBottom:  PRESSED_HIGH
+LeverSliderThumbPressedGradTop:     PRESSED_LOW
 
-ProgressMeterPercentLabelLeft:           black
-ProgressMeterPercentLabelRight:          white
-ProgressMeterTopBorder:                  grey1
-ProgressMeterBottomBorder:               grey1
-ProgressMeterWellGradHi:                 black
-ProgressMeterWellGradLo:                 black
-ProgressMeterBevelTop:                   white
-ProgressMeterBevelBottom:                grey4
-ProgressMeterGradHi:                     fg_dim
-ProgressMeterGradLo:                     fg_dim
-ProgressMeterText:                       fg_lite
+ProgressMeterPercentLabelLeft:      black
+ProgressMeterPercentLabelRight:     white
+ProgressMeterTopBorder:             grey1
+ProgressMeterBottomBorder:          grey1
+ProgressMeterWellGradHi:            black
+ProgressMeterWellGradLo:            black
+ProgressMeterBevelTop:              white
+ProgressMeterBevelBottom:           grey4
+ProgressMeterGradHi:                fg_dim
+ProgressMeterGradLo:                fg_dim
+ProgressMeterText:                  fg_lite
 
-RangeSliderBackground:                   black
-RangeSliderRect:                         #504000
-RangeSliderRectLocated:                  separator
-RangeSliderRectSelected:                 separator
-RangeSliderArrow:                        separator
-RangeSliderArrowLocated:                 separator
-RangeSliderArrowSelected:                separator
+RangeSliderBackground:              black
+RangeSliderRect:                    #504000
+RangeSliderRectLocated:             separator
+RangeSliderRectSelected:            separator
+RangeSliderArrow:                   separator
+RangeSliderArrowLocated:            separator
+RangeSliderArrowSelected:           separator
 
-ScrollbarUpperBorder:                    lite
-ScrollbarBottomBorder:                   lite
-ScrollbarWell:                           black
-ScrollbarWellShadow1:                    black
-ScrollbarWellShadow2:                    black
-ScrollbarWellShadow3:                    black
-ScrollbarWellShadowBlend12:              black
-ScrollbarWellShadowBlend13:              black
-ScrollbarWellShadowBlend22:              black
-ScrollbarWellShadowBlend23:              black
-ScrollbarWellShadowBlend32:              black
-ScrollbarWellShadowBlend33:              black
-ScrollbarThumbTopBorder:                 lite
-ScrollbarThumbBottomBorder:              lite
-ScrollbarThumbBevel:                     lite
-ScrollbarThumbGrippyBase:                button_bg
-ScrollbarThumbGrippyEdge:                button_bg
-ScrollbarButtonTopBorder:                lite
-ScrollbarButtonBottomBorder:             lite
-ScrollbarButtonBetweenBorder:            lite
-ScrollbarButtonBevel:                    lite
-ScrollbarButtonArrow:                    fg_blue
+ScrollbarUpperBorder:               lite
+ScrollbarBottomBorder:              lite
+ScrollbarWell:                      black
+ScrollbarWellShadow1:               black
+ScrollbarWellShadow2:               black
+ScrollbarWellShadow3:               black
+ScrollbarWellShadowBlend12:         black
+ScrollbarWellShadowBlend13:         black
+ScrollbarWellShadowBlend22:         black
+ScrollbarWellShadowBlend23:         black
+ScrollbarWellShadowBlend32:         black
+ScrollbarWellShadowBlend33:         black
+ScrollbarThumbTopBorder:            lite
+ScrollbarThumbBottomBorder:         lite
+ScrollbarThumbBevel:                lite
+ScrollbarThumbGrippyBase:           button_bg
+ScrollbarThumbGrippyEdge:           button_bg
+ScrollbarButtonTopBorder:           lite
+ScrollbarButtonBottomBorder:        lite
+ScrollbarButtonBetweenBorder:       lite
+ScrollbarButtonBevel:               lite
+ScrollbarButtonArrow:               separator
 
-ScrollArrow:                             lite
-ScrollArrowSelected:                     lite
-ScrollArrowDisabled:                     fg_blue
-Separator:                               fg_blue
+ScrollArrow:                        lite
+ScrollArrowSelected:                lite
+ScrollArrowDisabled:                separator
+Separator:                          separator
 
-SwitchButtonSelected:                    red
-SwitchButtonLocated:                     red
+SwitchButtonSelected:               red
+SwitchButtonLocated:                red
 
 // Spreadsheet
 
-SSOutline:                               DropIndicator     // spreadsheet drag & drop outline
+SSOutline:                          DropIndicator // spreadsheet drag & drop outline
 
 // Highlight Alpha in the channel lister
 // Red for the Displayed Channel Alpha
 // Green for the Graph Selected Channel Alpha
 
-SSHighlightAlpha:                        0.25 0.55 0.0
-SSHeader:                                red
+SSHighlightAlpha:                   0.25 0.55 0.0
+SSHeader:                           red
 
 // Parameter Pane
 
-GroupBorder:                             lite
+GroupBorder:                        lite
 
-GroupHeader0:                            button_bg
-GroupHeaderTop0:                         button_bg
-GroupHeaderHi0:                          button_bg
-GroupHeaderHiTop0:                       button_bg
-GroupHeaderOpen0:                        button_bg // selected tab
-GroupHeaderOpenTop0:                     button_bg_hi // selected tab
-GroupHeaderDisabled0:                    lite
-GroupHeaderDisabledTop0:                 lite
-GroupBody0:                              lite
+GroupHeader0:                       button_bg
+GroupHeaderTop0:                    button_bg
+GroupHeaderHi0:                     button_bg
+GroupHeaderHiTop0:                  button_bg
+GroupHeaderOpen0:                   button_bg    // selected tab
+GroupHeaderOpenTop0:                button_bg_hi // selected tab
+GroupHeaderDisabled0:               lite
+GroupHeaderDisabledTop0:            lite
+GroupBody0:                         button_bg
 
-GroupHeader1:                            lite
-GroupHeaderTop1:                         lite
-GroupHeaderHi1:                          lite
-GroupHeaderHiTop1:                       lite
-GroupHeaderOpen1:                        lite
-GroupHeaderOpenTop1:                     lite
-GroupHeaderDisabled1:                    lite
-GroupHeaderDisabledTop1:                 lite
-GroupBody1:                              lite
+GroupHeader1:                       lite
+GroupHeaderTop1:                    lite
+GroupHeaderHi1:                     lite
+GroupHeaderHiTop1:                  lite
+GroupHeaderOpen1:                   lite
+GroupHeaderOpenTop1:                lite
+GroupHeaderDisabled1:               lite
+GroupHeaderDisabledTop1:            lite
+GroupBody1:                         lite
 
-GroupHeader2:                            lite
-GroupHeaderTop2:                         lite
-GroupHeaderHi2:                          lite
-GroupHeaderHiTop2:                       lite
-GroupHeaderOpen2:                        lite
-GroupHeaderOpenTop2:                     lite
-GroupHeaderDisabled2:                    lite
-GroupHeaderDisabledTop2:                 lite
-GroupBody2:                              lite
+GroupHeader2:                       lite
+GroupHeaderTop2:                    lite
+GroupHeaderHi2:                     lite
+GroupHeaderHiTop2:                  lite
+GroupHeaderOpen2:                   lite
+GroupHeaderOpenTop2:                lite
+GroupHeaderDisabled2:               lite
+GroupHeaderDisabledTop2:            lite
+GroupBody2:                         lite
 
-GroupHeader3:                            lite
-GroupHeaderTop3:                         lite
-GroupHeaderHi3:                          lite
-GroupHeaderHiTop3:                       lite
-GroupHeaderOpen3:                        lite
-GroupHeaderOpenTop3:                     lite
-GroupHeaderDisabled3:                    lite
-GroupHeaderDisabledTop3:                 lite
-GroupBody3:                              lite
+GroupHeader3:                       lite
+GroupHeaderTop3:                    lite
+GroupHeaderHi3:                     lite
+GroupHeaderHiTop3:                  lite
+GroupHeaderOpen3:                   lite
+GroupHeaderOpenTop3:                lite
+GroupHeaderDisabled3:               lite
+GroupHeaderDisabledTop3:            lite
+GroupBody3:                         lite
 
-GroupLight:                              lite
+GroupLight:                         lite
 
-CreateAssetScope:                        #ccccff        // blue
-CreateAssetAuthor:                       #ccffff        // cyan
-CreateAssetBranch:                       #ccffcc        // green
-CreateAssetBasename:                     #ffffcc        // yellow
-CreateAssetVersion:                      #ffcccc        // pink
+CreateAssetScope:                   #ccccff        // blue
+CreateAssetAuthor:                  #ccffff        // cyan
+CreateAssetBranch:                  #ccffcc        // green
+CreateAssetBasename:                #ffffcc        // yellow
+CreateAssetVersion:                 #ffcccc        // pink
 
-InfoBG:                                  dim
-InfoText:                                red
+InfoBG:                             dim
+InfoText:                           red
 
 // Popup
 
-PopupHelpBG:                             black
-PopupHelpFG:                             fg_lite
-PopupHelpHotkeyFG:                       fg_dim
-PopupExtraHelpFG:                        fg_lite
-PopupExtraHelpBG:                        lite
+PopupHelpBG:                        black
+PopupHelpFG:                        fg_lite
+PopupHelpHotkeyFG:                  fg_dim
+PopupExtraHelpFG:                   fg_lite
+PopupExtraHelpBG:                   lite
 
 // Tool Shelf
 
-ShelfGradHi:                             black
-ShelfGradMidHi:                          black
-ShelfGradMidLow:                         black
-ShelfGradLow:                            black
-ShelfBG:                                 dim           // does not appear to be used
-ShelfEmptyBG:                            black
-ShelfTabActiveHi:                        lite
-ShelfTabActiveLow:                       lite
-ShelfTabInactiveHi:                      black
-ShelfTabInactiveLow:                     black
+ShelfGradHi:                        black
+ShelfGradMidHi:                     black
+ShelfGradMidLow:                    black
+ShelfGradLow:                       black
+ShelfBG:                            dim           // does not appear to be used
+ShelfEmptyBG:                       black
+ShelfTabActiveHi:                   lite
+ShelfTabActiveLow:                  lite
+ShelfTabInactiveHi:                 black
+ShelfTabInactiveLow:                black
 
 // Pane Tabs
 
-PaneTabActiveHi:                         button_bg_hi
-PaneTabActiveLow:                        button_bg
-PaneTabInactiveHi:                       black
-PaneTabInactiveLow:                      black
-PaneTabEdges:                            black
-PaneEmptyBG:                             bg
-PaneBorder:                              black
-PaneHeaderGradHi:                        bg
-PaneHeaderGradLow:                       bg
-PaneTabShadow:                           black
-PaneTabMarker:                           lite
+PaneTabActiveHi:                    button_bg_hi
+PaneTabActiveLow:                   button_bg
+PaneTabInactiveHi:                  black
+PaneTabInactiveLow:                 black
+PaneTabEdges:                       black
+PaneEmptyBG:                        bg
+PaneBorder:                         black
+PaneHeaderGradHi:                   bg
+PaneHeaderGradLow:                  bg
+PaneTabShadow:                      black
+PaneTabMarker:                      lite
 
 // used on pane tabs to indicate data type
 // tints, not colors
 
-ObjectColor:                             HSV  210  0.20  1.75
-SopColor:                                HSV  100  0.20  2
-DopColor:                                HSV  0    0.20  2
-PopNetColor:                             HSV  170  0.20  1.75
-PopColor:                                HSV  170  0.20  1.75
-ShopColor:                               HSV  340  0.20  1.75
-VopNetColor:                             HSV  260  0.20  1.75
-VopColor:                                HSV  260  0.20  1.75
-ChopNetColor:                            HSV  60   0.20  1.75
-ChopColor:                               HSV  60   0.20  1.75
-CopNet2Color:                            HSV  40   0.20  2
-Cop2Color:                               HSV  40   0.20  2
-OutputColor:                             HSV  20   0.20  2
-RootColor:                               HSV  0    0     1
+ObjectColor:                        HSV  210  0.20  1.75
+SopColor:                           HSV  100  0.20  2
+DopColor:                           HSV  0    0.20  2
+PopNetColor:                        HSV  170  0.20  1.75
+PopColor:                           HSV  170  0.20  1.75
+ShopColor:                          HSV  340  0.20  1.75
+VopNetColor:                        HSV  260  0.20  1.75
+VopColor:                           HSV  260  0.20  1.75
+ChopNetColor:                       HSV  60   0.20  1.75
+ChopColor:                          HSV  60   0.20  1.75
+CopNet2Color:                       HSV  40   0.20  2
+Cop2Color:                          HSV  40   0.20  2
+OutputColor:                        HSV  20   0.20  2
+RootColor:                          HSV  0    0     1
 
 // Path Gadget
 
@@ -389,15 +411,15 @@ PathGadgetPrimaryBorder:                 button_bg
 PathGadgetSecondaryBorder:               button_bg
 PathGadgetPrimaryBorderSelected:         button_bg
 PathGadgetSecondaryBorderSelected:       button_bg
-PathGadgetBevel:                         fg_blue
-PathGadgetBevelSelected:                 fg_blue
+PathGadgetBevel:                         separator
+PathGadgetBevelSelected:                 separator
 PathGadgetText:                          fg_lite
 PathGadgetGradHi:                        button_bg_hi
 PathGadgetGradLow:                       button_bg
 PathGadgetGradHiSelected:                button_bg_hi
 PathGadgetGradLowSelected:               button_bg_hi
-PathGadgetHistoryButtonBevel:            fg_blue
-PathGadgetHistoryButtonBevelSelected:    fg_blue
+PathGadgetHistoryButtonBevel:            separator
+PathGadgetHistoryButtonBevelSelected:    separator
 
 // Viewport
 
@@ -452,7 +474,7 @@ ErrorColor:                              red
 
 // Dope Sheet
 
-DopeSheetCurrentFrameFG:                 #808000
+DopeSheetCurrentFrameFG:                 separator
 DopeSheetCurrentFrameBG:                 black
 DopeSheetHoverFrameFG:                   white
 DopeSheetHoverFrameBG:                   grey4
@@ -533,20 +555,20 @@ MplayColorCorrectWarn:                   1 1 0.75
 
 // Channel Editor
 
-ChannelEditorBackground:                 0.00 0.00 0.00        // graph bg
-ChannelEditorBGOutsideGlobal:            GREY(0.1)             // graph bg outside global time range
-ChannelEditorBGOutsidePlayback:          0.093 0.086 0.051     // graph bg outside the playback range
-ChannelEditorTimebar:                    1.00 1.00 1.00        // Color of timebar to be xored on top
-ChannelEditorGridLine:                   0.20 0.20 0.20        // graph grid line
-ChannelEditorGridDashedLine:             0.20 0.20 0.20        // graph grid dashed line
-ChannelEditorHandleDefault:              0.50 0.50 0.50        // handles
-ChannelEditorHandleSelected:             1.00 1.00 0.00        // selected handle
-ChannelEditorHandleLocated:              0.80 0.80 0.80        // handle when mouse is on top
-ChannelEditorHandleSelectedLocated:      1.00 1.00 0.80        // selected handle when mouse is on top
-ChannelEditorStatsText:                  1.00 1.00 1.00        // color of the stats text
-ChannelEditorTimeText:                   EDIT_BG               // color of the bottom time text
-ChannelEditorViewLock:                   GREY(0.5)
-ChannelListCircleOutline:                black
+ChannelEditorBackground:            0.00 0.00 0.00    // graph bg
+ChannelEditorBGOutsideGlobal:       GREY(0.1)         // graph bg outside global time range
+ChannelEditorBGOutsidePlayback:     0.093 0.086 0.051 // graph bg outside the playback range
+ChannelEditorTimebar:               1.00 1.00 1.00    // timebar to be xored on top
+ChannelEditorGridLine:              0.20 0.20 0.20    // graph grid line
+ChannelEditorGridDashedLine:        0.20 0.20 0.20    // graph grid dashed line
+ChannelEditorHandleDefault:         0.50 0.50 0.50    // handles
+ChannelEditorHandleSelected:        1.00 1.00 0.00    // selected handle
+ChannelEditorHandleLocated:         0.80 0.80 0.80    // handle mouse over
+ChannelEditorHandleSelectedLocated: 1.00 1.00 0.80    // sel handle mouse over
+ChannelEditorStatsText:             1.00 1.00 1.00    // stats text
+ChannelEditorTimeText:              EDIT_BG           // bottom time text
+ChannelEditorViewLock:              GREY(0.5)
+ChannelListCircleOutline:           black
 
 // Chop Editor
 
@@ -600,86 +622,88 @@ GeoGroupColor2:                          hsv 330.0 0.6 1.0
 // Syntax
 // Editors and input boxes
 
-ParmSyntaxPlainColor:                    white
-ParmSyntaxStringColor:                   HSV 120 0.5  0.80       // Green        #66cc66
-ParmSyntaxVarColor:                      HSV 60  0.5  0.93       // Pale Yellow  #eded77
-ParmSyntaxFuncColor:                     HSV 180 0.5  0.80       // Cyan         #66cccc
-ParmSyntaxKeywordColor:                  HSV 300 0.5  0.93       // Magenta      #ed77ed
-ParmSyntaxQuoteColor:                    HSV 238 0.40 0.88       // Pale Blue    #3a3b61
-ParmSyntaxNumberColor:                   HSV 150 0.5  0.90       // Pale Green   #73e5ac
-ParmSyntaxRefColor:                      HSV 34  0.5  0.87       // Pale Orange  #deae6f
-ParmSyntaxCommentColor:                  HSV 60  0.5  0.93       // Pale Yellow  #eded77
-ParmSyntaxErrorColor:                    HSV 0   0.8     1       // Red          #ff3333
-ParmSyntaxTypeColor:                     #A08EB4                 // Purple
-ParmSyntaxExtraColor:                    #D08770                 // Rusty Orange
-ParmParenMatchColor:                     HSV 120 0.6     0.6     // Medium Green #66ff66
-ParmQuoteMatchColor:                     HSV 180 0.6     0.6     // Medium Cyan  #66ffff
-ParmMisMatchColor:                       HSV 0   0.6     0.6     // Pale Red     #ff6666
-PreEditUnderlineColor:                   grey4
-TextboxLineNumberFG:                     fg_dim
-TextboxLineNumberBG:                     grey4
-TextboxLineNumberHighlight:              fg_lite
+ParmSyntaxPlainColor:           white
+ParmSyntaxStringColor:          HSV 120 0.5  0.80       // Green        #66cc66
+ParmSyntaxVarColor:             HSV 60  0.5  0.93       // Pale Yellow  #eded77
+ParmSyntaxFuncColor:            HSV 180 0.5  0.80       // Cyan         #66cccc
+ParmSyntaxKeywordColor:         HSV 300 0.5  0.93       // Magenta      #ed77ed
+ParmSyntaxQuoteColor:           HSV 238 0.40 0.88       // Pale Blue    #3a3b61
+ParmSyntaxNumberColor:          HSV 150 0.5  0.90       // Pale Green   #73e5ac
+ParmSyntaxRefColor:             HSV 34  0.5  0.87       // Pale Orange  #deae6f
+ParmSyntaxCommentColor:         HSV 60  0.5  0.93       // Pale Yellow  #eded77
+ParmSyntaxErrorColor:           HSV 0   0.8     1       // Red          #ff3333
+ParmSyntaxTypeColor:            #A08EB4                 // Purple
+ParmSyntaxExtraColor:           #D08770                 // Rusty Orange
+ParmParenMatchColor:            HSV 120 0.6     0.6     // Medium Green #66ff66
+ParmQuoteMatchColor:            HSV 180 0.6     0.6     // Medium Cyan  #66ffff
+ParmMisMatchColor:              HSV 0   0.6     0.6     // Pale Red     #ff6666
+PreEditUnderlineColor:          grey4
+TextboxLineNumberFG:            fg_dim
+TextboxLineNumberBG:            grey4
+TextboxLineNumberHighlight:     fg_lite
 
 // Old UI Resources
 
-ForegroundColor:                         button_bg_hi
-BackgroundColor:                         black
-PaperColor:                              black
-TextHighlightColor:                      red
-ButtonColor:                             black                    // bg of node list in change node type dialogue
-ButtonStripColor:                        red
-ListTitleColor:                          red
-ListEntryColor:                          red
-ListEntrySelectedColor:                  red
-MenuBarColor:                            black
-MenuColor:                               black
-BlueSelectedMenuColor:                   red
-SliderColor:                             red
-SliderThumbColor:                        red
-InputColor:                              red
-RadioColor:                              separator                  // text editor status line hilite
-IconBackgroundColor:                     red
-IconOutlineColor:                        red
-IconShadowColor:                         red
-IconLocatedColor:                        red
-DisabledTextColor:                       fg_dim                     // disabled text
-DisabledTextDropShadowColor:             red
-PopupHelpBackgroundColor:                black
+ForegroundColor:                button_bg_hi
+BackgroundColor:                black
+PaperColor:                     black
+TextHighlightColor:             red
+ButtonColor:                    black  // bg of node list in change node type dialog
+ButtonStripColor:               red
+ListTitleColor:                 red
+ListEntryColor:                 red
+ListEntrySelectedColor:         red
+MenuBarColor:                   black
+MenuColor:                      black
+BlueSelectedMenuColor:          red
+SliderColor:                    red
+SliderThumbColor:               red
+InputColor:                     red
+RadioColor:                     separator   // text editor status line hilite
+IconBackgroundColor:            red
+IconOutlineColor:               red
+IconShadowColor:                red
+IconLocatedColor:               red
+DisabledTextColor:              fg_dim     // disabled text
+DisabledTextDropShadowColor:    red
+PopupHelpBackgroundColor:       black
 
 // New colors for Popup windows (Ex. Anonymous Usage Stats Window)
+
 PopupWindowTextColor:                    white
 BlueTextLinkColor:                       #FF00FF
 
 // luminance of most colors should be similar
 // so none stands out and the text will be readable.
-NormalColor:                             0.0  0.0  0.0           // not used
-LockedColor:                             HSV  200  0.3   0.3     // locked parameter
-PendingColor:                            HSV  60   0.5   0.5     // pending change
-IsKeyColor:                              HSV  120  0.5   0.55    // keyframe
-IsSoftKeyColor:                          #0D3D28                 // constant() or raw() usually.
-IsNotKeyColor:                           HSV  180  0.5   0.5     // channel, not at a key. (Expression)
-DisabledColor:                           HSV  207  0.27  0.75    // channel is disabled (muted) from dopesheet
-ChannelLockedColor:                      HSV  0    0     0.2     // has "lock()" expression
-OverrideColor:                           HSV  45   1     0.65    // parameter is overridden by chop
-OtherLanguageColor:                      #653D66                 // expr language differs from node lang.
-AutoTakeExcluded:                        HSV  42   0.17  0.31    // exluded from take, and auto-take is on.
-NonDefAccentColor:                       red                   // accent for non-default parms
-ChanRefAccentColor:                      red                   // accent for !!ch()!! parms
-DisabledAccentColor:                     red                   // accents are this color when disabled
-ScopedBlend:                             0.9  0.25  0.97
-ScopedBaseColor:                         EDIT_BG
-ScopedColor:                             HSV  40  0.825  0.525
-ScopedBaseSelectedColor:                 EDIT_BG
-ScopedSelectedColor:                     white
-#AutoScopedColor:                         HSV  40  0.125  0.375  // Low saturation orange grey, This matches the orange selection Hue.
-AutoScopedColor:                         HSV  210 0.125  0.375   // Low saturation blue grey, This matches the blue slider Hue.
-ScopedAlpha:                             1.0 1.0 1.0
+
+NormalColor:             0.0  0.0  0.0           // not used
+LockedColor:             HSV  200  0.3   0.3     // locked parameter
+PendingColor:            HSV  60   0.5   0.5     // pending change
+IsKeyColor:              HSV  120  0.5   0.55    // keyframe
+IsSoftKeyColor:          #0D3D28                 // constant() or raw() usually.
+IsNotKeyColor:           HSV  180  0.5   0.5     // channel, not (Expression)
+DisabledColor:           HSV  207  0.27  0.75    // channel disabled from dopesheet
+ChannelLockedColor:      HSV  0    0     0.2     // has "lock()" expression
+OverrideColor:           HSV  45   1     0.65    // parameter is overridden by chop
+OtherLanguageColor:      #653D66                 // expr lang not node lang.
+AutoTakeExcluded:        HSV  42   0.17  0.31    
+NonDefAccentColor:       red                     // accent for non-default parms
+ChanRefAccentColor:      red                     // accent for !!ch()!! parms
+DisabledAccentColor:     red                     // disabled accents
+ScopedBlend:             0.9  0.25  0.97
+ScopedBaseColor:         EDIT_BG
+ScopedColor:             HSV  40  0.825  0.525
+ScopedBaseSelectedColor: EDIT_BG
+ScopedSelectedColor:     white
+#AutoScopedColor:        HSV  40  0.125  0.375   // low saturation orange grey
+AutoScopedColor:         HSV  210 0.125  0.375   // low saturation blue grey
+ScopedAlpha:             1.0 1.0 1.0
 
 // Parm Borderes indicating that the parm has a handle associated with it
 
-InvisibleHandleColor:                    0.70  0.00  0.00        // See rows/columns in Torus SOP
-VisibleHandleColor:                      0.00  0.50  0.50
-ActiveHandleColor:                       fg_dim
+InvisibleHandleColor:    0.70  0.00  0.00        // See rows/columns in Torus SOP
+VisibleHandleColor:      0.00  0.50  0.50
+ActiveHandleColor:       fg_dim
 
 // Flag Buttons group and node tiles and listers 
 
@@ -699,14 +723,14 @@ CurrentColor:                            0.25  0.85  0.25
 
 // Split Bar
 
-SplitBarBackground:                      button_bg         // bg
-SplitBarEdgeColor:                       fg_blue           // grabber
-SplitBarLightColor:                      mud               // edge -- shown when stowbars are collapsed
-SplitBarDarkColor:                       black             // edge
-SplitBarPaneOutline:                     red               // edge
-SplitBarGrippyColor:                     fg_blue
-SplitBarHighlight:                       fg_dim
-SplitBarHighlight2:                      fg_dim
+SplitBarBackground:         button_bg   // bg
+SplitBarEdgeColor:          separator   // grabber
+SplitBarLightColor:         #808080     // edge -- shown when stowbars are collapsed
+SplitBarDarkColor:          black       // edge
+SplitBarPaneOutline:        red         // edge
+SplitBarGrippyColor:        separator
+SplitBarHighlight:          fg_dim
+SplitBarHighlight2:         fg_dim
 
 // Playbar
 
@@ -810,6 +834,7 @@ ParmSheetEmptyColor:                     0.65   0.65   0.65
 ParmSheetHeaderColor:                    0.60   0.60   0.60
 
 // The following color is used for buttons that simulate a hyper-text link
+
 HyperTextLinkColor:                      1.0  0.0  1.0
 
 // Old op hilite colors
@@ -829,8 +854,8 @@ OpNameSyncedColor:                       HSV 200 0.6 1
 OpNameUnsyncedColor:                     HSV 0   0.6 1
 OpNameSubnetColor:                       HSV 240 0.3 1
 
-ParmTitleBarNumSelectedColor:            1.0     1.0     0.0  // text in parameter title bar, indicates how many nodes are selected
-AutoTakeModeColor:                       0.40    0.70    0.40 // take label
+ParmTitleBarNumSelectedColor: 1.0   1.0   0.0  // parm titlebar fg, sel node count
+AutoTakeModeColor:            0.40  0.70  0.40 // take label
 
 // Operator type manager
 
