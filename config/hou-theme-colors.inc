@@ -22,17 +22,22 @@
 #define selected            #6060f0
 #define unselected          #505080
 
-#define mud_dim             #201b00
 #define mud                 #302b00
 #define mud_lite            #605b00
-#define mud_border_selected #c0a000
 #define mud_hover_bg        #302b00
 
-#define button_bg           #1D293F
-#define button_bg_hi        #2E3A50
-#define button_fg           #605000
+#define button_bg           #101010
+#define button_bg_hi        #202020
+#define button_fg           #505050
 
 #define fg_blue             #505080
 #define bg                  #0a1010
 
 #define button_pressed_bg   #505000
+
+#define border_selected     #ffc1c1
+
+#define node_current        #00fa9a
+#define node_selected       #8fbc8f
+#define node_circle         #505050
+#define node_flag           #302b00
