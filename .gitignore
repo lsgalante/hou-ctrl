@@ -4,3 +4,4 @@ scripts/python/__pycache__/
 viewer_states/__pycache__/
 desktop/Build.desk
 recent_paths
+.DS_Store
