@@ -54,16 +54,16 @@ SSBorder:                           button_bg_hi    // column divider
 
 // Menu
 
-MenuBG:                             bg              // menu bg
-MenuHighlight:                      border selected // menu hilite
-MenuShadow:                         border_selected // menu shadow
+MenuBG:                             menu_bg         // menu bg
+MenuHighlight:                      menu_border // menu hilite
+MenuShadow:                         menu_border // menu shadow
 
 MenuTitleBG:                        lite            // menu title bg
 MenuSelectedBG:                     border_selected // menu selected bg
 InvertedMenuBackground:             red             // menu inverted bg
 
 MenuText:                           fg_lite         // menu text
-MenuTextSelected:                   fg_lite         // menu text selected
+MenuTextSelected:                   #404040         // menu text selected
 MenuTextHotkey:                     fg_dim          // menu text hotkey
 MenuTextDisabled:                   fg_dim          // menu text disabled
 
