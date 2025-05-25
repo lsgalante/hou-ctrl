@@ -31,7 +31,7 @@ class filterBox(QLineEdit):
                 self.key_ctl_n.emit()
                 return True
             
-            # Modifiers
+            # Keys with Modifiers
             else:
 
                 if platform.system() == "Darwin": # macos
@@ -77,7 +77,7 @@ class dialog(QDialog):
         
         # Tab type Menu
         self.tabTypeMenu = QtWidgets.QComboBox()
-        tab_types = ["SceneViewer", "NetworkEditor", "Parm", "DetailsView", "PythonShell", "ApexEditor", "Textport"]
+        tab_types = ["ApexEditor", "DetailsView", "NetworkEditor", "Parm", "PythonPanel", "PythonShell", "SceneViewer", "Textport"]
         self.tabTypeMenu.addItems(tab_types)
         key = str(self.currentContext)
         key = key.lstrip("paneTabType")
@@ -265,14 +265,16 @@ class dialog(QDialog):
     def tabTypeChange(self):
         index = self.tabTypeMenu.currentIndex()
         if index == 0:
-            self.currentPaneTab = self.currentPaneTab.setType(hou.paneTabType.SceneViewer)
-        elif index == 1:
-            self.currentPaneTab = self.currentPaneTab.setType(hou.paneTabType.NetworkEditor)
-        elif index == 2:
-            self.currentPaneTab = self.currentPaneTab.setType(hou.paneTabType.Parm)
-        elif index == 3:
-            self.currentPaneTab = self.currentPaneTab.setType(hou.paneTabType.DetailsView)
-        elif index == 4:
-            self.currentPaneTab = self.currentPaneTab.setType(hou.paneTabType.PythonShell)
-        elif index == 5:
             self.currentPaneTab = self.currentPaneTab.setType(hou.paneTabType.ApexEditor)
+        elif index == 1:
+            self.currentPaneTab = self.currentPaneTab.setType(hou.paneTabType.DetailsView)
+        elif index == 2:
+            self.currentPaneTab = self.currentPaneTab.setType(hou.paneTabType.NetworkEditor)
+        elif index == 3:
+            self.currentPaneTab = self.currentPaneTab.setType(hou.paneTabType.Parm)            
+        elif index == 4:
+            self.currentPaneTab = self.currentPaneTab.setType(hou.paneTabType.PythonPanel)
+        elif index == 5:
+            self.currentPaneTab = self.currentPaneTab.setType(hou.paneTabType.PythonShell)
+        elif index == 6:
+            self.currentPaneTab = self.currentPaneTab.setType(hou.paneTabType.SceneViewer)
