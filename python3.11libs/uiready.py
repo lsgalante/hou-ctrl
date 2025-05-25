@@ -29,6 +29,6 @@ if ui_setup:
         networkEditor.setPref("gridmode", "1")
 
 if hotkey_setup:
-    hcu.sessionReloadBindings()
+    hcu.sessionEvalBindings()
     
 print("--END uiready.py--")
