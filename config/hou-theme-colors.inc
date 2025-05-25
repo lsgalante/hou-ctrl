@@ -41,3 +41,10 @@
 #define node_selected       #8fbc8f
 #define node_circle         #505050
 #define node_flag           #302b00
+
+//      //
+// Menu //
+//      //
+
+#define menu_bg     #0a1010
+#define menu_border #3F4B61
