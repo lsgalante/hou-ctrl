@@ -7,7 +7,13 @@ import hctl_resize
 import hctl_bindings
 
 
-## Desktop
+#         #
+# Desktop #
+
+def desktopEvalColorSchemes():
+    hou.ui.reloadColorScheme()
+desktopEvalColorSchemes.interactive_contexts = ["all"]
+
 
 def desktopGetNetworkEditors():
     tabs = hou.ui.paneTabs()
@@ -30,11 +36,6 @@ def desktopGetViewports():
         for viewport in sceneViewer.viewports():
             viewports.append(viewport)
 desktopGetViewports.interactive_contexts = ["none"]
-
-
-def desktopReloadColorSchemes():
-    hou.ui.reloadColorScheme()
-desktopReloadColorSchemes.interactive_contexts = ["all"]
 
 
 def desktopSceneSetA():
@@ -208,6 +209,19 @@ def networkEditorAddStickyNote():
 networkEditorAddStickyNote.interactive_contexts = ["paneTabType.NetworkEditor"]
 
 
+def networkEditorConnectNodeTo():
+    node = networkEditorGetCurrentNode()
+    choices = ("a", "b", "c")
+    popup = hou.ui.selectFromList(choices)
+networkEditorConnectNodeTo.interactive_contexts = ["paneTabType.NetworkEditor"]
+
+
+def networkEditorDeselectAllNodes():
+    node = networkEditorGetCurrentNode()
+    node.setSelected(False)
+networkEditorDeselectAllNodes.interactive_contexts = ["paneTabType.NetworkEditor"]
+
+
 def networkEditorGetCurrentNode():
     tabs = hou.ui.paneTabs()
     tabs = [tab for tab in tabs if tab.type() == hou.paneTabType.NetworkEditor]
@@ -225,12 +239,6 @@ def networkEditorGetDisplayNode():
     else:
         hou.ui.setStatusMessage("Not a network editor", hou.severityTyoe.Error)
 networkEditorGetDisplayNode.interactive_contexts = ["none"]
-
-
-def networkEditorDeselectAllNodes():
-    node = getCurrentNode()
-    node.setSelected(False)
-networkEditorDeselectAllNodes.interactive_contexts = ["paneTabType.NetworkEditor"]
 
 
 def networkEditorRenameNode():
@@ -418,7 +426,7 @@ paneSplitHorizontal.interactive_contexts = ["all"]
 def paneSplitVertical():
     pane = hou.ui.paneUnderCursor()
     newPane = pane.splitVertically()
-paneSplitVertical.interactive_contects = ["all"]
+paneSplitVertical.interactive_contexts = ["all"]
 
 
 def paneSplitRotate():
@@ -686,16 +694,22 @@ sceneViewerToggleGroupList.interactive_contexts = ["paneTabType.SceneViewer"]
 
 def sceneViewerToggleKeycam():
     sceneViewer = hou.ui.paneTabOfType(hou.paneTabType.SceneViewer)
-    if sceneViewer != None:
+    if sceneViewer:
         networkEditorContext = sceneViewer.pwd()
-        contextType = networkEditorContext.childTypeCategory().name()
-        if contextType == "Object" or contextType == "Sop":
+        context_type = networkEditorContext.childTypeCategory().name()
+        if context_type == "Object":
             sceneViewer.setCurrentState("keycam")
+            hou.ui.setStatusMessage("Entered keycam state in Obj context.")
+        elif context_type == "Sop":
+            sceneViewer.setCurrentState("keycam")
+            hou.ui.setStatusMessage("Entered keycam state in Sop context.")
+        elif context_type == "Lop":
+            sceneViewer.setCurrentState("keycam")
+            hou.ui.setStatusMessage("Entered keycam state in Lop context.")
         else:
-            print("No SOP or OBJ context")
+            hou.ui.setStatusMessage("No Obj, Sop or Lop context.", hou.severityType.Error)
     else:
-        print("No scene viewer")
-        return
+        hou.ui.setStatusMessage("No Scene Viewer.", hou.severityType.Error)
 sceneViewerToggleKeycam.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
@@ -777,6 +791,17 @@ sceneViewerToggleVectors.interactive_contexts = ["paneTabType.SceneViewer"]
         
 ## Session
 
+def sessionEvalBindings():
+    reload(hctl_bindings)
+    hctl_bindings.updateBindings()
+sessionEvalBindings.interactive_contexts = ["all"]
+
+
+def sessionEvalKeycam():
+    hou.ui.reloadViewerState("keycam")
+sessionEvalKeycam.interactive_contexts = ["all"]
+
+
 def sessionGetAutoSaveState():
     state = hou.getPreference("autoSave")
     return state
@@ -786,17 +811,6 @@ sessionGetAutoSaveState.interactive_contexts = ["none"]
 def sessionOpenFile():
     hou.ui.selectFile()
 sessionOpenFile.interactive_contexts = ["all"]
-
-
-def sessionReloadBindings():
-    reload(hctl_bindings)
-    hctl_bindings.updateBindings()
-sessionReloadBindings.interactive_contexts = ["all"]
-
-
-def sessionReloadKeycam():
-    hou.ui.reloadViewerState("keycam")
-sessionReloadKeycam.interactive_contexts = ["all"]
 
 
 def sessionRestart():
