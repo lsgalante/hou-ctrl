@@ -739,7 +739,7 @@ paneTabTogglePin.interactive_contexts = ["all"]
 
 
     
-def printLayout():
+def printLayout(*args):
     message = "Layout:"
     desktop = hou.ui.curDesktop()
     panes = desktop.panes()
