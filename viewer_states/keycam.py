@@ -680,7 +680,7 @@ class State(object):
         if self.guide_states["axisCam"]:
             self.guideAxisCamUpdate()
         else:
-            self.guideAxisCam.setGeometry(None)
+            # self.guideAxisCam.setGeometry(None)
             self.guideAxisCam.show(0)
 
 
@@ -715,14 +715,14 @@ class State(object):
         if self.guide_states["pivot3d"]:
             self.guidePivot3dUpdate()
         else:
-            self.guidePivot3d.setGeometry(None)
+            # self.guidePivot3d.setGeometry(None)
             self.guidePivot3d.show(0)
 
 
         if self.guide_states["ray"]:
             self.guideRayUpdate()
         else:
-            self.guideRay.setGeometry(0)
+            # self.guideRay.setGeometry(0)
             self.guideRay.show(0)
 
 
@@ -772,15 +772,15 @@ class State(object):
 
     def guideBboxUpdate(self):
         geo  = self.get_get()
-        bbox = geo.boundingBox()
-        P0 = (bbox[0], bbox[1], bbox[2])
-        P1 = (bbox[0], bbox[1], bbox[5])
-        P2 = (bbox[3], bbox[1], bbox[5])
-        P3 = (bbox[3], bbox[1], bbox[2])
-        P4 = (bbox[0], bbox[4], bbox[2])
-        P5 = (bbox[0], bbox[4], bbox[5])
-        P6 = (bbox[3], bbox[4], bbox[5])
-        P7 = (bbox[3], bbox[4], bbox[2])
+        # bbox = geo.boundingBox()
+        # P0 = (bbox[0], bbox[1], bbox[2])
+        # P1 = (bbox[0], bbox[1], bbox[5])
+        # P2 = (bbox[3], bbox[1], bbox[5])
+        # P3 = (bbox[3], bbox[1], bbox[2])
+        # P4 = (bbox[0], bbox[4], bbox[2])
+        # P5 = (bbox[0], bbox[4], bbox[5])
+        # P6 = (bbox[3], bbox[4], bbox[5])
+        # P7 = (bbox[3], bbox[4], bbox[2])
         #print(bbox)
         self.guideBbox.setGeometry(geo)
         self.guideBbox.show(1)
