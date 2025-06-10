@@ -103,34 +103,38 @@ class dialog(QDialog):
         
         # Autosave
         autoSaveCheckBox = QtWidgets.QCheckBox("Auto Save")
-        autoSaveState = hcu.sessionGetAutoSaveState()
-        if autoSaveState == "1": autoSaveCheckBox.setCheckState(Qt.Checked)
-        elif autoSaveState == "0": autoSaveCheckBox.setCheckState(Qt.Unchecked)
+        autoSaveState = hcu.sessionAutoSaveState()
+        if autoSaveState == "1":
+            autoSaveCheckBox.setCheckState(Qt.Checked)
+        elif autoSaveState == "0":
+            autoSaveCheckBox.setCheckState(Qt.Unchecked)
         autoSaveCheckBox.clicked.connect(hcu.sessionToggleAutoSave)
 
             
         # Pin
         pinCheckBox = QtWidgets.QCheckBox("Pin Tab")
-        if self.currentPaneTab.isPin(): pinCheckBox.setCheckState(Qt.Checked)
-        else: pinCheckBox.setCheckState(Qt.Unchecked)        
-        pinCheckBox.clicked.connect(hcu.paneTabTogglePin)
+        if self.paneTab.isPin():
+            pinCheckBox.setCheckState(Qt.Checked)
+        else:
+            pinCheckBox.setCheckState(Qt.Unchecked)        
+        pinCheckBox.clicked.connect(self.paneTabTogglePin)
 
         
         # Top Frame Layout
         topFrameLayout = QtWidgets.QGridLayout()
-        topFrameLayout.addWidget(QLabel("File Path:"),        0, 0)
-        topFrameLayout.addWidget(QLabel("Network Path:    "), 1, 0)
-        topFrameLayout.addWidget(QLabel("Current Node:"),     2, 0)
-        topFrameLayout.addWidget(QLabel("Context:"),          3, 0)
-        topFrameLayout.addWidget(autoSaveCheckBox,            4, 0)
-        topFrameLayout.addWidget(pinCheckBox,                 5, 0)
+        topFrameLayout.addWidget(QLabel("File:"),     0, 0)
+        topFrameLayout.addWidget(QLabel("Node:    "), 1, 0)
+        topFrameLayout.addWidget(QLabel("Context:"),  2, 0)
+        topFrameLayout.addWidget(QLabel("Pant Tab:"), 3, 0)
+        topFrameLayout.addWidget(autoSaveCheckBox,    4, 0)
+        topFrameLayout.addWidget(pinCheckBox,         5, 0)
         
         topFrameLayout.addWidget(QLabel(self.filePath), 0, 1)
         topFrameLayout.addWidget(QLabel(self.networkPath + "/" + str(self.node)), 1, 1)
         topFrameLayout.addWidget(self.paneTabTypeMenu, 2, 1)
         topFrameLayout.addWidget(self.paneTabMenu, 3, 1)
 
-        top_frame_h = 160
+        top_frame_h = 190
         row_h = top_frame_h / 5
         topFrameLayout.setRowMinimumHeight(0, row_h)
         topFrameLayout.setRowMinimumHeight(1, row_h)
@@ -155,12 +159,12 @@ class dialog(QDialog):
             
         # Filter Box Widget
         self.filterBox = filterBox() 
-        self.filterBox.key_ctl_n.connect( self.listNext )
-        self.filterBox.key_ctl_p.connect( self.listPrev )
-        self.filterBox.key_down.connect( self.listNext )
-        self.filterBox.key_up.connect( self.listPrev )
-        self.filterBox.textEdited.connect( self.listFilter )
-        self.filterBox.returnPressed.connect( self.execAction )
+        self.filterBox.key_ctl_n.connect(self.listNext)
+        self.filterBox.key_ctl_p.connect(self.listPrev)
+        self.filterBox.key_down.connect(self.listNext)
+        self.filterBox.key_up.connect(self.listPrev)
+        self.filterBox.textEdited.connect(self.listFilter)
+        self.filterBox.returnPressed.connect(self.execAction)
 
         
         # Populate Function List
@@ -173,7 +177,7 @@ class dialog(QDialog):
             if hasattr(obj, "interactive_contexts"):
                 if "all" in obj.interactive_contexts:
                     self.items.append((name, obj))
-                elif str(self.currentContext) in obj.interactive_contexts:
+                elif str(self.context) in obj.interactive_contexts:
                     self.items.append((name, obj))
 
                     
@@ -212,7 +216,7 @@ class dialog(QDialog):
 
         # Window Appearance
         self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint)
-        self.resize(600, 300)
+        self.resize(600, 400)
         self.setWindowTitle("hctl")
         self.filterBox.setFocus()
 
@@ -224,7 +228,6 @@ class dialog(QDialog):
         
             
     def closeEvent(self, event):
-        print("closing")
         self.setParent(None)
 
 
@@ -237,7 +240,7 @@ class dialog(QDialog):
         items = self.listGetItems()
         currentItem = self.functionList.selectedItems()[0]
         index = items.index(currentItem)
-        self.items[index][1]()
+        self.items[index][1](self.paneTab)
         self.accept()
 
         
