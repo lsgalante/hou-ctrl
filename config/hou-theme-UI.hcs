@@ -9,7 +9,6 @@ Sceme: hou-theme
 #define EDIT_BG                     GREY(0.075)
 #define dark_b                      #010101
 
-#define dark_b                          #010101
 
 ///////////
 // Icons //
