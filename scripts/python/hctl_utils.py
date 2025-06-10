@@ -378,130 +378,113 @@ def networkEditorAddStickyNote(editor):
 networkEditorAddStickyNote.interactive_contexts = ["paneTabType.NetworkEditor"]
 
 
-def networkEditorConnectNodeTo():
-    node = networkEditorGetCurrentNode()
+
+def networkEditorConnectNodeTo(editor):
+    node = networkEditorCurrentNode(editor)
     choices = ("a", "b", "c")
     popup = hou.ui.selectFromList(choices)
 networkEditorConnectNodeTo.interactive_contexts = ["paneTabType.NetworkEditor"]
 
 
-def networkEditorDeselectAllNodes():
-    node = networkEditorGetCurrentNode()
+
+def networkEditorCurrentNode(editor):
+    return editor.currentNode()
+networkEditorCurrentNode.interactive_contexts = ["none"]
+
+
+
+def networkEditorDeselectAllNodes(editor):
+    node = networkEditorCurrentNode(editor)
     node.setSelected(False)
 networkEditorDeselectAllNodes.interactive_contexts = ["paneTabType.NetworkEditor"]
 
 
-def networkEditorGetCurrentNode():
-    tabs = hou.ui.paneTabs()
-    tabs = [tab for tab in tabs if tab.type() == hou.paneTabType.NetworkEditor]
-    node = tabs[0].currentNode()    
-    return node
-networkEditorGetCurrentNode.interactive_contexts = ["none"]
+
+def networkEditorDisplayNode(editor):
+    context = editor.pwd()
+    return  context.displayNode()
+networkEditorDisplayNode.interactive_contexts = ["none"]
 
 
-def networkEditorGetDisplayNode():
-    tab = hou.ui.paneTabUnderCursor()
-    if tab.type() == hou.paneTabType.NetworkEditor:
-        context = tab.pwd()
-        displayNode = context.displayNode()
-        return displayNode
-    else:
-        hou.ui.setStatusMessage("Not a network editor", hou.severityTyoe.Error)
-networkEditorGetDisplayNode.interactive_contexts = ["none"]
 
-
-def networkEditorRenameNode():
-    node = networkEditorGetCurrentNode()
+def networkEditorRenameNode(editor):
+    node = networkEditorCurrentNode(editor)
     name = hou.ui.readInput("rename_node", buttons=("yes", "no"))
     if name[0] == 0:
         node.setName(name[1])
 networkEditorRenameNode.interactive_contexts = ["paneTabType.NetworkEditor", "paneTabType.Parm"]
 
 
-def networkEditorRotateNodeInputs():
-    node = networkEditorGetCurrentNode()
+
+def networkEditorRotateNodeInputs(editor):
+    node = networkEditorCurrentNode(editor)
     connectors = node.inputConnectors()
 networkEditorRotateNodeInputs.interactive_contexts = ["paneTabType.NetworkEditor"]
 
 
-def networkEditorSelectDisplayNode():
-    tab = hou.ui.paneTabUnderCursor()
-    if tab.type() == hou.paneTabType.NetworkEditor:
-        displayNode = networkEditorGetDisplayNode()
-        displayNode.setCurrent(True, True)
-    else:
-        hou.ui.setStatusMessage("Not a network editor", hou.severityType.Error)
+
+def networkEditorSelectDisplayNode(editor):
+    displayNode = networkEditorDisplayNode(editor)
+    displayNode.setCurrent(True, True)
 networkEditorSelectDisplayNode.interactive_contexts = ["paneTabType.NetworkEditor"]
 
 
-def networkEditorToggleDimUnusedNodes():
-    is_dim = "0"
-    networkEditors = getNetworkEditors()
-    for networkEditor in networkEditors:
-        if networkEditor.getPref("dimunusednodes") == "1":
-            is_dim = "1"
-    for networkEditor in networkEditors:
-        if is_dim == "0":
-            networkEditor.setPref("dimunusednodes", "1") 
-        else:
-            networkEditor.setPref("dimunusednodes", "0")
+
+def networkEditorToggleDimUnusedNodes(editor):
+    dim = "0"
+    if editor.getPref("dimunusednodes") == "1":
+        dim = "1"
+    if dim == "0":
+        editor.setPref("dimunusednodes", "1") 
+    else:
+        editor.setPref("dimunusednodes", "0")
 networkEditorToggleDimUnusedNodes.interactive_contexts = ["all"]
 
 
-def networkEditorToggleGridLines():
-    is_visible = "0"
-    networkEditors = desktopGetNetworkEditors()
-    for networkEditor in networkEditors:
-        if networkEditor.getPref("gridmode") == "1":
-            is_visible = "1"
-    for networkEditor in networkEditors:
-        if networkEditor.getPref("gridmode") == "0":
-            networkEditor.setPref("gridmode", "1")
-        else:
-            networkEditor.setPref("gridmode", "0")
+
+def networkEditorToggleGridLines(editor):
+    visible = "0"
+    if editor.getPref("gridmode") == "1":
+        visible = "1"
+    if editor.getPref("gridmode") == "0":
+        editor.setPref("gridmode", "1")
+    else:
+        editor.setPref("gridmode", "0")
 networkEditorToggleGridLines.interactive_contexts = ["all"]
 
 
-def networkEditorToggleLocating():
-    is_locating = 0
-    networkEditors = getNetworkEditors()
-    for networkEditor in networkEditors:
-        if networkEditor.locatingEnabled():
-            is_locating = 1
-    for networkEditor in networkEditors:
-        networkEditor.setLocatingEnabled((is_locating + 1) % 2)
+
+def networkEditorToggleLocating(editor):
+    locating = 0
+    if editor.locatingEnabled():
+        locating = 1
+    editor.setLocatingEnabled(not locating)
 networkEditorToggleLocating.interactive_contexts = ["all"]
 
 
-def networkEditorToggleMenu():
-    is_visible = 0
-    networkEditors = desktopGetNetworkEditors()
-    for networkEditor in networkEditors:
-        if networkEditor.getPref("showmenu") == "1":
-            is_visible = 1
-    for networkEditor in networkEditors:
-        if is_visible:
-            networkEditor.setPref("showmenu", "0")
-        else:
-            networkEditor.setPref("showmenu", "1")
+
+def networkEditorToggleMenu(editor):
+    visible = 0
+    if editor.getPref("showmenu") == "1":
+        visible = 1
+    if visible:
+        networkEditor.setPref("showmenu", str(not visible))
 networkEditorToggleMenu.interactive_contexts = ["all"]
 
 
-def networkEditorToggleGridPoints():
-    is_visible = "0"
-    networkEditors = getNetworkEditors()
-    for networkEditor in networkEditors:
-        if networkEditor.getPref("gridmode") == "1":
-            is_visible = "1"
-    for networkEditor in networkEditors:
-        if is_visible == "0":
-            networkEditor.setPref("gridmode", "1")
-        else:
-            networkEditor.setPref("gridmode", "0")
-networkEditorToggleMenu.interactive_contexts = ["all"]
 
-    
-## Open
+def networkEditorToggleGridPoints(editor):
+    visible = int(editor.getPref("gridmode"))
+    editor.setPref("gridmode", str(not visible))
+networkEditorToggleGridPoints.interactive_contexts = ["all"]
+
+
+
+########
+# Open #
+########
+
+
 
 def openColorEditor():
     hou.ui.selectColor()
