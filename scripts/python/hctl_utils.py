@@ -505,12 +505,17 @@ openFloatingParameterEditor.interactive_contexts = ["all"]
 def openHotkeyEditor(*args):
     print("open hotkey editor")
 openHotkeyEditor.interactive_contexts = ["none"]
-    
-    
-## Pane
 
-def paneContract():
-    pane = hou.ui.paneUnderCursor()
+
+
+########
+# Pane #
+########
+
+
+
+def paneContract(paneTab):
+    pane = paneTab.pane()
     fraction = pane.getSplitFraction()
     fraction = round(fraction, 3) + 0.1
     message = "Pane fraction: " + str(fraction)
@@ -519,8 +524,9 @@ def paneContract():
 paneContract.interactive_contexts = ["all"]
 
 
-def paneExpand():
-    pane = hou.ui.paneUnderCursor()
+
+def paneExpand(paneTab):
+    pane = paneTab.pane()
     fraction = pane.getSplitFraction()
     fraction = round(fraction, 3) - 0.1
     message = "Pane fraction: " + str(fraction)
@@ -529,79 +535,112 @@ def paneExpand():
 paneExpand.interactive_contexts = ["all"]
 
 
-def paneNewTab():
-    reload(hctl_new_tab_menu)
-    newTabMenu = hctl_new_tab_menu.newTabMenu()
-    newTabMenu.show()
-paneNewTab.interactive_contexts = ["all"]
+
+def paneNewPaneTab(paneTab):
+    pane = paneTab.pane()
+    reload(hctl_new_pane_tab_menu)
+    newPaneTabMenu = hctl_new_pane_tab_menu.newPaneTabMenu()
+    newPaneTabMenu.show()
+paneNewPaneTab.interactive_contexts = ["all"]
 
 
-def paneOnly():
+
+def paneOnly(paneTab):
+    this_pane = paneTab.pane()
     for pane in hou.ui.curDesktop().panes():
-        if pane != hou.ui.paneUnderCursor():
+        if pane != this_pane:
             for paneTab in pane.tabs():
                 paneTab.close()
 paneOnly.interactive_contexts = ["all"]
 
 
-def paneRatioHalf():
-    pane = hou.ui.paneUnderCursor()
+
+def paneRatioGet(pane):
+    return pane.getSplitFraction()
+paneRatioGet.interactive_contexts = ["none"]
+
+
+
+def paneRatioSet(pane, ratio):
+    pane.setSplitFraction(ratio)
+paneRatioSet.interactive_contexts = ["none"]
+
+
+
+def paneRatioHalf(paneTab):
+    pane = paneTab.pane()
     pane.setSplitFraction(0.5)
 paneRatioHalf.interactive_contexts = ["all"]
 
 
-def paneRatioQuarter():
-    pane = hou.ui.paneUnderCursor()
+
+def paneRatioQuarter(paneTab):
+    pane = paneTab.pane()
     pane.setSplitFraction(0.25)
 paneRatioQuarter.interactive_contexts = ["all"]
 
 
-def paneRatioThird():
-    pane = hou.ui.paneUnderCursor()
+
+def paneRatioThird(paneTab):
+    pane = paneTab.pane()
     pane.setSplitFraction(0.333)
 paneRatioThird.interactive_contexts = ["all"]
 
 
-def paneResize():
-    pane = hou.ui.paneUnderCursor()
+
+def paneResize(paneTab):
+    pane = paneTab.pane()
     reload(hctl_resize)
     resizeWidget = hctl_resize.resizeWidget(pane)
     resizeWidget.show()
 paneResize.interactive_contexts = ["all"]
 
 
-def paneSplitHorizontal():
-    pane = hou.ui.paneUnderCursor()
+
+def paneSplitHorizontal(paneTab):
+    pane = paneTab.pane()
     newPane = pane.splitHorizontally()
 paneSplitHorizontal.interactive_contexts = ["all"]
 
 
-def paneSplitVertical():
-    pane = hou.ui.paneUnderCursor()
+
+def paneSplitVertical(paneTab):
+    pane = paneTab.pane()
     newPane = pane.splitVertically()
 paneSplitVertical.interactive_contexts = ["all"]
 
 
-def paneSplitRotate():
-    pane = hou.ui.paneUnderCursor()
+
+def paneSplitRotate(paneTab):
+    pane = paneTab.pane()
     pane.splitRotate()
 paneSplitRotate.interactive_contexts = ["all"]
 
 
-def paneSplitSwap():
-    pane = hou.ui.paneUnderCursor()
+
+def paneSplitSwap(paneTab):
+    pane = paneTab.pane()
     pane.splitSwap()
 paneSplitSwap.interactive_contexts = ["all"]
 
 
-def paneToggleMaximized():
-    pane = hou.ui.paneUnderCursor()
+
+def paneToggleMaximized(paneTab):
+    pane = paneTab.pane()
     pane.setIsMaximized(not pane.isMaximized())
 paneToggleMaximized.interactive_contexts = ["all"]
 
 
-def paneToggleSplitMaximized():
-    pane = hou.ui.paneUnderCursor()
+
+def paneTogglePaneTabs(paneTab):
+    pane = paneTab.pane()
+    pane.showPaneTabs(not pane.isShowingPaneTabs())
+paneTogglePaneTabs.interactive_contexts = ["all"]
+
+
+
+def paneToggleSplitMaximized(paneTab):
+    pane = paneTab.pane()
     pane.setIsSplitMaximized(not pane.isSplitMaximized())
 paneToggleSplitMaximized.interactive_contexts = ["all"]
 
