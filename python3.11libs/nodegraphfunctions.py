@@ -171,9 +171,6 @@ class editorBindings:
             nodeP[0] = x
             node.setPosition(nodeP)
         
-def nodesArrange():
-    nodes = hou.selectedNodes()
-    # node.parent().layoutChildren(horizontal_spacing=5, vertical_spacing=5)
 
     #########
     # Cycle #
