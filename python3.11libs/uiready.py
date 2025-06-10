@@ -24,7 +24,7 @@ if ui_setup:
     # hcu.desktopTogglePaneTabs()
 
     # Set network grid points to on
-    networkEditors = hcu.desktopGetNetworkEditors()
+    networkEditors = hcu.desktopNetworkEditors()
     for networkEditor in networkEditors:
         networkEditor.setPref("gridmode", "1")
 
