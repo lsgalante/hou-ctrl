@@ -967,12 +967,9 @@ class State(object):
             if row["id"] != "divider":
 
                 # First three are common to all huds.
-                if row["id"] == "mode":
-                    updates["mode"] = {"value": self.mode}
-                elif row["id"] == "hud":
-                    updates["hud"] = {"value": self.hud_name}
-                elif row["id"] == "hud_g":
-                    updates["hud_g"] = {"value": self.hud_names.index(self.hud_name)}
+                if row["id"] == "mode": updates["mode"] = {"value": self.mode}
+                elif row["id"] == "hud": updates["hud"] = {"value": self.hud_name}
+                elif row["id"] == "hud_g": updates["hud_g"] = {"value": self.hud_names.index(self.hud_name)}
 
                 # Graph
                 elif row["id"][-2:] == "_g":
@@ -1017,19 +1014,13 @@ class State(object):
     def setView(self):
         set_view = self.hud_state["set_view"]
         r = None
-        if set_view == "top":
-            r = (270, 0, 0)
-        elif set_view == "bottom":
-            r = (90, 0, 0)
-        elif set_view == "front":
-            r = (0, 180, 0)
-        elif set_view == "back":
-            r = (0, 0, 0)
-        elif set_view == "right":
-            r = (0, 90, 0)
-        elif set_view == "left":
-            r = (0, 270, 0)
-        #self.r = hou.Vector3(r)
+        if set_view == "top": r = (270, 0, 0)
+        elif set_view == "bottom": r = (90, 0, 0)
+        elif set_view == "front": r = (0, 180, 0)
+        elif set_view == "back": r = (0, 0, 0)
+        elif set_view == "right": r = (0, 90, 0)
+        elif set_view == "left": r = (0, 270, 0)
+        self.r = hou.Vector3(r)
         self.stateToCam()
 
 
@@ -1123,25 +1114,17 @@ class State(object):
         self.viewports = self.sceneViewer.viewports()
         self.layout = self.sceneViewer.viewportLayout()
 
-        if self.layout == hou.geometryViewportLayout.DoubleSide:
-            self.viewport_index = (2, 3)[self.viewport_index]
-        elif self.layout == hou.geometryViewportLayout.DoubleStack:
-            self.viewport_index = (3, 0)[self.viewport_index]
-        elif self.layout == hou.geometryViewportLayout.Quad:
-            self.viewport_index = (2, 3, 1, 0)[self.viewport_index]
-        elif self.layout == hou.geometryViewportLayout.QuadBottomSplit:
-            self.viewport_index = (3, 2, 1, 0)[self.viewport_index]
-        elif self.layout == hou.geometryViewportLayout.QuadLeftSplit:
-            self.viewport_index = (2, 1, 0, 3)[self.viewport_index]
-        elif self.layout == hou.geometryViewportLayout.Single:
-            self.viewport_index = 3
-        elif self.layout == hou.geometryViewportLayout.TripleBottomSplit:
-            self.viewport_index = (3, 1, 0)[self.viewport_index]
-        elif self.layout == hou.geometryViewportLayout.TripleLeftSplit:
-            self.viewport_index = (2, 3, 1)[self.viewport_index]
+        if self.layout == hou.geometryViewportLayout.DoubleSide: self.viewport_index = (2, 3)[self.viewport_index]
+        elif self.layout == hou.geometryViewportLayout.DoubleStack: self.viewport_index = (3, 0)[self.viewport_index]
+        elif self.layout == hou.geometryViewportLayout.Quad: self.viewport_index = (2, 3, 1, 0)[self.viewport_index]
+        elif self.layout == hou.geometryViewportLayout.QuadBottomSplit: self.viewport_index = (3, 2, 1, 0)[self.viewport_index]
+        elif self.layout == hou.geometryViewportLayout.QuadLeftSplit: self.viewport_index = (2, 1, 0, 3)[self.viewport_index]
+        elif self.layout == hou.geometryViewportLayout.Single: self.viewport_index = 3
+        elif self.layout == hou.geometryViewportLayout.TripleBottomSplit: self.viewport_index = (3, 1, 0)[self.viewport_index]
+        elif self.layout == hou.geometryViewportLayout.TripleLeftSplit: self.viewport_index = (2, 3, 1)[self.viewport_index]
 
-            self.viewport = self.viewports[self.viewport_index]
-            self.viewportType = viewport.type()
+        self.viewport = self.viewports[self.viewport_index]
+        self.viewportType = self.viewport.type()
 
 
     def viewportFocus(self):
@@ -1186,22 +1169,14 @@ class State(object):
         self.sceneViewer.setViewportLayout(getattr(hou.geometryViewportLayout, layout))
 
         viewport_ct = 0
-        if layout == "DoubleSide":
-            viewport_ct = 2
-        elif layout == "DoubleStack":
-            viewport_ct = 2
-        elif layout == "Quad":
-            viewport_ct = 4
-        elif layout == "QuadBottomSplit":
-            viewport_ct = 4
-        elif layout == "QuadLeftSplit":
-            viewport_ct = 4
-        elif layout == "Single":
-            viewport_ct = 1
-        elif layout == "TripleBottomSplit":
-            viewport_ct = 3
-        elif layout == "TripleLeftSplit":
-            viewport_ct = 3
+        if layout == "DoubleSide": viewport_ct = 2
+        elif layout == "DoubleStack": viewport_ct = 2
+        elif layout == "Quad": viewport_ct = 4
+        elif layout == "QuadBottomSplit": viewport_ct = 4
+        elif layout == "QuadLeftSplit": viewport_ct = 4
+        elif layout == "Single": viewport_ct = 1
+        elif layout == "TripleBottomSplit": viewport_ct = 3
+        elif layout == "TripleLeftSplit": viewport_ct = 3
 
         viewport_indexs = []
         for i in range(viewport_ct):
