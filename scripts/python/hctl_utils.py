@@ -673,14 +673,6 @@ def paneTabPath(paneTab):
 paneTabPath.interactive_contexts = ["none"]
 
 
-def paneTabGetSceneViewer():
-    paneTab = hou.ui.paneTabUnderCursor()
-    if paneTab.type() == hou.paneTabType.SceneViewer:
-        return paneTab
-    else:
-        hou.ui.setStatusMessage("Not a scene viewer")
-paneTabGetSceneViewer.interactive_contexts = ["none"]
-
 
 def paneTabOnly(this_paneTab):
     for paneTab in desktopPaneTabs():
