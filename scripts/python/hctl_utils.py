@@ -13,11 +13,6 @@ import time
 # Desktop #
 ###########
 
-def desktopGetNetworkEditors():
-    tabs = hou.ui.paneTabs()
-    networkEditors = [tab for tab in tabs if tab.type() == hou.paneTabType.NetworkEditor]
-    return networkEditors
-desktopGetNetworkEditors.interactive_contexts = ["none"]
 
 
 def desktopGetSceneViewers():
