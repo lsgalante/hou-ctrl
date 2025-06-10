@@ -107,6 +107,7 @@ def updateBindings():
         ("h.pane.gview.refplane", "shift+g"),
 
         ("h.pane.nexttab", "ctrl+space"),
+        ("h.pane.prevtab", "ctrl+shift+space"),
 
         ("h.pane.parms.edit_expression", "ctrl+e"),
 
