@@ -91,7 +91,123 @@ def desktopLayoutQuad(paneTab):
 desktopLayoutQuad.interactive_contexts = ["all"]
 
 
-def desktopShelfHide():
+
+def desktopLayoutTriH(paneTab):
+    sessionRemoveEventLoopCallbacks()
+    # Reduce
+    paneOnly(paneTab)
+    paneTabOnly(paneTab)
+    # Make panes
+    panes = desktopPanes()
+    panes[0].tabs()[0].setType(hou.paneTabType.PythonShell)
+    panes[0].splitHorizontally()
+    panes = desktopPanes()
+    panes[1].splitHorizontally()
+    panes = desktopPanes()
+    # Make paneTabs
+    panes[1].createTab(hou.paneTabType.PythonShell)
+    panes[1].tabs()[0].setIsCurrentTab()
+    # Set types
+    panes[0].tabs()[0].setType(hou.paneTabType.SceneViewer)
+    panes[1].tabs()[0].setType(hou.paneTabType.Parm)
+    panes[1].tabs()[1].setType(hou.paneTabType.DetailsView)
+    panes[2].tabs()[0].setType(hou.paneTabType.NetworkEditor)
+    # Ratios
+    panes[0].setSplitFraction(0.5)
+
+    hou.session.lastPane = hou.ui.paneUnderCursor()
+    hou.ui.addEventLoopCallback(triHCallback)
+desktopLayoutTriH.interactive_contexts = ["all"]
+
+
+
+def triHCallback():
+    panes = hou.ui.panes()
+    pane = hou.ui.paneUnderCursor()
+    if str(pane) != str(hou.session.lastPane):
+        hou.session.lastPane = pane
+        if str(pane) == str(panes[1]):
+            pane.setSplitFraction(0.6)
+        elif str(pane) == str(panes[2]):
+            pane.setSplitFraction(0.3)
+    return True
+
+
+
+def desktopLayoutTriV(paneTab):
+    sessionRemoveEventLoopCallbacks()
+    
+    # Reduce
+    paneOnly(paneTab)
+    paneTabOnly(paneTab)
+
+    # Make panes
+    panes = desktopPanes()
+    panes[0].tabs()[0].setType(hou.paneTabType.PythonShell)
+    panes[0].splitHorizontally()
+    panes = desktopPanes()
+    panes[1].splitVertically()
+    panes = desktopPanes()
+
+    # Make paneTabs
+    panes[1].createTab(hou.paneTabType.PythonShell)
+    panes[1].tabs()[0].setIsCurrentTab()
+    
+    # Set types
+    panes[0].tabs()[0].setType(hou.paneTabType.SceneViewer)
+    panes[1].tabs()[0].setType(hou.paneTabType.Parm)
+    panes[1].tabs()[1].setType(hou.paneTabType.DetailsView)
+    panes[2].tabs()[0].setType(hou.paneTabType.NetworkEditor)
+
+    # Set ratios
+    panes[0].setSplitFraction(0.66)
+
+    
+    hou.session.lastPane = hou.ui.paneUnderCursor()
+    hou.ui.addEventLoopCallback(triVCallback)
+desktopLayoutTriV.interactive_contexts = ["all"]
+
+
+
+def triVCallback():
+    panes = hou.ui.panes()
+    pane = hou.ui.paneUnderCursor()
+    if str(pane) != str(hou.session.lastPane):
+        hou.session.lastPane = pane
+        if str(pane) == str(panes[1]):
+            pane.setSplitFraction(0.33)
+        elif str(pane) == str(panes[2]):
+            pane.setSplitFraction(0.66)
+    return True
+
+
+
+def desktopNetworkEditors(*args):
+    editors = []
+    for paneTab in desktopPaneTabs():
+        if paneTab.type() == hou.paneTabType.NetworkEditor:
+            editors.append(paneTab)
+    return editors
+desktopNetworkEditors.interactive_contexts = ["none"]
+
+
+        
+def desktopPanes(*args):
+    panes = hou.ui.curDesktop().panes()
+    return panes
+desktopPanes.interactive_contexts = ["none"]
+
+
+
+def desktopSceneViewers(*args):
+    paneTabs = hou.ui.paneTabs()
+    sceneViewers = [paneTab for paneTab in paneTabs if paneTab.type() == hou.paneTabType.SceneViewer]
+    return sceneViewers
+desktopSceneViewers.interactive_contexts = ["none"]
+
+
+
+def desktopShelfHide(*args):
     desktop = hou.ui.curDesktop()
     desktop.shelfDock().show(0)
     hou.ui.reloadViewportColorSchemes()
