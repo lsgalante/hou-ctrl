@@ -244,56 +244,56 @@ desktopToggleMainMenuBar.interactive_contexts = ["all"]
 def desktopToggleMenus(*args):
     visible = 0
     # gather contexts
-    networkEditors = desktopGetNetworkEditors()
-    panes = hou.ui.curDesktop().panes()
-    sceneViewers = desktopGetSceneViewers()
-    tabs = hou.ui.paneTabs()
+    editors = desktopNetworkEditors()
+    panes = desktopPanes()
+    viewers = desktopSceneViewers()
+    paneTabs = desktopPaneTabs()
     # main menu
     if hou.getPreference("showmenu.val") == "1":
-        is_visible = 1
+        visible = 1
     # network editor menu
-    elif any(networkEditor.getPref("showmenu") == "1" for networkEditor in networkEditors):
-        is_visible = 1
+    elif any(editor.getPref("showmenu") == "1" for editor in editors):
+        visible = 1
     # network controls
-    elif any(tab.isShowingNetworkControls() for tab in tabs):
-        is_visible = 1
+    elif any(paneTab.isShowingNetworkControls() for paneTab in paneTabs):
+        visible = 1
     # scene viewer toolbars (top, right, left)
-    elif any(sceneViewer.isShowingOperationBar() for sceneViewer in sceneViewers):
-        is_visible = 1
-    elif any(sceneViewer.isShowingDisplayOptionsBar() for sceneViewer in sceneViewers):
-        is_visible = 1
-    elif any(sceneViewer.isShowingSelectionBar() for sceneViewer in sceneViewers):
-        is_visible = 1
-    # tabs
+    elif any(viewer.isShowingOperationBar() for viewer in viewers):
+        visible = 1
+    elif any(viewer.isShowingDisplayOptionsBar() for viewer in viewers):
+        visible = 1
+    elif any(viewer.isShowingSelectionBar() for sceneViewer in sceneViewers):
+        visible = 1
+    # paneTabs
     elif any(pane.isShowingPaneTabs() for pane in panes):
-        is_visible = 1
+        visible = 1
     # hide all
-    if is_visible:
+    if visible:
         hou.setPreference("showmenu.val", "0")
-        for networkEditor in networkEditors:
-            networkEditor.setPref("showmenu", "0")
-        for tab in tabs:
-            tab.showNetworkControls(0)
+        for editor in editors:
+            editor.setPref("showmenu", "0")
+        for paneTab in paneTabs:
+            paneTab.showNetworkControls(0)
         for pane in panes:
             pane.showPaneTabs(0)
-        for sceneViewer in sceneViewers:
-            sceneViewer.showOperationBar(0)
-            sceneViewer.showDisplayOptionsBar(0)
-            sceneViewer.showSelectionBar(0)
+        for viewer in viewers:
+            viewer.showOperationBar(0)
+            viewer.showDisplayOptionsBar(0)
+            viewer.showSelectionBar(0)
         hou.ui.setHideAllMinimizedStowbars(1)
     # show all
     else:
         hou.setPreference("showmenu.val", "1")
-        for networkEditor in networkEditors:
-            networkEditor.setPref("showment", "1")
-        for tab in tabs:
-            tab.showNetworkControls(1)
+        for editor in editors:
+            editor.setPref("showment", "1")
+        for paneTab in paneTabs:
+            paneTab.showNetworkControls(1)
         for pane in panes:
             pane.showPaneTabs(1)
-        for sceneViewer in sceneViewers:
-            sceneViewer.showOperationBar(1)
-            sceneViewer.showDisplayOptionsBar(1)
-            sceneViewer.showSelectionBar(1)
+        for viewer in viewers:
+            viewer.showOperationBar(1)
+            viewer.showDisplayOptionsBar(1)
+            viewer.showSelectionBar(1)
         hou.ui.setHideAllMinimizedStowbars(0)
 desktopToggleMenus.interactive_contexts = ["all"]
 
@@ -305,25 +305,27 @@ def desktopToggleHctl(*args):
 desktopToggleHctl.interactive_contexts = ["all"]
 
 
-def desktopToggleNetworkControls():
-    is_visible = 0
-    tabs = hou.ui.paneTabs()
-    for tab in tabs:
-        if tab.isShowingNetworkControls():
-            is_visible = 1
-    for tab in tabs:
-        tab.showNetworkControls((is_visible + 1) % 2)
+
+def desktopToggleNetworkControls(*args):
+    visible = 0
+    paneTabs = desktopPaneTabs()
+    for paneTab in paneTabs:
+        if paneTab.isShowingNetworkControls():
+            visible = 1
+    for paneTab in paneTabs:
+        paneTab.showNetworkControls((visible + 1) % 2)
 desktopToggleNetworkControls.interactive_contexts = ["all"]
 
 
-def desktopTogglePaneTabs():
-    panes = hou.ui.curDesktop().panes()
-    is_visible = 0
+
+def desktopTogglePaneTabs(*args):
+    panes = desktopPanes()
+    visible = 0
     for pane in panes:
         if pane.isShowingPaneTabs():
-            is_visible = 1
+            visible = 1
     for pane in panes:
-        pane.showPaneTabs(not is_visible)
+        pane.showPaneTabs(not visible)
 desktopTogglePaneTabs.interactive_contexts = ["all"]
 
 
