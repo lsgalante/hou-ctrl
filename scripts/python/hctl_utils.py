@@ -5,6 +5,7 @@ import hctl_vis_menu
 import hctl_new_tab_menu
 import hctl_resize
 import hctl_bindings
+import time
 
 
 
