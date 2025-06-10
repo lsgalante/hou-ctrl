@@ -646,36 +646,31 @@ paneToggleSplitMaximized.interactive_contexts = ["all"]
 
 
 
-def paneTabClose():
-    paneTab = hou.ui.paneTabUnderCursor()
+###########
+# Panetab #
+###########
+
+
+
+def paneTabClose(paneTab):
     paneTab.close()
 paneTabClose.interactive_contexts = ["all"]
 
 
-def paneTabGetCurrentNode():
-    paneTab = hou.ui.paneTabUnderCursor()
+
+def paneTabCurrentNode(paneTab):
     if paneTab.hasNetworkControls():
         return paneTab.currentNode()
-    return None
-paneTabGetCurrentNode.interactive_contexts = ["none"]
+paneTabCurrentNode.interactive_contexts = ["none"]
 
 
-def paneTabGetCurrentViewport():
-    paneTab = hou.ui.paneTabUnderCursor()
-    if paneTab.type() == hou.paneTabType.SceneViewer:
-        return paneTab.curViewport()
-    else:
-        return None
-paneTabGetCurrentViewport.interactive_contexts = ["none"]
 
-
-def paneTabGetPath():
-    paneTab = hou.ui.paneTabUnderCursor()
+def paneTabPath(paneTab):
     if paneTab.hasNetworkControls():
         return paneTab.pwd().path()
     else:
         return "No path"
-paneTabGetPath.interactive_contexts = ["none"]
+paneTabPath.interactive_contexts = ["none"]
 
 
 def paneTabGetSceneViewer():
@@ -687,52 +682,52 @@ def paneTabGetSceneViewer():
 paneTabGetSceneViewer.interactive_contexts = ["none"]
 
 
-def paneTabOnly():
-    for paneTab in hou.ui.paneUnderCursor().tabs():
-        if paneTab != hou.ui.paneTabUnderCursor():
+def paneTabOnly(this_paneTab):
+    for paneTab in desktopPaneTabs():
+        if paneTab != this_paneTab:
             paneTab.close()
 paneTabOnly.interactive_contexts = ["all"]
 
 
-def paneTabSetTypeDetailsView():
-    paneTab = hou.ui.paneTabUnderCursor()
+
+def paneTabSetTypeDetailsView(paneTab):
     paneTab.setType(hou.paneTabType.DetailsView)
 paneTabSetTypeDetailsView.interactive_contexts = ["all"]
 
 
-def paneTabSetTypeNetworkEditor():
-    paneTab = hou.ui.paneTabUnderCursor()
+
+def paneTabSetTypeNetworkEditor(paneTab):
     paneTab.setType(hou.paneTabType.NetworkEditor)
 paneTabSetTypeNetworkEditor.interactive_contexts = ["all"]
 
 
-def paneTabSetTypeParm():
-    paneTab = hou.ui.paneTabUnderCursor()
+
+def paneTabSetTypeParm(paneTab):
     paneTab.setType(hou.paneTabType.Parm)
 paneTabSetTypeParm.interactive_contexts = ["all"]
 
 
-def paneTabSetTypePythonShell():
-    paneTab = hou.ui.paneTabUnderCursor()
+
+def paneTabSetTypePythonShell(paneTab):
     paneTab.setType(hou.paneTabType.PythonShell)
 paneTabSetTypePythonShell.interactive_contexts = ["all"]
 
 
-def paneTabSetTypeSceneViewer():
-    paneTab = hou.ui.paneTabUnderCursor()
+
+def paneTabSetTypeSceneViewer(paneTab):
     paneTab.setType(hou.paneTabType.SceneViewer)
 paneTabSetTypeSceneViewer.interactive_contexts = ["all"]
 
 
-def paneTabToggleNetworkControls():
-    paneTab = hou.ui.paneTabUnderCursor()
+
+def paneTabToggleNetworkControls(paneTab):
     if paneTab.hasNetworkControls():
         paneTab.showNetworkControls(not paneTab.isShowingNetworkControls())
 paneTabToggleNetworkControls.interactive_contexts = ["all"]
 
 
-def paneTabTogglePin():
-    paneTab = hou.ui.paneTabUnderCursor()
+
+def paneTabTogglePin(paneTab):
     paneTab.setPin(not paneTab.isPin())
 paneTabTogglePin.interactive_contexts = ["all"]
 
