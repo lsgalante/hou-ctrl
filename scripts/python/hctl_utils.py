@@ -758,197 +758,209 @@ printLayout.interactive_contexts = ["all"]
 
 
 
-def sceneViewerGetDisplaySets():
+################
+# Scene Viewer #
+################
+
+
+
+def sceneViewerCurrentViewport(sceneViewer):
+    return sceneViewer.curViewport()
+sceneViewerCurrentViewport.interactive_contexts = ["none"]
+
+
+
+def sceneViewerDisplaySets(sceneViewer):
+    viewports = sceneViewer.viewports()
     displaySets = []
-    for sceneViewer in desktopGetSceneViewers():
-        viewports = sceneViewer.viewports()
-        for viewport in viewports:
-            settings = viewport.settings()
-            displaySet = settings.displaySet(hou.displaySetType.DisplayModel)
-            displaySets.append(displaySet)
+    for viewport in viewports:
+        settings = viewport.settings()
+        displaySet = settings.displaySet(hou.displaySetType.DisplayModel)
+        displaySets.append(displaySet)
     return(displaySets)
-sceneViewerGetDisplaySets.interactive_contexts = ["none"]
+sceneViewerDisplaySets.interactive_contexts = ["none"]
 
 
-def sceneViewerLayoutDoubleSide():
-    sceneViewer = paneTabGetSceneViewer()
-    if sceneViewer:
-        sceneViewer.setViewportLayout(hou.geometryViewportLayout.DoubleSide)
+
+def sceneViewerLayoutDoubleSide(sceneViewer):
+    sceneViewer.setViewportLayout(hou.geometryViewportLayout.DoubleSide)
 sceneViewerLayoutDoubleSide.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerLayoutDoubleStack():
-    sceneViewer = paneTabGetSceneViewer()
-    if sceneViewer:
-        sceneViewer.setViewportLayout(hou.geometryViewportLayout.DoubleStack)
+
+def sceneViewerLayoutDoubleStack(sceneViewer):
+    sceneViewer.setViewportLayout(hou.geometryViewportLayout.DoubleStack)
 sceneViewerLayoutDoubleStack.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerLayoutQuad():
-    sceneViewer = paneTabGetSceneViewer()
-    if sceneViewer:
-        sceneViewer.setViewportLayout(hou.geometryViewportLayout.Quad)
+
+def sceneViewerLayoutQuad(sceneViewer):
+    sceneViewer.setViewportLayout(hou.geometryViewportLayout.Quad)
 sceneViewerLayoutQuad.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerLayoutQuadBottomSplit():
-    sceneViewer = paneTabGetSceneViewer()
-    if sceneViewer:
-        sceneViewer.setViewportLayout(hou.geometryViewportLayout.QuadBottomSplit)
+
+def sceneViewerLayoutQuadBottomSplit(sceneViewer):
+    sceneViewer.setViewportLayout(hou.geometryViewportLayout.QuadBottomSplit)
 sceneViewerLayoutQuadBottomSplit.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerLayoutQuadLeftSplit():
-    sceneViewer = paneTabGetSceneViewer()
-    if sceneViewer:
-        sceneViewer.setViewportLayout(hou.geometryViewportLayout.QuadLeftSplit)
+
+def sceneViewerLayoutQuadLeftSplit(sceneViewer):
+    sceneViewer.setViewportLayout(hou.geometryViewportLayout.QuadLeftSplit)
 sceneViewerLayoutQuadLeftSplit.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerLayoutSingle():
-    sceneViewer = paneTabGetSceneViewer()
-    if sceneViewer:
-        sceneViewer.setViewportLayout(hou.geometryViewportLayout.Single)
+
+def sceneViewerLayoutSingle(sceneViewer):
+    sceneViewer.setViewportLayout(hou.geometryViewportLayout.Single)
 sceneViewerLayoutSingle.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerLayoutTripleBottomSplit():
-    sceneViewer = paneTabGetSceneViewer()
-    if sceneViewer:
-        sceneViewer.setViewportLayout(hou.geometryViewportLayout.TripleBottomSplit)
+
+def sceneViewerLayoutTripleBottomSplit(sceneViewer):
+    sceneViewer.setViewportLayout(hou.geometryViewportLayout.TripleBottomSplit)
 sceneViewerLayoutTripleBottomSplit.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerLayoutTripleLeftSplit():
-    sceneViewer = paneTabGetSceneViewer()
-    if sceneViewer:
-        sceneViewer.setViewportLayout(hou.geometryViewportLayout.TripleLeftSplit)
+
+def sceneViewerLayoutTripleLeftSplit(sceneViewer):
+    sceneViewer.setViewportLayout(hou.geometryViewportLayout.TripleLeftSplit)
 sceneViewerLayoutTripleLeftSplit.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerLopToggleLightGeo():
-    sceneViewer = paneTabGetSceneViewer()
-    if sceneViewer:
-        is_visible = sceneViewer.showLights()
-        sceneViewer.setShowLights(not is_visible)
+
+def sceneViewerLopToggleLightGeo(sceneViewer):
+    visible = sceneViewer.showLights()
+    sceneViewer.setShowLights(not visible)
 sceneViewerLopToggleLightGeo.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerOpenVisualizerMenu():
+
+def sceneViewerVisualizerMenu(sceneViewer):
     reload(hctl_vis_menu)
     visualizerMenu = hctl_vis_menu.visualizerMenu()
     visualizerMenu.show()
-sceneViewerOpenVisualizerMenu.interactive_contexts = ["paneTabType.SceneViewer"]
+sceneViewerVisualizerMenu.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerToggleBackface():
-    is_visible = 0
-    displaySets = getDisplaySets()
+
+def sceneViewerToggleBackface(sceneViewer):
+    visible = 0
+    displaySets = sceneViewerDisplaySets(sceneViewer)
     for displaySet in displaySets:
         if displaySet.isShowingPrimBackfaces():
-            is_visible = 1
+            visible = 1
     for displaySet in displaySets:
-        displaySet.showPrimBackfaces((is_visible + 1) % 2)
+        displaySet.showPrimBackfaces(not visible)
 sceneViewerToggleBackface.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerToggleDisplayOptionsToolbar():
-    is_visible = 0
-    sceneViewers = desktopGetSceneViewers()
-    for sceneViewer in sceneViewers:
-        if sceneViewer.isShowingDisplayOptionsBar():
-            is_visible = 1
-    for sceneViewer in sceneViewers:
-        sceneViewer.showDisplayOptionsBar((is_visible + 1) % 2)
+
+def sceneViewerToggleDisplayOptionsToolbar(sceneViewer):
+    visible = 0
+    if sceneViewer.isShowingDisplayOptionsBar():
+        visible = 1
+    sceneViewer.showDisplayOptionsBar(not visible)
 sceneViewerToggleDisplayOptionsToolbar.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerToggleGrid():
-    paneTab = hou.ui.paneTabUnderCursor()
-    if paneTab.type() == hou.paneTabType.SceneViewer:
-        is_visible = paneTab.referencePlane().isVisible()
-        paneTab.referencePlane().setIsVisible(not is_visible)
+
+def sceneViewerToggleGrid(sceneViewer):
+    visible = sceneViewer.referencePlane().isVisible()
+    sceneViewer.referencePlane().setIsVisible(not visible)
 sceneViewerToggleGrid.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerToggleGroupList():
-    is_visible = 0
-    sceneViewers = desktopGetSceneViewers()
-    for sceneViewer in sceneViewers:
-        if sceneViewer.isGroupListVisible():
-            is_visible = 1
-    for sceneViewer in sceneViewers:
-        sceneViewer.setGroupListVisible((is_visible + 1) % 2)
+
+def sceneViewerToggleGroupList(sceneViewer):
+    visible = 0
+    if sceneViewer.isGroupListVisible():
+        visible = 1
+    sceneViewer.setGroupListVisible(not visible)
 sceneViewerToggleGroupList.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerToggleKeycam():
-    sceneViewer = hou.ui.paneTabOfType(hou.paneTabType.SceneViewer)
-    if sceneViewer:
-        networkEditorContext = sceneViewer.pwd()
-        context_type = networkEditorContext.childTypeCategory().name()
-        if context_type == "Object":
-            sceneViewer.setCurrentState("keycam")
-            hou.ui.setStatusMessage("Entered keycam state in Obj context.")
-        elif context_type == "Sop":
-            sceneViewer.setCurrentState("keycam")
-            hou.ui.setStatusMessage("Entered keycam state in Sop context.")
-        elif context_type == "Lop":
-            sceneViewer.setCurrentState("keycam")
-            hou.ui.setStatusMessage("Entered keycam state in Lop context.")
-        else:
-            hou.ui.setStatusMessage("No Obj, Sop or Lop context.", hou.severityType.Error)
+
+def sceneViewerToggleKeycam(sceneViewer):
+    context = sceneViewer.pwd()
+    context_type = context.childTypeCategory().name()
+    if context_type == "Object":
+        sceneViewer.setCurrentState("keycam")
+        hou.ui.setStatusMessage("Entered keycam viewer state in Obj context.")
+    elif context_type == "Sop":
+        sceneViewer.setCurrentState("keycam")
+        hou.ui.setStatusMessage("Entered keycam viewer state in Sop context.")
+    elif context_type == "Lop":
+        sceneViewer.setCurrentState("keycam")
+        hou.ui.setStatusMessage("Entered keycam viewer state in Lop context.")
     else:
-        hou.ui.setStatusMessage("No Scene Viewer.", hou.severityType.Error)
+        hou.ui.setStatusMessage("No Obj, Sop or Lop context.", hou.severityType.Error)
 sceneViewerToggleKeycam.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerTogglePointMarkers():
-    is_visible = 0
-    displaySets = sceneViewerGetDisplaySets()
+
+def sceneViewerTogglePointMarkers(sceneViewer):
+    visible = 0
+    displaySets = sceneViewerGetDisplaySets(sceneViewer)
     for displaySet in displaySets:
         if displaySet.isShowingPointMarkers():
-            is_visible = 1
+            visible = 1
     for displaySet in displaySets:
-        displaySet.showPointMarkers((is_visible + 1) % 2)
+        displaySet.showPointMarkers(not visible)
 sceneViewerTogglePointMarkers.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerTogglePointNormals():
-    is_visible = 0
-    displaySets = getDisplaySets()
+
+def sceneViewerTogglePointNormals(sceneViewer):
+    visible = 0
+    displaySets = sceneViewerGetDisplaySets(sceneViewer)
     for displaySet in displaySets:
         if displaySet.isShowingPointNormals():
-            is_visible = 1
+            visible = 1
     for displaySet in displaySets:
-        displaySet.showPointNormals((is_visible + 1) % 2)
+        displaySet.showPointNormals(not visible)
 sceneViewerTogglePointNormals.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerTogglePointNumbers():
-    is_visible = 0
-    displaySets = sceneViewerGetDisplaySets()
+
+def sceneViewerTogglePointNumbers(sceneViewer):
+    visible = 0
+    displaySets = sceneViewerGetDisplaySets(sceneViewer)
     for displaySet in displaySets:
         if displaySet.isShowingPointNumbers():
-            is_visible = 1
+            visible = 1
     for displaySet in displaySets:
-        displaySet.showPointNumbers((is_visible + 1) % 2)
+        displaySet.showPointNumbers(not visible)
 sceneViewerTogglePointNumbers.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerTogglePrimNumbers():
-    is_visible = 0
-    displaySets = getDisplaySets()
+
+def sceneViewerTogglePrimNormals(sceneViewer):
+    visible = 0
+    displaySets = sceneViewerGetDisplaySets(sceneViewer)
+    for displaySet in displaySets:
+        if displaySet.isShowingPrimNormals():
+            visible = 1
+        for displaySet in displaySets:
+            displaySet.showPrimNormals(not_visible)
+sceneViewerTogglePrimNormals.interactive_contexts = ["paneTabType.SceneViewer"]
+
+
+
+def sceneViewerTogglePrimNumbers(sceneViewer):
+    visible = 0
+    displaySets = sceneViewerGetDisplaySets(sceneViewer)
     for displaySet in displaySets:
         if displaySet.isShowingPrimNumbers():
-            is_visible = 1
+            visible = 1
     for displaySet in displaySets:
-        displaySet.showPrimNumbers((is_visible + 1) % 2)
+        displaySet.showPrimNumbers(not visible)
 sceneViewerTogglePrimNumbers.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerToggleToolbars():
-    sceneViewer = getSceneViewers()[0]
+
+def sceneViewerToggleToolbars(sceneViewer):
     state1 = sceneViewer.isShowingOperationBar()
     state2 = sceneViewer.isShowingDisplayOptionsBar()
     state3 = sceneViewer.isShowingSelectionBar()
@@ -963,19 +975,18 @@ def sceneViewerToggleToolbars():
 sceneViewerToggleToolbars.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-def sceneViewerToggleVectors():
-    sceneViewers = get_scene_viewers()
-    for sceneViewer in sceneViewers:
-        viewports = sceneViewer.viewports()
-        for viewport in viewports:
-            viewportSettings = viewport.settings()
-            vector_scale = viewportSettings.vectorScale()
-            if vector_scale == 1:
-                viewportSettings.setVectorScale(0)
-            elif vector_scale == 0:
-                viewportSettings.setVectorScale(1)
-            else:
-                viewportSettings.setVectorScale(1)
+
+def sceneViewerToggleVectors(sceneViewer):
+    viewports = sceneViewer.viewports()
+    for viewport in viewports:
+        viewportSettings = viewport.settings()
+        vector_scale = viewportSettings.vectorScale()
+        if vector_scale == 1:
+            viewportSettings.setVectorScale(0)
+        elif vector_scale == 0:
+            viewportSettings.setVectorScale(1)
+        else:
+            viewportSettings.setVectorScale(1)
 sceneViewerToggleVectors.interactive_contexts = ["paneTabType.SceneViewer"]
 
         
