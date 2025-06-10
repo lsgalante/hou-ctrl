@@ -4,23 +4,30 @@ Sceme: hou-theme
 #include "hou-theme-NodeGraph.inc"
 #include "hou-theme-colors.inc"
 
-#define GREY(g)                         g g g
-#define PRESSED_HIGH                    #4A5E73
-#define PRESSED_LOW                     #768EA7
-#define EDIT_BG                         GREY(0.075)
+#define GREY(g)                     g g g
+#define PRESSED_HIGH                #768EA7
+#define EDIT_BG                     GREY(0.075)
+#define dark_b                      #010101
 
 #define dark_b                          #010101
 
-// Icons
+///////////
+// Icons //
+///////////
+
 
 IconBrightness: 0.6
 IconContrast:   1
 IconGamma:      1
 IconSaturation: 0.0
 
-// New ui resources 
 
-BackColor:                          bg // if white lines appear, adjust BorderDark
+//////////////////////////
+// Frames & Backgrounds //
+//////////////////////////
+
+
+BackColor:                          bg              // if white lines appear, adjust BorderDark
 BorderLight:                        button_bg
 BorderDark:                         button_bg
 
@@ -29,7 +36,16 @@ DropIndicator                       0.0 0.0 1.0
 GalleryBackground:                  black
 SnapshotGalleryBackground:          black
 
-// Spreadsheet
+ToolbarBevelLight:                  button_bg       // toolbar bevel lite
+ToolbarBevelDark:                   lite            // toolbar bevel dark
+ToolbarFlatGradHi:                  bg              // toolbar flat hi
+ToolbarFlatGradLo:                  bg              // toolbar flat lo
+
+
+/////////////////
+// Spreadsheet //
+/////////////////
+
 
 ListShadow:                         #202000
 ListHighlight:                      #202000
@@ -39,27 +55,40 @@ ListEntry1:                         black
 ListEntry2:                         #101000
 ListEntrySelected:                  #ffd700
 
-ListTitleShadow:                    #202000         // spreadsheet title border
-ListTitleHighlight:                 #202000         // spreadsheet title hilite
-ListTitleGradHi:                    bg              // spreadsheet title hi
-ListTitleGradLow:                   bg              // spreadsheet title lo
-ListTitleHighlightGradHi:           button_bg_hi    // spreadsheet title hilite hi
-ListTitleHighlightGradLow:          button_bg       // spreadsheet title hilite lo
+ListTitleShadow:                    separator       // spreadsheet title border
+ListTitleHighlight:                 separator       // spreadsheet id column boder
+ListTitleGradHi:                    bg              // spreadsheet id column cell hi
+ListTitleGradLow:                   bg              // spreadsheet id column cell lo
+ListTitleHighlightGradHi:           red             // ??
+ListTitleHighlightGradLow:          red             // ??
 ListTitleFilteredText:              fg_lite         // spreadsheet title filtered
 
 ListText:                           fg_lite         // download color scheme fg
 ListAltText:                        fg_lite
 ListHoverHighlight:                 button_bg_hi    // hover hilite
-SSBorder:                           button_bg_hi    // column divider
 
-// Menu
+SSBorder:                           separator       // column divider
+SSOutline:                          DropIndicator   // drag & drop outline
+
+// Highlight Alpha in the channel lister
+// Red for the Displayed Channel Alpha
+// Green for the Graph Selected Channel Alpha
+
+SSHighlightAlpha:                   0.25 0.55 0.0
+SSHeader:                           red
+
+
+//////////
+// Menu //
+//////////
+
 
 MenuBG:                             menu_bg         // menu bg
-MenuHighlight:                      menu_border // menu hilite
-MenuShadow:                         menu_border // menu shadow
+MenuHighlight:                      button_bg_hi    // menu hilite
+MenuShadow:                         button_bg_hi    // menu shadow
 
 MenuTitleBG:                        lite            // menu title bg
-MenuSelectedBG:                     border_selected // menu selected bg
+MenuSelectedBG:                     button_bg_hi    // menu selected bg
 InvertedMenuBackground:             red             // menu inverted bg
 
 MenuText:                           fg_lite         // menu text
@@ -72,23 +101,14 @@ HiliteTextBG:                       red             // text hilite bg
 SecondaryText:                      separator       // text secondary
 LinkText:                           #64ACFF         // text link
 
-ToolbarBevelLight:                  button_bg       // toolbar bevel lite
-ToolbarBevelDark:                   lite            // toolbar bevel dark
-ToolbarFlatGradHi:                  bg              // toolbar flat hi
-ToolbarFlatGradLo:                  bg              // toolbar flat lo
 
-// Ladder
+////////////////////////
+// Parameter Controls //
+////////////////////////
 
-LadderBG:                           black           // ladder bg
-LadderText:                         fg_lite         // ladder text
-LadderHighlight:                    lite            // ladder hilite
-LadderShadow:                       red             // ladder shadow
-LadderOutline:                      lite            // ladder outline
-
-// Parameters
 
 ButtonGradHi:                       button_bg_hi    // button hi
-ButtonGradLow:                      button_bg       // button lo
+ButtonGradLow:                      button_bg_hi    // button lo
 ButtonNonActiveGradLow:             bg              // button non-active lo
 ButtonHoverHighlight:               #f0f0f0         // button hover hilite
 
@@ -105,25 +125,27 @@ ButtonPressedGradHi:                button_bg_hi    // some selected bg
 ButtonPressedGradLow:               button_bg_hi    // some selected bg
 
 ButtonMenuArrowHi:                  button_bg_hi    // button menu arrow hi
-ButtonMenuArrowLow:                 button_bg       // button menu arrow lo
+ButtonMenuArrowLow:                 button_bg_hi    // button menu arrow lo
 ButtonMenuArrow:                    button_fg       // button menu arrow
 ButtonArrow:                        separator       // button arrow
 ButtonArrowDisabled:                lite            // button arrow disabled
 ButtonArrowPressed:                 fg_dim          // button arrow pressed
 ButtonArrowModified:                fg_dim          // button arrow modified
 
-//
-
 CheckBG:                            button_bg_hi    // check bg
 CheckLocated:                       fg_lite         // check located
 CheckColor:                         fg_lite         // check color
+
+LadderBG:                           black           // ladder bg
+LadderText:                         fg_lite         // ladder text
+LadderHighlight:                    lite            // ladder hilite
+LadderShadow:                       red             // ladder shadow
+LadderOutline:                      lite            // ladder outline
 
 RadioBG:                            black           // radio bg
 RadioBorder:                        fg_dim          // radio border
 RadioDot:                           fg_dim          // radio dot
 RadioDotHighlight:                  fg_dim          // radio dot hilite
-
-//
 
 RampBG:                             black           // ramp bg
 RampFG:                             #151500         // ramp fg
@@ -133,8 +155,8 @@ RampGrid:                           GREY(0.3)       // ramp grid
 RampCurve:                          #605800         // ramp curve
 RampCurveDisabled:                  #202020         // ramp curve disabled
 
-RampKeyBG:                          #b0b0b0         // ramp key (dots on graph)
-RampKeyFG:                          #ffa020         // ramp key selected
+RampKeyBG:                          #b0b0b0         // ramp key unselected (dots on graph)
+RampKeyFG:                          #aa0000         // ramp key selected
 RampKeyDisabled:                    #404040         // ramp key disabled
 RampKeyHoverBG:                     selected        // ramp key hover bg
 RampKeyHoverFG:                     selected        // ramp key hover fg
@@ -150,14 +172,12 @@ RampBoxSelect:                      #ff0000         // ramp box select
 RampMarkerHover:                    unselected      // ramp marker hover
 RampConstraintGuide:                #ff0000         // ramp constraint guide
 
-//
-
-SliderTopBorder:                    lite            // slider track top border
-SliderBottomBorder:                 lite            // slider track bottom border
+SliderTopBorder:                    button_bg_hi    // slider track top border
+SliderBottomBorder:                 button_bg_hi    // slider track bottom border
 SliderAdvancedBevel:                #383800         // slider track advanced bevel
 SliderAdvancedGroove:               #383800         // slider track advanced groove
-SliderRemainingBevel:               #302800         // slider track remaining bevel
-SliderRemainingGroove:              #302800         // slider track remaining groove
+SliderRemainingBevel:               button_bg_hi    // slider track remaining bevel
+SliderRemainingGroove:              button_bg_hi    // slider track remaining groove
 
 SliderThumbGradHi:                  button_bg_hi    // slider thumb hi
 SliderThumbGradLow:                 button_bg       // slider thumb lo
@@ -173,13 +193,11 @@ SliderTick:                         #808080         // slider tick
 SliderTickLabel:                    fg_dim          // slider tick label
 SliderRangeBrackets:                fg_dim          // slider range brackets
 
-//
-
 TextboxBG:                          button_bg_hi    // textbox bg
 TextboxInvalidBG:                   red             // textbox bg invalid
 
-TextboxBorderPrimary:               #000000         // textbox border
-TextboxBorderHighlight:             button_bg       // textbox border hilite
+TextboxBorderPrimary:               button_bg_hi    // textbox border
+TextboxBorderHighlight:             button_bg_hi    // textbox border hilite
 TextboxBorderStippled:              red             // textbox border stippled
 TextboxBorderKeyFocus:              border_selected // textbox border selected
 
@@ -193,7 +211,11 @@ SelectedTextFG:                     #404040
 SelectedTextBG:                     #a0a0a0              // cursor
 SelectedTextDisabledBG:             GREY(0.3)
 
-// Other UI Controls
+
+/////////////////////////////
+// Non-Parameter Controls //
+////////////////////////////
+
 
 KeyframeButtonSelectedGradHi:       GREY(0.5067645)
 KeyframeButtonSelectedGradLow:      GREY(0.3429417)
@@ -249,21 +271,21 @@ RangeSliderArrow:                   separator
 RangeSliderArrowLocated:            separator
 RangeSliderArrowSelected:           separator
 
-ScrollbarUpperBorder:               lite
-ScrollbarBottomBorder:              lite
-ScrollbarWell:                      black
-ScrollbarWellShadow1:               black
-ScrollbarWellShadow2:               black
-ScrollbarWellShadow3:               black
-ScrollbarWellShadowBlend12:         black
-ScrollbarWellShadowBlend13:         black
-ScrollbarWellShadowBlend22:         black
-ScrollbarWellShadowBlend23:         black
-ScrollbarWellShadowBlend32:         black
-ScrollbarWellShadowBlend33:         black
-ScrollbarThumbTopBorder:            lite
-ScrollbarThumbBottomBorder:         lite
-ScrollbarThumbBevel:                lite
+ScrollbarUpperBorder:               bg           // well entire border
+ScrollbarBottomBorder:              bg           // well line at bottom
+ScrollbarWell:                      bg           // well bg
+ScrollbarWellShadow1:               bg           // well line at top or left
+ScrollbarWellShadow2:               bg           // well line at right or bottom
+ScrollbarWellShadow3:               bg           // well entire border
+ScrollbarWellShadowBlend12:         bg           // well dot at top/bottom
+ScrollbarWellShadowBlend13:         bg           // well 2 dots top/right
+ScrollbarWellShadowBlend22:         bg           // well dot top/bottom right
+ScrollbarWellShadowBlend23:         bg           // well 2 dots top/right
+ScrollbarWellShadowBlend32:         bg           // well dot top/bottom right
+ScrollbarWellShadowBlend33:         bg           // well 2 dots top/right
+ScrollbarThumbTopBorder:            bg
+ScrollbarThumbBottomBorder:         bg
+ScrollbarThumbBevel:                bg
 ScrollbarThumbGrippyBase:           button_bg
 ScrollbarThumbGrippyEdge:           button_bg
 ScrollbarButtonTopBorder:           lite
@@ -280,18 +302,11 @@ Separator:                          separator
 SwitchButtonSelected:               red
 SwitchButtonLocated:                red
 
-// Spreadsheet
 
-SSOutline:                          DropIndicator // spreadsheet drag & drop outline
+////////////////////
+// Parameter Pane //
+////////////////////
 
-// Highlight Alpha in the channel lister
-// Red for the Displayed Channel Alpha
-// Green for the Graph Selected Channel Alpha
-
-SSHighlightAlpha:                   0.25 0.55 0.0
-SSHeader:                           red
-
-// Parameter Pane
 
 GroupBorder:                        lite
 
@@ -299,11 +314,11 @@ GroupHeader0:                       button_bg
 GroupHeaderTop0:                    button_bg
 GroupHeaderHi0:                     button_bg
 GroupHeaderHiTop0:                  button_bg
-GroupHeaderOpen0:                   button_bg    // selected tab
-GroupHeaderOpenTop0:                button_bg_hi // selected tab
+GroupHeaderOpen0:                   #303030 // selected tab
+GroupHeaderOpenTop0:                #303030 // selected tab
 GroupHeaderDisabled0:               lite
 GroupHeaderDisabledTop0:            lite
-GroupBody0:                         button_bg
+GroupBody0:                         bg
 
 GroupHeader1:                       lite
 GroupHeaderTop1:                    lite
@@ -313,7 +328,7 @@ GroupHeaderOpen1:                   lite
 GroupHeaderOpenTop1:                lite
 GroupHeaderDisabled1:               lite
 GroupHeaderDisabledTop1:            lite
-GroupBody1:                         lite
+GroupBody1:                         bg
 
 GroupHeader2:                       lite
 GroupHeaderTop2:                    lite
@@ -323,7 +338,7 @@ GroupHeaderOpen2:                   lite
 GroupHeaderOpenTop2:                lite
 GroupHeaderDisabled2:               lite
 GroupHeaderDisabledTop2:            lite
-GroupBody2:                         lite
+GroupBody2:                         bg
 
 GroupHeader3:                       lite
 GroupHeaderTop3:                    lite
@@ -333,7 +348,7 @@ GroupHeaderOpen3:                   lite
 GroupHeaderOpenTop3:                lite
 GroupHeaderDisabled3:               lite
 GroupHeaderDisabledTop3:            lite
-GroupBody3:                         lite
+GroupBody3:                         bg
 
 GroupLight:                         lite
 
@@ -346,7 +361,11 @@ CreateAssetVersion:                 #ffcccc        // pink
 InfoBG:                             dim
 InfoText:                           red
 
-// Popup
+
+/////////////
+// Dialogs //
+/////////////
+
 
 PopupHelpBG:                        black
 PopupHelpFG:                        fg_lite
@@ -354,7 +373,11 @@ PopupHelpHotkeyFG:                  fg_dim
 PopupExtraHelpFG:                   fg_lite
 PopupExtraHelpBG:                   lite
 
-// Tool Shelf
+
+////////////////
+// Tool Shelf //
+////////////////
+
 
 ShelfGradHi:                        black
 ShelfGradMidHi:                     black
@@ -367,12 +390,16 @@ ShelfTabActiveLow:                  lite
 ShelfTabInactiveHi:                 black
 ShelfTabInactiveLow:                black
 
-// Pane Tabs
 
-PaneTabActiveHi:                    button_bg_hi
-PaneTabActiveLow:                   button_bg
-PaneTabInactiveHi:                  black
-PaneTabInactiveLow:                 black
+///////////////
+// Pane Tabs //
+///////////////
+
+
+PaneTabActiveHi:                    #202020
+PaneTabActiveLow:                   #202020
+PaneTabInactiveHi:                  bg
+PaneTabInactiveLow:                 bg
 PaneTabEdges:                       black
 PaneEmptyBG:                        bg
 PaneBorder:                         black
@@ -399,29 +426,37 @@ Cop2Color:                          HSV  40   0.20  2
 OutputColor:                        HSV  20   0.20  2
 RootColor:                          HSV  0    0     1
 
-// Path Gadget
+
+/////////////////
+// Path Gadget //
+/////////////////
+
 
 PathGadgetArrow1:                        separator
 PathGadgetArrow2:                        separator
-PathGadgetArrow3:                        separator
+PathGadgetArrow3:                        button_bg
 PathGadgetArrow1Selected:                separator
 PathGadgetArrow2Selected:                separator
 PathGadgetArrow3Selected:                separator
-PathGadgetPrimaryBorder:                 button_bg
-PathGadgetSecondaryBorder:               button_bg
+PathGadgetPrimaryBorder:                 separator
+PathGadgetSecondaryBorder:               separator
 PathGadgetPrimaryBorderSelected:         button_bg
 PathGadgetSecondaryBorderSelected:       button_bg
-PathGadgetBevel:                         separator
-PathGadgetBevelSelected:                 separator
+PathGadgetBevel:                         button_bg
+PathGadgetBevelSelected:                 button_bg
 PathGadgetText:                          fg_lite
-PathGadgetGradHi:                        button_bg_hi
-PathGadgetGradLow:                       button_bg
+PathGadgetGradHi:                        bg
+PathGadgetGradLow:                       bg
 PathGadgetGradHiSelected:                button_bg_hi
 PathGadgetGradLowSelected:               button_bg_hi
-PathGadgetHistoryButtonBevel:            separator
-PathGadgetHistoryButtonBevelSelected:    separator
+PathGadgetHistoryButtonBevel:            button_bg
+PathGadgetHistoryButtonBevelSelected:    button_bg
 
-// Viewport
+
+//////////////
+// Viewport //
+//////////////
+
 
 ViewportBorder:                          fg_dim
 ViewportDividers:                        fg_dim
@@ -431,7 +466,11 @@ ViewportInspectText:                     grey4
 ImageViewportBorder:                     GREY(0.2)
 ImageViewportBorderCurrent:              0.0 0.6 0.0
 
-// Tree
+
+//////////
+// Tree //
+//////////
+
 
 TreeNodeBG:                              grey3
 TreeNodeAlternateBG:                     grey1
@@ -444,7 +483,10 @@ TreeNodeInvisibleReservedParmFG:         grey1
 #TreeNodeInvisibleReservedParmFG:         0.45 0.50 0.58
 TreeLine:                                dim
 
-// Performance
+
+/////////////////
+// Performance //
+/////////////////
 
 PerformanceGood:                         0.45 0.82 0.08
 PerformanceBad:                          0.8 0 0
@@ -454,7 +496,11 @@ NetworkPerformanceGood:                  #95A084
 NetworkPerformanceBad:                   #D4AA9E
 NetworkPerformanceWarn:                  #B0A957
 
-// Status Bar
+
+////////////////
+// Status Bar //
+////////////////
+
 
 StatusBarMessageFG:                      fg_lite
 StatusBarMessageBG:                      bg
@@ -465,14 +511,16 @@ StatusBarWarningBG:                      bg
 StatusBarErrorFG:                        error
 StatusBarErrorBG:                        bg
 
-// Old Status Bar
+MessageColor:                            red          // old status bar
+PromptColor:                             red          // old status bar
+WarningColor:                            red          // old status bar
+ErrorColor:                              red          // old status bar
 
-MessageColor:                            red
-PromptColor:                             red
-WarningColor:                            red
-ErrorColor:                              red
 
-// Dope Sheet
+////////////////
+// Dope Sheet //
+////////////////
+
 
 DopeSheetCurrentFrameFG:                 separator
 DopeSheetCurrentFrameBG:                 black
@@ -529,7 +577,11 @@ DopeSheetSpreadSheetText:                black
 DopeSheetSpreadSheetDisabled:            0.07 0 0
 DopeSheetRippleTool:                     1 1 0
 
-// Playbar Bookmarks
+
+///////////////////////
+// Playbar Bookmarks //
+///////////////////////
+
 
 Bookmark1:                               0.11 0.62 0.47
 Bookmark2:                               0.85 0.37 0.10
@@ -539,21 +591,33 @@ Bookmark5:                               0.40 0.65 0.12
 Bookmark6:                               0.90 0.67 0.10
 Bookmark7:                               0.65 0.46 0.11
 
-// Assets
+
+////////////
+// Assets //
+////////////
+
 
 AssetBannerBackground:                   GREY(0.12)
 AssetUpdateStatusBackground:             0.19 0.28 0.38
 AssetUpdateStatusText:                   white
 OrboltSplashscreenProgressbar:           0.19 0.28 0.38
 
-// Mplay
+
+///////////
+// Mplay //
+///////////
+
 
 MplayInspectBox:                         GREY(0.8)
 MplayInspectBorder:                      GREY(0.3)
 MplayInspectText:                        black
 MplayColorCorrectWarn:                   1 1 0.75
 
-// Channel Editor
+
+////////////////////
+// Channel Editor //
+////////////////////
+
 
 ChannelEditorBackground:            0.00 0.00 0.00    // graph bg
 ChannelEditorBGOutsideGlobal:       GREY(0.1)         // graph bg outside global time range
@@ -570,11 +634,19 @@ ChannelEditorTimeText:              EDIT_BG           // bottom time text
 ChannelEditorViewLock:              GREY(0.5)
 ChannelListCircleOutline:           black
 
-// Chop Editor
+
+/////////////////
+// Chop Editor //
+/////////////////
+
 
 ChopEditorTimeBar:                       0.00 0.00 0.00
 
-// Channels
+
+//////////////
+// Channels //
+//////////////
+
 
 // These colors are for coloring channels in various places in Houdini
 // (eg. the Channel Editor and Channel List panes).
@@ -612,14 +684,22 @@ ChannelColorOther4:                      hsv  60.0 1.0 0.50      // Dark Yellow
 ChannelColorOther5:                      hsv 180.0 1.0 0.50      // Dark Aqua
 ChannelColorOther6:                      hsv 300.0 1.0 0.50      // Dark Purple
 
-// Geometry Groups
+
+/////////////////////
+// Geometry Groups //
+/////////////////////
+
 
 // Specify opposing corners of a quadrilateral in HSV space
 // Colors for geo groups are sampled from within this quad
 GeoGroupColor1:                          hsv  90.0 0.3 1.0
 GeoGroupColor2:                          hsv 330.0 0.6 1.0
 
-// Syntax
+
+////////////
+// Syntax //
+////////////
+
 // Editors and input boxes
 
 ParmSyntaxPlainColor:           white
@@ -642,33 +722,41 @@ TextboxLineNumberFG:            fg_dim
 TextboxLineNumberBG:            grey4
 TextboxLineNumberHighlight:     fg_lite
 
-// Old UI Resources
 
-ForegroundColor:                button_bg_hi
-BackgroundColor:                black
-PaperColor:                     black
-TextHighlightColor:             red
-ButtonColor:                    black  // bg of node list in change node type dialog
-ButtonStripColor:               red
-ListTitleColor:                 red
-ListEntryColor:                 red
-ListEntrySelectedColor:         red
-MenuBarColor:                   black
-MenuColor:                      black
-BlueSelectedMenuColor:          red
-SliderColor:                    red
-SliderThumbColor:               red
-InputColor:                     red
-RadioColor:                     separator   // text editor status line hilite
-IconBackgroundColor:            red
-IconOutlineColor:               red
-IconShadowColor:                red
-IconLocatedColor:               red
-DisabledTextColor:              fg_dim     // disabled text
-DisabledTextDropShadowColor:    red
-PopupHelpBackgroundColor:       black
+//////////////////////
+// Old UI Resources //
+//////////////////////
 
-// New colors for Popup windows (Ex. Anonymous Usage Stats Window)
+
+ForegroundColor:                button_bg_hi       // "old" variable
+BackgroundColor:                black              // "old" variable
+PaperColor:                     black              // "old" variable
+TextHighlightColor:             red                // "old" variable
+ButtonColor:                    black              // "old" variable - bg of node list in change node type dialog
+ButtonStripColor:               red                // "old" variable
+ListTitleColor:                 red                // "old" variable
+ListEntryColor:                 red                // "old" variable
+ListEntrySelectedColor:         red                // "old" variable
+MenuBarColor:                   black              // "old" variable
+MenuColor:                      black              // "old" variable
+BlueSelectedMenuColor:          red                // "old" variable
+SliderColor:                    red                // "old" variable
+SliderThumbColor:               red                // "old" variable
+InputColor:                     red                // "old" variable
+RadioColor:                     separator          // "old" variable - text editor status line hilite
+IconBackgroundColor:            red                // "old" variable
+IconOutlineColor:               red                // "old" variable
+IconShadowColor:                red                // "old" variable
+IconLocatedColor:               red                // "old" variable
+DisabledTextColor:              fg_dim             // "old" variable - disabled text
+DisabledTextDropShadowColor:    red                // "old" variable
+PopupHelpBackgroundColor:       black              // "old" variable
+
+
+//////////////////////////////////
+// New colors for Popup windows // (Ex. Anonymous Usage Stats Window)
+//////////////////////////////////
+
 
 PopupWindowTextColor:                    white
 BlueTextLinkColor:                       #FF00FF
@@ -699,13 +787,23 @@ ScopedSelectedColor:     white
 AutoScopedColor:         HSV  210 0.125  0.375   // low saturation blue grey
 ScopedAlpha:             1.0 1.0 1.0
 
-// Parm Borderes indicating that the parm has a handle associated with it
+
+///////////////////
+// Parm Borderes // indicating that the parm has a handle associated with it
+///////////////////
+
 
 InvisibleHandleColor:    0.70  0.00  0.00        // See rows/columns in Torus SOP
 VisibleHandleColor:      0.00  0.50  0.50
 ActiveHandleColor:       fg_dim
 
-// Flag Buttons group and node tiles and listers 
+
+//////////////////
+// Flag Buttons // group and node tiles and listers
+//////////////////
+
+
+// These may be obsolete
 
 SelectOnColor:                           0.75  0.75  0
 SelectOffColor:                          0.56  0.56  0
@@ -721,7 +819,11 @@ ExposeOnColor:                           1     0     0
 ExposeOffColor:                          0.6   0     0
 CurrentColor:                            0.25  0.85  0.25
 
-// Split Bar
+
+///////////////
+// Split Bar //
+///////////////
+
 
 SplitBarBackground:         button_bg   // bg
 SplitBarEdgeColor:          separator   // grabber
@@ -732,7 +834,11 @@ SplitBarGrippyColor:        separator
 SplitBarHighlight:          fg_dim
 SplitBarHighlight2:         fg_dim
 
-// Playbar
+
+/////////////
+// Playbar //
+/////////////
+
 
 PlayBarOnColor:                          0.05  0.8   0.05
 PlayBarOffColor:                         0.25  0.25  0.25
@@ -746,7 +852,11 @@ PlayBarAudioWaveColor:                   0.64  0.64  0.64
 PlayBarStartEndFieldBG:                  EDIT_BG
 PlayBarGStartEndFieldBG:                 GREY(0.125)
 
-// Info Button
+
+/////////////////
+// Info Button //
+/////////////////
+
 
 ErrorFlag:                               0.9  0.1  0.1
 WarningFlag:                             1    1    0
@@ -757,11 +867,21 @@ FilteredFlag:                            0.6  0.6  0.6
 
 NoSaveFlag:                              0.0  0.4  0.1
 
-// Shop viewer
+
+/////////////////
+// Shop viewer //
+/////////////////
+
 
 ShopViewTitleColor                       1.0 1.0   0.0
 
-// vop input/output labels
+
+/////////////////////////////
+// vop input/output labels //
+/////////////////////////////
+
+
+// These may be obsolete
 
 VopInOutVectorColor:                     #60C279
 VopInOutVectorArrayColor:                #448C69
@@ -792,7 +912,11 @@ VopErrorColor:                           error
 VopInOutDictColor:                       #D29628
 VopInOutDictArrayColor:                  #B5700A
 
-// Shop input/output labels
+
+//////////
+// Shop // input/output labels
+//////////
+
 
 ShopInOutSurfaceColor:                   #e5b299
 ShopInOutShadowColor:                    #33334c
@@ -805,7 +929,11 @@ ShopInOutShaderColor:                    #e5e5e5
 ShopInOutImage3dColor:                   #66e5b2
 ShopInOutImage3dArrayColor:              #4cb299
 
-// Dop input/output labels
+
+/////////
+// Dop // input/output labels
+/////////
+
 
 DopInOutObjectColor:                     #a5a5a5
 DopInOutDataColor:                       #7fcc7f
@@ -813,7 +941,11 @@ DopInOutRelDataColor:                    #339933
 DopInOutSolverColor:                     #b27fe5
 DopInOutAnyColor:                        #e5e5e5
 
-// Top graph nodes
+
+/////////
+// Top // graph nodes
+/////////
+
 
 TopInOutColor_file:                      #919191
 TopInOutColor_file/image:                #55D2C5
@@ -823,12 +955,20 @@ TopInOutColor_file/movie:                #5AAA00
 TopInOutColor_file/archive:              #BEC43F
 TopInOutColor_nonfile:                   #D05ADD
 
-// Simple spreadsheet (ie. tables)
+
+////////////////////////
+// Simple spreadsheet // (ie. tables)
+////////////////////////
+
 
 SSTableBackgroundColor:                  0.9    0.9    0.9
 SSTableSelectedColor:                    0.125  0.125  1.0
 
-// Parameter spreadsheet
+
+///////////////////////////
+// Parameter spreadsheet //
+///////////////////////////
+
 
 ParmSheetEmptyColor:                     0.65   0.65   0.65
 ParmSheetHeaderColor:                    0.60   0.60   0.60
@@ -837,7 +977,11 @@ ParmSheetHeaderColor:                    0.60   0.60   0.60
 
 HyperTextLinkColor:                      1.0  0.0  1.0
 
-// Old op hilite colors
+
+//////////////////////////
+// Old op hilite colors //
+//////////////////////////
+
 
 // Following used to hilite names of operators that have
 // a given property (e.g. modified parameters)
@@ -857,13 +1001,21 @@ OpNameSubnetColor:                       HSV 240 0.3 1
 ParmTitleBarNumSelectedColor: 1.0   1.0   0.0  // parm titlebar fg, sel node count
 AutoTakeModeColor:            0.40  0.70  0.40 // take label
 
-// Operator type manager
+
+///////////////////////////
+// Operator type manager //
+///////////////////////////
+
 
 OTLUnusedColor:                          0.70    0.10    0.10
 OTLOutOfDateColor:                       0.70    0.70    0.10
 OTLPreferredColor:                       0.20    0.70    0.20
 
-// Simulation tree
+
+/////////////////////
+// Simulation tree //
+/////////////////////
+
 
 SIMAltRepColor:                          0.20    0.70    0.20
 SIMObjectColor:                          0.00    0.00    0.00
@@ -878,29 +1030,49 @@ SIMAffectorColor:                        0.10    0.10    0.60
 SIMMutualColor:                          0.20    0.70    0.20
 SIMAlmostMutualColor:                    0.70    0.70    0.10
 
-// Linker tree view
+
+//////////////////////
+// Linker tree view //
+//////////////////////
+
 
 LinkerPartialLinkColor:                  GREY(0.8)
 
-// Network editor list mode
+
+//////////////////////////////
+// Network editor list mode //
+//////////////////////////////
+
 
 OpListHeaderBGColor:                     GREY(0.7)
 OpListSplitterColor:                     black
 OpListSelectionBGColor:                  fg_dim
 OpListSelectionFGColor:                  white
 
-// File dependency dialog
+
+////////////////////////////
+// File dependency dialog //
+////////////////////////////
+
 
 FileDepAcceptColor:                      0.0  1.0  0.0
 FileDepRejectColor:                      1.0  0.0  0.0
 
-// Shaded pick box
+
+/////////////////////
+// Shaded pick box //
+/////////////////////
+
 
 ShadedPickOutline:                       red
 ShadedPickInnerLine:                     0.3  0.3  0.3
 ShadedPickFill:                          0.2  0.2  0.2
 
-// Hotkey
+
+////////////
+// Hotkey //
+////////////
+
 
 HiliteTextColor:                         fg_lite          // fg key assigned in current context
 KeyCapUnavailableFill:                   #151515       // bg key non-bindable
@@ -927,7 +1099,11 @@ CmdKeyFill:                              #BBAB28
 CmdKeyHilite:                            #DBCB48
 HotkeyMgrUnboundActionFG:                red
 
-// USD
+
+/////////
+// USD //
+/////////
+
 
 UsdLocationHasArcs                       #3E9E2E
 UsdLocationIsInstance                    #87CEFA

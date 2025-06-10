@@ -1,7 +1,11 @@
 #include "NodeGraphCommon.inc"
 #include "hou-theme-colors.inc"
 
+
+////////////////////////
 // Wires & Connectors //
+////////////////////////
+
 
 GraphConnector:                     #605000            // connector
 GraphConnectorLabel:                GREY(0.70)         // connector label
@@ -27,7 +31,11 @@ GraphDependencyEndAffector:         #668E4A            // dependency
 GraphDependencyExternalIn:          GREY(0.8)          // dependency
 GraphDependencyExternalOut:         GREY(0.8)          // dependency
 
+
+///////////////
 // Selection //
+///////////////
+
 
 GraphPickFill:                      #aa9000            // drag selection bg
 GraphPreSelection:                  0.75 0.86 1.0      // item pre selection
@@ -39,7 +47,11 @@ GraphItemContentsSelection:         red                // item selection content
 GraphSnapLine:                      #5C704D            // item snap line
 GraphDotPinAccent:                  GREY(0.3)          // dot accent
 
-// General
+
+/////////////
+// General //
+/////////////
+
 
 GraphBackground:                    #000000            // bg
 GraphPromptText:                    #404040
@@ -60,7 +72,11 @@ GraphIndirectTextDark:              black
 GraphItemBorder:                    green
 GraphMinimizeButton:                GREY(0.8)
 
+
+//////////////
 // Palettes //
+//////////////
+
 
 PaletteBackground:                  lite               // palette bg
 PaletteSelected:                    yellow             // palette selected
@@ -69,20 +85,32 @@ GraphOverviewBackground:            GREY(0.10)         // overview bg
 GraphOverviewViewRegion:            0.5 0.3 0.5        // overview region
 GraphOverviewBorder:                black              // overview border
 
+
+//////////////
 // BG Image //
+//////////////
+
 
 BackgroundImageLocate:              white
 BackgroundImageBorder:              yellow
 BackgroundImageBrightness:          yellow
 BackgroundImageLink:                GREY(0.8)
 
+
+//////////////////
 // Overlay Text //
+//////////////////
+
 
 GraphOverlayLeftText:               0.2 0.9 0.9
 GraphOverlayCenterText:             #a0a0a0
 GraphOverlayRightText:              #a0a0a0
 
+
+///////////
 // Flags //
+///////////
+
 
 GraphTemplateFlag:                  node_flag          // flag template
 GraphSelectableTemplateFlag:        node_flag          // flag selectable template
@@ -110,14 +138,21 @@ GraphTemplateHighlight:             node_circle        // circle hilite template
 GraphFilterHighlight:               node_circle        // circle hilite filder
 
 
+////////////
 // Subnet //
+////////////
+
 
 GraphSubnetShadow1:                 mud                // subnet shadow1
 GraphSubnetShadowBlend1:            0.9                // subnet shadow1 blend
 GraphSubnetShadow2:                 mud                // subnet shadow2
 GraphSubnetShadowBlend2:            0.9                // subnet shadow2 blend
 
+
+////////////
 // Flyout //
+////////////
+
 
 GraphFlyoutBackgroundFlagOn:        black              // flyout
 GraphFlyoutBackgroundFlagOff:       black              // flyout
@@ -126,7 +161,11 @@ GraphFlyoutInfo:                    GREY(0.1)          // flyout
 GraphFlyoutWarning:                 0.2 0.2 0.0        // flyout
 GraphFlyoutError:                   0.2 0.0 0.0        // flyout
 
+
+////////////
 // Badges //
+////////////
+
 
 GraphErrorBadgeDot:                 red                // badge error
 GraphChildErrorBadgeDot:            1.00 0.00 0.00     // badge child error
@@ -157,9 +196,9 @@ GraphDiveableBadgeDot:              #73d216            // badge diveable
 GraphLoadFromDiskBadgeDot:          #dceefaff          // badge load from disk
 
 
-//                                   //
-// Network contexts from here to end //
-//                                   //
+//////////////////////
+// Network Contexts //
+//////////////////////
 
 // COP
 
