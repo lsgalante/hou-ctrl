@@ -9,18 +9,13 @@ class State(object):
         "title": "layout",
         "rows": [
             {"id": "mode", "label": "mode", "key": "M"},
-
             {"id": "divider", "type":  "divider"},
-
             {"id": "hud", "label": "hud"},
             {"id": "hud_g", "type": "choicegraph"},
-
             {"id": "layout", "label": "layout"},
             {"id": "layout_g", "type": "choicegraph"},
-
             {"id": "viewport_index", "label": "viewport_index"},
             {"id": "viewport_index_g", "type": "choicegraph"},
-
             {"id": "set_view", "label": "set_view"},
             {"id": "set_view_g", "type": "choicegraph"}
         ]
@@ -31,10 +26,8 @@ class State(object):
         "rows": [
             {"id": "mode", "label": "mode", "key": "M"},
             {"id": "divider", "type": "divider"},
-
             {"id": "hud", "label": "hud"},
             {"id": "hud_g", "type": "choicegraph"},
-
             {"id": "target", "label": "target"},
             {"id": "target_g", "type": "choicegraph"}
         ]
@@ -45,15 +38,11 @@ class State(object):
         "rows": [
             {"id": "mode" ,  "label": "mode", "key": "M"},
             {"id": "divider", "type": "divider"},
-
             {"id": "hud", "label": "hud"},
             {"id": "hud_g", "type" : "choicegraph"},
-
             {"id": "r", "label": "r_delta"},
             {"id": "t", "label": "t_delta"},
-
             {"id": "dist", "label": "dist_delta"},
-
             {"id": "ow", "label": "ow_delta"}
         ]
     }
@@ -63,10 +52,8 @@ class State(object):
         "rows": [
             {"id": "mode", "label": "mode", "key": "M"},
             {"id": "divider", "type": "divider"},
-
             {"id": "hud", "label": "hud"},
             {"id": "hud_g", "type": "choicegraph"},
-
             {"id": "vis", "label": "vis"}
         ]
     }
@@ -76,12 +63,9 @@ class State(object):
         "rows": [
             {"id": "mode", "label": "mode", "key": "M"},
             {"id": "divider", "type":  "divider"},
-
             {"id": "hud", "label": "hud"},
             {"id": "hud_g", "type":  "choicegraph"},
-
             # {"id": "attr", "label": "attr", "value": "partition"},
-
             {"id": "focus", "label": "focus", "value": 0},
             {"id": "focus_g", "type":  "choicegraph", "count": 10}
         ]
@@ -147,33 +131,28 @@ class State(object):
 
         self.hud_state = {}
 
-
         self.layout_hud_state={
             "controls": ("hud", "layout", "viewport_index", "set_view"),
             "control": "hud",
-
             "huds": ("layout", "movement", "delta", "vis", "focus"),
             "hud": "layout",
-
             # layouts: DoubleSide, DoubleStack, Quad, QuadBottomSplit, QuadLeftSplit, Single, TripleBottomSplit, TripleLeftSplit
             "layouts": ("Single", "DoubleSide", "TripleLeftSplit", "Quad"),
             "layout": "Single",
-
             "viewport_indexs": ("0"),
             "viewport_index": "0",
-
             "set_views": ("top", "bottom", "left", "right", "front", "back", "persp", "none"),
             "set_view": "persp"
 
         }
+
         self.hud_state = self.layout_hud_state
+
         self.movement_hud_state={
             "controls": ("hud", "target"),
             "control": "hud",
-
             "huds": ("layout", "movement", "delta", "vis", "focus"),
             "hud": "layout",
-
             "targets": ("cam", "pivot"),
             "target": "cam"
         }
@@ -181,10 +160,8 @@ class State(object):
         self.delta_hud_state={
             "controls": ("hud", "rot", "tr", "dist", "ow"),
             "control": "hud",
-
             "huds": ("layout", "movement", "delta", "vis", "focus"),
             "hud": "layout",
-
             "r": self.units["r"],
             "t": self.units["t"],
             "ow": self.units["ow"],
@@ -194,10 +171,8 @@ class State(object):
         self.vis_hud_state={
             "controls": ("hud"),
             "control": "hud",
-
             "huds": ("layout", "movement", "delta", "vis", "focus"),
             "hud": "layout",
-
             "vis_arr": ("test1", "test2", "test3"),
             "vis": "test1"
         }
@@ -205,10 +180,8 @@ class State(object):
         self.focus_hud_state={
             "controls": ("hud", "attr", "focus"),
             "control": "hud",
-
             "huds": ("layout", "movement", "delta", "vis", "focus"),
             "hud": "layout",
-
             "focuss": ("test1", "test2", "test3"),
             "focus": "test1"
         }
