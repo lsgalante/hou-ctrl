@@ -7,8 +7,6 @@ import hctl_utils as hcu
 from importlib import reload
 
 
-
-
 class filterBox(QLineEdit):
     key_ctl_n = QtCore.Signal()
     key_ctl_p = QtCore.Signal()
@@ -17,23 +15,21 @@ class filterBox(QLineEdit):
 
     # Input event
     def event(self, event):
-
         # Key press
         if event.type() == QtCore.QEvent.Type.KeyPress:
             key = event.key()
             mods = event.modifiers()
 
-            # Single keys
+            # Single keypress
             if key == Qt.Key_Up:
                 self.key_ctl_p.emit()
                 return True
             elif key == Qt.Key_Down:
                 self.key_ctl_n.emit()
                 return True
-            
-            # Keys with Modifiers
-            else:
 
+            # Modifier keypress
+            else:
                 if platform.system() == "Darwin": # macos
                     if key == Qt.Key_N and mods == Qt.MetaModifier:
                         self.key_ctl_n.emit()
@@ -41,7 +37,7 @@ class filterBox(QLineEdit):
                     elif key == Qt.Key_P and mods == Qt.MetaModifier:
                         self.key_ctl_p.emit()
                         return True
-                else: # linux
+                else: # Linux
                     if key == Qt.Key_N and mods == Qt.ControlModifier:
                         self.key_ctl_n.emit()
                         return True
@@ -72,7 +68,10 @@ class dialog(QDialog):
         self.currentContext = self.currentPaneTab.type()
 
         
-        ###
+
+        #############
+        # Top Frame #
+        #############
 
         
         # Tab type Menu
@@ -130,7 +129,12 @@ class dialog(QDialog):
         self.topFrame.setFrameShape(QFrame.Panel)
         self.topFrame.setLineWidth(1)
         self.topFrame.setLayout(topFrameLayout)
-        self.topFrame.setFixedHeight(160)
+        self.topFrame.setFixedHeight(top_frame_h)
+
+
+        ################
+        # Bottom Frame #
+        ################
 
             
         # Filter Box Widget
@@ -143,7 +147,7 @@ class dialog(QDialog):
         self.filterBox.returnPressed.connect( self.execAction )
 
         
-        # Function List
+        # Populate Function List
         self.items = []
         # hcu functions
         funcs = inspect.getmembers(hcu)
@@ -166,38 +170,52 @@ class dialog(QDialog):
         self.functionList.setFocusPolicy(Qt.StrongFocus)
 
         
-        # Bottom Frame Layout
+        # Layout
         bottomFrameLayout = QVBoxLayout()
         bottomFrameLayout.addWidget(self.filterBox)
         bottomFrameLayout.addWidget(self.functionList)
 
         
-        # Bottom Frame
+        # Widget
         self.bottomFrame = QFrame()
         self.bottomFrame.setFrameShape(QFrame.Panel)
         self.bottomFrame.setLineWidth(1)
         self.bottomFrame.setLayout(bottomFrameLayout)
 
+
+        ###############
+        # Main Layout #
+        ###############
         
-        # Layout
+        
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.topFrame)
         self.layout.addWidget(self.bottomFrame)
         self.setLayout(self.layout)
         self.listSetIndex(0)
 
-        
-        # Size
+        # Window Appearance
         self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint)
         self.resize(600, 300)
         self.setWindowTitle("hctl")
         self.filterBox.setFocus()
+
+        
+
+    #############
+    # Listeners #
+    #############
         
             
     def closeEvent(self, event):
         print("closing")
         self.setParent(None)
 
+
+    ###########
+    # Helpers #
+    ###########
+    
         
     def execAction(self):
         items = self.listGetItems()

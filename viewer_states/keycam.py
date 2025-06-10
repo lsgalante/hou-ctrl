@@ -8,18 +8,18 @@ class State(object):
         "title": "layout",
         "rows": [
             {"id": "mode", "label": "mode", "key": "M"},
-            
+
             {"id": "divider", "type":  "divider"},
-            
+
             {"id": "hud", "label": "hud"},
             {"id": "hud_g", "type": "choicegraph"},
-            
+
             {"id": "layout", "label": "layout"},
             {"id": "layout_g", "type": "choicegraph"},
-            
+
             {"id": "viewport_index", "label": "viewport_index"},
             {"id": "viewport_index_g", "type": "choicegraph"},
-            
+
             {"id": "set_view", "label": "set_view"},
             {"id": "set_view_g", "type": "choicegraph"}
         ]
@@ -30,10 +30,10 @@ class State(object):
         "rows": [
             {"id": "mode", "label": "mode", "key": "M"},
             {"id": "divider", "type": "divider"},
-            
+
             {"id": "hud", "label": "hud"},
             {"id": "hud_g", "type": "choicegraph"},
-            
+
             {"id": "target", "label": "target"},
             {"id": "target_g", "type": "choicegraph"}
         ]
@@ -44,15 +44,15 @@ class State(object):
         "rows": [
             {"id": "mode" ,  "label": "mode", "key": "M"},
             {"id": "divider", "type": "divider"},
-            
+
             {"id": "hud", "label": "hud"},
             {"id": "hud_g", "type" : "choicegraph"},
-            
+
             {"id": "r", "label": "r_delta"},
             {"id": "t", "label": "t_delta"},
-            
+
             {"id": "dist", "label": "dist_delta"},
-            
+
             {"id": "ow", "label": "ow_delta"}
         ]
     }
@@ -62,10 +62,10 @@ class State(object):
         "rows": [
             {"id": "mode", "label": "mode", "key": "M"},
             {"id": "divider", "type": "divider"},
-            
-            {"id": "hud", "label": "hud"},          
+
+            {"id": "hud", "label": "hud"},
             {"id": "hud_g", "type": "choicegraph"},
-            
+
             {"id": "vis", "label": "vis"}
         ]
     }
@@ -75,16 +75,17 @@ class State(object):
         "rows": [
             {"id": "mode", "label": "mode", "key": "M"},
             {"id": "divider", "type":  "divider"},
-            
+
             {"id": "hud", "label": "hud"},
             {"id": "hud_g", "type":  "choicegraph"},
-            
+
             # {"id": "attr", "label": "attr", "value": "partition"},
-            
+
             {"id": "focus", "label": "focus", "value": 0},
             {"id": "focus_g", "type":  "choicegraph", "count": 10}
         ]
     }
+
 
     def __init__(self, state_name, scene_viewer):
         # General Variabls
@@ -106,7 +107,7 @@ class State(object):
         self.global_x = hou.Vector3(1, 0, 0)
         self.global_y = hou.Vector3(0, 1, 0)
         self.global_z = hou.Vector3(0, 0, 1)
-        
+
         # util dicts
         self.guides={
             "axis_size": 1,
@@ -188,12 +189,12 @@ class State(object):
         }
         self.initGuides()
 
-        
+
     #############
     # Listeners #
     #############
 
-    
+
     def onDraw(self, kwargs):
         handle = kwargs["draw_handle"]
         self.guideAxisCam.draw(handle, {})
@@ -204,7 +205,6 @@ class State(object):
         self.guideRay.draw(handle, {})
         self.guideText.draw(handle, {})
 
-        
     def onGenerate(self, kwargs):
         # Prevent exiting the state when node selection is changed.
         kwargs["state_flags"]["exit_on_node_select"] = False
@@ -217,7 +217,6 @@ class State(object):
         self.initSettings()
         self.camFrame()
 
-        
     def onKeyEvent(self, kwargs):
         key = kwargs["ui_event"].device().keyString()
         self.log("keycam key press event: " + key)
@@ -341,9 +340,9 @@ class State(object):
                 elif key == "f":       # Frame
                     self.camFrame()
                     return True
-                
+
                 self.stateToCam()
-                
+
             else: # Cam is default
                 cam = viewport.defaultCamera()
                 t = list(cam.translation())
@@ -380,7 +379,7 @@ class State(object):
         else:
             return False
 
-        
+
     def onMenuAction(self, kwargs):
         item = kwargs["menu_item"]
         if item == "cam_frame":
@@ -408,10 +407,6 @@ class State(object):
         self.updateGuides()
         self.stateToCam()
 
-        
-    #############################
-    # Array Traversal Functions #
-    #############################
 
     
     def arrNext(self, arr, sel):
@@ -430,7 +425,6 @@ class State(object):
     # Camera Manipulation Functions #
     #################################
 
-    
     def camFrame(self):
         centroid = self.getGeoCentroid()
         bbox = self.getGeoBbox()
@@ -469,7 +463,7 @@ class State(object):
         self.pr = list(self.cam.evalParmTuple("pr"))
         self.ow = self.cam.evalParm("orthowidth")
 
-        
+
     def camReset(self):
         self.P_cam = hou.Vector3(0, 0, 0)
         self.P_pivot = hou.Vector3(0, 0, 0)
@@ -483,7 +477,7 @@ class State(object):
         self.stateToCam()
         self.updateGuides()
 
-        
+
     def camRotate(self, axis_name, deg):
         axis = None
         if axis_name == "x":
@@ -503,7 +497,7 @@ class State(object):
         self.local_z *= m
         self.stateToCam()
 
-        
+
     def camTranslate(self, axis_name, amt):
         axis = None
         if axis_name == "x":
@@ -516,7 +510,7 @@ class State(object):
         self.P_cam += move
         self.stateToCam()
 
-        
+
     def camZoom(self, amt):
         move = hou.Vector3(0, 0, 0)
         move = self.local_z * amt
@@ -740,11 +734,10 @@ class State(object):
             self.camReset()
         else:
             self.camToState()
-            
+
         # keycam node display flag.
         self.cam.setDisplayFlag(self.guides["cam_geo"])
 
-        
     def setView(self):
         set_view = self.layout_state["set_view"]
         r = None
@@ -762,14 +755,14 @@ class State(object):
             r = (0, 270, 0)
         #self.r = hou.Vector3(r)
         self.stateToCam()
-        
+
 
     def setFocusAttr(self):
         attr = hou.ui.readInput(
             "focus_attr",
             buttons=("OK", "Cancel"),
             initial_contents=self.hud_state_focus["focus_attr"])
-        
+
         if attr[0] == 0:
             self.focus_state["focus_attr"] = attr[1]
 
@@ -850,7 +843,6 @@ class State(object):
 
     def updateContext(self):
         node = self.sceneViewer.pwd()
-
         self.context = node.type().name()
 
         
@@ -1091,7 +1083,6 @@ class State(object):
                 # Set the number of bars in the graph.
                 hud_state["rows"][i]["count"] = len(arr)
 
-            
     def viewportFrame(self):
         for viewport in self.sceneViewer.viewports():
             cam = viewport.camera()
@@ -1102,7 +1093,7 @@ class State(object):
                 viewport.frameAll()
         self.camToState()
 
-        
+
     def viewportSwap(self):
         viewports = self.sceneViewer.viewports()
         viewport_names = [viewport.name() for viewport in viewports]

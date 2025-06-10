@@ -7,13 +7,10 @@ import hctl_resize
 import hctl_bindings
 
 
-#         #
+
+###########
 # Desktop #
-
-def desktopEvalColorSchemes():
-    hou.ui.reloadColorScheme()
-desktopEvalColorSchemes.interactive_contexts = ["all"]
-
+###########
 
 def desktopGetNetworkEditors():
     tabs = hou.ui.paneTabs()
@@ -43,11 +40,17 @@ def desktopSceneSetA():
     paneTabOnly()
     panes = hou.ui.curDesktop().panes()
     # panes[0].tabs()[0].setPin(False)
+
+    # Main center split
     panes[0].splitHorizontally()
     panes = hou.ui.curDesktop().panes()
     panes[0].setSplitFraction(0.6)
+
+    # Left vertical split
     panes[0].splitVertically()
     panes[0].setSplitFraction(0.2)
+
+    # Right vertical split
     panes[1].splitVertically()
     panes[1].setSplitFraction(0.666)
 
@@ -453,7 +456,6 @@ def paneToggleSplitMaximized():
 paneToggleSplitMaximized.interactive_contexts = ["all"]
 
 
-## Panetab
 
 def paneTabClose():
     paneTab = hou.ui.paneTabUnderCursor()
@@ -545,8 +547,13 @@ def paneTabTogglePin():
     paneTab.setPin(not paneTab.isPin())
 paneTabTogglePin.interactive_contexts = ["all"]
 
-        
-## Print
+
+
+#########
+# Print #
+#########
+
+
     
 def printLayout():
     message = "Layout:"
@@ -566,7 +573,6 @@ def printLayout():
 printLayout.interactive_contexts = ["all"]
 
 
-## Scene Viewer
 
 def sceneViewerGetDisplaySets():
     displaySets = []
