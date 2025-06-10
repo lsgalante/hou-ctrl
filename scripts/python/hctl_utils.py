@@ -15,31 +15,26 @@ import time
 
 
 
-def desktopGetSceneViewers():
-    tabs  = hou.ui.paneTabs()
-    sceneViewers = [tab for tab in tabs if tab.type() == hou.paneTabType.SceneViewer]
-    return sceneViewers
-desktopGetSceneViewers.interactive_contexts = ["none"]
+def desktopEvalColorSchemes(*args):
+    hou.ui.reloadColorScheme()
+desktopEvalColorSchemes.interactive_contexts = ["all"]
 
 
-def desktopGetViewports():
-    viewports = []
-    sceneViewers = getSceneViewers()
-    for sceneViewer in sceneViewers:
-        for viewport in sceneViewer.viewports():
-            viewports.append(viewport)
-desktopGetViewports.interactive_contexts = ["none"]
 
+def desktopLayoutA(paneTab):
+    pane = paneTab.pane()
+    # Close all panes but one
+    paneOnly(pane)
+    # Close all tabs but one
+    paneTabOnly(paneTab)
 
-def desktopSceneSetA():
-    paneOnly()
-    paneTabOnly()
-    panes = hou.ui.curDesktop().panes()
+    # There should be only 1 pane at this point
+    panes = desktopPanes()
     # panes[0].tabs()[0].setPin(False)
 
     # Main center split
     panes[0].splitHorizontally()
-    panes = hou.ui.curDesktop().panes()
+    panes = desktopPanes()
     panes[0].setSplitFraction(0.6)
 
     # Left vertical split
@@ -49,17 +44,51 @@ def desktopSceneSetA():
     # Right vertical split
     panes[1].splitVertically()
     panes[1].setSplitFraction(0.666)
-
-    paneTabs = [pane.tabs()[0] for pane in hou.ui.curDesktop().panes()]
-    paneTabs[0].setType(hou.paneTabType.SceneViewer)
-    paneTabs[1].setType(hou.paneTabType.DetailsView)
-    paneTabs[2].setType(hou.paneTabType.Parm)
-    paneTabs[3].setType(hou.paneTabType.NetworkEditor)
+    
+    paneTabs = desktopPaneTabs()
+    paneTabs[0].setType(hou.paneTabType.SceneViewer) # Top left
+    paneTabs[1].setType(hou.paneTabType.DetailsView) # Bas left
+    paneTabs[2].setType(hou.paneTabType.Parm) # Top right
+    paneTabs[3].setType(hou.paneTabType.NetworkEditor) # Bas right
     # paneTabs[3].setPin(True)
-    desktopToggleMenus()
+    # desktopToggleMenus()
     desktopToggleStowbars()
     desktopToggleStowbars()
-desktopSceneSetA.interactive_contexts = ["all"]
+desktopLayoutA.interactive_contexts = ["all"]
+
+
+
+def desktopLayoutB(paneTab):
+    paneOnly()
+    paneTabOnly()
+
+    panes = desktopPanes()
+    panes[0].tabs()[0].setType(hou.paneTabType.PythonShell)
+    panes[0].splitHorizontally()
+
+    panes = desktopPanes()
+    panes[0].splitVertically()
+    panes[1].splitVertically()
+
+    panes = desktopPanes()
+    panes[0].tabs()[0].setType(hou.paneTabType.SceneViewer) # Top left
+    panes[1].tabs()[0].setType(hou.paneTabType.Parm)
+desktopLayoutB.interactive_contexts = ["all"]
+
+
+
+def desktopLayoutQuad(paneTab):
+    paneOnly(paneTab)
+    paneTabOnly(paneTab)
+
+    panes = desktopPanes()
+    panes[0].tabs()[0].setType(hou.paneTabType.PythonShell)
+    panes[0].splitHorizontally()
+
+    panes = desktopPanes()
+    panes[0].splitVertically()
+    panes[1].splitVertically()
+desktopLayoutQuad.interactive_contexts = ["all"]
 
 
 def desktopShelfHide():
@@ -69,13 +98,25 @@ def desktopShelfHide():
 desktopShelfHide.interactive_contexts = ["none"]
 
 
-def desktopShelfShow():
+
+def desktopShelfShow(*args):
     desktop = hou.ui.curDesktop()
     desktop.shelfDock().show(1)
 desktopShelfShow.interactive_contexts = ["none"]
 
 
-def desktopToggleMainMenuBar():
+
+def desktopPaneTabs(*args):
+    paneTabs = []
+    for pane in desktopPanes():
+        for paneTab in pane.tabs():
+            paneTabs.append(paneTab)
+    return paneTabs
+desktopPaneTabs.interactive_contexts = ["none"]
+
+
+
+def desktopToggleMainMenuBar(*args):
     if hou.getPreference("showmenu.val") == "1":
         hou.setPreference("showmenu.val", "0")
     else:
@@ -83,8 +124,9 @@ def desktopToggleMainMenuBar():
 desktopToggleMainMenuBar.interactive_contexts = ["all"]
 
 
-def desktopToggleMenus():
-    is_visible = 0
+
+def desktopToggleMenus(*args):
+    visible = 0
     # gather contexts
     networkEditors = desktopGetNetworkEditors()
     panes = hou.ui.curDesktop().panes()
@@ -140,7 +182,8 @@ def desktopToggleMenus():
 desktopToggleMenus.interactive_contexts = ["all"]
 
 
-def desktopToggleHctl():
+
+def desktopToggleHctl(*args):
     reload(hctl)
     hctl.dialog().show()
 desktopToggleHctl.interactive_contexts = ["all"]
@@ -168,43 +211,52 @@ def desktopTogglePaneTabs():
 desktopTogglePaneTabs.interactive_contexts = ["all"]
 
 
-def desktopToggleStowbars():
-    is_hidden = hou.ui.hideAllMinimizedStowbars()
-    hou.ui.setHideAllMinimizedStowbars(not is_hidden)
+
+def desktopToggleStowbars(*args):
+    hidden = hou.ui.hideAllMinimizedStowbars()
+    hou.ui.setHideAllMinimizedStowbars(not hidden)
 desktopToggleStowbars.interactive_contexts = ["all"]
 
 
-def desktopUpdateMainMenuBar():
+
+def desktopUpdateMainMenuBar(*args):
     hou.ui.updateMainMenuBar()
 desktopUpdateMainMenuBar.interactive_contexts = ["all"]
 
 
-## Network Editor
+
+def desktopViewports(*args):
+    viewports = []
+    sceneViewers = desktopSceneViewers()
+    for sceneViewer in sceneViewers:
+        for viewport in sceneViewer.viewports():
+            viewports.append(viewport)
+desktopViewports.interactive_contexts = ["none"]
 
 
-def networkEditorAddNetworkBox():
-    tab = hou.ui.paneTabUnderCursor()
-    if tab.type() == hou.paneTabType.NetworkEditor:
-        context = tab.pwd()
-        node = tab.currentNode()
-        networkBox = context.createNetworkBox()
-        networkBox.setPosition(node.position())
-    else:
-        hou.ui.setStatusMessage("Network editor not focused", hou.severityType.Error)
+
+##################
+# Network Editor #
+##################
+
+
+
+def networkEditorAddNetworkBox(editor):
+    context = editor.pwd()
+    node = editor.currentNode()
+    networkBox = context.createNetworkBox()
+    networkBox.setPosition(node.position())
 networkEditorAddNetworkBox.interactive_contexts = ["paneTabType.NetworkEditor"]
 
 
-def networkEditorAddStickyNote():
-    tab = hou.ui.paneTabUnderCursor()
-    if tab.type() == hou.paneTabType.NetworkEditor:
-        context = tab.pwd()
-        stickyNote = context.createStickyNote()
-        cursor_pos =  tab.cursorPosition()
-        stickyNote.setPosition(cursor_pos)
-        color = hou.Color(0.71, 0.784, 1.0)
-        stickyNote.setColor(color)
-    else:
-        hou.ui.setStatusMessage("Not a network editor", hou.severityType.Error)
+
+def networkEditorAddStickyNote(editor):
+    context = editor.pwd()
+    stickyNote = context.createStickyNote()
+    cursor_pos =  editor.cursorPosition()
+    stickyNote.setPosition(cursor_pos)
+    color = hou.Color(0.71, 0.784, 1.0)
+    stickyNote.setColor(color)
 networkEditorAddStickyNote.interactive_contexts = ["paneTabType.NetworkEditor"]
 
 
