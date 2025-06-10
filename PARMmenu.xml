@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menuDocument>
-    <menu>
-        <removeItem id="take_activate"/>
-        <removeItem id="lock_parm"/>
-        <removeItem id="unlock_parm"/>
-        <removeItem id="revert_factory_defs"/>
-        <removeItem id="set_curr_as_def"/>
-        <removeItem id="export_parm_type_props"/>
-        <scriptItem id="vector_set_x">
-            <label>Set to X</label>
-            <context>
-                <expression>len(kwargs["parms"])==3 and kwargs["parms"][0].parmTemplate().type()==hou.parmTemplateType.Float and kwargs["parms"][1].parmTemplate().type()==hou.parmTemplateType.Float and kwargs["parms"][2].parmTemplate().type()==hou.parmTemplateType.Float </expression>
-            </context>
-            <scriptCode><![CDATA[
-name = kwargs["parms"][0].name()
-name = name[:-1]
-node = kwargs["parms"][0].node()
-node.setParmExpressions({name+"x": 1, name+"y": 0, name+"z": 0})                    
+  <menu>
+    <removeItem id="take_activate"/>
+    <removeItem id="lock_parm"/>
+    <removeItem id="unlock_parm"/>
+    <removeItem id="revert_factory_defs"/>
+    <removeItem id="set_curr_as_def"/>
+    <removeItem id="export_parm_type_props"/>
+
+    <scriptItem id="vector_set_x">
+      <label>Set to X</label>
+      <context>
+        <expression><![CDATA[
+import hctl_menu_utils as hmu
+answer = hmu.vector3Test(kwargs)        
+return answer
+]]></expression>
+      </context>
+      <scriptCode><![CDATA[
+import hctl_menu_utils as hmu
+hmu.setVector3(kwargs, 1, 0, 0)
 ]]></scriptCode>
-        </scriptItem>
-        <scriptItem id="vector_lock">
-            <label>Lock Y and Z to X</label>
-            <context>
-                <expression>len(kwargs["parms"])==3 and kwargs["parms"][0].parmTemplate().type()==hou.parmTemplateType.Float and kwargs["parms"][1].parmTemplate().type()==hou.parmTemplateType.Float and kwargs["parms"][2].parmTemplate().type()==hou.parmTemplateType.Float </expression>
-            </context>
-            <scriptCode><![CDATA[
-name = kwargs["parms"][0].name()
-name = name[:-1]
-node = kwargs["parms"][0].node()
-node.setParmExpressions({name + "y": "ch('" + name + "x')", name + "z": "ch('" + name + "x')"})
+    </scriptItem>
+
+    <scriptItem id="vector_lock">
+      <label>Lock Y and Z to X</label>
+      <context>
+        <expression><![CDATA[
+import hctl_menu_utils as hmu
+answer = hmu.vector3Test(kwargs)
+return answer       
+]]></expression>
+      </context>
+      <scriptCode><![CDATA[
+import hctl_menu_utils as hmu
+hmu.vector3XMaster(kwargs)
 ]]></scriptCode>
-        </scriptItem
-    </menu>
+    </scriptItem>
+  </menu>
 </menuDocument>
