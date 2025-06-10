@@ -1062,13 +1062,14 @@ def sessionToggleAutoSave(*args):
 sessionToggleAutoSave.interactive_contexts = ["none"]
 
 
-## Viewport
 
-def viewportGetVisualizers():
-    viewport = paneTabGetCurrentViewport()
-    if viewport:
-        category = hou.viewportVisualizerCategory.Scene
-        vis_arr = hou.viewportVisualizers.visualizers(category)
-        return vis_arr
-    else:
-        return None 
+############
+# Viewport #
+############
+
+
+
+def viewportVisualizers(viewport):
+    category = hou.viewportVisualizerCategory.Scene
+    vis_arr = hou.viewportVisualizers.visualizers(category)
+    return vis_arr
