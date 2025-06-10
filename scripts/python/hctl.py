@@ -59,14 +59,25 @@ class dialog(QDialog):
 
         # States
         self.filePath = hou.hipFile.name()
-        self.currentPane = hou.ui.paneUnderCursor()
-        self.currentPaneTab = hou.ui.paneTabUnderCursor()
-        self.currentNetworkPath = hcu.paneTabGetPath()
-        self.currentNode = hcu.paneTabGetCurrentNode()
-        self.currentSceneViewer = hcu.paneTabGetSceneViewer()
-        self.currentViewport = hcu.paneTabGetCurrentViewport()
-        self.currentContext = self.currentPaneTab.type()
+        self.pane = hou.ui.paneUnderCursor()
+        self.paneTab = hou.ui.paneTabUnderCursor()
+        self.networkPath = hcu.paneTabPath(self.paneTab)
+        self.node = hcu.paneTabCurrentNode(self.paneTab)
+        # self.sceneViewer = hcu.paneTabSceneViewer(self.paneTab)
+        # self.viewport = hcu.paneTabCurrentViewport(self.paneTab)
+        self.context = self.paneTab.type()
 
+        # Variables
+        self.pane_tab_types = (hou.paneTabType.ApexEditor, hou.paneTabType.CompositorViewer, hou.paneTabType.DetailsView, hou.paneTabType.NetworkEditor, hou.paneTabType.Parm, hou.paneTabType.PythonPanel, hou.paneTabType.PythonShell, hou.paneTabType.SceneViewer, hou.paneTabType.Textport)
+        self.pane_tab_type_names = ("ApexEditor", "CompositorViewer", "DetailsView", "NetworkEditor", "Parm", "PythonPanel", "PythonShell", "SceneViewer", "Textport")
+
+        self.paneTabs = self.pane.tabs()
+        self.pane_tab_names = [paneTab.name() for paneTab in self.paneTabs]
+        self.pane_tab_labels = []
+        for paneTab in self.paneTabs:
+            index = self.pane_tab_types.index(paneTab.type())
+            label = self.pane_tab_type_names[index]
+            self.pane_tab_labels.append(label)
         
 
         #############
@@ -75,14 +86,19 @@ class dialog(QDialog):
 
         
         # Tab type Menu
-        self.tabTypeMenu = QtWidgets.QComboBox()
-        tab_types = ["ApexEditor", "DetailsView", "NetworkEditor", "Parm", "PythonPanel", "PythonShell", "SceneViewer", "Textport"]
-        self.tabTypeMenu.addItems(tab_types)
-        key = str(self.currentContext)
+        self.paneTabTypeMenu = QtWidgets.QComboBox()
+        self.paneTabTypeMenu.addItems(self.pane_tab_type_names)
+        key = str(self.context)
         key = key.lstrip("paneTabType")
         key = key.lstrip(".")
-        self.tabTypeMenu.setCurrentIndex(tab_types.index(key))
-        self.tabTypeMenu.activated.connect(self.tabTypeChange)
+        self.paneTabTypeMenu.setCurrentIndex(self.pane_tab_type_names.index(key))
+        self.paneTabTypeMenu.activated.connect(self.paneTabTypeChange)
+
+        
+        # Tab Menu
+        self.paneTabMenu = QtWidgets.QComboBox()
+        self.paneTabMenu.addItems(self.pane_tab_labels)
+        self.paneTabMenu.activated.connect(self.paneTabChange)
 
         
         # Autosave
@@ -109,10 +125,10 @@ class dialog(QDialog):
         topFrameLayout.addWidget(autoSaveCheckBox,            4, 0)
         topFrameLayout.addWidget(pinCheckBox,                 5, 0)
         
-        topFrameLayout.addWidget(QLabel(self.filePath),           0, 1)
-        topFrameLayout.addWidget(QLabel(self.currentNetworkPath), 1, 1)
-        topFrameLayout.addWidget(QLabel(str(self.currentNode)),   2, 1)
-        topFrameLayout.addWidget(self.tabTypeMenu,                3, 1)
+        topFrameLayout.addWidget(QLabel(self.filePath), 0, 1)
+        topFrameLayout.addWidget(QLabel(self.networkPath + "/" + str(self.node)), 1, 1)
+        topFrameLayout.addWidget(self.paneTabTypeMenu, 2, 1)
+        topFrameLayout.addWidget(self.paneTabMenu, 3, 1)
 
         top_frame_h = 160
         row_h = top_frame_h / 5
@@ -280,19 +296,16 @@ class dialog(QDialog):
         self.listSetIndex(index)
 
 
-    def tabTypeChange(self):
-        index = self.tabTypeMenu.currentIndex()
-        if index == 0:
-            self.currentPaneTab = self.currentPaneTab.setType(hou.paneTabType.ApexEditor)
-        elif index == 1:
-            self.currentPaneTab = self.currentPaneTab.setType(hou.paneTabType.DetailsView)
-        elif index == 2:
-            self.currentPaneTab = self.currentPaneTab.setType(hou.paneTabType.NetworkEditor)
-        elif index == 3:
-            self.currentPaneTab = self.currentPaneTab.setType(hou.paneTabType.Parm)            
-        elif index == 4:
-            self.currentPaneTab = self.currentPaneTab.setType(hou.paneTabType.PythonPanel)
-        elif index == 5:
-            self.currentPaneTab = self.currentPaneTab.setType(hou.paneTabType.PythonShell)
-        elif index == 6:
-            self.currentPaneTab = self.currentPaneTab.setType(hou.paneTabType.SceneViewer)
+    def paneTabChange(self):
+        index = self.tabMenu.currentIndex()
+        paneTab = self.paneTabs[index]
+        paneTab.setIsCurrentTab()
+
+
+    def paneTabTogglePin(self):
+        hcu.paneTabTogglePin(self.paneTab)
+
+
+    def paneTabTypeChange(self):
+        index = self.paneTabTypeMenu.currentIndex()
+        self.paneTab.setType(self.pane_tab_types[index])
