@@ -486,22 +486,23 @@ networkEditorToggleGridPoints.interactive_contexts = ["all"]
 
 
 
-def openColorEditor():
+def openColorEditor(*args):
     hou.ui.selectColor()
 openColorEditor.interactive_contexts = ["all"]
 
 
-def openFloatingParameterEditor():
-    tab = hou.ui.paneTabUnderCursor()
-    if tab.type() == hou.paneTabType.NetworkEditor:
-        node = tab.currentNode()
+
+def openFloatingParameterEditor(paneTab):
+    if paneTab.type() == hou.paneTabType.NetworkEditor:
+        node = paneTab.currentNode()
         hou.ui.showFloatingParameterEditor(node)
     else:
         hou.ui.setStatusMessage("Not a network editor", hou.severityType.Error) 
 openFloatingParameterEditor.interactive_contexts = ["all"]
 
 
-def openHotkeyEditor():
+
+def openHotkeyEditor(*args):
     print("open hotkey editor")
 openHotkeyEditor.interactive_contexts = ["none"]
     
