@@ -41,7 +41,10 @@ def updateBindings():
         "h.redo",
         "h.save",
         "h.undo",
-        
+
+        "h.pane.gview.decrease_subd",
+        "h.pane.gview.increase_subd",
+
         "h.pane.edit_bookmark",
         "h.pane.nexttab",
         "h.pane.to_parm",
