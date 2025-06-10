@@ -382,12 +382,12 @@ class State(object):
         if item == "camFrame": self.camFrame()
         elif item == "camReset": self.camReset()
         elif item == "viewportFrame": self.viewportFrame()
-        elif item == "axis_cam": self.guides["axis_cam"] = kwargs["axis_cam"]
-        elif item == "axis_pivot": self.guides["axis_pivot"] = kwargs["axis_pivot"]
-        elif item == "perim": self.guides["perim"] = kwargs["perim"]
-        elif item == "pivot_2d": self.guides["pivot_2d"] = kwargs["pivot_2d"]
-        elif item == "pivot_3d": self.guides["pivot_3d"] = kwargs["pivot_3d"]
-        elif item == "ray": self.guides["ray"] = kwargs["ray"]
+        elif item == "axis_cam": self.guide_states["axisCam"] = kwargs["axis_cam"]
+        elif item == "axis_pivot": self.guide_states["axisPivot"] = kwargs["axis_pivot"]
+        elif item == "perim": self.guide_states["perim"] = kwargs["perim"]
+        elif item == "pivot_2d": self.guide_states["pivot2d"] = kwargs["pivot_2d"]
+        elif item == "pivot_3d": self.guide_states["pivot3d"] = kwargs["pivot_3d"]
+        elif item == "ray": self.guide_states["ray"] = kwargs["ray"]
         self.guideUpdate()
 
 
