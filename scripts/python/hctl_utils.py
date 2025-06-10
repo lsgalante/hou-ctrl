@@ -989,54 +989,73 @@ def sceneViewerToggleVectors(sceneViewer):
             viewportSettings.setVectorScale(1)
 sceneViewerToggleVectors.interactive_contexts = ["paneTabType.SceneViewer"]
 
-        
-## Session
 
-def sessionEvalBindings():
+###########
+# Session #
+###########
+
+
+def sessionAutoSaveState(*args):
+    state = hou.getPreference("autoSave")
+    return state
+sessionAutoSaveState.interactive_contexts = ["none"]
+
+
+
+def sessionEvalBindings(*args):
     reload(hctl_bindings)
     hctl_bindings.updateBindings()
 sessionEvalBindings.interactive_contexts = ["all"]
 
 
-def sessionEvalKeycam():
+
+def sessionEvalKeycam(*args):
     hou.ui.reloadViewerState("keycam")
 sessionEvalKeycam.interactive_contexts = ["all"]
 
 
-def sessionGetAutoSaveState():
-    state = hou.getPreference("autoSave")
-    return state
-sessionGetAutoSaveState.interactive_contexts = ["none"]
 
-
-def sessionOpenFile():
+def sessionOpenFile(*args):
     hou.ui.selectFile()
 sessionOpenFile.interactive_contexts = ["all"]
 
 
-def sessionRestart():
+
+def sessionRemoveEventLoopCallbacks(*args):
+    callbacks = hou.ui.eventLoopCallbacks()
+    for callback in callbacks:
+        hou.ui.removeEventLoopCallback(callback)
+sessionRemoveEventLoopCallbacks.interactive_contexts = ["all"]
+
+
+
+def sessionRestart(*args):
     return
 sessionRestart.interactive_contexts = ["none"]
 
 
-def sessionTriggerUpdate():
+
+def sessionTriggerUpdate(*args):
     hou.ui.triggerUpdate()
 sessionTriggerUpdate.interactive_contexts = ["all"]
 
 
-def sessionUpdateModeAuto():
+
+def sessionUpdateModeAuto(*args):
     hou.setUpdateMode(hou.updateMode.AutoUpdate)
 sessionUpdateModeAuto.interactive_contexts = ["all"]
 
 
-def sessionUpdateModeManual():
+
+def sessionUpdateModeManual(*args):
     hou.setUpdateMode(hou.updateMode.Manual)
 sessionUpdateModeManual.interactive_contexts = ["all"]
 
 
-def sessionToggleAutoSave():
-    is_autosave = hou.getPreference("autoSave")
-    if is_autosave == "0":
+
+def sessionToggleAutoSave(*args):
+    autosave = hou.getPreference("autoSave")
+    if autosave == "0":
         hou.setPreference("autoSave", "1")
     else:
         hou.setPreference("autoSave", "0");
