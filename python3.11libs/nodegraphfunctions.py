@@ -9,223 +9,226 @@ from PySide2.QtWidgets import QGraphicsScene, QGraphicsView
 
 
 def action(uievent):
+
     if isinstance(uievent, ContextEvent):
         return
 
-    if isinstance(uievent, KeyboardEvent) and uievent.eventtype == 'keyhit':
-        editor = uievent.editor
-        key = uievent.key
+    if isinstance(uievent, KeyboardEvent):
+        if uievent.eventtype == 'keyhit':
+            test = editorBindings(uievent.editor, uievent.key)
+
+
+############
+# # Bindings #
+############
+        
+        
+class editorBindings:
+    
+    def __init__(self, editor, key):
+        self.context = editor.pwd()
+        self.cursorP = editor.cursorPosition()
+        self.editor = editor
+        self.key = key
+        self.nodes = hou.selectedNodes()
+        self.screenSize = editor.screenBounds().size()
+        self.step_t = 160
+        self.visibleBounds = editor.visibleBounds()
+        self.visibleSize = editor.visibleBounds().size()
+        self.xform = None
+        self.zoomLevel = self.getZoomLevel()
 
         
-        #######
-        # FOV #
-        #######
+        ############
+        # Bindings #
+        ############
         
         
         # zoom
-        if key == "-":
-            zoomOut()
-        elif key == "=":
-            zoomIn()
+        if key == "=": self.zoom("in")
+        elif key == "-": self.zoom("out")
 
         # translate
-        elif key == "H":
-            fovTranslateLeft(editor)
-        elif key == "J":
-            fovTranslateDown(editor)
-        elif key == "K":
-            fovTranslateUp(editor)
-        elif key == "L":
-            fovTranslateRight(editor)
-
-            
-        #########
-        # Nodes #
-        #########
-        
+        elif key == "K": self.fovTranslate("up")
+        elif key == "J": self.fovTranslate("down")
+        elif key == "H": self.fovTranslate("left")
+        elif key == "L": self.fovTranslate("right")
         
         # move
-        elif key == "Ctrl+Shift+H":
-            nodesTranslateLeft()
-        elif key == "Ctrl+Shift+J":
-            nodesTranslateDown()
-        elif key == "Ctrl+Shift+K":
-            nodesTranslateUp()
-        elif key == "Ctrl+Shift+L":
-            nodesTranslateRight()
+        elif key == "Ctrl+Shift+H": self.nodesTranslateLeft()
+        elif key == "Ctrl+Shift+J": self.nodesTranslateDown()
+        elif key == "Ctrl+Shift+K": self.nodesTranslateUp()
+        elif key == "Ctrl+Shift+L": self.nodesTranslateRight()
 
         # organize
-        elif key == "Ctrl+Shift+A":
-            nodesArrange()
+        elif key == "Ctrl+Shift+A": self.nodesArrange()
+        elif key == "Shift+D": self.placeDot()
 
-
-        ###################
-        # Network Objects #
-        ###################
-        
-        
-        # place dot
-        elif key == "Shift+D":
-            dotPlace()
-
-
-        #########
-        # Other #
-        #########
-
-        
         # next grid mode
-        elif key == "Shift+G":
-            gridModeNext(editor)
+        elif key == "Shift+G": self.gridCycle()
 
         # next update mode
-        elif key == "M":
-            updateModeNext()
+        elif key == "M": self.updateModeCycle()
 
+
+    #############
+    # Retrieval #
+    #############
+
+    
+    def getZoomLevel(self):
+        zoomLevel = self.visibleSize[0] / self.screenSize[0]
+        return zoomLevel
+    
+
+    ##############
+    # Navigation #
+    ##############
+    
+    
+    def fovTranslate(self, direction):
+        if direction == "up":
+            self.xform = hou.Vector2(0, self.step_t * self.zoomLevel)
+        elif direction == "down":
+            self.xform = hou.Vector2(0, self.step_t * self.zoomLevel * -1)
+        elif direction == "left":
+            self.xform = hou.Vector2(self.step_t * self.zoomLevel * -1, 0)
+        elif direction == "right":
+            self.xform = hou.Vector2(self.step_t * self.zoomLevel, 0)
             
-def dotPlace(editor):
-    selected = hou.selectedNodes()
-    if len(selected) == 1:
-        context = node.parent()
-        dot = context.createNetworkDot()
-        dot.setInput(node)
-        cursor_pos = editor.cursorPosition()
-        dot.setPosition(cursor_pos)
+        self.visibleBounds.translate(self.xform)
+        self.editor.setVisibleBounds(self.visibleBounds)
+
+    def zoom(self, direction):
+        scale = (0, 0)
+        if direction == "in":
+            scale = (0.5, 0.5)
+        else:
+            scale = (2, 2)
+            
+        self.visibleBounds.scale(scale)
+        self.editor.setVisibleBounds(self.visibleBounds)
+        print(self.zoomLevel)
 
         
-def fovTranslate(editor, xform):
-    visible_bounds = editor.visibleBounds()
-    visible_bounds.translate(xform)
-    editor.setVisibleBounds(visible_bounds)
-
+    ################
+    # Manipulation #
+    ################
+ 
     
-def fovTranslateLeft(editor):
-    step = 160
-    zoom_level = zoomGetLevel(editor)
-    xform = hou.Vector2(step * zoom_level * -1, 0)
-    fovTranslate(editor, xform)
+    def nodesTranslateLeft(self):
+        for node in self.nodes:
+            nodeP = node.position()
+            x = nodeP[0]
+            print("")
+            print(x)
+            print(round(x%1, 2))
+            if round(x % 1, 2) < 0.85:
+                x = math.floor(x)
+            else:
+                x = math.ceil(x)
+            x -= 0.5
+            nodeP[0] = x
+            node.setPosition(nodeP)
+            
 
-    
-def fovTranslateDown(editor):
-    step = 160
-    zoom_level = zoomGetLevel(editor)
-    xform = hou.Vector2(0, step * zoom_level * -1)
-    fovTranslate(editor, xform)
+    def nodesTranslateDown(self):
+        for node in self.nodes:
+            nodeP = node.position()
+            y = nodeP[1]
+            if round(y % 1, 2) > 0.85:
+                y = math.floor(y)
+            else:
+                y = math.ceil(y)
+            y -= 0.15
+            nodeP[1] = y
+            node.setPosition(nodeP)
+            
 
-    
-def fovTranslateUp(editor):
-    step = 160
-    zoom_level = zoomGetLevel(editor)
-    xform = hou.Vector2(0, step * zoom_level)
-    fovTranslate(editor, xform)
+    def nodesTranslateUp(self):
+        for node in self.nodes:
+            nodeP = node.position()
+            y = nodeP[1]
+            if round(y % 1, 2) <= 0.85:
+                y = math.floor(y)
+            else:
+                y = math.ceil(y)
+            y += 0.85
+            nodeP[1] = y
+            node.setPosition(nodeP)
+            
 
-    
-def fovTranslateRight(editor):
-    step = 160
-    zoom_level = zoomGetLevel(editor)
-    xform = hou.Vector2(step * zoom_level, 0)
-    fovTranslate(editor, xform)
-
-    
-def gridModeNext(editor):
-    mode = editor.getPref("gridmode")
-    modes = ("0", "1", "2")
-    idx = (modes.index(mode) + 1) % len(modes)
-    editor.setPref("gridmode", modes[idx])
-
+    def nodesTranslateRight(self):
+        for node in self.nodes:
+            nodeP = node.position()
+            x = nodeP[0]
+            # print(x)
+            if round(x % 1, 2) >= 0.85:
+                x = math.floor(x)
+            else:
+                x = math.ceil(x)
+            x += 0.5
+            nodeP[0] = x
+            node.setPosition(nodeP)
         
 def nodesArrange():
     nodes = hou.selectedNodes()
     # node.parent().layoutChildren(horizontal_spacing=5, vertical_spacing=5)
 
+    #########
+    # Cycle #
+    #########
     
-def nodesQuantize():
-    nodes = hou.selectedNodex()
     
+    def gridModeCycle(self):
+        mode = self.editor.getPref("gridmode")
+        modes = ("0", "1", "2")
+        idx = (modes.index(mode) + 1) % len(modes)
+        self.editor.setPref("gridmode", modes[idx])
 
-def nodesTranslateLeft():
-    nodes = hou.selectedNodes()
-    for node in nodes:
-        x = node.position()[0]
-        y = node.position()[1]
-        if round(x % 1, 1) <= 0.5:
-            x = math.floor(x)
-        else:
-            x = math.ceil(x)
-        x -= 0.5
-        node.setPosition(x, y)
+
+    ############
+    # Organize #
+    ############
+    
+    
+    def nodesArrange(self):
+        # node.parent().layoutChildren(horizontal_spacing=5, vertical_spacing=
+        return
+
+    
+    def nodesQuantize(self):
+        return
+
+    
+    def outlineDraw(self):
+        image = hou.NetworkImage()
+        image.setPath('$HIP/drawings/bg.png')
+        image.setRect(hou.BoundingRect(0, 0, 1, 1))
+
+        visibleItems = editor.networkItemsInBox(self.screenBounds.min(), self.screenBounds.max(), for_select=True)
+        images = []
+        for item in visibleItems:
+            P0 = item[0].position()
+            P0 = hou.Vector2(P0.x() - 0.025, P0.y() - 0.35)
+            P1 = hou.Vector2(P0.x() + 1.05, P0.y() + 1)
+            image.setRect(hou.BoundingRect(pos, pos2))
+            images.append(image)
+        self.editor.setBackgroundImages([image])
+
         
+    def placeDot(self):
+        if len(self.nodes) == 1:
+            context = self.nodes(0).parent()
+            dot = context.createNetworkDot()
+            dot.setInput(node)
+            dot.setPosition(self.cursorP)
 
-def nodesTranslateDown():
-    nodes = hou.selectedNodes()
-    for node in nodes:
-        x = node.position()[0]
-        y = node.position()[1]
-        if round(y % 1, 2) > 0.85:
-            y = math.ceil(y)
-        else:
-            y = math.floor(y)
-        y -= 0.15
-        node.setPosition(x, y)
-        
-
-def nodesTranslateUp():
-    nodes = hou.selectedNodes()
-    for node in nodes:
-        x = node.position()[0]
-        y = node.position()[1]
-        if round(y % 1, 2) < 0.85:
-            y = math.floor(y)
-        else:
-            y = math.ceil(y)
-        node.setPosition(x, y + 0.85)
-        
-
-def nodesTranslateRight():
-    nodes = hou.selectedNodes()
-    for node in nodes:
-        x = node.position()[0]
-        y = node.position()[1]
-        if round(x % 1, 1) >= 0.5:
-            x = math.ceil(x)
-        else:
-            x = math.floor(x)
-        node.setPosition(x + 0.5, y)
-        
-    
-def outlineDraw(uievent):
-    editor = uievent.editor
-    image = hou.NetworkImage()
-    image.setPath('$HIP/drawings/bg.png')
-    image.setRect(hou.BoundingRect(0, 0, 1, 1))
-
-    screen_space = editor.screenBounds()
-    visible_items = editor.networkItemsInBox(screen_space.min(), screen_space.max(), for_select=True)
-    images = []
-    for item in visible_items:
-        pos = item[0].position()
-        pos = hou.Vector2(pos.x()-0.025, pos.y()-0.35)
-        pos2 = hou.Vector2(pos.x()+1.05, pos.y()+1)
-        image.setRect(hou.BoundingRect(pos, pos2))
-        images.append(image)
-
-    editor.setBackgroundImages([image])
-
-    
-def updateModeNext():
-    mode = hou.updateModeSetting()
-    modes = (hou.updateMode.Manual, hou.updateMode.AutoUpdate)
-    idx = (modes.index(mode) + 1) % len(modes)
-    hou.setUpdateMode(modes[idx])
-
-    
-def zoomGetLevel(editor):
-    screen_size = editor.screenBounds().size()
-    visible_size = editor.visibleBounds().size()
-    zoom_level = visible_size[0] / screen_size[0]
-    return zoom_level
+            
+    def updateModeNext(self):
+        mode = hou.updateModeSetting()
+        modes = (hou.updateMode.Manual, hou.updateMode.AutoUpdate)
+        idx = (modes.index(mode) + 1) % len(modes)
+        hou.setUpdateMode(modes[idx])
 
 
-def zoomOut():
-    return
-    
