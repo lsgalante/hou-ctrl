@@ -1,5 +1,5 @@
 # BG
-BackgroundColor:                0.0  0.0  0.0        # top
+BackgroundColor:                0.0  1.0  0.0        # top
 BackgroundBottomColor:          @BackgroundColor     # bottom
 
 # Wire
@@ -68,8 +68,8 @@ HandleDeltaTextShadowColor:     0.0  0.0  0.0        # Text shadow for delta val
 HandleDeltaTextAlpha:           ALPHA  1.0           # Opacity of delta text values
 
 # Pill
-PillTextColor:                  0.75 0.75 0.75       # Menu pill text color
-PillOutlineColor:               0.55 0.55 0.55       # Menu pill outline
+PillTextColor:                  1.00 0.00 0.00 # 0.75 0.75 0.75       # Menu pill text color
+PillOutlineColor:               0.00 0.00 0.00 # 0.55 0.55 0.55       # Menu pill outline
 PillBGColor:                    0.15 0.15 0.15       # Menu pill background
 PillBGAlpha:                    ALPHA  0.5           # Menu pill background alpha
 PillCamLockTextColor:           0.85 0.85 0.85       # Menu pill text color when cam is locked
