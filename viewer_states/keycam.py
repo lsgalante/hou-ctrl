@@ -1004,6 +1004,24 @@ def createViewerStateTemplate():
         contexts=[hou.objNodeTypeCategory()])
     # Bind factory
     template.bindFactory(State)
+    # Bind icon
+    template.bindIcon("DESKTOP_application_sierra")
+    # Bind parameters
+    template.bindParameter(hou.parmTemplateType.Menu, name="mode", label="Mode", default_value="nav", menu_items=[("nav", "Nav"), ("settings", "Settings")])
+    template.bindParameter(hou.parmTemplateType.Menu, name="hud", label="HUD", default_value="layout", menu_items=[("layout", "Layout"), ("movement", "Movement"), ("delta", "Delta"), ("vis", "Vis"), ("focus", "Focus")])
+    template.bindParameter(hou.parmTemplateType.Separator)
+    template.bindParameter(hou.parmTemplateType.Menu, name="layout", label="Layout", default_value="layout", menu_items=[("single", "Single"), ("doubleside", "DoubleSide"), ("tripleleftsplit", "TripleLeftSplit"), ("quad", "Quad")])
+    template.bindParameter(hou.parmTemplateType.Int, name="viewport_index", label="Viewport Index", default_value=0, min_limit=0, max_limit=3)
+    template.bindParameter(hou.parmTemplateType.Menu, name="view", label="View", default_value="perspective", menu_items=[("perspective", "Perspective"), ("top", "Top"), ("front", "Front"), ("side", "Side")])
+    template.bindParameter(hou.parmTemplateType.Separator)
+    template.bindParameter(hou.parmTemplateType.Menu, name="target", label="Target", default_value="cam", menu_items=[("cam", "Cam"), ("pivot", "Pivot")])
+    template.bindParameter(hou.parmTemplateType.Separator)
+    template.bindParameter(hou.parmTemplateType.Float, name="rot_amt", label="Rotation Amount", default_value=7.5, min_limit=-180.0, max_limit=180.0)
+    template.bindParameter(hou.parmTemplateType.Float, name="tr_amt", label="Translation Amount", default_value=1.0, min_limit=0, max_limit=10.0)
+    template.bindParameter(hou.parmTemplateType.Float, name="ow_amt", label="Ortho Width Amount", default_value=1.0, min_limit=0, max_limit=10.0)
+    template.bindParameter(hou.parmTemplateType.Float, name="zoom_amt", label="Zoom Amount", default_value=1.0, min_limit=0, max_limit=10.0)
+    template.bindParameter(hou.parmTemplateType.Separator)
+    # Bind menu
     menu = makeMenu()
     template.bindMenu(menu)
     return template
