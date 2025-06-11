@@ -467,25 +467,6 @@ class State(object):
     # Geometry #
     ############
 
-
-    def geoGet(self):
-        self.displayNode = None
-
-        pwd = self.sceneViewer.pwd()
-        self.context = pwd.childTypeCategory().label()
-        # print(self.context)
-
-        if self.context == "dop":
-            displayNode = pwd.displayNode()
-        elif self.context == "lop":
-            return None
-        elif self.context == "Objects":
-            displayNode = pwd.children()[0].displayNode()
-        elif self.context == "Geometry":
-            displayNode = pwd.displayNode()
-        return displayNode.geometry()
-
-
     def geoBboxGet(self):
         geo = self.geoGet()
         bbox = geo.boundingBox()
@@ -501,7 +482,22 @@ class State(object):
         centroid = pt.position()
         return centroid
 
+    def geoGet(self):
+        self.displayNode = None
+        pwd = self.sceneViewer.pwd()
+        self.context = pwd.childTypeCategory().label()
 
+        if self.context == "dop": displayNode = pwd.displayNode()
+        elif self.context == "lop": return None
+        elif self.context == "Objects": displayNode = pwd.children()[0].displayNode()
+        elif self.context == "Geometry": displayNode = pwd.displayNode()
+        return displayNode.geometry()
+
+    def geoHome(self):
+        self.displayNode = None
+        pwd = self.sceneViewer.pwd()
+        self.context = pwd.childTypeCategory().label()
+        # print(self.context)
 
     #########
     # Guide #
