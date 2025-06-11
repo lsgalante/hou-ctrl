@@ -205,10 +205,8 @@ class State(object):
             viewport.lockCameraToView(False)
 
     def onGenerate(self, kwargs):
-        # Prevent exiting the state when current node changes
-        kwargs["state_flags"]["exit_on_node_select"] = False
-        self.parms = kwargs["state_parms"]
-
+        kwargs["state_flags"]["exit_on_node_select"] = False # Prevent exiting the state when current node changes
+        self.kwargs = kwargs
         self.hudSwitch()
         self.viewportLayoutUpdate()
         self.camInit()
@@ -272,7 +270,7 @@ class State(object):
                 self.stateToCam()
 
             else: # Cam is default
-                cam = viewport.defaultCamera()
+                cam = self.viewport.defaultCamera()
                 t = list(cam.translation())
                 delta = self.units["t"]
                 indices = [0, 0]
@@ -382,6 +380,7 @@ class State(object):
         self.viewport.lockCameraToView(self.options["lock_cam"])
 
     def camMovePivot(self):
+        state_parms = self.kwargs["state_parms"]
         target = self.nav_state["target"]
         if target == "cam": t = list(state_parms["t"]["value"])
         elif target == "centroid": centroid = self.geoCentroidGet()
