@@ -220,14 +220,15 @@ class State(object):
     def onKeyEvent(self, kwargs):
         key = kwargs["ui_event"].device().keyString()
         self.camAspectRatioUpdate()
-
+        self.camFrame()
+        # HUD navigation
         if self.mode == "settings":
             if key == "m": self.hudModeCycle(); return True
-            elif key == "k": self.hudControlNav("up"); return True
-            elif key == "j": self.hudControlNav("down"); return True
+            elif key == "k": self.hudControlPrev(); return True
+            elif key == "j": self.hudControlNext(); return True
             elif key == "h": self.hudOptionNav("prev"); return True
             elif key == "l": self.hudOptionNav("next"); return True
-
+        # Camera movement
         elif self.mode == "camera":
             if key == "m": self.hudModeCycle(); return True
             elif key == "o": self.camProjectionCycle(); return True
@@ -697,21 +698,28 @@ class State(object):
     # HUD Functions #
     #################
 
-    def hudControlNav(self, direction):
-        self.hud_state["huds"] = self.hud_names
+    def hudControlNext(self):
+        self.hude_state["huds"] = self.hud_names
         self.hud_state["hud"] = self.hud_name
-
         controls = self.hud_state["controls"]
         control = self.hud_state["control"]
         control_index = controls.index(control)
+        control_index += 1
+        control_index %= len(controls)
+        new_control = controls[control_index]
+        self.hud_state["control"] = new_control
+        self.hud_name = self.hud_state["hud"]
+        self.hudSwitch()
+        self.hudUpdate()
 
-        if direction == "up":
-            control_index -= 1
-            control_index %= len(control)
-        elif direction == "down":
-            control_index += 1
-            control_index %= len(controls)
-
+    def hudControlPrev(self):
+        self.hud_state["huds"] = self.hud_names
+        self.hud_state["hud"] = self.hud_name
+        controls = self.hud_state["controls"]
+        control = self.hud_state["control"]
+        control_index = controls.index(control)
+        control_index -= 1
+        control_index %= len(controls)
         new_control = controls[control_index]
         self.hud_state["control"] = new_control
         self.hud_name = self.hud_state["hud"]
