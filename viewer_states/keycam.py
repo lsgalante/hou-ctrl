@@ -86,9 +86,10 @@ class State(object):
         self.viewports = None
         self.viewport_index = None
 
-        # Camera Variables
-        self.P_pivot = hou.Vector3(0, 0, 0)
-        self.P_cam = hou.Vector3(0, 0, 0)
+        # Camera Variables #
+
+        self.T_pvt = hou.Vector3(0, 0, 0)
+        self.T_cam = hou.Vector3(0, 0, 0)
         self.r = hou.Vector3(0, 0, 0)
         self.local_x = hou.Vector3(1, 0, 0)
         self.local_y = hou.Vector3(0, 1, 0)
@@ -382,8 +383,8 @@ class State(object):
 
     def camMovePivot(self):
         target = self.nav_state["target"]
-        if target == "cam":t = list(self.parms["t"]["value"])
-        elif target == "centroid":centroid = self.geoCentroidGet()
+        if target == "cam": t = list(state_parms["t"]["value"])
+        elif target == "centroid": centroid = self.geoCentroidGet()
         elif target == "origin":
             dist = self.parm_state["dist"]["value"]
             self.t = [0, 0, dist]
