@@ -276,12 +276,12 @@ class State(object):
                 delta = self.units["t"]
                 indices = [0, 0]
 
-                if viewportType == hou.geometryViewportType.Top: indices = [0, 1]
-                elif viewportType == hou.geometryViewportType.Bottom: indices = [2, 0]
-                elif viewportType == hou.geometryViewportType.Front: indices = [0, 1]
-                elif viewportType == hou.geometryViewportType.Back: indices = [1, 0]
-                elif viewportType == hou.geometryViewportType.Right: indices = [0, 1]
-                elif viewportType == hou.geometryViewportType.Left: indices = [1, 2]
+                # if viewportType == hou.geometryViewportType.Top: indices = [0, 1]
+                # elif viewportType == hou.geometryViewportType.Bottom: indices = [2, 0]
+                # elif viewportType == hou.geometryViewportType.Front: indices = [0, 1]
+                # elif viewportType == hou.geometryViewportType.Back: indices = [1, 0]
+                # elif viewportType == hou.geometryViewportType.Right: indices = [0, 1]
+                # elif viewportType == hou.geometryViewportType.Left: indices = [1, 2]
 
                 if key == "h": t[indices[0]] += delta
                 elif key == "j": t[indices[1]] += delta
@@ -337,7 +337,7 @@ class State(object):
 
     def camFrame(self):
         centroid = self.geoCentroidGet()
-        bbox = self.geoBboxGet()
+        # bbox = self.geoBboxGet()
         self.T_pvt = centroid
         self.T_cam = centroid
         self.ow = 10
@@ -357,18 +357,18 @@ class State(object):
             cam.setName("keycam")
             cam.parm("xOrd").set(0)
         # Define vars.
-        t = [0, 0, 0]
-        r = [0, 0, 0]
-        p = [0, 0, 0]
-        ow = 1
+        # t = [0, 0, 0]
+        # r = [0, 0, 0]
+        # p = [0, 0, 0]
+        # ow = 1
         cam = self.viewport.camera()
 
-        if cam == None: # Cam is default.
-            cam = self.viewport.defaultCamera()
-            t = cam.translation()
-            r = cam.rotation()
-            p = cam.pivot()
-            ow = cam.orthoWidth()
+        # if cam == None: # Cam is default.
+            # cam = self.viewport.defaultCamera()
+            # t = cam.translation()
+            # r = cam.rotation()
+            # p = cam.pivot()
+            # ow = cam.orthoWidth()
 
         # else: # Cam is node.
             # t = cam.evalParmTuple("t")
@@ -381,11 +381,11 @@ class State(object):
         self.viewport.lockCameraToView(self.options["lock_cam"])
 
     def camMovePivot(self):
-        state_parms = self.kwargs["state_parms"]
+        # state_parms = self.kwargs["state_parms"]
         target = self.nav_state["target"]
-        if target == "cam": t = list(state_parms["t"]["value"])
-        elif target == "centroid": centroid = self.geoCentroidGet()
-        elif target == "origin":
+        # if target == "cam": t = list(state_parms["t"]["value"])
+        # elif target == "centroid": centroid = self.geoCentroidGet()
+        if target == "origin":
             dist = self.parm_state["dist"]["value"]
             self.t = [0, 0, dist]
             self.r = hou.Vector3(45, 45, 0)
@@ -748,7 +748,7 @@ class State(object):
     def hudOptionNext(self):
         self.hud_state["huds"] = self.hud_names
         self.hud_state["hud"] = self.hud_name
-        controls = self.hud_state["controls"]
+        # controls = self.hud_state["controls"]
         control = self.hud_state["control"]
         values = self.hud_state[control + "s"]
         value = self.hud_state[control]
@@ -770,7 +770,7 @@ class State(object):
     def hudOptionPrev(self):
         self.hud_state["huds"] = self.hud_names
         self.hud_state["hud"] = self.hud_name
-        controls = self.hud_state["controls"]
+        # controls = self.hud_state["controls"]
         control = self.hud_state["control"]
         values = self.hud_state[control + "s"]
         value = self.hud_state[control]
@@ -963,7 +963,7 @@ class State(object):
         self.camToState()
 
     def viewportSwap(self):
-        viewport_names = [viewport.name() for viewport in self.viewports]
+        # viewport_names = [viewport.name() for viewport in self.viewports]
         self.viewports = self.viewports[1:] + [self.viewports[0]]
         viewportTypes = viewportTypes[1:] + [viewportTypes[0]]
 
