@@ -965,13 +965,13 @@ class State(object):
     def viewportSwap(self):
         # viewport_names = [viewport.name() for viewport in self.viewports]
         self.viewports = self.viewports[1:] + [self.viewports[0]]
-        viewportTypes = viewportTypes[1:] + [viewportTypes[0]]
+        # viewportTypes = viewportTypes[1:] + [viewportTypes[0]]
 
         for i, viewport in enumerate(self.viewports):
             viewport.changeName("v" * i)
         for i, viewport in enumerate(self.viewports):
             viewport.changeName(self.viewports[i])
-            viewport.changeType(viewportTypes[i])
+            # viewport.changeType(viewportTypes[i])
 
     def viewportGet(self):
         viewport_indexs = self.layout_state["viewport_indexs"]
