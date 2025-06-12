@@ -893,11 +893,6 @@ def sessionEvalBindings(*args):
 sessionEvalBindings.interactive_contexts = ["all"]
 
 
-def sessionEvalKeycam(*args):
-    hou.ui.reloadViewerState("keycam")
-sessionEvalKeycam.interactive_contexts = ["all"]
-
-
 def sessionOpenFile(*args):
     hou.ui.selectFile()
 sessionOpenFile.interactive_contexts = ["all"]
@@ -908,6 +903,11 @@ def sessionRemoveEventLoopCallbacks(*args):
     for callback in callbacks:
         hou.ui.removeEventLoopCallback(callback)
 sessionRemoveEventLoopCallbacks.interactive_contexts = ["all"]
+
+
+def sessionReloadKeycam(*args):
+    hou.ui.reloadViewerState("keycam")
+sessionReloadKeycam.interactive_contexts = ["all"]
 
 
 def sessionRestart(*args):

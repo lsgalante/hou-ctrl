@@ -3,68 +3,38 @@ import hou
 
 class State(object):
 
-    HUD_TEMPLATE={}
-
-    HUD_TEMPLATE_LAYOUT={
-        "title": "layout",
+    HUD_TEMPLATE={
+        "title": "test",
         "rows": [
             {"id": "mode", "label": "mode", "key": "M"},
+
+            # Layout
             {"id": "divider", "type":  "divider"},
-            {"id": "hud", "label": "hud"},
-            {"id": "hud_g", "type": "choicegraph"},
             {"id": "layout", "label": "layout"},
             {"id": "layout_g", "type": "choicegraph"},
             {"id": "viewport_index", "label": "viewport_index"},
             {"id": "viewport_index_g", "type": "choicegraph"},
             {"id": "set_view", "label": "set_view"},
-            {"id": "set_view_g", "type": "choicegraph"}
-        ]
-    }
+            {"id": "set_view_g", "type": "choicegraph"},
 
-    HUD_TEMPLATE_MOVEMENT={
-        "title": "movement",
-        "rows": [
-            {"id": "mode", "label": "mode", "key": "M"},
-            {"id": "divider", "type": "divider"},
-            {"id": "hud", "label": "hud"},
-            {"id": "hud_g", "type": "choicegraph"},
+            # Movement
+            {"id": "divider0", "type": "divider"},
             {"id": "target", "label": "target"},
-            {"id": "target_g", "type": "choicegraph"}
-        ]
-    }
+            {"id": "target_g", "type": "choicegraph"},
 
-    HUD_TEMPLATE_DELTA={
-        "title": "delta",
-        "rows": [
-            {"id": "mode" ,  "label": "mode", "key": "M"},
-            {"id": "divider", "type": "divider"},
-            {"id": "hud", "label": "hud"},
-            {"id": "hud_g", "type" : "choicegraph"},
+            # Delta
+            {"id": "divider1", "type": "divider"},
             {"id": "r", "label": "r_delta"},
             {"id": "t", "label": "t_delta"},
             {"id": "dist", "label": "dist_delta"},
-            {"id": "ow", "label": "ow_delta"}
-        ]
-    }
+            {"id": "ow", "label": "ow_delta"},
 
-    HUD_TEMPLATE_VIS={
-        "title": "vis",
-        "rows": [
-            {"id": "mode", "label": "mode", "key": "M"},
-            {"id": "divider", "type": "divider"},
-            {"id": "hud", "label": "hud"},
-            {"id": "hud_g", "type": "choicegraph"},
-            {"id": "vis", "label": "vis"}
-        ]
-    }
+            # Vis
+            {"id": "divider2", "type": "divider"},
+            {"id": "vis", "label": "vis"},
 
-    HUD_TEMPLATE_FOCUS={
-        "title": "focus",
-        "rows": [
-            {"id": "mode", "label": "mode", "key": "M"},
-            {"id": "divider", "type":  "divider"},
-            {"id": "hud", "label": "hud"},
-            {"id": "hud_g", "type":  "choicegraph"},
+            # Focus
+            {"id": "divider3", "type": "divider"},
             # {"id": "attr", "label": "attr", "value": "partition"},
             {"id": "focus", "label": "focus", "value": 0},
             {"id": "focus_g", "type":  "choicegraph", "count": 10}
@@ -77,8 +47,6 @@ class State(object):
 
         self.cam_type = None
         self.context = None
-        self.hud_names = ("layout", "movement", "delta", "vis", "focus")
-        self.hud_name = "layout"
         self.modes = ("camera", "settings")
         self.mode = "camera"
         self.sceneViewer = scene_viewer
@@ -130,61 +98,35 @@ class State(object):
         # HUD States #
         ##############
 
-        self.hud_state = {}
+        self.hud_state={
+            "controls": ("layout", "viewport_index", "set_view", "target", "r", "t", "ow", "dist", "vis", "focus"),
+            "control": "layout",
 
-        self.layout_hud_state={
-            "controls": ("hud", "layout", "viewport_index", "set_view"),
-            "control": "hud",
-            "huds": ("layout", "movement", "delta", "vis", "focus"),
-            "hud": "layout",
             # layouts: DoubleSide, DoubleStack, Quad, QuadBottomSplit, QuadLeftSplit, Single, TripleBottomSplit, TripleLeftSplit
             "layouts": ("Single", "DoubleSide", "TripleLeftSplit", "Quad"),
             "layout": "Single",
+
             "viewport_indexs": ("0"),
             "viewport_index": "0",
+
             "set_views": ("top", "bottom", "left", "right", "front", "back", "persp", "none"),
             "set_view": "persp"
-        }
 
-        self.hud_state = self.layout_hud_state
-
-        self.movement_hud_state={
-            "controls": ("hud", "target"),
-            "control": "hud",
-            "huds": ("layout", "movement", "delta", "vis", "focus"),
-            "hud": "layout",
             "targets": ("cam", "pivot"),
             "target": "cam"
-        }
 
-        self.delta_hud_state={
-            "controls": ("hud", "rot", "tr", "dist", "ow"),
-            "control": "hud",
-            "huds": ("layout", "movement", "delta", "vis", "focus"),
-            "hud": "layout",
             "r": self.units["r"],
             "t": self.units["t"],
             "ow": self.units["ow"],
             "dist": self.units["dist"]
-        }
 
-        self.vis_hud_state={
-            "controls": ("hud"),
-            "control": "hud",
-            "huds": ("layout", "movement", "delta", "vis", "focus"),
-            "hud": "layout",
             "vis_arr": ("test1", "test2", "test3"),
             "vis": "test1"
-        }
 
-        self.focus_hud_state={
-            "controls": ("hud", "attr", "focus"),
-            "control": "hud",
-            "huds": ("layout", "movement", "delta", "vis", "focus"),
-            "hud": "layout",
             "focuss": ("test1", "test2", "test3"),
             "focus": "test1"
         }
+
 
     #############
     # Listeners #
@@ -200,9 +142,11 @@ class State(object):
         self.guideRay.draw(handle, {})
         # self.guideText.draw(handle, {})
 
+
     def onExit(self, kwargs):
         for viewport in self.viewports:
             viewport.lockCameraToView(False)
+
 
     def onGenerate(self, kwargs):
         kwargs["state_flags"]["exit_on_node_select"] = False # Prevent exiting the state when current node changes
@@ -216,6 +160,7 @@ class State(object):
         self.optionUpdate()
         self.camFrame()
         self.guideCreate()
+
 
     def onKeyEvent(self, kwargs):
         key = kwargs["ui_event"].device().keyString()
@@ -252,6 +197,7 @@ class State(object):
                 "f" # frame
             )
             index = keys.index(key)
+            print(self.cam_type)
 
             if self.cam_type == "node":
                 functions = (
@@ -329,6 +275,7 @@ class State(object):
         else:
             return False
 
+
     def onMenuAction(self, kwargs):
         item = kwargs["menu_item"]
         if item == "camFrame":        self.camFrame()
@@ -342,9 +289,11 @@ class State(object):
         elif item == "ray":           self.guide_states["ray"] = kwargs["ray"]
         self.guideUpdate()
 
+
     def onParmChangeEvent(self, kwargs):
         self.guideUpdate()
         self.stateToCam()
+
 
     ###################
     # Array Traversal #
@@ -355,10 +304,12 @@ class State(object):
         index = (index + 1) % len(arr)
         return index
 
+
     def arrPrev(self, arr, cur):
         index = arr.index(cur)
         index = (index - 1) % len(arr)
         return index
+
 
     ##########
     # Camera #
@@ -371,6 +322,7 @@ class State(object):
         ratio = viewport.size()[2] / viewport.size()[3]
         self.cam.parm("aspect").set(ratio)
 
+
     def camFrame(self):
         centroid = self.geoCentroidGet()
         # bbox = self.geoBboxGet()
@@ -379,6 +331,7 @@ class State(object):
         self.ow = 10
         self.camZoom(6)
         self.stateToCam()
+
 
     def camInit(self):
         self.viewports = list( self.sceneViewer.viewports() )
@@ -433,6 +386,7 @@ class State(object):
         self.stateToCam()
         self.updateGuides()
 
+
     def camProjectionCycle(self):
         cam = self.cam
         projParm = cam.parm("projection")
@@ -440,12 +394,14 @@ class State(object):
         if proj == "ortho": projParm.set("perspective")
         elif proj == "perspective": projParm.set("ortho")
 
+
     def camToState(self):
         self.t = list(self.cam.evalParmTuple("t"))
         self.p = list(self.cam.evalParmTuple("p"))
         self.r = hou.Vector3(self.cam.evalParmTuple("r"))
         self.pr = list(self.cam.evalParmTuple("pr"))
         self.ow = self.cam.evalParm("orthowidth")
+
 
     def camReset(self):
         self.T_cam = hou.Vector3(0, 0, 0)
@@ -458,6 +414,7 @@ class State(object):
         self.global_y = hou.Vector3(0, 1, 0)
         self.global_z = hou.Vector3(0, 0, 1)
         self.stateToCam()
+
 
     def camR(self, axis_name, deg):
         axis = None
@@ -472,6 +429,7 @@ class State(object):
         self.local_z *= m
         self.stateToCam()
 
+
     def camT(self, axis_name, amt):
         axis = None
         if axis_name == "x": axis = self.local_x
@@ -481,10 +439,12 @@ class State(object):
         self.T_cam += move
         self.stateToCam()
 
+
     def camZoom(self, amt):
         move = self.local_z * amt
         self.T_cam += move
         self.stateToCam()
+
 
     ###############
     # Default Cam #
@@ -499,6 +459,7 @@ class State(object):
                 viewport.frameAll()
         self.camToState()
 
+
     ############
     # Geometry #
     ############
@@ -507,6 +468,7 @@ class State(object):
         geo = self.geoGet()
         bbox = geo.boundingBox()
         return bbox
+
 
     def geoCentroidGet(self):
         geo_in = self.geoGet()
@@ -517,6 +479,7 @@ class State(object):
         pt = geo_out.point(0)
         centroid = pt.position()
         return centroid
+
 
     def geoGet(self):
         self.displayNode = None
@@ -529,11 +492,13 @@ class State(object):
         elif self.context == "Geometry": displayNode = pwd.displayNode()
         return displayNode.geometry()
 
+
     def geoHome(self):
         self.displayNode = None
         pwd = self.sceneViewer.pwd()
         self.context = pwd.childTypeCategory().label()
         # print(self.context)
+
 
     #########
     # Guide #
@@ -583,9 +548,11 @@ class State(object):
                 name="ray",
                 params={"color1": hou.Vector4((1, 0.8, 1, 0.5))})
 
+
     def guideToggle(self, kwargs, guide):
         kwargs[guide] = not kwargs[guide]
         self.update_bbox()
+
 
     def guideUpdate(self):
         if self.guide_states["axisCam"]: self.guideAxisCamUpdate()
@@ -617,6 +584,7 @@ class State(object):
         #         name="text",
         #         label="test")
 
+
     def guideAxisCamUpdate(self):
         axes = (self.local_x, self.local_y, self.local_z)
         geo = hou.Geometry()
@@ -629,6 +597,7 @@ class State(object):
             poly.addVertex(pt_arr[1])
         self.guideAxisCam.setGeometry(geo)
         self.guideAxisCam.show(1)
+
 
     def guideAxisPivotUpdate(self):
         T_pvt = hou.Vector3(self.T_pvt)
@@ -650,6 +619,7 @@ class State(object):
         self.guideAxisPivot.setParams({"fade_factor": 0.0})
         self.guideAxisPivot.show(1)
 
+
     def guideBboxUpdate(self):
         geo  = self.get_get()
         # bbox = geo.boundingBox()
@@ -664,6 +634,7 @@ class State(object):
         #print(bbox)
         self.guideBbox.setGeometry(geo)
         self.guideBbox.show(1)
+
 
     def guidePerimUpdate(self):
         rad  = self.T_pvt.distanceTo(self.T_cam)
@@ -683,6 +654,7 @@ class State(object):
             "fade_factor": 1.0 })
         self.guidePerim.setGeometry(geo)
         self.guidePerim.show(1)
+
 
     def guidePivot2dUpdate(self):
         r = list(self.r)
@@ -704,6 +676,7 @@ class State(object):
         self.guidePivot2d.setGeometry(geo)
         self.guidePivot2d.show(1)
 
+
     def guidePivot3dUpdate(self):
             verb = hou.sopNodeTypeCategory().nodeVerb("sphere")
             verb.setParms({
@@ -714,6 +687,7 @@ class State(object):
             verb.execute(geo, [])
             self.guidePivot3d.setGeometry(geo)
             self.guidePivot3d.show(1)
+
 
     def guideRayUpdate (self):
             T_pvt = self.T_pvt
@@ -727,8 +701,10 @@ class State(object):
             self.guideRay.setGeometry(geo)
             self.guideRay.show(1)
 
+
     def guideTextUpdate (self):
         return
+
 
     #################
     # HUD Functions #
@@ -748,6 +724,7 @@ class State(object):
         self.hudSwitch()
         self.hudUpdate()
 
+
     def hudControlPrev(self):
         self.hud_state["huds"] = self.hud_names
         self.hud_state["hud"] = self.hud_name
@@ -761,6 +738,7 @@ class State(object):
         self.hud_name = self.hud_state["hud"]
         self.hudSwitch()
         self.hudUpdate()
+
 
     def hudGraphUpdate(self):
         # Calculate the number of bars in a graph based on the length of the appropriate array
@@ -776,10 +754,12 @@ class State(object):
                 # Set the number of bars in the graph.
                 self.HUD_TEMPLATE["rows"][i]["count"] = len(arr)
 
+
     def hudModeCycle(self):
         index = self.arrNext(self.modes, self.mode)
         self.mode = self.modes[index]
         self.hudUpdate()
+
 
     def hudOptionNext(self):
         self.hud_state["huds"] = self.hud_names
@@ -803,6 +783,7 @@ class State(object):
         elif control == "set_view": self.setView()
         self.hudUpdate()
 
+
     def hudOptionPrev(self):
         self.hud_state["huds"] = self.hud_names
         self.hud_state["hud"] = self.hud_name
@@ -825,6 +806,7 @@ class State(object):
         elif control == "set_view": self.setView()
         self.hudUpdate()
 
+
     def hudSwitch(self):
         # Update the current hud based on the self.hud_name variable
         self.hud_name = self.hud_state["hud"]
@@ -832,6 +814,7 @@ class State(object):
         self.sceneViewer.hudInfo(template=self.HUD_TEMPLATE)
         self.hud_state = getattr(self, self.hud_name + "_hud_state")
         self.hudGraphUpdate()
+
 
     def hudUpdate(self):
         # Update graph bar count
@@ -870,6 +853,7 @@ class State(object):
         # Apply
         self.sceneViewer.hudInfo(hud_values=updates)
 
+
     ##################
     # Init Functions #
     ##################
@@ -883,6 +867,7 @@ class State(object):
         # keycam node display flag.
         self.cam.setDisplayFlag(self.guide_states["camGeo"])
 
+
     def setView(self):
         set_view = self.hud_state["set_view"]
         r = None
@@ -895,6 +880,7 @@ class State(object):
         self.r = hou.Vector3(r)
         self.stateToCam()
 
+
     def setFocusAttr(self):
         attr = hou.ui.readInput(
             "focus_attr",
@@ -903,6 +889,7 @@ class State(object):
         if attr[0] == 0:
             self.focus_state["focus_attr"] = attr[1]
 
+
     ###########
     # Network #
     ###########
@@ -910,6 +897,7 @@ class State(object):
     def networkContextUpdate(self):
         node = self.sceneViewer.pwd()
         self.context = node.type().name()
+
 
     ##############
     # Parameters #
@@ -922,10 +910,12 @@ class State(object):
         self.pr = list(self.cam.evalParmTuple("pr"))
         self.ow = self.cam.evalParm("orthowidth")
 
+
     def stateToCam(self):
         self.cam.parmTuple("t").set(self.T_cam)
         self.cam.parmTuple("r").set(self.r)
         self.cam.parm("orthowidth").set(self.ow)
+
 
     ############
     # Viewport #
@@ -987,8 +977,10 @@ class State(object):
         self.viewport = self.viewports[self.viewport_index]
         self.viewportType = self.viewport.type()
 
+
     def viewportFocus(self):
         return
+
 
     def viewportFrame(self):
         for viewport in self.viewports:
@@ -997,6 +989,7 @@ class State(object):
             if cam == None: viewport.frameAll()
             else: viewport.frameAll()
         self.camToState()
+
 
     def viewportSwap(self):
         # viewport_names = [viewport.name() for viewport in self.viewports]
@@ -1009,6 +1002,7 @@ class State(object):
             viewport.changeName(self.viewports[i])
             # viewport.changeType(viewportTypes[i])
 
+
     def viewportGet(self):
         viewport_indexs = self.layout_state["viewport_indexs"]
         viewport_index = self.layout_state["viewport_index"]
@@ -1017,6 +1011,7 @@ class State(object):
         viewports.reverse()
         viewport = viewports[viewport_index]
         return viewport
+
 
     def viewportLayoutSet(self):
         layout = self.hud_state["layout"]
@@ -1042,6 +1037,7 @@ class State(object):
     def viewportTypeSet(self, viewportType):
         viewport = self.sceneViewer.findViewport(self.layout_state["viewport_index"])
         viewport.changeType(viewportType)
+
 
 def createViewerStateTemplate():
     # Define template
@@ -1073,6 +1069,7 @@ def createViewerStateTemplate():
     menu = makeMenu()
     template.bindMenu(menu)
     return template
+
 
 def makeMenu():
     menu = hou.ViewerStateMenu("keycamMenu", "keycamMenu")
