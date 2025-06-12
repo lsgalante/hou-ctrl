@@ -226,8 +226,8 @@ class State(object):
             if key == "m": self.hudModeCycle(); return True
             elif key == "k": self.hudControlPrev(); return True
             elif key == "j": self.hudControlNext(); return True
-            elif key == "h": self.hudOptionNav("prev"); return True
-            elif key == "l": self.hudOptionNav("next"); return True
+            elif key == "h": self.hudOptionPrev; return True
+            elif key == "l": self.hudOptionNext; return True
         # Camera movement
         elif self.mode == "camera":
             if key == "m": self.hudModeCycle(); return True
@@ -745,39 +745,48 @@ class State(object):
         self.mode = self.modes[index]
         self.hudUpdate()
 
-    def hudOptionNav(self, direction):
+    def hudOptionNext(self):
         self.hud_state["huds"] = self.hud_names
         self.hud_state["hud"] = self.hud_name
         controls = self.hud_state["controls"]
         control = self.hud_state["control"]
-
         values = self.hud_state[control + "s"]
         value = self.hud_state[control]
         index = values.index(value)
-
-        if direction == "prev":
-            if control == "attr":
-                self.setFocusAttr()
-            else:
-                index -= 1
-                index %= len(values)
-                new_value = values[index]
-                self.hud_state[control] = new_value
-        elif direction == "next":
-            if control == "attr":
-                self.setFocusAttr()
-            else:
-                index += 1
-                index %= len(values)
-                new_value = values[index]
-                self.hud_state[control] = new_value
-
+        if control == "attr":
+            self.setFocusAttr()
+        else:
+            index += 1
+            index %= len(values)
+            new_value = values[index]
+            self.hud_state[control] = new_value
         # Extra handling
         if control == "hud": self.hudSwitch()
         elif control == "layout": self.viewportLayoutSet()
         elif control == "viewport_index": self.viewportFocus()
         elif control == "set_view": self.setView()
+        self.hudUpdate()
 
+    def hudOptionPrev(self):
+        self.hud_state["huds"] = self.hud_names
+        self.hud_state["hud"] = self.hud_name
+        controls = self.hud_state["controls"]
+        control = self.hud_state["control"]
+        values = self.hud_state[control + "s"]
+        value = self.hud_state[control]
+        index = values.index(value)
+        if control == "attr":
+            self.setFocusAttr()
+        else:
+            index -= 1
+            index %= len(values)
+            new_value = values[index]
+            self.hud_state[control] = new_value
+        # Extra handling
+        if control == "hud": self.hudSwitch()
+        elif control == "layout": self.viewportLayoutSet()
+        elif control == "viewport_index": self.viewportFocus()
+        elif control == "set_view": self.setView()
         self.hudUpdate()
 
     def hudSwitch(self):
