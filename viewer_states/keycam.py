@@ -251,6 +251,7 @@ class State(object):
                 "shift+-", "shift+=", # special zoom in/out
                 "f" # frame
             )
+            index = keys.index(key)
 
             if self.cam_type == "node":
                 functions = (
