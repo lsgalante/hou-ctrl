@@ -221,75 +221,110 @@ class State(object):
         key = kwargs["ui_event"].device().keyString()
         self.camAspectRatioUpdate()
         self.camFrame()
-        # HUD navigation
+        functions = ()
+        keys = ()
+
+        # HUD
         if self.mode == "settings":
-            if key == "m": self.hudModeCycle(); return True
-            elif key == "k": self.hudControlPrev(); return True
-            elif key == "j": self.hudControlNext(); return True
-            elif key == "h": self.hudOptionPrev; return True
-            elif key == "l": self.hudOptionNext; return True
-        # Camera movement
+            keys = (
+                "m",      # cycle mode
+                "h", "l"  # prev/next option
+                "k", "j", # prev/next control
+            )
+            functions = (
+                self.hudModeCycle,
+                self.hudOptionPrev, self.hudOptionNext,
+                self.hudControlPrev, self.hudControlNext
+            )
+            args = [None] * len(functions)
+            index = keys.index(key)
+
+        # Camera
         elif self.mode == "camera":
-            if key == "m": self.hudModeCycle(); return True
-            elif key == "o": self.camProjectionCycle(); return True
+            keys = (
+                "m", "o", # Cycle mode/projection
+                "h", "l", # rotate about y axis neg/pos
+                "k", "j", # rotate about x axis neg/pos
+                "shift+h", "shift+l", # translate on x axis
+                "shift+k", "shift+j", # translate on y axis
+                "-", "=", # zoom in/out
+                "shift+-", "shift+=", # special zoom in/out
+                "f" # frame
+            )
 
-            elif self.cam_type == "node":
-                if key == "k": self.camRotate("x", -15); return True
-                elif key == "j": self.camRotate("x", 15); return True
-                elif key == "h": self.camRotate("y", -15); return True
-                elif key == "l": self.camRotate("y", 15); return True
-                elif key == "shift+k": self.camTranslate("y", 1); return True
-                elif key == "shift+j": self.camTranslate("y", -1); return True
-                elif key == "shift+h": self.camTranslate("x", -1); return True
-                elif key == "shift+l": self.camTranslate("x", 1); return True
-
-            elif self.cam_type == "default":
-                if key == "k": self.defaultCamTranslate(); return True
-                elif key == "j": self.defaultCamTranslate(); return True
-                elif key == "h": self.defaultCamTranslate(); return True
-                elif key == "l": self.defaultCamTranslate(); return True
-                elif key == "shift+k": self.defaultCamRotate(); return True
-                elif key == "shift+j": self.defaultCamRotate(); return True
-                elif key == "shift+h": self.defaultCamRotate(); return True
-                elif key == "shift+l": self.defaultCamRotate(); return True
-
-            if self.viewport.type() == hou.geometryViewportType.Perspective: # Cam is node
-                if key == "Shift+h": self.camTranslate("x", -1); return True
-                elif key == "Shift+j": self.camTranslate("y", -1); return True
-                elif key == "Shift+k": self.camTranslate("y", 1); return True
-                elif key == "Shift+l": self.camTranslate("x", 1); return True
-                elif key == "h": self.camRotate("y", -15); return True
-                elif key == "j": self.camRotate("x", 15); return True
-                elif key == "k": self.camRotate("x", -15); return True
-                elif key == "l": self.camRotate("y", 15); return True
-                elif key == "-": self.camZoom(1); return True
-                elif key == "=": self.camZoom(-1); return True
-                elif key == "Shift+-": self.ow += 1; self.stateToCam(); return True
-                elif key == "Shift+=": self.ow -= 1; self.stateToCam(); return True
-                elif key == "f":       self.camFrame(); return True
+            if self.cam_type == "node":
+                functions = (
+                    self.hudModeCycle, self.camProjectionCycle,
+                    self.camR, self.camR,
+                    self.camR, self.camR,
+                    self.camT, self.camT,
+                    self.camT, self.camT
+                )
+                args = (
+                    None, None,
+                    (hou.Vector3(1, 0, 0), -15), (hou.Vector3(1, 0, 0), 15),
+                    (hou.Vector3(0, 1, 0), -15), (hou.Vector3(0, 1, 0), 15),
+                    hou.Vector3(0, 1, 0), hou.Vector3(0, -1, 0),
+                    hou.Vector3(-1, 0, 0), hou.Vector3(1, 0, -1)
+                )
 
                 self.stateToCam()
 
-            else: # Cam is default
+            elif self.cam_type == "default":
                 cam = self.viewport.defaultCamera()
                 t = list(cam.translation())
                 delta = self.units["t"]
-                indices = [0, 0]
 
-                # if viewportType == hou.geometryViewportType.Top: indices = [0, 1]
-                # elif viewportType == hou.geometryViewportType.Bottom: indices = [2, 0]
-                # elif viewportType == hou.geometryViewportType.Front: indices = [0, 1]
-                # elif viewportType == hou.geometryViewportType.Back: indices = [1, 0]
-                # elif viewportType == hou.geometryViewportType.Right: indices = [0, 1]
-                # elif viewportType == hou.geometryViewportType.Left: indices = [1, 2]
+                # Perspective/Orthographic projection
+                if self.viewport.type() == hou.geometryViewportType.Perspective:
+                    functions = (
+                        self.camT, self.camT,
+                        self.camT, self.camT,
+                        self.camR, self.camR,
+                        self.camR, self.camR,
+                        self.camZoom, self.camZoom)
+                    args = (
+                        (hou.Vector3(1, 0, 0), -1), (hou.Vector3(0, 1, 0), -1),
+                        (hou.Vector3(0, 1, 0), 15), (hou.Vector3(0, -1, 0), 15),
+                        (hou.Vector3(-1, 0, 0), 15), (hou.Vector3(1, 0, -1), 15),
+                        (hou.Vector3(0, 0, 1), 15), (hou.Vector3(0, 0, -1), 15),
+                        (hou.Vector3(0, 0, 1), 15), (hou.Vector3(0, 0, -1), 15),
+                    )
 
-                if key == "h": t[indices[0]] += delta
-                elif key == "j": t[indices[1]] += delta
-                elif key == "k": t[indices[1]] -= delta
-                elif key == "l": t[indices[0]] -= delta
-                elif key == "-": cam.setOrthoWidth(cam.orthoWidth() + 1)
-                elif key == "=": cam.setOrthoWidth(cam.orthoWidth() - 1)
+                # Linear projection
+                else:
+                    indices = [0, 0]
+                    if self.viewport.type() == hou.geometryViewportType.Top: indices = [0, 1]
+                    elif self.viewport.type() == hou.geometryViewportType.Bottom: indices = [2, 0]
+                    elif self.viewport.type() == hou.geometryViewportType.Front: indices = [0, 1]
+                    elif self.viewport.type() == hou.geometryViewportType.Back: indices = [1, 0]
+                    elif self.viewport.type() == hou.geometryViewportType.Right: indices = [0, 1]
+                    elif self.viewport.type() == hou.geometryViewportType.Left: indices = [1, 2]
+
+                    functions = (
+                        self.hudModeCycle, self.defaultCamProjectionCycle,
+                        self.defaultcamR, self.defaultcamR,
+                        self.defaultcamR, self.defaultcamR,
+                        self.defaultcamT, self.defaultcamT,
+                        self.defaultcamT, self.defaultcamT,
+                        cam.setOrthoWidth(cam.orthoWidth() - 1),
+                        cam.setOrthoWidth(cam.orthoWidth() + 1)
+                    )
+                    args = (
+                        None, None,
+                        (hou.Vector3(1, 0, 0), -15),
+                        (hou.Vector3(1, 0, 0), 15),
+                        (hou.Vector3(0, 1, 0), -15), (hou.Vector3(0, 1, 0), 15),
+                        hou.Vector3(0, 1, 0), hou.Vector3(0, -1, 0),
+                        hou.Vector3(-1, 0, 0), hou.Vector3(1, 0, -1)
+                    )
+
                 cam.setTranslation(t)
+
+            if index != -1:
+                functions[index](args[index])
+                return True
+
         else:
             return False
 
@@ -423,7 +458,7 @@ class State(object):
         self.global_z = hou.Vector3(0, 0, 1)
         self.stateToCam()
 
-    def camRotate(self, axis_name, deg):
+    def camR(self, axis_name, deg):
         axis = None
         if axis_name == "x": axis = self.local_x; self.r[0] += deg
         elif axis_name == "y": axis = self.global_y; self.r[1] += deg
@@ -436,7 +471,7 @@ class State(object):
         self.local_z *= m
         self.stateToCam()
 
-    def camTranslate(self, axis_name, amt):
+    def camT(self, axis_name, amt):
         axis = None
         if axis_name == "x": axis = self.local_x
         elif axis_name == "y": axis = self.local_y
