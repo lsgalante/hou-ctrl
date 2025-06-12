@@ -13,12 +13,9 @@ import time
 # Desktop #
 ###########
 
-
-
 def desktopEvalColorSchemes(*args):
     hou.ui.reloadColorScheme()
 desktopEvalColorSchemes.interactive_contexts = ["all"]
-
 
 
 def desktopLayoutA(paneTab):
@@ -44,7 +41,7 @@ def desktopLayoutA(paneTab):
     # Right vertical split
     panes[1].splitVertically()
     panes[1].setSplitFraction(0.666)
-    
+
     paneTabs = desktopPaneTabs()
     paneTabs[0].setType(hou.paneTabType.SceneViewer) # Top left
     paneTabs[1].setType(hou.paneTabType.DetailsView) # Bas left
@@ -55,7 +52,6 @@ def desktopLayoutA(paneTab):
     desktopToggleStowbars()
     desktopToggleStowbars()
 desktopLayoutA.interactive_contexts = ["all"]
-
 
 
 def desktopLayoutB(paneTab):
@@ -76,7 +72,6 @@ def desktopLayoutB(paneTab):
 desktopLayoutB.interactive_contexts = ["all"]
 
 
-
 def desktopLayoutQuad(paneTab):
     paneOnly(paneTab)
     paneTabOnly(paneTab)
@@ -89,7 +84,6 @@ def desktopLayoutQuad(paneTab):
     panes[0].splitVertically()
     panes[1].splitVertically()
 desktopLayoutQuad.interactive_contexts = ["all"]
-
 
 
 def desktopLayoutTriH(paneTab):
@@ -120,7 +114,6 @@ def desktopLayoutTriH(paneTab):
 desktopLayoutTriH.interactive_contexts = ["all"]
 
 
-
 def triHCallback():
     panes = hou.ui.panes()
     pane = hou.ui.paneUnderCursor()
@@ -133,10 +126,9 @@ def triHCallback():
     return True
 
 
-
 def desktopLayoutTriV(paneTab):
     sessionRemoveEventLoopCallbacks()
-    
+
     # Reduce
     paneOnly(paneTab)
     paneTabOnly(paneTab)
@@ -152,7 +144,7 @@ def desktopLayoutTriV(paneTab):
     # Make paneTabs
     panes[1].createTab(hou.paneTabType.PythonShell)
     panes[1].tabs()[0].setIsCurrentTab()
-    
+
     # Set types
     panes[0].tabs()[0].setType(hou.paneTabType.SceneViewer)
     panes[1].tabs()[0].setType(hou.paneTabType.Parm)
@@ -162,11 +154,10 @@ def desktopLayoutTriV(paneTab):
     # Set ratios
     panes[0].setSplitFraction(0.66)
 
-    
+
     hou.session.lastPane = hou.ui.paneUnderCursor()
     hou.ui.addEventLoopCallback(triVCallback)
 desktopLayoutTriV.interactive_contexts = ["all"]
-
 
 
 def triVCallback():
@@ -181,7 +172,6 @@ def triVCallback():
     return True
 
 
-
 def desktopNetworkEditors(*args):
     editors = []
     for paneTab in desktopPaneTabs():
@@ -191,12 +181,10 @@ def desktopNetworkEditors(*args):
 desktopNetworkEditors.interactive_contexts = ["none"]
 
 
-        
 def desktopPanes(*args):
     panes = hou.ui.curDesktop().panes()
     return panes
 desktopPanes.interactive_contexts = ["none"]
-
 
 
 def desktopSceneViewers(*args):
@@ -206,7 +194,6 @@ def desktopSceneViewers(*args):
 desktopSceneViewers.interactive_contexts = ["none"]
 
 
-
 def desktopShelfHide(*args):
     desktop = hou.ui.curDesktop()
     desktop.shelfDock().show(0)
@@ -214,12 +201,10 @@ def desktopShelfHide(*args):
 desktopShelfHide.interactive_contexts = ["none"]
 
 
-
 def desktopShelfShow(*args):
     desktop = hou.ui.curDesktop()
     desktop.shelfDock().show(1)
 desktopShelfShow.interactive_contexts = ["none"]
-
 
 
 def desktopPaneTabs(*args):
@@ -231,14 +216,12 @@ def desktopPaneTabs(*args):
 desktopPaneTabs.interactive_contexts = ["none"]
 
 
-
 def desktopToggleMainMenuBar(*args):
     if hou.getPreference("showmenu.val") == "1":
         hou.setPreference("showmenu.val", "0")
     else:
         hou.setPreference("showmenu.val", "1")
 desktopToggleMainMenuBar.interactive_contexts = ["all"]
-
 
 
 def desktopToggleMenus(*args):
@@ -298,12 +281,10 @@ def desktopToggleMenus(*args):
 desktopToggleMenus.interactive_contexts = ["all"]
 
 
-
 def desktopToggleHctl(*args):
     reload(hctl)
     hctl.dialog().show()
 desktopToggleHctl.interactive_contexts = ["all"]
-
 
 
 def desktopToggleNetworkControls(*args):
@@ -317,7 +298,6 @@ def desktopToggleNetworkControls(*args):
 desktopToggleNetworkControls.interactive_contexts = ["all"]
 
 
-
 def desktopTogglePaneTabs(*args):
     panes = desktopPanes()
     visible = 0
@@ -329,18 +309,15 @@ def desktopTogglePaneTabs(*args):
 desktopTogglePaneTabs.interactive_contexts = ["all"]
 
 
-
 def desktopToggleStowbars(*args):
     hidden = hou.ui.hideAllMinimizedStowbars()
     hou.ui.setHideAllMinimizedStowbars(not hidden)
 desktopToggleStowbars.interactive_contexts = ["all"]
 
 
-
 def desktopUpdateMainMenuBar(*args):
     hou.ui.updateMainMenuBar()
 desktopUpdateMainMenuBar.interactive_contexts = ["all"]
-
 
 
 def desktopViewports(*args):
@@ -352,12 +329,9 @@ def desktopViewports(*args):
 desktopViewports.interactive_contexts = ["none"]
 
 
-
 ##################
 # Network Editor #
 ##################
-
-
 
 def networkEditorAddNetworkBox(editor):
     context = editor.pwd()
@@ -365,7 +339,6 @@ def networkEditorAddNetworkBox(editor):
     networkBox = context.createNetworkBox()
     networkBox.setPosition(node.position())
 networkEditorAddNetworkBox.interactive_contexts = ["paneTabType.NetworkEditor"]
-
 
 
 def networkEditorAddStickyNote(editor):
@@ -378,7 +351,6 @@ def networkEditorAddStickyNote(editor):
 networkEditorAddStickyNote.interactive_contexts = ["paneTabType.NetworkEditor"]
 
 
-
 def networkEditorConnectNodeTo(editor):
     node = networkEditorCurrentNode(editor)
     choices = ("a", "b", "c")
@@ -386,11 +358,9 @@ def networkEditorConnectNodeTo(editor):
 networkEditorConnectNodeTo.interactive_contexts = ["paneTabType.NetworkEditor"]
 
 
-
 def networkEditorCurrentNode(editor):
     return editor.currentNode()
 networkEditorCurrentNode.interactive_contexts = ["none"]
-
 
 
 def networkEditorDeselectAllNodes(editor):
@@ -399,12 +369,10 @@ def networkEditorDeselectAllNodes(editor):
 networkEditorDeselectAllNodes.interactive_contexts = ["paneTabType.NetworkEditor"]
 
 
-
 def networkEditorDisplayNode(editor):
     context = editor.pwd()
     return  context.displayNode()
 networkEditorDisplayNode.interactive_contexts = ["none"]
-
 
 
 def networkEditorRenameNode(editor):
@@ -415,12 +383,10 @@ def networkEditorRenameNode(editor):
 networkEditorRenameNode.interactive_contexts = ["paneTabType.NetworkEditor", "paneTabType.Parm"]
 
 
-
 def networkEditorRotateNodeInputs(editor):
     node = networkEditorCurrentNode(editor)
     connectors = node.inputConnectors()
 networkEditorRotateNodeInputs.interactive_contexts = ["paneTabType.NetworkEditor"]
-
 
 
 def networkEditorSelectDisplayNode(editor):
@@ -429,17 +395,15 @@ def networkEditorSelectDisplayNode(editor):
 networkEditorSelectDisplayNode.interactive_contexts = ["paneTabType.NetworkEditor"]
 
 
-
 def networkEditorToggleDimUnusedNodes(editor):
     dim = "0"
     if editor.getPref("dimunusednodes") == "1":
         dim = "1"
     if dim == "0":
-        editor.setPref("dimunusednodes", "1") 
+        editor.setPref("dimunusednodes", "1")
     else:
         editor.setPref("dimunusednodes", "0")
 networkEditorToggleDimUnusedNodes.interactive_contexts = ["all"]
-
 
 
 def networkEditorToggleGridLines(editor):
@@ -453,14 +417,12 @@ def networkEditorToggleGridLines(editor):
 networkEditorToggleGridLines.interactive_contexts = ["all"]
 
 
-
 def networkEditorToggleLocating(editor):
     locating = 0
     if editor.locatingEnabled():
         locating = 1
     editor.setLocatingEnabled(not locating)
 networkEditorToggleLocating.interactive_contexts = ["all"]
-
 
 
 def networkEditorToggleMenu(editor):
@@ -472,24 +434,19 @@ def networkEditorToggleMenu(editor):
 networkEditorToggleMenu.interactive_contexts = ["all"]
 
 
-
 def networkEditorToggleGridPoints(editor):
     visible = int(editor.getPref("gridmode"))
     editor.setPref("gridmode", str(not visible))
 networkEditorToggleGridPoints.interactive_contexts = ["all"]
 
 
-
 ########
 # Open #
 ########
 
-
-
 def openColorEditor(*args):
     hou.ui.selectColor()
 openColorEditor.interactive_contexts = ["all"]
-
 
 
 def openFloatingParameterEditor(paneTab):
@@ -497,9 +454,8 @@ def openFloatingParameterEditor(paneTab):
         node = paneTab.currentNode()
         hou.ui.showFloatingParameterEditor(node)
     else:
-        hou.ui.setStatusMessage("Not a network editor", hou.severityType.Error) 
+        hou.ui.setStatusMessage("Not a network editor", hou.severityType.Error)
 openFloatingParameterEditor.interactive_contexts = ["all"]
-
 
 
 def openHotkeyEditor(*args):
@@ -507,12 +463,9 @@ def openHotkeyEditor(*args):
 openHotkeyEditor.interactive_contexts = ["none"]
 
 
-
 ########
 # Pane #
 ########
-
-
 
 def paneContract(paneTab):
     pane = paneTab.pane()
@@ -522,7 +475,6 @@ def paneContract(paneTab):
     hou.ui.setStatusMessage(message)
     pane = pane.setSplitFraction(fraction)
 paneContract.interactive_contexts = ["all"]
-
 
 
 def paneExpand(paneTab):
@@ -535,14 +487,12 @@ def paneExpand(paneTab):
 paneExpand.interactive_contexts = ["all"]
 
 
-
 def paneNewPaneTab(paneTab):
     pane = paneTab.pane()
     reload(hctl_new_pane_tab_menu)
     newPaneTabMenu = hctl_new_pane_tab_menu.newPaneTabMenu()
     newPaneTabMenu.show()
 paneNewPaneTab.interactive_contexts = ["all"]
-
 
 
 def paneOnly(paneTab):
@@ -554,17 +504,14 @@ def paneOnly(paneTab):
 paneOnly.interactive_contexts = ["all"]
 
 
-
 def paneRatioGet(pane):
     return pane.getSplitFraction()
 paneRatioGet.interactive_contexts = ["none"]
 
 
-
 def paneRatioSet(pane, ratio):
     pane.setSplitFraction(ratio)
 paneRatioSet.interactive_contexts = ["none"]
-
 
 
 def paneRatioHalf(paneTab):
@@ -573,19 +520,16 @@ def paneRatioHalf(paneTab):
 paneRatioHalf.interactive_contexts = ["all"]
 
 
-
 def paneRatioQuarter(paneTab):
     pane = paneTab.pane()
     pane.setSplitFraction(0.25)
 paneRatioQuarter.interactive_contexts = ["all"]
 
 
-
 def paneRatioThird(paneTab):
     pane = paneTab.pane()
     pane.setSplitFraction(0.333)
 paneRatioThird.interactive_contexts = ["all"]
-
 
 
 def paneResize(paneTab):
@@ -596,12 +540,10 @@ def paneResize(paneTab):
 paneResize.interactive_contexts = ["all"]
 
 
-
 def paneSplitHorizontal(paneTab):
     pane = paneTab.pane()
     newPane = pane.splitHorizontally()
 paneSplitHorizontal.interactive_contexts = ["all"]
-
 
 
 def paneSplitVertical(paneTab):
@@ -610,12 +552,10 @@ def paneSplitVertical(paneTab):
 paneSplitVertical.interactive_contexts = ["all"]
 
 
-
 def paneSplitRotate(paneTab):
     pane = paneTab.pane()
     pane.splitRotate()
 paneSplitRotate.interactive_contexts = ["all"]
-
 
 
 def paneSplitSwap(paneTab):
@@ -624,12 +564,10 @@ def paneSplitSwap(paneTab):
 paneSplitSwap.interactive_contexts = ["all"]
 
 
-
 def paneToggleMaximized(paneTab):
     pane = paneTab.pane()
     pane.setIsMaximized(not pane.isMaximized())
 paneToggleMaximized.interactive_contexts = ["all"]
-
 
 
 def paneTogglePaneTabs(paneTab):
@@ -638,31 +576,25 @@ def paneTogglePaneTabs(paneTab):
 paneTogglePaneTabs.interactive_contexts = ["all"]
 
 
-
 def paneToggleSplitMaximized(paneTab):
     pane = paneTab.pane()
     pane.setIsSplitMaximized(not pane.isSplitMaximized())
 paneToggleSplitMaximized.interactive_contexts = ["all"]
 
 
-
 ###########
 # Panetab #
 ###########
-
-
 
 def paneTabClose(paneTab):
     paneTab.close()
 paneTabClose.interactive_contexts = ["all"]
 
 
-
 def paneTabCurrentNode(paneTab):
     if paneTab.hasNetworkControls():
         return paneTab.currentNode()
 paneTabCurrentNode.interactive_contexts = ["none"]
-
 
 
 def paneTabPath(paneTab):
@@ -673,7 +605,6 @@ def paneTabPath(paneTab):
 paneTabPath.interactive_contexts = ["none"]
 
 
-
 def paneTabOnly(this_paneTab):
     for paneTab in desktopPaneTabs():
         if paneTab != this_paneTab:
@@ -681,11 +612,9 @@ def paneTabOnly(this_paneTab):
 paneTabOnly.interactive_contexts = ["all"]
 
 
-
 def paneTabSetTypeDetailsView(paneTab):
     paneTab.setType(hou.paneTabType.DetailsView)
 paneTabSetTypeDetailsView.interactive_contexts = ["all"]
-
 
 
 def paneTabSetTypeNetworkEditor(paneTab):
@@ -693,11 +622,9 @@ def paneTabSetTypeNetworkEditor(paneTab):
 paneTabSetTypeNetworkEditor.interactive_contexts = ["all"]
 
 
-
 def paneTabSetTypeParm(paneTab):
     paneTab.setType(hou.paneTabType.Parm)
 paneTabSetTypeParm.interactive_contexts = ["all"]
-
 
 
 def paneTabSetTypePythonShell(paneTab):
@@ -705,11 +632,9 @@ def paneTabSetTypePythonShell(paneTab):
 paneTabSetTypePythonShell.interactive_contexts = ["all"]
 
 
-
 def paneTabSetTypeSceneViewer(paneTab):
     paneTab.setType(hou.paneTabType.SceneViewer)
 paneTabSetTypeSceneViewer.interactive_contexts = ["all"]
-
 
 
 def paneTabToggleNetworkControls(paneTab):
@@ -718,19 +643,15 @@ def paneTabToggleNetworkControls(paneTab):
 paneTabToggleNetworkControls.interactive_contexts = ["all"]
 
 
-
 def paneTabTogglePin(paneTab):
     paneTab.setPin(not paneTab.isPin())
 paneTabTogglePin.interactive_contexts = ["all"]
-
 
 
 #########
 # Print #
 #########
 
-
-    
 def printLayout(*args):
     message = "Layout:"
     desktop = hou.ui.curDesktop()
@@ -740,26 +661,22 @@ def printLayout(*args):
         message += " Pane" + str(ct) + " -"
         if pane.isSplit():
             message += " split"
-        else:    
+        else:
             message += " whole"
             message += "    "
         ct += 1
     message = message[0:-1]
-    hou.ui.setStatusMessage(message) 
+    hou.ui.setStatusMessage(message)
 printLayout.interactive_contexts = ["all"]
-
 
 
 ################
 # Scene Viewer #
 ################
 
-
-
 def sceneViewerCurrentViewport(sceneViewer):
     return sceneViewer.curViewport()
 sceneViewerCurrentViewport.interactive_contexts = ["none"]
-
 
 
 def sceneViewerDisplaySets(sceneViewer):
@@ -773,11 +690,9 @@ def sceneViewerDisplaySets(sceneViewer):
 sceneViewerDisplaySets.interactive_contexts = ["none"]
 
 
-
 def sceneViewerLayoutDoubleSide(sceneViewer):
     sceneViewer.setViewportLayout(hou.geometryViewportLayout.DoubleSide)
 sceneViewerLayoutDoubleSide.interactive_contexts = ["paneTabType.SceneViewer"]
-
 
 
 def sceneViewerLayoutDoubleStack(sceneViewer):
@@ -785,11 +700,9 @@ def sceneViewerLayoutDoubleStack(sceneViewer):
 sceneViewerLayoutDoubleStack.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-
 def sceneViewerLayoutQuad(sceneViewer):
     sceneViewer.setViewportLayout(hou.geometryViewportLayout.Quad)
 sceneViewerLayoutQuad.interactive_contexts = ["paneTabType.SceneViewer"]
-
 
 
 def sceneViewerLayoutQuadBottomSplit(sceneViewer):
@@ -797,11 +710,9 @@ def sceneViewerLayoutQuadBottomSplit(sceneViewer):
 sceneViewerLayoutQuadBottomSplit.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-
 def sceneViewerLayoutQuadLeftSplit(sceneViewer):
     sceneViewer.setViewportLayout(hou.geometryViewportLayout.QuadLeftSplit)
 sceneViewerLayoutQuadLeftSplit.interactive_contexts = ["paneTabType.SceneViewer"]
-
 
 
 def sceneViewerLayoutSingle(sceneViewer):
@@ -809,17 +720,14 @@ def sceneViewerLayoutSingle(sceneViewer):
 sceneViewerLayoutSingle.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-
 def sceneViewerLayoutTripleBottomSplit(sceneViewer):
     sceneViewer.setViewportLayout(hou.geometryViewportLayout.TripleBottomSplit)
 sceneViewerLayoutTripleBottomSplit.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-
 def sceneViewerLayoutTripleLeftSplit(sceneViewer):
     sceneViewer.setViewportLayout(hou.geometryViewportLayout.TripleLeftSplit)
 sceneViewerLayoutTripleLeftSplit.interactive_contexts = ["paneTabType.SceneViewer"]
-
 
 
 def sceneViewerLopToggleLightGeo(sceneViewer):
@@ -828,13 +736,11 @@ def sceneViewerLopToggleLightGeo(sceneViewer):
 sceneViewerLopToggleLightGeo.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-
 def sceneViewerVisualizerMenu(sceneViewer):
     reload(hctl_vis_menu)
     visualizerMenu = hctl_vis_menu.visualizerMenu()
     visualizerMenu.show()
 sceneViewerVisualizerMenu.interactive_contexts = ["paneTabType.SceneViewer"]
-
 
 
 def sceneViewerToggleBackface(sceneViewer):
@@ -848,7 +754,6 @@ def sceneViewerToggleBackface(sceneViewer):
 sceneViewerToggleBackface.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-
 def sceneViewerToggleDisplayOptionsToolbar(sceneViewer):
     visible = 0
     if sceneViewer.isShowingDisplayOptionsBar():
@@ -857,12 +762,10 @@ def sceneViewerToggleDisplayOptionsToolbar(sceneViewer):
 sceneViewerToggleDisplayOptionsToolbar.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-
 def sceneViewerToggleGrid(sceneViewer):
     visible = sceneViewer.referencePlane().isVisible()
     sceneViewer.referencePlane().setIsVisible(not visible)
 sceneViewerToggleGrid.interactive_contexts = ["paneTabType.SceneViewer"]
-
 
 
 def sceneViewerToggleGroupList(sceneViewer):
@@ -871,7 +774,6 @@ def sceneViewerToggleGroupList(sceneViewer):
         visible = 1
     sceneViewer.setGroupListVisible(not visible)
 sceneViewerToggleGroupList.interactive_contexts = ["paneTabType.SceneViewer"]
-
 
 
 def sceneViewerToggleKeycam(sceneViewer):
@@ -891,7 +793,6 @@ def sceneViewerToggleKeycam(sceneViewer):
 sceneViewerToggleKeycam.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-
 def sceneViewerTogglePointMarkers(sceneViewer):
     visible = 0
     displaySets = sceneViewerGetDisplaySets(sceneViewer)
@@ -901,7 +802,6 @@ def sceneViewerTogglePointMarkers(sceneViewer):
     for displaySet in displaySets:
         displaySet.showPointMarkers(not visible)
 sceneViewerTogglePointMarkers.interactive_contexts = ["paneTabType.SceneViewer"]
-
 
 
 def sceneViewerTogglePointNormals(sceneViewer):
@@ -915,7 +815,6 @@ def sceneViewerTogglePointNormals(sceneViewer):
 sceneViewerTogglePointNormals.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-
 def sceneViewerTogglePointNumbers(sceneViewer):
     visible = 0
     displaySets = sceneViewerGetDisplaySets(sceneViewer)
@@ -925,7 +824,6 @@ def sceneViewerTogglePointNumbers(sceneViewer):
     for displaySet in displaySets:
         displaySet.showPointNumbers(not visible)
 sceneViewerTogglePointNumbers.interactive_contexts = ["paneTabType.SceneViewer"]
-
 
 
 def sceneViewerTogglePrimNormals(sceneViewer):
@@ -939,7 +837,6 @@ def sceneViewerTogglePrimNormals(sceneViewer):
 sceneViewerTogglePrimNormals.interactive_contexts = ["paneTabType.SceneViewer"]
 
 
-
 def sceneViewerTogglePrimNumbers(sceneViewer):
     visible = 0
     displaySets = sceneViewerGetDisplaySets(sceneViewer)
@@ -949,7 +846,6 @@ def sceneViewerTogglePrimNumbers(sceneViewer):
     for displaySet in displaySets:
         displaySet.showPrimNumbers(not visible)
 sceneViewerTogglePrimNumbers.interactive_contexts = ["paneTabType.SceneViewer"]
-
 
 
 def sceneViewerToggleToolbars(sceneViewer):
@@ -965,7 +861,6 @@ def sceneViewerToggleToolbars(sceneViewer):
         sceneViewer.showDisplayOptionsBar(1)
         sceneViewer.showSelectionBar(1)
 sceneViewerToggleToolbars.interactive_contexts = ["paneTabType.SceneViewer"]
-
 
 
 def sceneViewerToggleVectors(sceneViewer):
@@ -986,12 +881,10 @@ sceneViewerToggleVectors.interactive_contexts = ["paneTabType.SceneViewer"]
 # Session #
 ###########
 
-
 def sessionAutoSaveState(*args):
     state = hou.getPreference("autoSave")
     return state
 sessionAutoSaveState.interactive_contexts = ["none"]
-
 
 
 def sessionEvalBindings(*args):
@@ -1000,17 +893,14 @@ def sessionEvalBindings(*args):
 sessionEvalBindings.interactive_contexts = ["all"]
 
 
-
 def sessionEvalKeycam(*args):
     hou.ui.reloadViewerState("keycam")
 sessionEvalKeycam.interactive_contexts = ["all"]
 
 
-
 def sessionOpenFile(*args):
     hou.ui.selectFile()
 sessionOpenFile.interactive_contexts = ["all"]
-
 
 
 def sessionRemoveEventLoopCallbacks(*args):
@@ -1020,11 +910,9 @@ def sessionRemoveEventLoopCallbacks(*args):
 sessionRemoveEventLoopCallbacks.interactive_contexts = ["all"]
 
 
-
 def sessionRestart(*args):
     return
 sessionRestart.interactive_contexts = ["none"]
-
 
 
 def sessionTriggerUpdate(*args):
@@ -1032,17 +920,14 @@ def sessionTriggerUpdate(*args):
 sessionTriggerUpdate.interactive_contexts = ["all"]
 
 
-
 def sessionUpdateModeAuto(*args):
     hou.setUpdateMode(hou.updateMode.AutoUpdate)
 sessionUpdateModeAuto.interactive_contexts = ["all"]
 
 
-
 def sessionUpdateModeManual(*args):
     hou.setUpdateMode(hou.updateMode.Manual)
 sessionUpdateModeManual.interactive_contexts = ["all"]
-
 
 
 def sessionToggleAutoSave(*args):
@@ -1054,12 +939,9 @@ def sessionToggleAutoSave(*args):
 sessionToggleAutoSave.interactive_contexts = ["none"]
 
 
-
 ############
 # Viewport #
 ############
-
-
 
 def viewportVisualizers(viewport):
     category = hou.viewportVisualizerCategory.Scene
