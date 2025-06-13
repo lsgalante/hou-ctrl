@@ -110,18 +110,18 @@ class State(object):
             "viewport_index": "0",
 
             "set_views": ("top", "bottom", "left", "right", "front", "back", "persp", "none"),
-            "set_view": "persp"
+            "set_view": "persp",
 
             "targets": ("cam", "pivot"),
-            "target": "cam"
+            "target": "cam",
 
             "r": self.units["r"],
             "t": self.units["t"],
             "ow": self.units["ow"],
-            "dist": self.units["dist"]
+            "dist": self.units["dist"],
 
             "vis_arr": ("test1", "test2", "test3"),
-            "vis": "test1"
+            "vis": "test1",
 
             "focuss": ("test1", "test2", "test3"),
             "focus": "test1"
@@ -325,7 +325,6 @@ class State(object):
 
     def camFrame(self):
         centroid = self.geoCentroidGet()
-        # bbox = self.geoBboxGet()
         self.T_pvt = centroid
         self.T_cam = centroid
         self.ow = 10
@@ -345,25 +344,7 @@ class State(object):
             cam = hou.node("/obj").createNode("cam")
             cam.setName("keycam")
             cam.parm("xOrd").set(0)
-        # Define vars.
-        # t = [0, 0, 0]
-        # r = [0, 0, 0]
-        # p = [0, 0, 0]
-        # ow = 1
         cam = self.viewport.camera()
-
-        # if cam == None: # Cam is default.
-            # cam = self.viewport.defaultCamera()
-            # t = cam.translation()
-            # r = cam.rotation()
-            # p = cam.pivot()
-            # ow = cam.orthoWidth()
-
-        # else: # Cam is node.
-            # t = cam.evalParmTuple("t")
-            # r = cam.evalParmTuple("r")
-            # p = cam.evalParmTuple("p")
-            # ow = cam.evalParm("orthowidth")
 
         self.cam = hou.node("/obj/keycam")
         self.viewport.setCamera(self.cam)
@@ -721,7 +702,6 @@ class State(object):
         new_control = controls[control_index]
         self.hud_state["control"] = new_control
         self.hud_name = self.hud_state["hud"]
-        self.hudSwitch()
         self.hudUpdate()
 
 
@@ -736,7 +716,6 @@ class State(object):
         new_control = controls[control_index]
         self.hud_state["control"] = new_control
         self.hud_name = self.hud_state["hud"]
-        self.hudSwitch()
         self.hudUpdate()
 
 
@@ -762,9 +741,6 @@ class State(object):
 
 
     def hudOptionNext(self):
-        self.hud_state["huds"] = self.hud_names
-        self.hud_state["hud"] = self.hud_name
-        # controls = self.hud_state["controls"]
         control = self.hud_state["control"]
         values = self.hud_state[control + "s"]
         value = self.hud_state[control]
@@ -777,17 +753,13 @@ class State(object):
             new_value = values[index]
             self.hud_state[control] = new_value
         # Extra handling
-        if control == "hud": self.hudSwitch()
-        elif control == "layout": self.viewportLayoutSet()
+        if control == "layout": self.viewportLayoutSet()
         elif control == "viewport_index": self.viewportFocus()
         elif control == "set_view": self.setView()
         self.hudUpdate()
 
 
     def hudOptionPrev(self):
-        self.hud_state["huds"] = self.hud_names
-        self.hud_state["hud"] = self.hud_name
-        # controls = self.hud_state["controls"]
         control = self.hud_state["control"]
         values = self.hud_state[control + "s"]
         value = self.hud_state[control]
@@ -800,20 +772,10 @@ class State(object):
             new_value = values[index]
             self.hud_state[control] = new_value
         # Extra handling
-        if control == "hud": self.hudSwitch()
-        elif control == "layout": self.viewportLayoutSet()
+        if control == "layout": self.viewportLayoutSet()
         elif control == "viewport_index": self.viewportFocus()
         elif control == "set_view": self.setView()
         self.hudUpdate()
-
-
-    def hudSwitch(self):
-        # Update the current hud based on the self.hud_name variable
-        self.hud_name = self.hud_state["hud"]
-        self.HUD_TEMPLATE = getattr(self, "HUD_TEMPLATE_" + self.hud_name.upper())
-        self.sceneViewer.hudInfo(template=self.HUD_TEMPLATE)
-        self.hud_state = getattr(self, self.hud_name + "_hud_state")
-        self.hudGraphUpdate()
 
 
     def hudUpdate(self):
@@ -825,7 +787,7 @@ class State(object):
 
         for row in self.HUD_TEMPLATE["rows"]:
             # Skip processing dividers.
-            if row["id"] != "divider":
+            if "divider" not in row["id"]:
 
                 # First three are common to all huds.
                 if row["id"] == "mode": updates["mode"] = {"value": self.mode}
@@ -871,12 +833,12 @@ class State(object):
     def setView(self):
         set_view = self.hud_state["set_view"]
         r = None
-        if set_view == "top": r = (270, 0, 0)
-        elif set_view == "bottom": r = (90, 0, 0)
+        if set_view == "top":     r = (270, 0, 0)
+        elif set_view == "bottom":r = (90, 0, 0)
         elif set_view == "front": r = (0, 180, 0)
-        elif set_view == "back": r = (0, 0, 0)
+        elif set_view == "back":  r = (0, 0, 0)
         elif set_view == "right": r = (0, 90, 0)
-        elif set_view == "left": r = (0, 270, 0)
+        elif set_view == "left":  r = (0, 270, 0)
         self.r = hou.Vector3(r)
         self.stateToCam()
 
