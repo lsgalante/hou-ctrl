@@ -1009,7 +1009,6 @@ def createViewerStateTemplate():
     template.bindIcon("DESKTOP_application_sierra")
     # Bind parameters
     template.bindParameter(hou.parmTemplateType.Menu, name="mode", label="Mode", default_value="nav", menu_items=[("nav", "Nav"), ("settings", "Settings")])
-    template.bindParameter(hou.parmTemplateType.Menu, name="hud", label="HUD", default_value="layout", menu_items=[("layout", "Layout"), ("movement", "Movement"), ("delta", "Delta"), ("vis", "Vis"), ("focus", "Focus")])
     template.bindParameter(hou.parmTemplateType.Separator)
     template.bindParameter(hou.parmTemplateType.Menu, name="layout", label="Layout", default_value="layout", menu_items=[("single", "Single"), ("doubleside", "DoubleSide"), ("tripleleftsplit", "TripleLeftSplit"), ("quad", "Quad")])
     template.bindParameter(hou.parmTemplateType.Int, name="viewport_index", label="Viewport Index", default_value=0, min_limit=0, max_limit=3)
