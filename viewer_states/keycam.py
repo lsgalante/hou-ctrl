@@ -151,7 +151,6 @@ class State(object):
     def onGenerate(self, kwargs):
         kwargs["state_flags"]["exit_on_node_select"] = False # Prevent exiting the state when current node changes
         self.kwargs = kwargs
-        self.hudSwitch()
         self.viewportLayoutUpdate()
         self.camInit()
         self.parmInit()
