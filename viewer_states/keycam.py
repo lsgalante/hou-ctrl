@@ -5,15 +5,116 @@ class Camera():
     def __init__(self, cam_type):
         self.cam_type = cam_type
         self.t = hou.Vector3(0, 0, 0)
+        self.pivot = hou.Vector3(0, 0, 0)
+
+        self.viewports = list( self.sceneViewer.viewports() )
+        self.viewports.reverse() # I guess they get listed backward
+        self.viewport = self.viewports[0]
+
+        # Create keycam node if nonexistant
+        children = hou.node("/obj").children()
+        children_names = [ node.name() for node in children ]
+        if "keycam" not in children_names:
+            cam = hou.node("/obj").createNode("cam")
+            cam.setName("keycam")
+            cam.parm("xOrd").set(0)
+        cam = self.viewport.camera()
+
+        self.cam = hou.node("/obj/keycam")
+        self.viewport.setCamera(self.cam)
+        self.viewport.lockCameraToView(self.options["lock_cam"])
 
 
     def frame(self):
-        centroid = self.geoCentroidGet()
-        self.T_pvt = centroid
-        self.T_cam = centroid
+        centroid = self.geo.centroid()
+        self.t = centroid
+        self.t_pivot = centroid
         self.ow = 10
-        self.camZoom(6)
-        self.updateCam()
+        self.zoom(6)
+        self.update()
+
+
+    def movePivot(self):
+        parms = self.kwargs["state_parms"]
+        target = self.nav_state["target"]
+        # if target == "cam": t = list(state_parms["t"]["value"])
+        # elif target == "centroid": centroid = self.geoCentroidGet()
+        if target == "origin":
+            dist = self.parms["dist"]["value"]
+            self.t = [0, 0, dist]
+            self.r = hou.Vector3(45, 45, 0)
+            self.p = [0, 0, -dist]
+            self.pr = [0, 0, 0]
+            self.ow = 10
+        elif target == "ray":
+            return
+        self.update()
+        self.Guides.update()
+
+    def nextProjection(self):
+        cam = self.cam
+        projParm = cam.parm("projection")
+        proj = projParm.evalAsString()
+        if proj == "ortho": projParm.set("perspective")
+        elif proj == "perspective": projParm.set("ortho")
+
+    def reset(self):
+        self.t= hou.Vector3(0, 0, 0)
+        self.r = hou.Vector3(0, 0, 0)
+        self.local_x = hou.Vector3(1, 0, 0)
+        self.local_y = hou.Vector3(0, 1, 0)
+        self.local_z = hou.Vector3(0, 0, 1)
+        self.global_x = hou.Vector3(1, 0, 0)
+        self.global_y = hou.Vector3(0, 1, 0)
+        self.global_z = hou.Vector3(0, 0, 1)
+        self.update()
+
+    def rotate(self, axis_name, deg):
+        axis = None
+        if axis_name == "x": axis = self.local_x; self.r[0] += deg
+        elif axis_name == "y": axis = self.global_y; self.r[1] += deg
+        m = hou.hmath.buildRotateAboutAxis(axis, deg)
+        self.T_cam -= self.T_pvt
+        self.T_cam *= m
+        self.T_cam += self.T_pvt
+        self.local_x *= m
+        self.local_y *= m
+        self.local_z *= m
+        self.update()
+
+    def translate(self, axis_name, amt):
+        axis = None
+        if axis_name == "x": axis = self.local_x
+        elif axis_name == "y": axis = self.local_y
+        move = axis * amt
+        self.T_pvt += move
+        self.t += move
+        self.update()
+
+    def update(self):
+        self.cam.parmTuple("t").set(self.T_cam)
+        self.cam.parmTuple("r").set(self.r)
+        self.cam.parm("orthowidth").set(self.ow)
+
+    def zoom(self, amt):
+        move = self.local_z * amt
+        self.t += move
+        self.update()
+
+
+class Geo():
+    def __init__(self):
+        self.geo = hou.Geometry()
+        self.geo_type = hou.drawableGeometryType.Line
+        self.name = "geo"
+        self.color = hou.Vector4((1, 1, 1, 0.5))
+        self.geo_params = {"color1": self.color}
+        self.geo_drawable = hou.GeometryDrawable(
+            scene_viewer=self.sceneViewer,
+            geo_type=self.geo_type,
+            name=self.name,
+            params=self.geo_params
+        )
 
 
 class Guides():
@@ -233,17 +334,255 @@ class Guides():
     def updateText(self):
         return
 
+class Hud():
 
-class Pivot():
-    def __init__(self, pivot_type):
-        self.pivot_type = pivot_type
-        self.t = hou.Vector3(0, 0, 0)
+    def updateHud(self):
+        # Update graph bar count
+        self.updateHudGraph()
+        # Find the new update values.
+        updates = {}
+        for row in self.HUD_TEMPLATE["rows"]:
+            # Skip processing dividers.
+            if "divider" not in row["id"]:
+                if row["id"] == "mode": updates["mode"] = {"value": self.mode}
+
+                # Graph
+                elif row["id"][-2:] == "_g":
+                    control_name = row["id"][0:-2]
+                    control_value = self.hud_state[control_name]
+                    control_values = self.hud_state[control_name + "s"]
+
+                    updates[row["id"]] = {"value": control_values.index(control_value)}
+
+                # Other
+                else:
+                    control_name = row["id"]
+                    control_value = self.hud_state[control_name]
+                    updates[row["id"]] = {"value": control_value}
+
+        # Add selection indicator in setting mode
+        if self.mode == "settings":
+            updates[self.hud_state["control"]]["value"] = "[" + updates[self.hud_state["control"]]["value"] + "]"
+        # Apply
+        self.sceneViewer.hudInfo(hud_values=updates)
 
 
-class Viewports():
+    def updateHudGraph(self):
+        # Calculate the number of bars in a graph based on the length of the appropriate array
+        for i, row in enumerate(self.HUD_TEMPLATE["rows"]):
+            # If row ID indicates it is a graph
+            if row["id"][-2:] == "_g":
+                arr = None
+                # Count the number of items in the array
+                if row["id"] == "hud_g":
+                    arr = self.hud_names
+                else:
+                    arr = self.hud_state[row["id"][0:-2] + "s"]
+                # Set the number of bars in the graph.
+                self.HUD_TEMPLATE["rows"][i]["count"] = len(arr)
+    #################
+    # HUD Functions #
+    #################
+
+    def hudControlNext(self):
+        self.hude_state["huds"] = self.hud_names
+        self.hud_state["hud"] = self.hud_name
+        controls = self.hud_state["controls"]
+        control = self.hud_state["control"]
+        control_index = controls.index(control)
+        control_index += 1
+        control_index %= len(controls)
+        new_control = controls[control_index]
+        self.hud_state["control"] = new_control
+        self.hud_name = self.hud_state["hud"]
+        self.updateHud()
+
+
+    def hudControlPrev(self):
+        self.hud_state["huds"] = self.hud_names
+        self.hud_state["hud"] = self.hud_name
+        controls = self.hud_state["controls"]
+        control = self.hud_state["control"]
+        control_index = controls.index(control)
+        control_index -= 1
+        control_index %= len(controls)
+        new_control = controls[control_index]
+        self.hud_state["control"] = new_control
+        self.hud_name = self.hud_state["hud"]
+        self.updateHud()
+
+
+    def hudModeCycle(self):
+        index = self.arrNext(self.modes, self.mode)
+        self.mode = self.modes[index]
+        self.updateHud()
+
+
+    def hudOptionNext(self):
+        control = self.hud_state["control"]
+        values = self.hud_state[control + "s"]
+        value = self.hud_state[control]
+        index = values.index(value)
+        if control == "attr":
+            self.setFocusAttr()
+        else:
+            index += 1
+            index %= len(values)
+            new_value = values[index]
+            self.hud_state[control] = new_value
+        # Extra handling
+        if control == "layout": self.viewportLayoutSet()
+        elif control == "viewport_index": self.viewportFocus()
+        elif control == "set_view": self.setView()
+        self.hudUpdate()
+
+
+    def hudOptionPrev(self):
+        control = self.hud_state["control"]
+        values = self.hud_state[control + "s"]
+        value = self.hud_state[control]
+        index = values.index(value)
+        if control == "attr":
+            self.setFocusAttr()
+        else:
+            index -= 1
+            index %= len(values)
+            new_value = values[index]
+            self.hud_state[control] = new_value
+        # Extra handling
+        if control == "layout": self.viewportLayoutSet()
+        elif control == "viewport_index": self.viewportFocus()
+        elif control == "set_view": self.setView()
+        self.updateHud()
+class Layout():
     def __init__(self):
-        self.viewport = 0
-        self.viewports = []
+        self.update()
+
+    def update(self):
+        self.viewport = self.sceneViewer.curViewport()
+        self.viewports = self.sceneViewer.viewports()
+        self.layout = self.sceneViewer.viewportLayout()
+
+        if self.layout == hou.geometryViewportLayout.DoubleSide:
+            self.viewport_index = (2, 3)[self.viewport_index]
+        elif self.layout == hou.geometryViewportLayout.DoubleStack:
+            self.viewport_index = (3, 0)[self.viewport_index]
+        elif self.layout == hou.geometryViewportLayout.Quad:
+            self.viewport_index = (2, 3, 1, 0)[self.viewport_index]
+        elif self.layout == hou.geometryViewportLayout.QuadBottomSplit:
+            self.viewport_index = (3, 2, 1, 0)[self.viewport_index]
+        elif self.layout == hou.geometryViewportLayout.QuadLeftSplit:
+            self.viewport_index = (2, 1, 0, 3)[self.viewport_index]
+        elif self.layout == hou.geometryViewportLayout.Single:
+            self.viewport_index = 3
+        elif self.layout == hou.geometryViewportLayout.TripleBottomSplit:
+            self.viewport_index = (3, 1, 0)[self.viewport_index]
+        elif self.layout == hou.geometryViewportLayout.TripleLeftSplit:
+            self.viewport_index = (2, 3, 1)[self.viewport_index]
+
+        self.viewport = self.viewports[self.viewport_index]
+        self.viewportType = self.viewport.type()
+
+    # Guide to layout/viewport IDs:
+    #
+    # DoubleSide:
+    # 2 3
+    #
+    # DoubleStack:
+    # 3
+    # 0
+    #
+    # Quad:
+    # 2 3
+    # 1 0
+    #
+    # QuadBottomSplit:
+    #   3
+    # 2 1 0
+    #
+    # QuadLeftSplit:
+    # 2
+    # 1 3
+    # 0
+    #
+    # Single:
+    # setViewportLayout(layout, single=-1)
+    # -1: current viewport (viewportmouse is/was over)
+    # 0: top-left viewport from quad layout (default Top)
+    # 1: top-right viewport from quad layout (default Perspective)
+    # 2: bottom-left viewport from quad layout (default Front)
+    # 3: bottom-right viewport from quad layout (default Right)
+    #
+    # TripleBottomSplit:
+    #   3
+    # 1   0
+    #
+    # TripleLeftSplit:
+    # 2
+    # 0 3
+    # 1
+
+
+    def viewportFocus(self):
+        return
+
+
+    def viewportFrame(self):
+        for viewport in self.viewports:
+            cam = viewport.camera()
+            # Is camera node or default.
+            if cam == None: viewport.frameAll()
+            else: viewport.frameAll()
+        self.camToState()
+
+
+    def viewportSwap(self):
+        # viewport_names = [viewport.name() for viewport in self.viewports]
+        self.viewports = self.viewports[1:] + [self.viewports[0]]
+        # viewportTypes = viewportTypes[1:] + [viewportTypes[0]]
+
+        for i, viewport in enumerate(self.viewports):
+            viewport.changeName("v" * i)
+        for i, viewport in enumerate(self.viewports):
+            viewport.changeName(self.viewports[i])
+            # viewport.changeType(viewportTypes[i])
+
+
+    def viewportGet(self):
+        viewport_indexs = self.layout_state["viewport_indexs"]
+        viewport_index = self.layout_state["viewport_index"]
+        viewport_index = viewport_indexs.index(viewport_index)
+        viewports = list(self.sceneViewer.viewports())
+        viewports.reverse()
+        viewport = viewports[viewport_index]
+        return viewport
+
+
+    def viewportLayoutSet(self):
+        layout = self.hud_state["layout"]
+        self.sceneViewer.setViewportLayout(getattr(hou.geometryViewportLayout, layout))
+
+        viewport_ct = 0
+        if layout == "DoubleSide": viewport_ct = 2
+        elif layout == "DoubleStack": viewport_ct = 2
+        elif layout == "Quad": viewport_ct = 4
+        elif layout == "QuadBottomSplit": viewport_ct = 4
+        elif layout == "QuadLeftSplit": viewport_ct = 4
+        elif layout == "Single": viewport_ct = 1
+        elif layout == "TripleBottomSplit": viewport_ct = 3
+        elif layout == "TripleLeftSplit": viewport_ct = 3
+
+        viewport_indexs = []
+        for i in range(viewport_ct):
+            viewport_indexs.append(str(i))
+
+        self.hud_state["viewport_indexs"] = viewport_indexs
+        self.hud_state["viewport_index"] = viewport_indexs[0]
+
+    def viewportTypeSet(self, viewportType):
+        viewport = self.sceneViewer.findViewport(self.layout_state["viewport_index"])
+        viewport.changeType(viewportType)
+
 
 
 class State(object):
@@ -357,30 +696,30 @@ class State(object):
 
     def onDraw(self, kwargs):
         handle = kwargs["draw_handle"]
-        self.guideAxisCam.draw(handle, {})
-        self.guideAxisPivot.draw(handle, {})
-        self.guidePerim.draw(handle, {})
-        self.guidePivot2d.draw(handle, {})
-        self.guidePivot3d.draw(handle, {})
-        self.guideRay.draw(handle, {})
-        # self.guideText.draw(handle, {})
+        self.guides.AxisCam.draw(handle, {})
+        self.guides.AxisPivot.draw(handle, {})
+        self.guides.Perim.draw(handle, {})
+        self.guides.Pivot2d.draw(handle, {})
+        self.guides.Pivot3d.draw(handle, {})
+        self.guides.Ray.draw(handle, {})
+        # self.guides.Text.draw(handle, {})
 
 
     def onExit(self, kwargs):
-        for viewport in self.viewports:
+        for viewport in self.Layout.viewports:
             viewport.lockCameraToView(False)
 
 
     def onGenerate(self, kwargs):
         kwargs["state_flags"]["exit_on_node_select"] = False # Prevent exiting the state when current node changes
         self.kwargs = kwargs
-        self.updateViewportLayout()
-        self.camInit()
-        self.parmInit()
+        self.layout = Layout(self)
+        self.cam = Camera(self)
+        self.parms = Parms(self)
         self.updateNetworkContext()
         self.updateOptions()
         self.camFrame()
-        self.guideCreate()
+        self.guides = Guides(self)
         self.updateHud()
 
 
@@ -542,49 +881,6 @@ class State(object):
     ##########
 
 
-    def camInit(self):
-        self.viewports = list( self.sceneViewer.viewports() )
-        self.viewports.reverse() # I guess they get listed backward
-        self.viewport = self.viewports[0]
-
-        # Create keycam node if nonexistant
-        children = hou.node("/obj").children()
-        children_names = [ node.name() for node in children ]
-        if "keycam" not in children_names:
-            cam = hou.node("/obj").createNode("cam")
-            cam.setName("keycam")
-            cam.parm("xOrd").set(0)
-        cam = self.viewport.camera()
-
-        self.cam = hou.node("/obj/keycam")
-        self.viewport.setCamera(self.cam)
-        self.viewport.lockCameraToView(self.options["lock_cam"])
-
-    def camMovePivot(self):
-        # state_parms = self.kwargs["state_parms"]
-        target = self.nav_state["target"]
-        # if target == "cam": t = list(state_parms["t"]["value"])
-        # elif target == "centroid": centroid = self.geoCentroidGet()
-        if target == "origin":
-            dist = self.parm_state["dist"]["value"]
-            self.t = [0, 0, dist]
-            self.r = hou.Vector3(45, 45, 0)
-            self.p = [0, 0, -dist]
-            self.pr = [0, 0, 0]
-            self.ow = 10
-        elif target == "ray":
-            return
-        self.updateCam()
-        self.updateGuides()
-
-
-    def camProjectionCycle(self):
-        cam = self.cam
-        projParm = cam.parm("projection")
-        proj = projParm.evalAsString()
-        if proj == "ortho": projParm.set("perspective")
-        elif proj == "perspective": projParm.set("ortho")
-
 
     def camToState(self):
         self.t = list(self.cam.evalParmTuple("t"))
@@ -594,47 +890,6 @@ class State(object):
         self.ow = self.cam.evalParm("orthowidth")
 
 
-    def camReset(self):
-        self.T_cam = hou.Vector3(0, 0, 0)
-        self.T_pvt = hou.Vector3(0, 0, 0)
-        self.r = hou.Vector3(0, 0, 0)
-        self.local_x = hou.Vector3(1, 0, 0)
-        self.local_y = hou.Vector3(0, 1, 0)
-        self.local_z = hou.Vector3(0, 0, 1)
-        self.global_x = hou.Vector3(1, 0, 0)
-        self.global_y = hou.Vector3(0, 1, 0)
-        self.global_z = hou.Vector3(0, 0, 1)
-        self.updateCam()
-
-
-    def camR(self, axis_name, deg):
-        axis = None
-        if axis_name == "x": axis = self.local_x; self.r[0] += deg
-        elif axis_name == "y": axis = self.global_y; self.r[1] += deg
-        m = hou.hmath.buildRotateAboutAxis(axis, deg)
-        self.T_cam -= self.T_pvt
-        self.T_cam *= m
-        self.T_cam += self.T_pvt
-        self.local_x *= m
-        self.local_y *= m
-        self.local_z *= m
-        self.updateCam()
-
-
-    def camT(self, axis_name, amt):
-        axis = None
-        if axis_name == "x": axis = self.local_x
-        elif axis_name == "y": axis = self.local_y
-        move = axis * amt
-        self.T_pvt += move
-        self.T_cam += move
-        self.updateCam()
-
-
-    def camZoom(self, amt):
-        move = self.local_z * amt
-        self.T_cam += move
-        self.updateCam()
 
 
     ###############
@@ -705,80 +960,6 @@ class State(object):
 
 
 
-    #################
-    # HUD Functions #
-    #################
-
-    def hudControlNext(self):
-        self.hude_state["huds"] = self.hud_names
-        self.hud_state["hud"] = self.hud_name
-        controls = self.hud_state["controls"]
-        control = self.hud_state["control"]
-        control_index = controls.index(control)
-        control_index += 1
-        control_index %= len(controls)
-        new_control = controls[control_index]
-        self.hud_state["control"] = new_control
-        self.hud_name = self.hud_state["hud"]
-        self.updateHud()
-
-
-    def hudControlPrev(self):
-        self.hud_state["huds"] = self.hud_names
-        self.hud_state["hud"] = self.hud_name
-        controls = self.hud_state["controls"]
-        control = self.hud_state["control"]
-        control_index = controls.index(control)
-        control_index -= 1
-        control_index %= len(controls)
-        new_control = controls[control_index]
-        self.hud_state["control"] = new_control
-        self.hud_name = self.hud_state["hud"]
-        self.updateHud()
-
-
-    def hudModeCycle(self):
-        index = self.arrNext(self.modes, self.mode)
-        self.mode = self.modes[index]
-        self.updateHud()
-
-
-    def hudOptionNext(self):
-        control = self.hud_state["control"]
-        values = self.hud_state[control + "s"]
-        value = self.hud_state[control]
-        index = values.index(value)
-        if control == "attr":
-            self.setFocusAttr()
-        else:
-            index += 1
-            index %= len(values)
-            new_value = values[index]
-            self.hud_state[control] = new_value
-        # Extra handling
-        if control == "layout": self.viewportLayoutSet()
-        elif control == "viewport_index": self.viewportFocus()
-        elif control == "set_view": self.setView()
-        self.hudUpdate()
-
-
-    def hudOptionPrev(self):
-        control = self.hud_state["control"]
-        values = self.hud_state[control + "s"]
-        value = self.hud_state[control]
-        index = values.index(value)
-        if control == "attr":
-            self.setFocusAttr()
-        else:
-            index -= 1
-            index %= len(values)
-            new_value = values[index]
-            self.hud_state[control] = new_value
-        # Extra handling
-        if control == "layout": self.viewportLayoutSet()
-        elif control == "viewport_index": self.viewportFocus()
-        elif control == "set_view": self.setView()
-        self.updateHud()
 
 
     ##################
@@ -831,58 +1012,10 @@ class State(object):
         self.cam.parm("aspect").set(ratio)
 
 
-    def updateCam(self):
-        self.cam.parmTuple("t").set(self.T_cam)
-        self.cam.parmTuple("r").set(self.r)
-        self.cam.parm("orthowidth").set(self.ow)
 
 
 
 
-    def updateHud(self):
-        # Update graph bar count
-        self.updateHudGraph()
-        # Find the new update values.
-        updates = {}
-        for row in self.HUD_TEMPLATE["rows"]:
-            # Skip processing dividers.
-            if "divider" not in row["id"]:
-                if row["id"] == "mode": updates["mode"] = {"value": self.mode}
-
-                # Graph
-                elif row["id"][-2:] == "_g":
-                    control_name = row["id"][0:-2]
-                    control_value = self.hud_state[control_name]
-                    control_values = self.hud_state[control_name + "s"]
-
-                    updates[row["id"]] = {"value": control_values.index(control_value)}
-
-                # Other
-                else:
-                    control_name = row["id"]
-                    control_value = self.hud_state[control_name]
-                    updates[row["id"]] = {"value": control_value}
-
-        # Add selection indicator in setting mode
-        if self.mode == "settings":
-            updates[self.hud_state["control"]]["value"] = "[" + updates[self.hud_state["control"]]["value"] + "]"
-        # Apply
-        self.sceneViewer.hudInfo(hud_values=updates)
-
-
-    def updateHudGraph(self):
-        # Calculate the number of bars in a graph based on the length of the appropriate array
-        for i, row in enumerate(self.HUD_TEMPLATE["rows"]):
-            # If row ID indicates it is a graph
-            if row["id"][-2:] == "_g":
-                arr = None
-                # Count the number of items in the array
-                if row["id"] == "hud_g":
-                    arr = self.hud_names
-                else:
-                    arr = self.hud_state[row["id"][0:-2] + "s"]
-                # Set the number of bars in the graph.
-                self.HUD_TEMPLATE["rows"][i]["count"] = len(arr)
 
 
     def updateNetworkContext(self):
@@ -898,128 +1031,6 @@ class State(object):
             self.camToState()
         # keycam node display flag.
         self.cam.setDisplayFlag(self.guide_states["camGeo"])
-
-
-    def updateViewportLayout(self):
-        self.viewport = self.sceneViewer.curViewport()
-        self.viewports = self.sceneViewer.viewports()
-        self.layout = self.sceneViewer.viewportLayout()
-
-        if self.layout == hou.geometryViewportLayout.DoubleSide: self.viewport_index = (2, 3)[self.viewport_index]
-        elif self.layout == hou.geometryViewportLayout.DoubleStack: self.viewport_index = (3, 0)[self.viewport_index]
-        elif self.layout == hou.geometryViewportLayout.Quad: self.viewport_index = (2, 3, 1, 0)[self.viewport_index]
-        elif self.layout == hou.geometryViewportLayout.QuadBottomSplit: self.viewport_index = (3, 2, 1, 0)[self.viewport_index]
-        elif self.layout == hou.geometryViewportLayout.QuadLeftSplit: self.viewport_index = (2, 1, 0, 3)[self.viewport_index]
-        elif self.layout == hou.geometryViewportLayout.Single: self.viewport_index = 3
-        elif self.layout == hou.geometryViewportLayout.TripleBottomSplit: self.viewport_index = (3, 1, 0)[self.viewport_index]
-        elif self.layout == hou.geometryViewportLayout.TripleLeftSplit: self.viewport_index = (2, 3, 1)[self.viewport_index]
-
-        self.viewport = self.viewports[self.viewport_index]
-        self.viewportType = self.viewport.type()
-
-    # Guide to layout/viewport IDs:
-    #
-    # DoubleSide:
-    # 2 3
-    #
-    # DoubleStack:
-    # 3
-    # 0
-    #
-    # Quad:
-    # 2 3
-    # 1 0
-    #
-    # QuadBottomSplit:
-    #   3
-    # 2 1 0
-    #
-    # QuadLeftSplit:
-    # 2
-    # 1 3
-    # 0
-    #
-    # Single:
-    # setViewportLayout(layout, single=-1)
-    # -1: current viewport (viewportmouse is/was over)
-    # 0: top-left viewport from quad layout (default Top)
-    # 1: top-right viewport from quad layout (default Perspective)
-    # 2: bottom-left viewport from quad layout (default Front)
-    # 3: bottom-right viewport from quad layout (default Right)
-    #
-    # TripleBottomSplit:
-    #   3
-    # 1   0
-    #
-    # TripleLeftSplit:
-    # 2
-    # 0 3
-    # 1
-
-
-    ############
-    # Viewport #
-    ############
-
-    def viewportFocus(self):
-        return
-
-
-    def viewportFrame(self):
-        for viewport in self.viewports:
-            cam = viewport.camera()
-            # Is camera node or default.
-            if cam == None: viewport.frameAll()
-            else: viewport.frameAll()
-        self.camToState()
-
-
-    def viewportSwap(self):
-        # viewport_names = [viewport.name() for viewport in self.viewports]
-        self.viewports = self.viewports[1:] + [self.viewports[0]]
-        # viewportTypes = viewportTypes[1:] + [viewportTypes[0]]
-
-        for i, viewport in enumerate(self.viewports):
-            viewport.changeName("v" * i)
-        for i, viewport in enumerate(self.viewports):
-            viewport.changeName(self.viewports[i])
-            # viewport.changeType(viewportTypes[i])
-
-
-    def viewportGet(self):
-        viewport_indexs = self.layout_state["viewport_indexs"]
-        viewport_index = self.layout_state["viewport_index"]
-        viewport_index = viewport_indexs.index(viewport_index)
-        viewports = list(self.sceneViewer.viewports())
-        viewports.reverse()
-        viewport = viewports[viewport_index]
-        return viewport
-
-
-    def viewportLayoutSet(self):
-        layout = self.hud_state["layout"]
-        self.sceneViewer.setViewportLayout(getattr(hou.geometryViewportLayout, layout))
-
-        viewport_ct = 0
-        if layout == "DoubleSide": viewport_ct = 2
-        elif layout == "DoubleStack": viewport_ct = 2
-        elif layout == "Quad": viewport_ct = 4
-        elif layout == "QuadBottomSplit": viewport_ct = 4
-        elif layout == "QuadLeftSplit": viewport_ct = 4
-        elif layout == "Single": viewport_ct = 1
-        elif layout == "TripleBottomSplit": viewport_ct = 3
-        elif layout == "TripleLeftSplit": viewport_ct = 3
-
-        viewport_indexs = []
-        for i in range(viewport_ct):
-            viewport_indexs.append(str(i))
-
-        self.hud_state["viewport_indexs"] = viewport_indexs
-        self.hud_state["viewport_index"] = viewport_indexs[0]
-
-    def viewportTypeSet(self, viewportType):
-        viewport = self.sceneViewer.findViewport(self.layout_state["viewport_index"])
-        viewport.changeType(viewportType)
 
 
 def createViewerStateTemplate():
