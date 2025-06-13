@@ -162,29 +162,18 @@ class State(object):
 
 
     def onKeyEvent(self, kwargs):
-        key = kwargs["ui_event"].device().keyString()
         self.updateAspectRatio()
         self.camFrame()
+        parms = kwargs["state_parms"]
+
+        key = kwargs["ui_event"].device().keyString()
         functions = ()
         keys = ()
 
-        # HUD
-        if self.mode == "settings":
-            keys = (
-                "m",      # cycle mode
-                "h", "l"  # prev/next option
-                "k", "j", # prev/next control
-            )
-            functions = (
-                self.hudModeCycle,
-                self.hudOptionPrev, self.hudOptionNext,
-                self.hudControlPrev, self.hudControlNext
-            )
-            args = [None] * len(functions)
-            index = keys.index(key)
-
         # Camera
-        elif self.mode == "camera":
+        if parms["mode"]["label"] == "Camera":
+            cam_type = kwargs["state_parms"]["camera"]["label"]
+
             keys = (
                 "m", "o", # Cycle mode/projection
                 "h", "l", # rotate about y axis neg/pos
@@ -197,7 +186,7 @@ class State(object):
             )
             index = keys.index(key)
 
-            if self.cam_type == "node":
+            if cam_type == "Keycam":
                 functions = (
                     self.hudModeCycle, self.camProjectionCycle,
                     self.camR, self.camR,
@@ -212,15 +201,13 @@ class State(object):
                     hou.Vector3(0, 1, 0), hou.Vector3(0, -1, 0),
                     hou.Vector3(-1, 0, 0), hou.Vector3(1, 0, -1)
                 )
-
                 self.updateCam()
 
-            elif self.cam_type == "default":
+            elif cam_type == "Default Perspective":
                 cam = self.viewport.defaultCamera()
                 t = list(cam.translation())
                 delta = self.units["t"]
 
-                # Perspective/Orthographic projection
                 if self.viewport.type() == hou.geometryViewportType.Perspective:
                     functions = (
                         self.camT, self.camT,
@@ -236,39 +223,55 @@ class State(object):
                         (hou.Vector3(0, 0, 1), 15), (hou.Vector3(0, 0, -1), 15),
                     )
 
-                # Linear projection
-                else:
-                    indices = [0, 0]
-                    if self.viewport.type() == hou.geometryViewportType.Top: indices = [0, 1]
-                    elif self.viewport.type() == hou.geometryViewportType.Bottom: indices = [2, 0]
-                    elif self.viewport.type() == hou.geometryViewportType.Front: indices = [0, 1]
-                    elif self.viewport.type() == hou.geometryViewportType.Back: indices = [1, 0]
-                    elif self.viewport.type() == hou.geometryViewportType.Right: indices = [0, 1]
-                    elif self.viewport.type() == hou.geometryViewportType.Left: indices = [1, 2]
+            elif cam == "Default Linear":
+                indices = (0, 0)
+                if self.viewport.type() == hou.geometryViewportType.Top: indices = (0, 1)
+                elif self.viewport.type() == hou.geometryViewportType.Bottom: indices = (2, 0)
+                elif self.viewport.type() == hou.geometryViewportType.Front: indices = (0, 1)
+                elif self.viewport.type() == hou.geometryViewportType.Back: indices = (1, 0)
+                elif self.viewport.type() == hou.geometryViewportType.Right: indices = (0, 1)
+                elif self.viewport.type() == hou.geometryViewportType.Left: indices = (1, 2)
 
-                    functions = (
-                        self.hudModeCycle, self.defaultCamProjectionCycle,
-                        self.defaultcamR, self.defaultcamR,
-                        self.defaultcamR, self.defaultcamR,
-                        self.defaultcamT, self.defaultcamT,
-                        self.defaultcamT, self.defaultcamT,
-                        cam.setOrthoWidth(cam.orthoWidth() - 1),
-                        cam.setOrthoWidth(cam.orthoWidth() + 1)
-                    )
-                    args = (
-                        None, None,
-                        (hou.Vector3(1, 0, 0), -15),
-                        (hou.Vector3(1, 0, 0), 15),
-                        (hou.Vector3(0, 1, 0), -15), (hou.Vector3(0, 1, 0), 15),
-                        hou.Vector3(0, 1, 0), hou.Vector3(0, -1, 0),
-                        hou.Vector3(-1, 0, 0), hou.Vector3(1, 0, -1)
-                    )
+                functions = (
+                    self.hudModeCycle, self.defaultCamProjectionCycle,
+                    self.defaultcamR, self.defaultcamR,
+                    self.defaultcamR, self.defaultcamR,
+                    self.defaultcamT(indices), self.defaultcamT(indices),
+                    self.defaultcamT(indices), self.defaultcamT(indices),
+                    cam.setOrthoWidth(cam.orthoWidth() - 1),
+                    cam.setOrthoWidth(cam.orthoWidth() + 1)
+                )
+                args = (
+                    None, None,
+                    (hou.Vector3(1, 0, 0), -15),
+                    (hou.Vector3(1, 0, 0), 15),
+                    (hou.Vector3(0, 1, 0), -15), (hou.Vector3(0, 1, 0), 15),
+                    hou.Vector3(0, 1, 0), hou.Vector3(0, -1, 0),
+                    hou.Vector3(-1, 0, 0), hou.Vector3(1, 0, -1)
+                )
+
+            elif cam == "Other":
+                return
 
                 cam.setTranslation(t)
 
             if index != -1:
                 functions[index](args[index])
                 return True
+
+        elif parms["mode"]["label"] == "Settings":
+            keys = (
+                "m",      # cycle mode
+                "h", "l"  # prev/next option
+                "k", "j", # prev/next control
+            )
+            functions = (
+                self.hudModeCycle,
+                self.hudOptionPrev, self.hudOptionNext,
+                self.hudControlPrev, self.hudControlNext
+            )
+            args = [None] * len(functions)
+            index = keys.index(key)
 
         else:
             return False
@@ -429,6 +432,9 @@ class State(object):
             if cam == None:
                 viewport.frameAll()
         self.camToState()
+
+    def defaultCamT(self, indices):
+        return
 
 
     ############
@@ -1004,7 +1010,7 @@ def createViewerStateTemplate():
     # Bind icon
     template.bindIcon("DESKTOP_application_sierra")
     # Bind parameters
-    template.bindParameter(hou.parmTemplateType.Menu, name="mode", label="Mode", default_value="nav", menu_items=[("nav", "Nav"), ("settings", "Settings")])
+    template.bindParameter(hou.parmTemplateType.Menu, name="mode", label="Mode", default_value="camera", menu_items=[("camera", "Camera"), ("settings", "Settings")])
     template.bindParameter(hou.parmTemplateType.Separator)
     template.bindParameter(hou.parmTemplateType.Menu, name="layout", label="Layout", default_value="layout", menu_items=[("single", "Single"), ("doubleside", "DoubleSide"), ("tripleleftsplit", "TripleLeftSplit"), ("quad", "Quad")])
     template.bindParameter(hou.parmTemplateType.Int, name="viewport_index", label="Viewport Index", default_value=0, min_limit=0, max_limit=3)
