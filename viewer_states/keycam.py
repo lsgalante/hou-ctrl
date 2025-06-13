@@ -2,12 +2,17 @@ import hou
 # import hctl_utils as hcu # pyright: ignore
 
 class Camera():
-    def __init__(self, cam_type):
-        self.cam_type = cam_type
+    def __init__(self, sceneViewer, options, units, geo):
+        self.units = units
+        self.sceneViewer = sceneViewer
+        self.geo = geo
+        self.options = options
+        # self.cam_type = cam_type
         self.t = hou.Vector3(0, 0, 0)
         self.pivot = hou.Vector3(0, 0, 0)
+        self.ow = 10
 
-        self.viewports = list( self.sceneViewer.viewports() )
+        self.viewports = list(self.sceneViewer.viewports())
         self.viewports.reverse() # I guess they get listed backward
         self.viewport = self.viewports[0]
 
@@ -24,7 +29,6 @@ class Camera():
         self.viewport.setCamera(self.cam)
         self.viewport.lockCameraToView(self.options["lock_cam"])
 
-
     def frame(self):
         centroid = self.geo.centroid()
         self.t = centroid
@@ -32,7 +36,6 @@ class Camera():
         self.ow = 10
         self.zoom(6)
         self.update()
-
 
     def movePivot(self):
         parms = self.kwargs["state_parms"]
@@ -74,9 +77,9 @@ class Camera():
         if axis_name == "x": axis = self.local_x; self.r[0] += deg
         elif axis_name == "y": axis = self.global_y; self.r[1] += deg
         m = hou.hmath.buildRotateAboutAxis(axis, deg)
-        self.T_cam -= self.T_pvt
-        self.T_cam *= m
-        self.T_cam += self.T_pvt
+        self.t -= self.pivot
+        self.t *= m
+        self.t += self.pivot
         self.local_x *= m
         self.local_y *= m
         self.local_z *= m
@@ -87,12 +90,12 @@ class Camera():
         if axis_name == "x": axis = self.local_x
         elif axis_name == "y": axis = self.local_y
         move = axis * amt
-        self.T_pvt += move
+        self.t += move
         self.t += move
         self.update()
 
     def update(self):
-        self.cam.parmTuple("t").set(self.T_cam)
+        self.cam.parmTuple("t").set(self.t)
         self.cam.parmTuple("r").set(self.r)
         self.cam.parm("orthowidth").set(self.ow)
 
@@ -103,22 +106,59 @@ class Camera():
 
 
 class Geo():
-    def __init__(self):
+    def __init__(self, scene_viewer):
         self.geo = hou.Geometry()
+        self.scene_viewer = scene_viewer
         self.geo_type = hou.drawableGeometryType.Line
         self.name = "geo"
         self.color = hou.Vector4((1, 1, 1, 0.5))
         self.geo_params = {"color1": self.color}
         self.geo_drawable = hou.GeometryDrawable(
-            scene_viewer=self.sceneViewer,
+            scene_viewer=self.scene_viewer,
             geo_type=self.geo_type,
             name=self.name,
             params=self.geo_params
         )
 
+    def bbox(self):
+        geo = self.get()
+        bbox = geo.boundingBox()
+        return bbox
+
+    def centroid(self):
+        geo_in = self.get()
+        geo_out = hou.Geometry()
+        verb = hou.sopNodeTypeCategory().nodeVerb("extractcentroid")
+        verb.setParms({"partitiontype": 2})
+        verb.execute(geo_out, [geo_in])
+        pt = geo_out.point(0)
+        centroid = pt.position()
+        return centroid
+
+
+    def get(self):
+        self.displayNode = None
+        pwd = self.scene_viewer.pwd()
+        self.context = pwd.childTypeCategory().label()
+
+        if self.context == "dop": displayNode = pwd.displayNode()
+        elif self.context == "lop": return None
+        elif self.context == "Objects": displayNode = pwd.children()[0].displayNode()
+        elif self.context == "Geometry": displayNode = pwd.displayNode()
+        return displayNode.geometry()
+
+
+    def home(self):
+        self.displayNode = None
+        pwd = self.sceneViewer.pwd()
+        self.context = pwd.childTypeCategory().label()
+        # print(self.context)
+
 
 class Guides():
-    def __init__(self):
+    def __init__(self, scene_viewer):
+        self.scene_viewer = scene_viewer
+
         self.guides = []
         self.axis_size = 1
         self.axis_cam = 1
@@ -132,34 +172,34 @@ class Guides():
         self.tie_axis_to_radius = 0
 
         self.AxisCam = hou.GeometryDrawable(
-            scene_viewer=self.sceneViewer,
+            scene_viewer=self.scene_viewer,
             geo_type=hou.drawableGeometryType.Line,
             name="axis_cam"
         )
         self.AxisPivot = hou.GeometryDrawable(
-            scene_viewer=self.sceneViewer,
+            scene_viewer=self.scene_viewer,
             geo_type=hou.drawableGeometryType.Line,
             name="axis_pivot",
             params={"color1": hou.Vector4((1, 1, 1, 0.5))}
         )
         self.Bbox = hou.GeometryDrawable(
-            scene_viewer=self.sceneViewer,
+            scene_viewer=self.scene_viewer,
             geo_type=hou.drawableGeometryType.Line,
             name="bbox",
             params={"color1": hou.Vector4((1, 1, 1, 0.3))}
         )
         self.Perim = hou.GeometryDrawable(
-            scene_viewer=self.sceneViewer,
+            scene_viewer=self.scene_viewer,
             geo_type=hou.drawableGeometryType.Line,
             name="perim"
         )
         self.Pivot2d = hou.GeometryDrawable(
-            scene_viewer=self.sceneViewer,
+            scene_viewer=self.scene_viewer,
             geo_type=hou.drawableGeometryType.Line,
             name="pivot2d"
         )
         self.Pivot3d = hou.GeometryDrawable(
-                scene_viewer=self.sceneViewer,
+                scene_viewer=self.scene_viewer,
                 geo_type=hou.drawableGeometryType.Face,
                 name="pivot3d"
         )
@@ -168,7 +208,7 @@ class Guides():
             "fade_factor": 0.5}
         )
         self.Ray = hou.GeometryDrawable(
-            scene_viewer=self.sceneViewer,
+            scene_viewer=self.scene_viewer,
             geo_type=hou.drawableGeometryType.Line,
             name="ray",
             params={"color1": hou.Vector4((1, 0.8, 1, 0.5))}
@@ -454,8 +494,11 @@ class Hud():
         elif control == "viewport_index": self.viewportFocus()
         elif control == "set_view": self.setView()
         self.updateHud()
+
+
 class Layout():
-    def __init__(self):
+    def __init__(self, sceneViewer):
+        self.sceneViewer = sceneViewer
         self.update()
 
     def update(self):
@@ -625,13 +668,12 @@ class State(object):
     }
 
     def __init__(self, state_name, scene_viewer):
-
         # General Variables #
         self.cam_type = None
         self.context = None
         self.modes = ("camera", "settings")
         self.mode = "camera"
-        self.sceneViewer = scene_viewer
+        self.scene_viewer = scene_viewer
         self.state_name = state_name
 
         # Camera Variables #
@@ -713,14 +755,15 @@ class State(object):
     def onGenerate(self, kwargs):
         kwargs["state_flags"]["exit_on_node_select"] = False # Prevent exiting the state when current node changes
         self.kwargs = kwargs
-        self.layout = Layout(self)
-        self.cam = Camera(self)
-        self.parms = Parms(self)
+        self.layout = Layout(self.scene_viewer)
+        self.geo = Geo(self.scene_viewer)
+        self.cam = Camera(self.scene_viewer, self.options, self.units, self.geo)
+        # self.parms = Parms(self)
         self.updateNetworkContext()
         self.updateOptions()
-        self.camFrame()
-        self.guides = Guides(self)
-        self.updateHud()
+        self.cam.frame()
+        self.guides = Guides(self.scene_viewer)
+        self.hud = Hud()
 
 
     def onKeyEvent(self, kwargs):
@@ -918,48 +961,6 @@ class State(object):
         return
 
 
-    ############
-    # Geometry #
-    ############
-
-    def geoBboxGet(self):
-        geo = self.geoGet()
-        bbox = geo.boundingBox()
-        return bbox
-
-
-    def geoCentroidGet(self):
-        geo_in = self.geoGet()
-        geo_out = hou.Geometry()
-        verb = hou.sopNodeTypeCategory().nodeVerb("extractcentroid")
-        verb.setParms({"partitiontype": 2})
-        verb.execute(geo_out, [geo_in])
-        pt = geo_out.point(0)
-        centroid = pt.position()
-        return centroid
-
-
-    def geoGet(self):
-        self.displayNode = None
-        pwd = self.sceneViewer.pwd()
-        self.context = pwd.childTypeCategory().label()
-
-        if self.context == "dop": displayNode = pwd.displayNode()
-        elif self.context == "lop": return None
-        elif self.context == "Objects": displayNode = pwd.children()[0].displayNode()
-        elif self.context == "Geometry": displayNode = pwd.displayNode()
-        return displayNode.geometry()
-
-
-    def geoHome(self):
-        self.displayNode = None
-        pwd = self.sceneViewer.pwd()
-        self.context = pwd.childTypeCategory().label()
-        # print(self.context)
-
-
-
-
 
 
     ##################
@@ -1012,25 +1013,19 @@ class State(object):
         self.cam.parm("aspect").set(ratio)
 
 
-
-
-
-
-
-
     def updateNetworkContext(self):
-        node = self.sceneViewer.pwd()
+        node = self.scene_viewer.pwd()
         self.context = node.type().name()
 
 
     def updateOptions(self):
         # Reset cam, or else set state from cam.
         if self.options["cam_reset"]:
-            self.camReset()
+            self.cam.reset()
         else:
             self.camToState()
         # keycam node display flag.
-        self.cam.setDisplayFlag(self.guide_states["camGeo"])
+        # self.cam.setDisplayFlag(self.guide_states["camGeo"])
 
 
 def createViewerStateTemplate():
