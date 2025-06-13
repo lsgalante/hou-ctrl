@@ -151,7 +151,7 @@ class State(object):
     def onGenerate(self, kwargs):
         kwargs["state_flags"]["exit_on_node_select"] = False # Prevent exiting the state when current node changes
         self.kwargs = kwargs
-        self.viewportLayoutUpdate()
+        self.updateViewportLayout()
         self.camInit()
         self.parmInit()
         self.updateNetworkContext()
@@ -213,7 +213,7 @@ class State(object):
                     hou.Vector3(-1, 0, 0), hou.Vector3(1, 0, -1)
                 )
 
-                self.stateToCam()
+                self.updateCam()
 
             elif self.cam_type == "default":
                 cam = self.viewport.defaultCamera()
@@ -290,7 +290,7 @@ class State(object):
 
     def onParmChangeEvent(self, kwargs):
         self.updateGuides()
-        self.stateToCam()
+        self.updateCam()
 
 
     ###################
@@ -319,7 +319,7 @@ class State(object):
         self.T_cam = centroid
         self.ow = 10
         self.camZoom(6)
-        self.stateToCam()
+        self.updateCam()
 
 
     def camInit(self):
@@ -354,7 +354,7 @@ class State(object):
             self.ow = 10
         elif target == "ray":
             return
-        self.stateToCam()
+        self.updateCam()
         self.updateGuides()
 
 
@@ -384,7 +384,7 @@ class State(object):
         self.global_x = hou.Vector3(1, 0, 0)
         self.global_y = hou.Vector3(0, 1, 0)
         self.global_z = hou.Vector3(0, 0, 1)
-        self.stateToCam()
+        self.updateCam()
 
 
     def camR(self, axis_name, deg):
@@ -398,7 +398,7 @@ class State(object):
         self.local_x *= m
         self.local_y *= m
         self.local_z *= m
-        self.stateToCam()
+        self.updateCam()
 
 
     def camT(self, axis_name, amt):
@@ -408,13 +408,13 @@ class State(object):
         move = axis * amt
         self.T_pvt += move
         self.T_cam += move
-        self.stateToCam()
+        self.updateCam()
 
 
     def camZoom(self, amt):
         move = self.local_z * amt
         self.T_cam += move
-        self.stateToCam()
+        self.updateCam()
 
 
     ###############
@@ -615,7 +615,7 @@ class State(object):
         elif set_view == "right": r = (0, 90, 0)
         elif set_view == "left":  r = (0, 270, 0)
         self.r = hou.Vector3(r)
-        self.stateToCam()
+        self.updateCam()
 
 
     def setFocusAttr(self):
@@ -625,7 +625,6 @@ class State(object):
             initial_contents=self.hud_state_focus["focus_attr"])
         if attr[0] == 0:
             self.focus_state["focus_attr"] = attr[1]
-
 
 
     ##############
