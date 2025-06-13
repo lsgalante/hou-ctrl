@@ -2,17 +2,19 @@ import hou
 # import hctl_utils as hcu # pyright: ignore
 
 class Camera():
-    def __init__(self, sceneViewer, options, units, geo):
-        self.units = units
-        self.sceneViewer = sceneViewer
+    def __init__(self, scene_viewer, options, units, geo):
         self.geo = geo
         self.options = options
+        self.scene_viewer = scene_viewer
+        self.units = units
+
         # self.cam_type = cam_type
+        #
         self.t = hou.Vector3(0, 0, 0)
         self.pivot = hou.Vector3(0, 0, 0)
         self.ow = 10
 
-        self.viewports = list(self.sceneViewer.viewports())
+        self.viewports = list(self.scene_viewer.viewports())
         self.viewports.reverse() # I guess they get listed backward
         self.viewport = self.viewports[0]
 
@@ -72,10 +74,49 @@ class Camera():
         self.global_z = hou.Vector3(0, 0, 1)
         self.update()
 
-    def rotate(self, axis_name, deg):
-        axis = None
-        if axis_name == "x": axis = self.local_x; self.r[0] += deg
-        elif axis_name == "y": axis = self.global_y; self.r[1] += deg
+    def rotateUp(self):
+        axis = self.local_x
+        deg = 15
+        self.r[0] += deg
+        m = hou.hmath.buildRotateAboutAxis(axis, deg)
+        self.t -= self.pivot
+        self.t *= m
+        self.t += self.pivot
+        self.local_x *= m
+        self.local_y *= m
+        self.local_z *= m
+        self.update()
+
+    def rotateDown(self):
+        axis = self.local_x
+        deg = 15
+        self.r[0] -= deg
+        m = hou.hmath.buildRotateAboutAxis(axis, -deg)
+        self.t -= self.pivot
+        self.t *= m
+        self.t += self.pivot
+        self.local_x *= m
+        self.local_y *= m
+        self.local_z *= m
+        self.update()
+
+    def rotateLeft(self):
+        axis = self.global_y
+        deg = 15
+        self.r[1] -= deg
+        m = hou.hmath.buildRotateAboutAxis(axis, -deg)
+        self.t -= self.pivot
+        self.t *= m
+        self.t += self.pivot
+        self.local_x *= m
+        self.local_y *= m
+        self.local_z *= m
+        self.update()
+
+    def rotateRight(self):
+        axis = self.global_y
+        deg = 15
+        self.r[1] += deg
         m = hou.hmath.buildRotateAboutAxis(axis, deg)
         self.t -= self.pivot
         self.t *= m
@@ -98,6 +139,13 @@ class Camera():
         self.cam.parmTuple("t").set(self.t)
         self.cam.parmTuple("r").set(self.r)
         self.cam.parm("orthowidth").set(self.ow)
+
+    def updateAspectRatio(self):
+        self.cam.parm("resx").set(1000)
+        self.cam.parm("resy").set(1000)
+        viewport = self.scene_viewer.findViewport("persp1")
+        ratio = viewport.size()[2] / viewport.size()[3]
+        self.cam.parm("aspect").set(ratio)
 
     def zoom(self, amt):
         move = self.local_z * amt
@@ -158,7 +206,6 @@ class Geo():
 class Guides():
     def __init__(self, scene_viewer):
         self.scene_viewer = scene_viewer
-
         self.guides = []
         self.axis_size = 1
         self.axis_cam = 1
@@ -376,9 +423,9 @@ class Guides():
 
 class Hud():
 
-    def updateHud(self):
+    def update(self):
         # Update graph bar count
-        self.updateHudGraph()
+        self.updateGraph()
         # Find the new update values.
         updates = {}
         for row in self.HUD_TEMPLATE["rows"]:
@@ -404,10 +451,10 @@ class Hud():
         if self.mode == "settings":
             updates[self.hud_state["control"]]["value"] = "[" + updates[self.hud_state["control"]]["value"] + "]"
         # Apply
-        self.sceneViewer.hudInfo(hud_values=updates)
+        self.scene_viewer.hudInfo(hud_values=updates)
 
 
-    def updateHudGraph(self):
+    def updateGraph(self):
         # Calculate the number of bars in a graph based on the length of the appropriate array
         for i, row in enumerate(self.HUD_TEMPLATE["rows"]):
             # If row ID indicates it is a graph
@@ -420,9 +467,6 @@ class Hud():
                     arr = self.hud_state[row["id"][0:-2] + "s"]
                 # Set the number of bars in the graph.
                 self.HUD_TEMPLATE["rows"][i]["count"] = len(arr)
-    #################
-    # HUD Functions #
-    #################
 
     def hudControlNext(self):
         self.hude_state["huds"] = self.hud_names
@@ -452,7 +496,7 @@ class Hud():
         self.updateHud()
 
 
-    def hudModeCycle(self):
+    def nextMode(self):
         index = self.arrNext(self.modes, self.mode)
         self.mode = self.modes[index]
         self.updateHud()
@@ -767,8 +811,7 @@ class State(object):
 
 
     def onKeyEvent(self, kwargs):
-        self.updateAspectRatio()
-        self.camFrame()
+        self.cam.updateAspectRatio()
 
         key = kwargs["ui_event"].device().keyString()
         functions = ()
@@ -794,41 +837,69 @@ class State(object):
             index = keys.index(key)
 
             if cam_type == 0:
-                functions = (
-                    self.hudModeCycle, self.camProjectionCycle,
-                    self.camR, self.camR,
-                    self.camR, self.camR,
-                    self.camT, self.camT,
-                    self.camT, self.camT
-                )
-                args = (
-                    None, None,
-                    (hou.Vector3(1, 0, 0), -15), (hou.Vector3(1, 0, 0), 15),
-                    (hou.Vector3(0, 1, 0), -15), (hou.Vector3(0, 1, 0), 15),
-                    hou.Vector3(0, 1, 0), hou.Vector3(0, -1, 0),
-                    hou.Vector3(-1, 0, 0), hou.Vector3(1, 0, -1)
-                )
-                self.updateCam()
+                if key == "m":
+                    self.hud.nextMode()
+                    return True
+                elif key == "o":
+                    self.cam.nextProjection()
+                    return True
+                elif key == "h":
+                    self.cam.rotateLeft()
+                    return True
+                elif key == "l":
+                    self.cam.rotateRight()
+                    return True
+                elif key == "k":
+                    self.cam.rotateUp()
+                    return True
+                elif key == "j":
+                    self.cam.rotateDown()
+                    return True
+                elif key == "shift+h":
+                    self.cam.TranslateLeft()
+                    return True
+                elif key == "shift+l":
+                    self.cam.TranslateRight()
+                    return True
+                elif key == "shift+k":
+                    self.cam.TranslateUp()
+                    return True
+                elif key == "shift+j":
+                    self.cam.TranslateDown()
+                    return True
+                self.cam.update()
 
             elif cam_type == 1:
                 cam = self.viewport.defaultCamera()
-                t = list(cam.translation())
-                delta = self.units["t"]
 
                 if self.viewport.type() == hou.geometryViewportType.Perspective:
-                    functions = (
-                        self.camT, self.camT,
-                        self.camT, self.camT,
-                        self.camR, self.camR,
-                        self.camR, self.camR,
-                        self.camZoom, self.camZoom)
-                    args = (
-                        (hou.Vector3(1, 0, 0), -1), (hou.Vector3(0, 1, 0), -1),
-                        (hou.Vector3(0, 1, 0), 15), (hou.Vector3(0, -1, 0), 15),
-                        (hou.Vector3(-1, 0, 0), 15), (hou.Vector3(1, 0, -1), 15),
-                        (hou.Vector3(0, 0, 1), 15), (hou.Vector3(0, 0, -1), 15),
-                        (hou.Vector3(0, 0, 1), 15), (hou.Vector3(0, 0, -1), 15),
-                    )
+                    if key == "m":
+                        self.hud.nextMode()
+                        return True
+                    elif key == "o":
+                        self.cam.nextProjection()
+                        return True
+                    elif key == "h":
+                        self.defaultCam.rotateLeft()
+                        return True
+                    elif key == "l":
+                        self.defaultCam.rotateRight()
+                        return True
+                    elif key == "j":
+                        self.defaultCam.rotateUp()
+                        return True
+                    elif key == "k":
+                        self.defaultCam.rotateDown()
+                        return True
+                    elif key == "-":
+                        self.defaultCam.zoomOut()
+                        return True
+                    elif key == "=":
+                        self.defaultCam.zoomIn()
+                        return True
+                    elif key == "f":
+                        self.defaultCam.frame()
+
 
             elif cam_type == 2:
                 indices = (0, 0)
@@ -862,9 +933,6 @@ class State(object):
 
                 cam.setTranslation(t)
 
-            if index != -1:
-                functions[index](args[index])
-                return True
 
         elif mode == 1:
             keys = (
@@ -1005,12 +1073,6 @@ class State(object):
     # Updates #
     ###########
 
-    def updateAspectRatio(self):
-        self.cam.parm("resx").set(1000)
-        self.cam.parm("resy").set(1000)
-        viewport = self.sceneViewer.findViewport("persp1")
-        ratio = viewport.size()[2] / viewport.size()[3]
-        self.cam.parm("aspect").set(ratio)
 
 
     def updateNetworkContext(self):
