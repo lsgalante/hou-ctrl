@@ -196,7 +196,6 @@ class State(object):
                 "f" # frame
             )
             index = keys.index(key)
-            print(self.cam_type)
 
             if self.cam_type == "node":
                 functions = (
@@ -788,10 +787,7 @@ class State(object):
             # Skip processing dividers.
             if "divider" not in row["id"]:
 
-                # First three are common to all huds.
                 if row["id"] == "mode": updates["mode"] = {"value": self.mode}
-                elif row["id"] == "hud": updates["hud"] = {"value": self.hud_name}
-                elif row["id"] == "hud_g": updates["hud_g"] = {"value": self.hud_names.index(self.hud_name)}
 
                 # Graph
                 elif row["id"][-2:] == "_g":
