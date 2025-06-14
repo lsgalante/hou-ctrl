@@ -141,12 +141,23 @@ class Camera():
         self.local_z *= m
         self.update()
 
-    def translate(self, axis_name, amt):
-        axis = None
-        if axis_name == "x": axis = self.local_x
-        elif axis_name == "y": axis = self.local_y
-        move = axis * amt
+    def translateUp(self):
+        move = self.local_y * self.t_delta
         self.t += move
+        self.update()
+
+    def translateDown(self):
+        move = self.local_y * self.t_delta * -1
+        self.t += move
+        self.update()
+
+    def translateLeft(self):
+        move = self.local_x * self.t_delta * -1
+        self.t += move
+        self.update()
+
+    def translateRight(self):
+        move = self.local_x * self.t_delta
         self.t += move
         self.update()
 
