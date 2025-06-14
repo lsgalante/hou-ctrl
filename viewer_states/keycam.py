@@ -834,68 +834,31 @@ class State(object):
             # cam_type: 0 = Keycam, 1 = Default Perspective, 2 = Default Linear, 3 = Other
 
             if cam_type == 0:
-                if key == "m":
-                    self.hud.nextMode()
-                    return True
-                elif key == "o":
-                    self.cam.nextProjection()
-                    return True
-                elif key == "h":
-                    self.cam.rotateLeft()
-                    return True
-                elif key == "l":
-                    self.cam.rotateRight()
-                    return True
-                elif key == "k":
-                    self.cam.rotateUp()
-                    return True
-                elif key == "j":
-                    self.cam.rotateDown()
-                    return True
-                elif key == "shift+h":
-                    self.cam.TranslateLeft()
-                    return True
-                elif key == "shift+l":
-                    self.cam.TranslateRight()
-                    return True
-                elif key == "shift+k":
-                    self.cam.TranslateUp()
-                    return True
-                elif key == "shift+j":
-                    self.cam.TranslateDown()
-                    return True
+                if key == "m": self.hud.nextMode(); return True
+                elif key == "o": self.cam.nextProjection(); return True
+                elif key == "h": self.cam.rotateLeft(); return True
+                elif key == "l": self.cam.rotateRight(); return True
+                elif key == "k": self.cam.rotateUp(); return True
+                elif key == "j": self.cam.rotateDown(); return True
+                elif key == "shift+h": self.cam.TranslateLeft(); return True
+                elif key == "shift+l": self.cam.TranslateRight(); return True
+                elif key == "shift+k": self.cam.TranslateUp(); return True
+                elif key == "shift+j": self.cam.TranslateDown(); return True
                 self.cam.update()
 
             elif cam_type == 1:
                 cam = self.viewport.defaultCamera()
 
                 if self.viewport.type() == hou.geometryViewportType.Perspective:
-                    if key == "m":
-                        self.hud.nextMode()
-                        return True
-                    elif key == "o":
-                        self.cam.nextProjection()
-                        return True
-                    elif key == "h":
-                        self.defaultCam.rotateLeft()
-                        return True
-                    elif key == "l":
-                        self.defaultCam.rotateRight()
-                        return True
-                    elif key == "j":
-                        self.defaultCam.rotateUp()
-                        return True
-                    elif key == "k":
-                        self.defaultCam.rotateDown()
-                        return True
-                    elif key == "-":
-                        self.defaultCam.zoomOut()
-                        return True
-                    elif key == "=":
-                        self.defaultCam.zoomIn()
-                        return True
-                    elif key == "f":
-                        self.defaultCam.frame()
+                    if key == "m": self.hud.nextMode(); return True
+                    elif key == "o": self.cam.nextProjection(); return True
+                    elif key == "h": self.defaultCam.rotateLeft(); return True
+                    elif key == "l": self.defaultCam.rotateRight(); return True
+                    elif key == "j": self.defaultCam.rotateUp(); return True
+                    elif key == "k": self.defaultCam.rotateDown(); return True
+                    elif key == "-": self.defaultCam.zoomOut(); return True
+                    elif key == "=": self.defaultCam.zoomIn(); return True
+                    elif key == "f": self.defaultCam.frame()
 
             elif cam_type == 2:
                 indices = (0, 0)
