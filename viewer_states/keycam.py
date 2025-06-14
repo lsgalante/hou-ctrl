@@ -840,18 +840,6 @@ class State(object):
             cam_type = kwargs["state_parms"]["camera"]["value"]
             # cam_type: 0 = Keycam, 1 = Default Perspective, 2 = Default Linear, 3 = Other
 
-            keys = (
-                "m", "o", # Cycle mode/projection
-                "h", "l", # rotate about y axis neg/pos
-                "k", "j", # rotate about x axis neg/pos
-                "shift+h", "shift+l", # translate on x axis
-                "shift+k", "shift+j", # translate on y axis
-                "-", "=", # zoom in/out
-                "shift+-", "shift+=", # special zoom in/out
-                "f" # frame
-            )
-            index = keys.index(key)
-
             if cam_type == 0:
                 if key == "m":
                     self.hud.nextMode()
