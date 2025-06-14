@@ -40,7 +40,7 @@ class Camera():
         self.t = centroid
         self.p = centroid
         self.orthowidth = 10
-        # self.zoom(6)
+        self.zoomSet(6)
         self.update()
 
     def home(self):
@@ -179,6 +179,11 @@ class Camera():
         viewport = self.state.scene_viewer.findViewport("persp1")
         ratio = viewport.size()[2] / viewport.size()[3]
         self.cam.parm("aspect").set(ratio)
+
+    def zoomSet(self, zoom):
+        move = self.local_z * zoom
+        self.t += move
+        self.update()
 
     def zoomIn(self):
         move = self.local_z * self.z_delta * -1
