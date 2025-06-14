@@ -95,8 +95,9 @@ class Camera():
         self.update()
 
     def rotateUp(self):
-        self.r[0] += self.deg
-        m = hou.hmath.buildRotateAboutAxis(self.local_x, self.deg)
+        self.deg = self.parms["rot_amt"]["value"]
+        self.r[0] += self.r_delta
+        m = hou.hmath.buildRotateAboutAxis(self.local_x, self.r_delta)
         self.t -= self.p
         self.t *= m
         self.t += self.p
@@ -117,8 +118,9 @@ class Camera():
         self.update()
 
     def rotateLeft(self):
-        self.r[1] -= self.deg
-        m = hou.hmath.buildRotateAboutAxis(self.global_y, -self.deg)
+        self.deg = self.parms["rot_amt"]["value"]
+        self.r[1] -= self.r_delta
+        m = hou.hmath.buildRotateAboutAxis(self.global_y, -self.r_delta)
         self.t -= self.p
         self.t *= m
         self.t += self.p
@@ -128,8 +130,9 @@ class Camera():
         self.update()
 
     def rotateRight(self):
-        self.r[1] += self.deg
-        m = hou.hmath.buildRotateAboutAxis(self.global_y, self.deg)
+        self.deg = self.parms["rot_amt"]["value"]
+        self.r[1] += self.r_delta
+        m = hou.hmath.buildRotateAboutAxis(self.global_y, self.r_delta)
         self.t -= self.p
         self.t *= m
         self.t += self.p
