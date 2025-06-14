@@ -8,8 +8,6 @@ class Camera():
         self.scene_viewer = scene_viewer
         self.units = units
 
-        # self.cam_type = cam_type
-        #
         self.t = hou.Vector3(0, 0, 0)
         self.pivot = hou.Vector3(0, 0, 0)
         self.ow = 10
@@ -711,6 +709,7 @@ class State(object):
         ]
     }
 
+
     def __init__(self, state_name, scene_viewer):
         # General Variables #
         self.cam_type = None
@@ -933,7 +932,6 @@ class State(object):
 
                 cam.setTranslation(t)
 
-
         elif mode == 1:
             keys = (
                 "m",      # cycle mode
@@ -991,16 +989,12 @@ class State(object):
     # Camera #
     ##########
 
-
-
     def camToState(self):
         self.t = list(self.cam.evalParmTuple("t"))
         self.p = list(self.cam.evalParmTuple("p"))
         self.r = hou.Vector3(self.cam.evalParmTuple("r"))
         self.pr = list(self.cam.evalParmTuple("pr"))
         self.ow = self.cam.evalParm("orthowidth")
-
-
 
 
     ###############
@@ -1027,8 +1021,6 @@ class State(object):
 
     def defaultCamRight(self, indices):
         return
-
-
 
 
     ##################
@@ -1072,8 +1064,6 @@ class State(object):
     ###########
     # Updates #
     ###########
-
-
 
     def updateNetworkContext(self):
         node = self.scene_viewer.pwd()
