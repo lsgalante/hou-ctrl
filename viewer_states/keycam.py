@@ -2,7 +2,9 @@ import hou
 # import hctl_utils as hcu # pyright: ignore
 
 class Camera():
-    def __init__(self, scene_viewer, options, units, geo):
+    def __init__(self, scene_viewer, options, units, geo, kwargs):
+        self.kwargs = kwargs
+        self.parms = kwargs["state_parms"]
         self.geo = geo
         self.options = options
         self.scene_viewer = scene_viewer
