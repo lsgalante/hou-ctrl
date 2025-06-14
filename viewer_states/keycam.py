@@ -70,7 +70,7 @@ class Camera():
         self.Guides.update()
 
     def nextProjection(self):
-        projParm = self.state.cam.parm("projection")
+        projParm = self.cam.parm("projection")
         proj = projParm.evalAsString()
         if proj == "ortho": projParm.set("perspective")
         elif proj == "perspective": projParm.set("ortho")
