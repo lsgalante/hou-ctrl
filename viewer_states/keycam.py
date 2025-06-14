@@ -159,9 +159,14 @@ class Camera():
         ratio = viewport.size()[2] / viewport.size()[3]
         self.cam.parm("aspect").set(ratio)
 
-    def zoom(self, amt):
-        move = self.local_z * amt
+    def zoomIn(self):
+        move = self.local_z * self.z_delta
         self.t += move
+        self.update()
+
+    def zoomOut(self):
+        move = self.local_z * self.z_delta * -1
+        self.t -= move
         self.update()
 
 
