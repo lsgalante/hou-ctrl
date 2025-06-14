@@ -844,6 +844,8 @@ class State(object):
                 elif key == "shift+l": self.cam.TranslateRight(); return True
                 elif key == "shift+k": self.cam.TranslateUp(); return True
                 elif key == "shift+j": self.cam.TranslateDown(); return True
+                elif key == "-": self.cam.zoomOut(); return True
+                elif key == "=": self.cam.zoomIn(); return True
                 self.cam.update()
 
             elif cam_type == 1:
