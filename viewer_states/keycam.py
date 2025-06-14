@@ -2,21 +2,21 @@ import hou
 # import hctl_utils as hcu # pyright: ignore
 
 class Camera():
-    def __init__(self, scene_viewer, options, units, geo, kwargs):
-        self.kwargs = kwargs
-        self.parms = kwargs["state_parms"]
-        self.geo = geo
-        self.options = options
-        self.scene_viewer = scene_viewer
-        self.units = units
+    def __init__(self, state):
+        self.state = state
+        self.kwargs = state.kwargs
 
         self.t = hou.Vector3(0, 0, 0)
         self.pivot = hou.Vector3(0, 0, 0)
         self.ow = 10
 
-        self.viewports = list(self.scene_viewer.viewports())
-        self.viewports.reverse() # I guess they get listed backward
+        self.viewports = self.state.layout.viewports
+        # self.viewports = list(self.scene_viewer.viewports())
+        # self.viewports.reverse() # I guess they get listed backward
         self.viewport = self.viewports[0]
+        print("x")
+        print(self.viewports)
+
 
         # Create keycam node if nonexistant
         children = hou.node("/obj").children()
@@ -29,10 +29,10 @@ class Camera():
 
         self.cam = hou.node("/obj/keycam")
         self.viewport.setCamera(self.cam)
-        self.viewport.lockCameraToView(self.options["lock_cam"])
+        self.viewport.lockCameraToView(self.state.options["lock_cam"])
 
     def frame(self):
-        centroid = self.geo.centroid()
+        centroid = self.state.geo.centroid()
         self.t = centroid
         self.t_pivot = centroid
         self.ow = 10
@@ -40,7 +40,6 @@ class Camera():
         self.update()
 
     def movePivot(self):
-        parms = self.kwargs["state_parms"]
         target = self.nav_state["target"]
         # if target == "cam": t = list(state_parms["t"]["value"])
         # elif target == "centroid": centroid = self.geoCentroidGet()
@@ -137,6 +136,8 @@ class Camera():
         self.update()
 
     def update(self):
+        print(self.t)
+        self.state.kwargs["state_parms"]["t"]["value"] = self.t
         self.cam.parmTuple("t").set(self.t)
         self.cam.parmTuple("r").set(self.r)
         self.cam.parm("orthowidth").set(self.ow)
@@ -144,7 +145,7 @@ class Camera():
     def updateAspectRatio(self):
         self.cam.parm("resx").set(1000)
         self.cam.parm("resy").set(1000)
-        viewport = self.scene_viewer.findViewport("persp1")
+        viewport = self.state.scene_viewer.findViewport("persp1")
         ratio = viewport.size()[2] / viewport.size()[3]
         self.cam.parm("aspect").set(ratio)
 
@@ -155,9 +156,10 @@ class Camera():
 
 
 class Geo():
-    def __init__(self, scene_viewer):
+    def __init__(self, state):
+        self.state = state
         self.geo = hou.Geometry()
-        self.scene_viewer = scene_viewer
+        self.scene_viewer = state.scene_viewer
         self.geo_type = hou.drawableGeometryType.Line
         self.name = "geo"
         self.color = hou.Vector4((1, 1, 1, 0.5))
@@ -184,18 +186,15 @@ class Geo():
         centroid = pt.position()
         return centroid
 
-
     def get(self):
         self.displayNode = None
         pwd = self.scene_viewer.pwd()
         self.context = pwd.childTypeCategory().label()
-
         if self.context == "dop": displayNode = pwd.displayNode()
         elif self.context == "lop": return None
         elif self.context == "Objects": displayNode = pwd.children()[0].displayNode()
         elif self.context == "Geometry": displayNode = pwd.displayNode()
         return displayNode.geometry()
-
 
     def home(self):
         self.displayNode = None
@@ -205,8 +204,9 @@ class Geo():
 
 
 class Guides():
-    def __init__(self, scene_viewer):
-        self.scene_viewer = scene_viewer
+    def __init__(self, state):
+        self.state = state
+        self.scene_viewer = state.scene_viewer
         self.guides = []
         self.axis_size = 1
         self.axis_cam = 1
@@ -542,14 +542,14 @@ class Hud():
 
 
 class Layout():
-    def __init__(self, sceneViewer):
-        self.sceneViewer = sceneViewer
+    def __init__(self, state):
+        self.state = state
+        self.viewport = state.scene_viewer.curViewport()
+        self.layout = state.scene_viewer.viewportLayout()
+        self.viewports = state.scene_viewer.viewports()
         self.update()
 
     def update(self):
-        self.viewport = self.sceneViewer.curViewport()
-        self.viewports = self.sceneViewer.viewports()
-        self.layout = self.sceneViewer.viewportLayout()
 
         if self.layout == hou.geometryViewportLayout.DoubleSide:
             self.viewport_index = (2, 3)[self.viewport_index]
@@ -673,23 +673,6 @@ class Layout():
         viewport.changeType(viewportType)
 
 
-class Parms():
-    def __init__(self, kwargs):
-        self.state_parms = kwargs["state_parms"]
-        self.parms = kwargs["state_parms"]
-        self.t = hou.Vector3(0, 0, 0)
-        self.set()
-
-
-    def get(self, key):
-        return self.parms.get(key)
-
-
-    def set(self):
-        print(self.parms)
-        self.parms["t"]["value"] = hou.Vector3(0, 0, 0)
-
-
 class State(object):
     HUD_TEMPLATE={
         "title": "test",
@@ -728,7 +711,6 @@ class State(object):
             {"id": "focus_g", "type":  "choicegraph", "count": 10}
         ]
     }
-
 
     def __init__(self, state_name, scene_viewer):
         # General Variables #
@@ -818,15 +800,14 @@ class State(object):
     def onGenerate(self, kwargs):
         kwargs["state_flags"]["exit_on_node_select"] = False # Prevent exiting the state when current node changes
         self.kwargs = kwargs
-        self.layout = Layout(self.scene_viewer)
-        self.geo = Geo(self.scene_viewer)
-        self.cam = Camera(self.scene_viewer, self.options, self.units, self.geo, kwargs)
-        self.parms = Parms(kwargs)
+        self.layout = Layout(self)
+        self.cam = Camera(self)
+        self.geo = Geo(self)
+        self.guides = Guides(self)
+        self.hud = Hud()
         self.updateNetworkContext()
         self.updateOptions()
         self.cam.frame()
-        self.guides = Guides(self.scene_viewer)
-        self.hud = Hud()
 
 
     def onKeyEvent(self, kwargs):
