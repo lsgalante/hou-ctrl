@@ -857,10 +857,10 @@ class State(object):
                 elif key == "l": self.cam.rotateRight(); return True
                 elif key == "k": self.cam.rotateUp(); return True
                 elif key == "j": self.cam.rotateDown(); return True
-                elif key == "shift+h": self.cam.TranslateLeft(); return True
-                elif key == "shift+l": self.cam.TranslateRight(); return True
-                elif key == "shift+k": self.cam.TranslateUp(); return True
-                elif key == "shift+j": self.cam.TranslateDown(); return True
+                elif key == "Shift+h": self.cam.TranslateLeft(); return True
+                elif key == "Shift+l": self.cam.TranslateRight(); return True
+                elif key == "Shift+k": self.cam.TranslateUp(); return True
+                elif key == "Shift+j": self.cam.TranslateDown(); return True
                 elif key == "-": self.cam.zoomOut(); return True
                 elif key == "=": self.cam.zoomIn(); return True
                 elif key == "Shift+-": self.cam.orthoZoomOut(); return True
