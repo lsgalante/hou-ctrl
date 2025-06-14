@@ -101,6 +101,7 @@ class Camera():
         self.update()
 
     def rotateLeft(self):
+        print("test")
         axis = self.global_y
         deg = 15
         self.r[1] -= deg
@@ -810,7 +811,7 @@ class State(object):
 
 
     def onExit(self, kwargs):
-        for viewport in self.Layout.viewports:
+        for viewport in self.scene_viewer.viewports():
             viewport.lockCameraToView(False)
 
 
@@ -1104,23 +1105,61 @@ def createViewerStateTemplate():
     # Bind icon
     template.bindIcon("DESKTOP_application_sierra")
     # Bind parameters
-    template.bindParameter(hou.parmTemplateType.Menu, name="mode", label="Mode", default_value="camera", menu_items=[("camera", "Camera"), ("settings", "Settings")])
+    template.bindParameter(hou.parmTemplateType.Menu,
+        name="mode", label="Mode",
+        default_value="camera",
+        menu_items=[("camera", "Camera"), ("settings", "Settings")])
     template.bindParameter(hou.parmTemplateType.Separator)
-    template.bindParameter(hou.parmTemplateType.Menu, name="layout", label="Layout", default_value="layout", menu_items=[("single", "Single"), ("doubleside", "DoubleSide"), ("tripleleftsplit", "TripleLeftSplit"), ("quad", "Quad")])
-    template.bindParameter(hou.parmTemplateType.Int, name="viewport_index", label="Viewport Index", default_value=0, min_limit=0, max_limit=3)
-    template.bindParameter(hou.parmTemplateType.Menu, name="view", label="View", default_value="perspective", menu_items=[("perspective", "Perspective"), ("top", "Top"), ("front", "Front"), ("right", "Right"), ("uv", "UV"), ("bottom", "Bottom"), ("back", "Back"), ("left", "Left")])
-    template.bindParameter(hou.parmTemplateType.Menu, name="camera", label="Camera", menu_items=[("keycam", "Keycam"), ("default", "Default"), ("other", "Other")])
+    template.bindParameter(hou.parmTemplateType.Menu,
+        name="layout", label="Layout",
+        default_value="layout",
+        menu_items=[("single", "Single"), ("doubleside", "DoubleSide"), ("tripleleftsplit", "TripleLeftSplit"), ("quad", "Quad")])
+    template.bindParameter(hou.parmTemplateType.Int,
+        name="viewport_index", label="Viewport Index",
+        default_value=0,
+        min_limit=0, max_limit=3)
+    template.bindParameter(hou.parmTemplateType.Menu,
+        name="view", label="View",
+        default_value="perspective",
+        menu_items=[("perspective", "Perspective"), ("top", "Top"), ("front", "Front"), ("right", "Right"), ("uv", "UV"), ("bottom", "Bottom"), ("back", "Back"), ("left", "Left")])
+    template.bindParameter(hou.parmTemplateType.Menu,
+        name="camera", label="Camera",
+        menu_items=[("keycam", "Keycam"), ("default", "Default"), ("other", "Other")])
     template.bindParameter(hou.parmTemplateType.Separator)
-    template.bindParameter(hou.parmTemplateType.Menu, name="target", label="Target", default_value="cam", menu_items=[("cam", "Cam"), ("pivot", "Pivot")])
+    template.bindParameter(hou.parmTemplateType.Menu,
+        name="target", label="Target",
+        default_value="cam",
+        menu_items=[("cam", "Cam"), ("pivot", "Pivot")])
     template.bindParameter(hou.parmTemplateType.Separator)
-    template.bindParameter(hou.parmTemplateType.Float, name="rot_amt", label="Rotation Amount", default_value=7.5, min_limit=-180.0, max_limit=180.0)
-    template.bindParameter(hou.parmTemplateType.Float, name="tr_amt", label="Translation Amount", default_value=1.0, min_limit=0, max_limit=10.0)
-    template.bindParameter(hou.parmTemplateType.Float, name="ow_amt", label="Ortho Width Amount", default_value=1.0, min_limit=0, max_limit=10.0)
-    template.bindParameter(hou.parmTemplateType.Float, name="zoom_amt", label="Zoom Amount", default_value=1.0, min_limit=0, max_limit=10.0)
+    template.bindParameter(hou.parmTemplateType.Float,
+        name="rot_amt", label="Rotation Amount",
+        default_value=7.5,
+        min_limit=-180.0, max_limit=180.0)
+    template.bindParameter(hou.parmTemplateType.Float,
+        name="tr_amt", label="Translation Amount",
+        default_value=1.0,
+        min_limit=0, max_limit=10.0)
+    template.bindParameter(hou.parmTemplateType.Float,
+        name="ow_amt", label="Ortho Width Amount",
+        default_value=1.0,
+        min_limit=0, max_limit=10.0)
+    template.bindParameter(hou.parmTemplateType.Float,
+        name="zoom_amt", label="Zoom Amount",
+        default_value=1.0,
+        min_limit=0, max_limit=10.0)
     template.bindParameter(hou.parmTemplateType.Separator)
+    template.bindParameter(hou.parmTemplateType.Float,
+        name="t", label="t",
+        num_components=3)
+    template.bindParameter(hou.parmTemplateType.Float,
+        name="r", label="r",
+        num_components=3)
+    template.bindParameter(hou.parmTemplateType.Float,
+        name="pivot", label="pivot",
+        num_components=3)
+
     # Bind menu
-    menu = makeMenu()
-    template.bindMenu(menu)
+    template.bindMenu(makeMenu())
     return template
 
 
