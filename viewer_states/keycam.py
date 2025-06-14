@@ -39,7 +39,7 @@ class Camera():
         centroid = self.state.geo.centroid()
         self.t = centroid
         self.p = centroid
-        self.orthowidth = 10
+        # self.orthowidth = 10
         self.zoomSet(6)
         self.update()
 
@@ -47,7 +47,7 @@ class Camera():
         centroid = self.state.geo.centroid()
         self.t = centroid
         self.p = centroid
-        self.orthowidth = 10
+        # self.orthowidth = 10
         # self.zoom(6)
         self.update()
 
@@ -65,7 +65,7 @@ class Camera():
             self.t = [0, 0, dist]
             self.r = [45, 45, 0]
             self.p = [0, 0, -dist]
-            self.orthowidth = 10
+            # self.orthowidth = 10
         self.update()
         self.Guides.update()
 
@@ -193,6 +193,18 @@ class Camera():
     def zoomOut(self):
         move = self.local_z * self.z_delta
         self.t += move
+        self.update()
+
+    def orthoZoomSet(self, zoom):
+        self.orthowidth = zoom
+        self.update()
+
+    def orthoZoomIn(self):
+        self.orthowidth += self.z_delta * -1
+        self.update()
+
+    def orthoZoomOut(self):
+        self.orthowidth += self.z_delta
         self.update()
 
 
@@ -851,6 +863,8 @@ class State(object):
                 elif key == "shift+j": self.cam.TranslateDown(); return True
                 elif key == "-": self.cam.zoomOut(); return True
                 elif key == "=": self.cam.zoomIn(); return True
+                elif key == "Shift+-": self.cam.orthoZoomOut(); return True
+                elif key == "Shift+=": self.cam.orthoZoomIn(); return True
                 self.cam.update()
 
             elif cam_type == 1:
@@ -970,7 +984,7 @@ class State(object):
         self.parms["p"]["value"] = list(self.cam.evalParmTuple("p"))
         self.parms["r"]["value"] = hou.Vector3(self.cam.evalParmTuple("r"))
         self.parms["pr"]["value"] = list(self.cam.evalParmTuple("pr"))
-        self.parms["ow"]["value"] = self.cam.evalParm("orthowidth")
+        self.parms["orthowidth"]["value"] = self.cam.evalParm("orthowidth")
 
 
     ###############
