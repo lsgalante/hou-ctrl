@@ -7,12 +7,9 @@ class Camera():
         self.state = state
         self.kwargs = state.kwargs
         self.parms = state.kwargs["state_parms"]
-        self.viewports = self.state.layout.viewports
-        self.viewport = self.viewports[0]
         self.nodeCheck()
         self.lock()
 
-        # Camera Variables #
         self.parms["t"]["value"] = [0, 0, 0]
         self.parms["r"]["value"] = [0, 0, 0]
         self.parms["p"]["value"] = [0, 0, 0]
@@ -45,10 +42,11 @@ class Camera():
         self.update()
 
     def lock(self):
-        print(self.viewport)
-        print(self.cam)
-        self.viewport.setCamera(self.cam)
-        # self.viewport.lockCameraToView(1)
+        self.state.layout.viewport.setCamera(self.cam)
+        self.state.layout.viewport.lockCameraToView(1)
+
+    def unlock(self):
+        self.state.layout.viewport.lockCameraToView(0)
 
     def movePivot(self):
         # if origin
@@ -558,13 +556,12 @@ class Layout():
         self.state = state
         self.parms = state.parms
         self.viewports = state.scene_viewer.viewports()
-        self.viewport = self.viewports[1]
+        self.viewports = self.viewports[::-1]
         self.layout = state.scene_viewer.viewportLayout()
         self.update()
 
     def update(self):
         indices = (0, 0)
-        index = 0
         if self.layout == hou.geometryViewportLayout.DoubleSide:
             indices = (2, 3)
         elif self.layout == hou.geometryViewportLayout.DoubleStack:
@@ -582,8 +579,7 @@ class Layout():
         elif self.layout == hou.geometryViewportLayout.TripleLeftSplit:
             indices = (2, 3, 1)
 
-        self.viewport_index = indices[self.parms["viewport_index"]["value"]]
-        self.viewport = self.viewports[indices[index]]
+        self.viewport = self.viewports[0]
         self.viewportType = self.viewport.type()
 
     # Guide to layout/viewport IDs:
