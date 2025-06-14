@@ -936,8 +936,17 @@ class State(object):
 
 
     def onParmChangeEvent(self, kwargs):
-        self.updateGuides()
-        self.updateCam()
+        # self.updateGuides()
+        self.cam.update()
+        self.parm = kwargs["parm_name"]
+        if self.parm == "mode":
+            return
+        elif self.parm == "layout":
+            return
+        elif self.parm == "viewport_index":
+            return
+        elif self.parm == "view":
+            return
 
 
     ###################
