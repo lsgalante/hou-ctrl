@@ -141,12 +141,12 @@ class Camera():
         self.update()
 
     def translateUp(self):
-        move = self.local_y * self.t_delta
+        move = self.local_y * self.t_delta * -1
         self.t += move
         self.update()
 
     def translateDown(self):
-        move = self.local_y * self.t_delta * -1
+        move = self.local_y * self.t_delta
         self.t += move
         self.update()
 
