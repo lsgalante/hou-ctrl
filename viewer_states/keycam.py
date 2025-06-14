@@ -38,7 +38,15 @@ class Camera():
         self.t = centroid
         self.p = centroid
         self.orthowidth = 10
-        self.zoom(6)
+        # self.zoom(6)
+        self.update()
+
+    def home(self):
+        centroid = self.state.geo.centroid()
+        self.t = centroid
+        self.p = centroid
+        self.orthowidth = 10
+        # self.zoom(6)
         self.update()
 
     def lock(self):
