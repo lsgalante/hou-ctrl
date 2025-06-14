@@ -31,7 +31,9 @@ class Camera():
         self.global_x = hou.Vector3(self.parms["global_x"]["value"])
         self.global_y = hou.Vector3(self.parms["global_y"]["value"])
         self.global_z = hou.Vector3(self.parms["global_z"]["value"])
-        self.deg = self.parms["rot_amt"]["value"]
+        self.t_delta = self.parms["t_delta"]["value"]
+        self.r_delta = self.parms["r_delta"]["value"]
+        self.z_delta = self.parms["z_delta"]["value"]
 
     def frame(self):
         centroid = self.state.geo.centroid()
@@ -107,8 +109,9 @@ class Camera():
         self.update()
 
     def rotateDown(self):
-        self.r[0] -= self.deg
-        m = hou.hmath.buildRotateAboutAxis(self.local_x, -self.deg)
+        self.deg = self.parms["rot_amt"]["value"]
+        self.r[0] -= self.r_delta
+        m = hou.hmath.buildRotateAboutAxis(self.local_x, -self.r_delta)
         self.t -= self.p
         self.t *= m
         self.t += self.p
@@ -1114,10 +1117,10 @@ def createViewerStateTemplate():
     template.bindParameter(hou.parmTemplateType.Separator)
     template.bindParameter(hou.parmTemplateType.Menu, name="target", label="Target", default_value="cam", menu_items=[("cam", "Cam"), ("pivot", "Pivot")])
     template.bindParameter(hou.parmTemplateType.Separator)
-    template.bindParameter(hou.parmTemplateType.Float, name="rot_amt", label="Rotation Amount", default_value=7.5, min_limit=-180.0, max_limit=180.0)
-    template.bindParameter(hou.parmTemplateType.Float, name="tr_amt", label="Translation Amount", default_value=1.0, min_limit=0, max_limit=10.0)
-    template.bindParameter(hou.parmTemplateType.Float, name="ow_amt", label="Ortho Width Amount", default_value=1.0, min_limit=0, max_limit=10.0)
-    template.bindParameter(hou.parmTemplateType.Float, name="zoom_amt", label="Zoom Amount", default_value=1.0, min_limit=0, max_limit=10.0)
+    template.bindParameter(hou.parmTemplateType.Float, name="r_delta", label="Rotation Delta", default_value=7.5, min_limit=-180.0, max_limit=180.0)
+    template.bindParameter(hou.parmTemplateType.Float, name="t_delta", label="Translation Delta", default_value=1.0, min_limit=0, max_limit=10.0)
+    template.bindParameter(hou.parmTemplateType.Float, name="orthowidth_delta", label="Ortho Width Delta", default_value=1.0, min_limit=0, max_limit=10.0)
+    template.bindParameter(hou.parmTemplateType.Float, name="z_delta", label="Zoom Delta", default_value=1.0, min_limit=0, max_limit=10.0)
     template.bindParameter(hou.parmTemplateType.Separator)
     template.bindParameter(hou.parmTemplateType.Float, name="t", label="Translation", num_components=3)
     template.bindParameter(hou.parmTemplateType.Float, name="r", label="Rotation", num_components=3)
