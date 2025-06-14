@@ -664,10 +664,27 @@ class Layout():
         self.hud_state["viewport_indexs"] = viewport_indexs
         self.hud_state["viewport_index"] = viewport_indexs[0]
 
+
     def viewportTypeSet(self, viewportType):
         viewport = self.sceneViewer.findViewport(self.layout_state["viewport_index"])
         viewport.changeType(viewportType)
 
+
+class Parms():
+    def __init__(self, kwargs):
+        self.state_parms = kwargs["state_parms"]
+        self.parms = kwargs["state_parms"]
+        self.t = hou.Vector3(0, 0, 0)
+        self.set()
+
+
+    def get(self, key):
+        return self.parms.get(key)
+
+
+    def set(self):
+        print(self.parms)
+        self.parms["t"]["value"] = hou.Vector3(0, 0, 0)
 
 
 class State(object):
@@ -800,8 +817,8 @@ class State(object):
         self.kwargs = kwargs
         self.layout = Layout(self.scene_viewer)
         self.geo = Geo(self.scene_viewer)
-        self.cam = Camera(self.scene_viewer, self.options, self.units, self.geo)
-        # self.parms = Parms(self)
+        self.cam = Camera(self.scene_viewer, self.options, self.units, self.geo, kwargs)
+        self.parms = Parms(kwargs)
         self.updateNetworkContext()
         self.updateOptions()
         self.cam.frame()
@@ -1010,14 +1027,18 @@ class State(object):
                 viewport.frameAll()
         self.camToState()
 
+
     def defaultCamUp(self, indices):
         return
+
 
     def defaultCamDown(self, indices):
         return
 
+
     def defaultCamLeft(self, indices):
         return
+
 
     def defaultCamRight(self, indices):
         return
