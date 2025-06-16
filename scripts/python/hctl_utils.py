@@ -8,942 +8,815 @@ import hctl_bindings
 import time
 
 
-
-###########
-# Desktop #
-###########
-
-def desktopEvalColorSchemes(*args):
-    hou.ui.reloadColorScheme()
-desktopEvalColorSchemes.interactive_contexts = ["all"]
-
-
-def desktopLayoutA(paneTab):
-    pane = paneTab.pane()
-    # Close all panes but one
-    paneOnly(pane)
-    # Close all tabs but one
-    paneTabOnly(paneTab)
-
-    # There should be only 1 pane at this point
-    panes = desktopPanes()
-    # panes[0].tabs()[0].setPin(False)
-
-    # Main center split
-    panes[0].splitHorizontally()
-    panes = desktopPanes()
-    panes[0].setSplitFraction(0.6)
-
-    # Left vertical split
-    panes[0].splitVertically()
-    panes[0].setSplitFraction(0.2)
-
-    # Right vertical split
-    panes[1].splitVertically()
-    panes[1].setSplitFraction(0.666)
-
-    paneTabs = desktopPaneTabs()
-    paneTabs[0].setType(hou.paneTabType.SceneViewer) # Top left
-    paneTabs[1].setType(hou.paneTabType.DetailsView) # Bas left
-    paneTabs[2].setType(hou.paneTabType.Parm) # Top right
-    paneTabs[3].setType(hou.paneTabType.NetworkEditor) # Bas right
-    # paneTabs[3].setPin(True)
-    # desktopToggleMenus()
-    desktopToggleStowbars()
-    desktopToggleStowbars()
-desktopLayoutA.interactive_contexts = ["all"]
-
-
-def desktopLayoutB(paneTab):
-    paneOnly()
-    paneTabOnly()
-
-    panes = desktopPanes()
-    panes[0].tabs()[0].setType(hou.paneTabType.PythonShell)
-    panes[0].splitHorizontally()
-
-    panes = desktopPanes()
-    panes[0].splitVertically()
-    panes[1].splitVertically()
-
-    panes = desktopPanes()
-    panes[0].tabs()[0].setType(hou.paneTabType.SceneViewer) # Top left
-    panes[1].tabs()[0].setType(hou.paneTabType.Parm)
-desktopLayoutB.interactive_contexts = ["all"]
-
-
-def desktopLayoutQuad(paneTab):
-    paneOnly(paneTab)
-    paneTabOnly(paneTab)
-
-    panes = desktopPanes()
-    panes[0].tabs()[0].setType(hou.paneTabType.PythonShell)
-    panes[0].splitHorizontally()
-
-    panes = desktopPanes()
-    panes[0].splitVertically()
-    panes[1].splitVertically()
-desktopLayoutQuad.interactive_contexts = ["all"]
-
-
-def desktopLayoutTriH(paneTab):
-    sessionRemoveEventLoopCallbacks()
-    # Reduce
-    paneOnly(paneTab)
-    paneTabOnly(paneTab)
-    # Make panes
-    panes = desktopPanes()
-    panes[0].tabs()[0].setType(hou.paneTabType.PythonShell)
-    panes[0].splitHorizontally()
-    panes = desktopPanes()
-    panes[1].splitHorizontally()
-    panes = desktopPanes()
-    # Make paneTabs
-    panes[1].createTab(hou.paneTabType.PythonShell)
-    panes[1].tabs()[0].setIsCurrentTab()
-    # Set types
-    panes[0].tabs()[0].setType(hou.paneTabType.SceneViewer)
-    panes[1].tabs()[0].setType(hou.paneTabType.Parm)
-    panes[1].tabs()[1].setType(hou.paneTabType.DetailsView)
-    panes[2].tabs()[0].setType(hou.paneTabType.NetworkEditor)
-    # Ratios
-    panes[0].setSplitFraction(0.5)
-
-    hou.session.lastPane = hou.ui.paneUnderCursor()
-    hou.ui.addEventLoopCallback(triHCallback)
-desktopLayoutTriH.interactive_contexts = ["all"]
-
-
-def triHCallback():
-    panes = hou.ui.panes()
-    pane = hou.ui.paneUnderCursor()
-    if str(pane) != str(hou.session.lastPane):
-        hou.session.lastPane = pane
-        if str(pane) == str(panes[1]):
-            pane.setSplitFraction(0.6)
-        elif str(pane) == str(panes[2]):
-            pane.setSplitFraction(0.3)
-    return True
-
-
-def desktopLayoutTriV(paneTab):
-    sessionRemoveEventLoopCallbacks()
-
-    # Reduce
-    paneOnly(paneTab)
-    paneTabOnly(paneTab)
-
-    # Make panes
-    panes = desktopPanes()
-    panes[0].tabs()[0].setType(hou.paneTabType.PythonShell)
-    panes[0].splitHorizontally()
-    panes = desktopPanes()
-    panes[1].splitVertically()
-    panes = desktopPanes()
-
-    # Make paneTabs
-    panes[1].createTab(hou.paneTabType.PythonShell)
-    panes[1].tabs()[0].setIsCurrentTab()
-
-    # Set types
-    panes[0].tabs()[0].setType(hou.paneTabType.SceneViewer)
-    panes[1].tabs()[0].setType(hou.paneTabType.Parm)
-    panes[1].tabs()[1].setType(hou.paneTabType.DetailsView)
-    panes[2].tabs()[0].setType(hou.paneTabType.NetworkEditor)
-
-    # Set ratios
-    panes[0].setSplitFraction(0.66)
-
-
-    hou.session.lastPane = hou.ui.paneUnderCursor()
-    hou.ui.addEventLoopCallback(triVCallback)
-desktopLayoutTriV.interactive_contexts = ["all"]
-
-
-def triVCallback():
-    panes = hou.ui.panes()
-    pane = hou.ui.paneUnderCursor()
-    if str(pane) != str(hou.session.lastPane):
-        hou.session.lastPane = pane
-        if str(pane) == str(panes[1]):
-            pane.setSplitFraction(0.33)
-        elif str(pane) == str(panes[2]):
-            pane.setSplitFraction(0.66)
-    return True
-
-
-def desktopNetworkEditors(*args):
-    editors = []
-    for paneTab in desktopPaneTabs():
-        if paneTab.type() == hou.paneTabType.NetworkEditor:
-            editors.append(paneTab)
-    return editors
-desktopNetworkEditors.interactive_contexts = ["none"]
-
-
-def desktopPanes(*args):
-    panes = hou.ui.curDesktop().panes()
-    return panes
-desktopPanes.interactive_contexts = ["none"]
-
-
-def desktopSceneViewers(*args):
-    paneTabs = hou.ui.paneTabs()
-    sceneViewers = [paneTab for paneTab in paneTabs if paneTab.type() == hou.paneTabType.SceneViewer]
-    return sceneViewers
-desktopSceneViewers.interactive_contexts = ["none"]
-
-
-def desktopShelfHide(*args):
-    desktop = hou.ui.curDesktop()
-    desktop.shelfDock().show(0)
-    hou.ui.reloadViewportColorSchemes()
-desktopShelfHide.interactive_contexts = ["none"]
-
-
-def desktopShelfShow(*args):
-    desktop = hou.ui.curDesktop()
-    desktop.shelfDock().show(1)
-desktopShelfShow.interactive_contexts = ["none"]
-
-
-def desktopPaneTabs(*args):
-    paneTabs = []
-    for pane in desktopPanes():
-        for paneTab in pane.tabs():
-            paneTabs.append(paneTab)
-    return paneTabs
-desktopPaneTabs.interactive_contexts = ["none"]
-
-
-def desktopToggleMainMenuBar(*args):
-    if hou.getPreference("showmenu.val") == "1":
-        hou.setPreference("showmenu.val", "0")
-    else:
-        hou.setPreference("showmenu.val", "1")
-desktopToggleMainMenuBar.interactive_contexts = ["all"]
-
-
-def desktopToggleMenus(*args):
-    visible = 0
-    # gather contexts
-    editors = desktopNetworkEditors()
-    panes = desktopPanes()
-    viewers = desktopSceneViewers()
-    paneTabs = desktopPaneTabs()
-    # main menu
-    if hou.getPreference("showmenu.val") == "1":
-        visible = 1
-    # network editor menu
-    elif any(editor.getPref("showmenu") == "1" for editor in editors):
-        visible = 1
-    # network controls
-    elif any(paneTab.isShowingNetworkControls() for paneTab in paneTabs):
-        visible = 1
-    # scene viewer toolbars (top, right, left)
-    elif any(viewer.isShowingOperationBar() for viewer in viewers):
-        visible = 1
-    elif any(viewer.isShowingDisplayOptionsBar() for viewer in viewers):
-        visible = 1
-    elif any(viewer.isShowingSelectionBar() for sceneViewer in sceneViewers):
-        visible = 1
-    # paneTabs
-    elif any(pane.isShowingPaneTabs() for pane in panes):
-        visible = 1
-    # hide all
-    if visible:
-        hou.setPreference("showmenu.val", "0")
-        for editor in editors:
-            editor.setPref("showmenu", "0")
-        for paneTab in paneTabs:
-            paneTab.showNetworkControls(0)
-        for pane in panes:
-            pane.showPaneTabs(0)
-        for viewer in viewers:
-            viewer.showOperationBar(0)
-            viewer.showDisplayOptionsBar(0)
-            viewer.showSelectionBar(0)
-        hou.ui.setHideAllMinimizedStowbars(1)
-    # show all
-    else:
-        hou.setPreference("showmenu.val", "1")
-        for editor in editors:
-            editor.setPref("showment", "1")
-        for paneTab in paneTabs:
-            paneTab.showNetworkControls(1)
-        for pane in panes:
-            pane.showPaneTabs(1)
-        for viewer in viewers:
-            viewer.showOperationBar(1)
-            viewer.showDisplayOptionsBar(1)
-            viewer.showSelectionBar(1)
-        hou.ui.setHideAllMinimizedStowbars(0)
-desktopToggleMenus.interactive_contexts = ["all"]
-
-
-def desktopToggleHctl(*args):
-    reload(hctl)
-    hctl.dialog().show()
-desktopToggleHctl.interactive_contexts = ["all"]
-
-
-def desktopToggleNetworkControls(*args):
-    visible = 0
-    paneTabs = desktopPaneTabs()
-    for paneTab in paneTabs:
-        if paneTab.isShowingNetworkControls():
-            visible = 1
-    for paneTab in paneTabs:
-        paneTab.showNetworkControls((visible + 1) % 2)
-desktopToggleNetworkControls.interactive_contexts = ["all"]
-
-
-def desktopTogglePaneTabs(*args):
-    panes = desktopPanes()
-    visible = 0
-    for pane in panes:
-        if pane.isShowingPaneTabs():
-            visible = 1
-    for pane in panes:
-        pane.showPaneTabs(not visible)
-desktopTogglePaneTabs.interactive_contexts = ["all"]
-
-
-def desktopToggleStowbars(*args):
-    hidden = hou.ui.hideAllMinimizedStowbars()
-    hou.ui.setHideAllMinimizedStowbars(not hidden)
-desktopToggleStowbars.interactive_contexts = ["all"]
-
-
-def desktopUpdateMainMenuBar(*args):
-    hou.ui.updateMainMenuBar()
-desktopUpdateMainMenuBar.interactive_contexts = ["all"]
-
-
-def desktopViewports(*args):
-    viewports = []
-    sceneViewers = desktopSceneViewers()
-    for sceneViewer in sceneViewers:
-        for viewport in sceneViewer.viewports():
-            viewports.append(viewport)
-desktopViewports.interactive_contexts = ["none"]
-
-
-##################
-# Network Editor #
-##################
-
-def networkEditorAddNetworkBox(editor):
-    context = editor.pwd()
-    node = editor.currentNode()
-    networkBox = context.createNetworkBox()
-    networkBox.setPosition(node.position())
-networkEditorAddNetworkBox.interactive_contexts = ["paneTabType.NetworkEditor"]
-
-
-def networkEditorAddStickyNote(editor):
-    context = editor.pwd()
-    stickyNote = context.createStickyNote()
-    cursor_pos =  editor.cursorPosition()
-    stickyNote.setPosition(cursor_pos)
-    color = hou.Color(0.71, 0.784, 1.0)
-    stickyNote.setColor(color)
-networkEditorAddStickyNote.interactive_contexts = ["paneTabType.NetworkEditor"]
-
-
-def networkEditorConnectNodeTo(editor):
-    node = networkEditorCurrentNode(editor)
-    choices = ("a", "b", "c")
-    popup = hou.ui.selectFromList(choices)
-networkEditorConnectNodeTo.interactive_contexts = ["paneTabType.NetworkEditor"]
-
-
-def networkEditorCurrentNode(editor):
-    return editor.currentNode()
-networkEditorCurrentNode.interactive_contexts = ["none"]
-
-
-def networkEditorDeselectAllNodes(editor):
-    node = networkEditorCurrentNode(editor)
-    node.setSelected(False)
-networkEditorDeselectAllNodes.interactive_contexts = ["paneTabType.NetworkEditor"]
-
-
-def networkEditorDisplayNode(editor):
-    context = editor.pwd()
-    return  context.displayNode()
-networkEditorDisplayNode.interactive_contexts = ["none"]
-
-
-def networkEditorRenameNode(editor):
-    node = networkEditorCurrentNode(editor)
-    name = hou.ui.readInput("rename_node", buttons=("yes", "no"))
-    if name[0] == 0:
-        node.setName(name[1])
-networkEditorRenameNode.interactive_contexts = ["paneTabType.NetworkEditor", "paneTabType.Parm"]
-
-
-def networkEditorRotateNodeInputs(editor):
-    node = networkEditorCurrentNode(editor)
-    connectors = node.inputConnectors()
-networkEditorRotateNodeInputs.interactive_contexts = ["paneTabType.NetworkEditor"]
-
-
-def networkEditorSelectDisplayNode(editor):
-    displayNode = networkEditorDisplayNode(editor)
-    displayNode.setCurrent(True, True)
-networkEditorSelectDisplayNode.interactive_contexts = ["paneTabType.NetworkEditor"]
-
-
-def networkEditorToggleDimUnusedNodes(editor):
-    dim = "0"
-    if editor.getPref("dimunusednodes") == "1":
-        dim = "1"
-    if dim == "0":
-        editor.setPref("dimunusednodes", "1")
-    else:
-        editor.setPref("dimunusednodes", "0")
-networkEditorToggleDimUnusedNodes.interactive_contexts = ["all"]
-
-
-def networkEditorToggleGridLines(editor):
-    visible = "0"
-    if editor.getPref("gridmode") == "1":
-        visible = "1"
-    if editor.getPref("gridmode") == "0":
-        editor.setPref("gridmode", "1")
-    else:
-        editor.setPref("gridmode", "0")
-networkEditorToggleGridLines.interactive_contexts = ["all"]
-
-
-def networkEditorToggleLocating(editor):
-    locating = 0
-    if editor.locatingEnabled():
-        locating = 1
-    editor.setLocatingEnabled(not locating)
-networkEditorToggleLocating.interactive_contexts = ["all"]
-
-
-def networkEditorToggleMenu(editor):
-    visible = 0
-    if editor.getPref("showmenu") == "1":
-        visible = 1
-    if visible:
-        networkEditor.setPref("showmenu", str(not visible))
-networkEditorToggleMenu.interactive_contexts = ["all"]
-
-
-def networkEditorToggleGridPoints(editor):
-    visible = int(editor.getPref("gridmode"))
-    editor.setPref("gridmode", str(not visible))
-networkEditorToggleGridPoints.interactive_contexts = ["all"]
-
-
-########
-# Open #
-########
-
-def openColorEditor(*args):
-    hou.ui.selectColor()
-openColorEditor.interactive_contexts = ["all"]
-
-
-def openFloatingParameterEditor(paneTab):
-    if paneTab.type() == hou.paneTabType.NetworkEditor:
-        node = paneTab.currentNode()
-        hou.ui.showFloatingParameterEditor(node)
-    else:
-        hou.ui.setStatusMessage("Not a network editor", hou.severityType.Error)
-openFloatingParameterEditor.interactive_contexts = ["all"]
-
-
-def openHotkeyEditor(*args):
-    print("open hotkey editor")
-openHotkeyEditor.interactive_contexts = ["none"]
-
-
-########
-# Pane #
-########
-
-def paneContract(paneTab):
-    pane = paneTab.pane()
-    fraction = pane.getSplitFraction()
-    fraction = round(fraction, 3) + 0.1
-    message = "Pane fraction: " + str(fraction)
-    hou.ui.setStatusMessage(message)
-    pane = pane.setSplitFraction(fraction)
-paneContract.interactive_contexts = ["all"]
-
-
-def paneExpand(paneTab):
-    pane = paneTab.pane()
-    fraction = pane.getSplitFraction()
-    fraction = round(fraction, 3) - 0.1
-    message = "Pane fraction: " + str(fraction)
-    hou.ui.setStatusMessage(message)
-    pane = pane.setSplitFraction(fraction)
-paneExpand.interactive_contexts = ["all"]
-
-
-def paneNewPaneTab(paneTab):
-    pane = paneTab.pane()
-    reload(hctl_new_pane_tab_menu)
-    newPaneTabMenu = hctl_new_pane_tab_menu.newPaneTabMenu()
-    newPaneTabMenu.show()
-paneNewPaneTab.interactive_contexts = ["all"]
-
-
-def paneOnly(paneTab):
-    this_pane = paneTab.pane()
-    for pane in hou.ui.curDesktop().panes():
-        if pane != this_pane:
+class Desktop():
+    def __init__(self, paneTab):
+        self.update()
+        return
+
+    def clearLayout(self):
+        self.paneOnly(self.pane)
+        self.paneTabOnly(self.paneTab)
+        self.update()
+    clearLayout.interactive_contexts = ["all"]
+
+    def getNetworkEditors(self):
+        editors = []
+        for paneTab in self.paneTabs():
+            if paneTab.type() == hou.paneTabType.NetworkEditor:
+                editors.append(paneTab)
+        return editors
+    getNetworkEditors.interactive_contexts = ["none"]
+
+    def getPanes(self):
+        panes = hou.ui.curDesktop().panes()
+        return panes
+    getPanes.interactive_contexts = ["none"]
+
+    def getPaneTabs(self):
+        paneTabs = []
+        for pane in hou.desktopPanes():
             for paneTab in pane.tabs():
+                paneTabs.append(paneTab)
+        return paneTabs
+    getPaneTabs.interactive_contexts = ["none"]
+
+    def getSceneViewers(self):
+        paneTabs = hou.ui.paneTabs()
+        sceneViewers = [paneTab for paneTab in paneTabs if paneTab.type() == hou.paneTabType.SceneViewer]
+        return sceneViewers
+    getSceneViewers.interactive_contexts = ["none"]
+
+    def getViewports(self):
+        viewports = []
+        sceneViewers = self.getSceneViewers()
+        for sceneViewer in sceneViewers:
+            for viewport in sceneViewer.viewports():
+                viewports.append(viewport)
+        return(viewports)
+    getViewports.interactive_contexts = ["none"]
+
+    def hideShelf(self):
+        desktop = hou.ui.curDesktop()
+        desktop.shelfDock().show(0)
+        hou.ui.reloadViewportColorSchemes()
+    hideShelf.interactive_contexts = ["none"]
+
+    def layoutA(self):
+        self.clearLayout()
+        # pin network editor(?) pane
+        # self.panes[0].tabs()[0].setPin(False)
+        # Main center split
+        self.panes[0].splitHorizontally()
+        self.update()
+        self.panes[0].setSplitFraction(0.6)
+        # Left vertical split
+        self.panes[0].splitVertically()
+        self.panes[0].setSplitFraction(0.2)
+        # Right vertical split
+        self.panes[1].splitVertically()
+        self.panes[1].setSplitFraction(0.666)
+        # Assign
+        self.update()
+        self.paneTabs[0].setType(hou.paneTabType.SceneViewer) # Top left
+        self.paneTabs[1].setType(hou.paneTabType.DetailsView) # Bas left
+        self.paneTabs[2].setType(hou.paneTabType.Parm) # Top right
+        self.paneTabs[3].setType(hou.paneTabType.NetworkEditor) # Bas right
+        # Hide etc
+        # paneTabs[3].setPin(True)
+        # desktopToggleMenus()
+        self.toggleStowbars()
+        self.toggleStowbars()
+    layoutA.interactive_contexts = ["all"]
+
+    def layoutB(self):
+        self.clearLayout()
+        self.panes[0].tabs()[0].setType(hou.paneTabType.PythonShell)
+        self.panes[0].splitHorizontally()
+        self.panes[0].splitVertically()
+        self.panes[1].splitVertically()
+        self.update()
+        # Assign top left
+        self.panes[0].tabs()[0].setType(hou.paneTabType.SceneViewer)
+        self.panes[1].tabs()[0].setType(hou.paneTabType.Parm)
+    layoutB.interactive_contexts = ["all"]
+
+    def layoutQuad(self):
+        self.clearLayout()
+        self.panes[0].tabs()[0].setType(hou.paneTabType.PythonShell)
+        self.panes[0].splitHorizontally()
+        self.update()
+        self.panes[0].splitVertically()
+        self.panes[1].splitVertically()
+        self.update()
+    layoutQuad.interactive_contexts = ["all"]
+
+    def layoutTriH(self):
+        self.parent.session.removeEventLoopCallbacks()
+        self.clearLayout()
+        # Make panes
+        self.panes[0].tabs()[0].setType(hou.paneTabType.PythonShell)
+        self.panes[0].splitHorizontally()
+        self.update()
+        self.panes[1].splitHorizontally()
+        self.update()
+        # Make paneTabs
+        self.panes[1].createTab(hou.paneTabType.PythonShell)
+        self.panes[1].tabs()[0].setIsCurrentTab()
+        # Set types
+        self.panes[0].tabs()[0].setType(hou.paneTabType.SceneViewer)
+        self.panes[1].tabs()[0].setType(hou.paneTabType.Parm)
+        self.panes[1].tabs()[1].setType(hou.paneTabType.DetailsView)
+        self.panes[2].tabs()[0].setType(hou.paneTabType.NetworkEditor)
+        # Ratios
+        self.panes[0].setSplitFraction(0.5)
+        self.update()
+        hou.session.lastPane = hou.ui.paneUnderCursor()
+        hou.ui.addEventLoopCallback(self.triHCallback)
+    layoutTriH.interactive_contexts = ["all"]
+
+    def triHCallback():
+        panes = hou.ui.panes()
+        pane = hou.ui.paneUnderCursor()
+        if str(pane) != str(hou.session.lastPane):
+            hou.session.lastPane = pane
+            if str(pane) == str(panes[1]): pane.setSplitFraction(0.6)
+            elif str(pane) == str(panes[2]): pane.setSplitFraction(0.3)
+        return True
+
+    def layoutTriV(self):
+        self.parent.session.removeEventLoopCallbacks()
+        self.clearLayout()
+        # Make panes
+        self.panes[0].tabs()[0].setType(hou.paneTabType.PythonShell)
+        self.panes[0].splitHorizontally()
+        self.update()
+        self.panes[1].splitVertically()
+        self.update()
+        # Make pane tabs
+        self.panes[1].createTab(hou.paneTabType.PythonShell)
+        self.panes[1].tabs()[0].setIsCurrentTab()
+        # Set types
+        self.panes[0].tabs()[0].setType(hou.paneTabType.SceneViewer)
+        self.panes[1].tabs()[0].setType(hou.paneTabType.Parm)
+        self.panes[1].tabs()[1].setType(hou.paneTabType.DetailsView)
+        self.panes[2].tabs()[0].setType(hou.paneTabType.NetworkEditor)
+        # Set ratios
+        self.panes[0].setSplitFraction(0.66)
+        # Ok
+        hou.session.lastPane = hou.ui.paneUnderCursor()
+        hou.ui.addEventLoopCallback(self.triVCallback)
+    layoutTriV.interactive_contexts = ["all"]
+
+    def triVCallback():
+        panes = hou.ui.panes()
+        pane = hou.ui.paneUnderCursor()
+        if str(pane) != str(hou.session.lastPane):
+            hou.session.lastPane = pane
+            if str(pane) == str(panes[1]):
+                pane.setSplitFraction(0.33)
+            elif str(pane) == str(panes[2]):
+                pane.setSplitFraction(0.66)
+        return True
+
+    def openColorEditor(self):
+        hou.ui.selectColor()
+    openColorEditor.interactive_contexts = ["all"]
+
+    def openFloatingParameterEditor(self):
+        if self.paneTab.type() == hou.paneTabType.NetworkEditor:
+            node = self.paneTab.currentNode()
+            hou.ui.showFloatingParameterEditor(node)
+        else:
+            hou.ui.setStatusMessage("Not a network editor", hou.severityType.Error)
+    openFloatingParameterEditor.interactive_contexts = ["all"]
+
+    def openHotkeyEditor(self):
+        print("This function does nothing")
+    openHotkeyEditor.interactive_contexts = ["none"]
+
+    def showShelf(self):
+        self.desktop.shelfDock().show(1)
+    showShelf.interactive_contexts = ["none"]
+
+    def toggleMainMenuBar(*args):
+        if hou.getPreference("showmenu.val") == "1":
+            hou.setPreference("showmenu.val", "0")
+        else:
+            hou.setPreference("showmenu.val", "1")
+    toggleMainMenuBar.interactive_contexts = ["all"]
+
+    def toggleMenus(self):
+        visible = 0
+        # main menu
+        if hou.getPreference("showmenu.val") == "1":
+            visible = 1
+        # network editor menu
+        elif any(editor.getPref("showmenu") == "1" for editor in self.editors):
+            visible = 1
+        # network controls
+        elif any(paneTab.isShowingNetworkControls() for paneTab in self.paneTabs):
+            visible = 1
+        # scene viewer toolbars (top, right, left)
+        elif any(viewer.isShowingOperationBar() for viewer in self.sceneViewers):
+            visible = 1
+        elif any(viewer.isShowingDisplayOptionsBar() for viewer in self.sceneViewers):
+            visible = 1
+        elif any(viewer.isShowingSelectionBar() for sceneViewer in self.sceneViewers):
+            visible = 1
+        # paneTabs
+        elif any(pane.isShowingPaneTabs() for pane in self.panes):
+            visible = 1
+        # hide all
+        if visible:
+            hou.setPreference("showmenu.val", "0")
+            for editor in self.editors:
+                editor.setPref("showmenu", "0")
+            for paneTab in self.paneTabs:
+                paneTab.showNetworkControls(0)
+            for pane in self.panes:
+                pane.showPaneTabs(0)
+            for viewer in self.sceneViewers:
+                viewer.showOperationBar(0)
+                viewer.showDisplayOptionsBar(0)
+                viewer.showSelectionBar(0)
+            hou.ui.setHideAllMinimizedStowbars(1)
+        # show all
+        else:
+            hou.setPreference("showmenu.val", "1")
+            for editor in self.editors:
+                editor.setPref("showment", "1")
+            for paneTab in self.paneTabs:
+                paneTab.showNetworkControls(1)
+            for pane in self.panes:
+                pane.showPaneTabs(1)
+            for viewer in self.sceneViewers:
+                viewer.showOperationBar(1)
+                viewer.showDisplayOptionsBar(1)
+                viewer.showSelectionBar(1)
+            hou.ui.setHideAllMinimizedStowbars(0)
+    toggleMenus.interactive_contexts = ["all"]
+
+    def toggleHctl(self):
+        reload(hctl)
+        hctl.dialog().show()
+    toggleHctl.interactive_contexts = ["all"]
+
+    def toggleNetworkControls(self):
+        visible = 0
+        for paneTab in self.paneTabs:
+            if paneTab.isShowingNetworkControls():
+                visible = 1
+        for paneTab in self.paneTabs:
+            paneTab.showNetworkControls((visible + 1) % 2)
+    toggleNetworkControls.interactive_contexts = ["all"]
+
+    def togglePaneTabs(self):
+        visible = 0
+        for pane in self.panes:
+            if pane.isShowingPaneTabs():
+                visible = 1
+        for pane in self.panes:
+            pane.showPaneTabs(not visible)
+    togglePaneTabs.interactive_contexts = ["all"]
+
+    def toggleStowbars(self):
+        hidden = hou.ui.hideAllMinimizedStowbars()
+        hou.ui.setHideAllMinimizedStowbars(not hidden)
+    toggleStowbars.interactive_contexts = ["all"]
+
+    def update(self):
+        self.desktop = hou.ui.curDesktop()
+        self.editors = self.getNetworkEditors()
+        self.pane = self.paneTab.pane()
+        self.panes = self.getPanes()
+        self.paneTab = self.hou.ui.paneTabUnderCursor()
+        self.paneTabs = self.getPaneTabs()
+        self.viewers = self.getSceneViewers()
+
+    def updateMainMenuBar(*args):
+        hou.ui.updateMainMenuBar()
+    updateMainMenuBar.interactive_contexts = ["all"]
+
+
+
+class NetworkEditor():
+    def __init__(self, editor):
+        self.editor = editor
+        self.networkBox = None
+        self.stickyNote = None
+
+    def addNetworkBox(self):
+        context = self.editor.pwd()
+        node = self.editor.currentNode()
+        networkBox = context.createNetworkBox()
+        networkBox.setPosition(node.position())
+    addNetworkBox.interactive_contexts = ["paneTabType.NetworkEditor"]
+
+    def addStickyNote(self):
+        context = self.editor.pwd()
+        stickyNote = context.createStickyNote()
+        cursor_pos = self.editor.cursorPosition()
+        stickyNote.setPosition(cursor_pos)
+        color = hou.Color(0.71, 0.784, 1.0)
+        stickyNote.setColor(color)
+    addStickyNote.interactive_contexts = ["paneTabType.NetworkEditor"]
+
+    def connectNodeTo(self):
+        node = self.currentNode(self.editor)
+        choices = ("a", "b", "c")
+        popup = hou.ui.selectFromList(choices)
+    connectNodeTo.interactive_contexts = ["paneTabType.NetworkEditor"]
+
+    def currentNode(self):
+        return self.editor.currentNode()
+    currentNode.interactive_contexts = ["none"]
+
+    def deselectAllNodes(self):
+        node = self.CurrentNode(self.editor)
+        node.setSelected(False)
+    deselectAllNodes.interactive_contexts = ["paneTabType.NetworkEditor"]
+
+    def displayNode(self):
+        context = self.editor.pwd()
+        return  context.displayNode()
+    displayNode.interactive_contexts = ["none"]
+
+    def renameNode(self):
+        node = self.currentNode(self.editor)
+        name = hou.ui.readInput("rename_node", buttons=("yes", "no"))
+        if name[0] == 0:
+            node.setName(name[1])
+    renameNode.interactive_contexts = ["paneTabType.NetworkEditor", "paneTabType.Parm"]
+
+    def rotateNodeInputs(self):
+        node = self.currentNode(self)
+        connectors = node.inputConnectors()
+    rotateNodeInputs.interactive_contexts = ["paneTabType.NetworkEditor"]
+
+    def selectDisplayNode(self):
+        displayNode = self.displayNode(self.editor)
+        displayNode.setCurrent(True, True)
+    selectDisplayNode.interactive_contexts = ["paneTabType.NetworkEditor"]
+
+    def toggleDimUnusedNodes(self):
+        dim = "0"
+        if self.editor.getPref("dimunusednodes") == "1":
+            dim = "1"
+        if dim == "0":
+            self.editor.setPref("dimunusednodes", "1")
+        else:
+            self.editor.setPref("dimunusednodes", "0")
+    toggleDimUnusedNodes.interactive_contexts = ["all"]
+
+    def toggleGridLines(self):
+        visible = "0"
+        if self.editor.getPref("gridmode") == "1":
+            visible = "1"
+        if self.editor.getPref("gridmode") == "0":
+            self.editor.setPref("gridmode", "1")
+        else:
+            self.editor.setPref("gridmode", "0")
+    toggleGridLines.interactive_contexts = ["all"]
+
+    def toggleLocating(self):
+        locating = 0
+        if self.editor.locatingEnabled():
+            locating = 1
+        self.editor.setLocatingEnabled(not locating)
+    toggleLocating.interactive_contexts = ["all"]
+
+    def toggleMenu(self):
+        visible = 0
+        if self.editor.getPref("showmenu") == "1":
+            visible = 1
+        if visible:
+            self.editor.setPref("showmenu", str(not visible))
+    toggleMenu.interactive_contexts = ["all"]
+
+    def toggleGridPoints(self):
+        visible = int(self.editor.getPref("gridmode"))
+        self.editor.setPref("gridmode", str(not visible))
+    toggleGridPoints.interactive_contexts = ["all"]
+
+    def update(self):
+        context = self.editor.pwd()
+        node = self.editor.currentNode()
+        pass
+
+
+
+class Pane():
+    def __init__(self, pane):
+        self.pane = pane
+
+    def contract(self):
+        fraction = self.pane.getSplitFraction()
+        fraction = round(fraction, 3) + 0.1
+        message = "Pane fraction: " + str(fraction)
+        hou.ui.setStatusMessage(message)
+        pane = pane.setSplitFraction(fraction)
+    contract.interactive_contexts = ["all"]
+
+    def expand(self):
+        fraction = self.pane.getSplitFraction()
+        fraction = round(fraction, 3) - 0.1
+        message = "Pane fraction: " + str(fraction)
+        hou.ui.setStatusMessage(message)
+        pane = pane.setSplitFraction(fraction)
+    expand.interactive_contexts = ["all"]
+
+    def getRatio(self):
+        return self.pane.getSplitFraction()
+    getRatio.interactive_contexts = ["none"]
+
+    def newPaneTab(self):
+        reload(hctl_new_pane_tab_menu)
+        newPaneTabMenu = hctl_new_pane_tab_menu.newPaneTabMenu()
+        newPaneTabMenu.show()
+    newPaneTab.interactive_contexts = ["all"]
+
+    def only(self):
+        for pane in hou.ui.curDesktop().panes():
+            if pane != self.pane:
+                for paneTab in pane.tabs():
+                    paneTab.close()
+    only.interactive_contexts = ["all"]
+
+    def resize(self):
+        reload(hctl_resize)
+        resizeWidget = hctl_resize.resizeWidget(self.pane)
+        resizeWidget.show()
+    resize.interactive_contexts = ["all"]
+
+    def setRatio(self, ratio):
+        self.pane.setSplitFraction(ratio)
+    setRatio.interactive_contexts = ["none"]
+
+    def setRatioHalf(self):
+        self.pane.setSplitFraction(0.5)
+    setRatioHalf.interactive_contexts = ["all"]
+
+    def setRatioQuarter(self):
+        self.pane.setSplitFraction(0.25)
+    setRatioQuarter.interactive_contexts = ["all"]
+
+    def setRatioThird(self):
+        self.pane.setSplitFraction(0.333)
+    setRatioThird.interactive_contexts = ["all"]
+
+    def splitHorizontal(self):
+        newPane = self.pane.splitHorizontally()
+    splitHorizontal.interactive_contexts = ["all"]
+
+    def splitVertical(self):
+        newPane = self.pane.splitVertically()
+    splitVertical.interactive_contexts = ["all"]
+
+    def splitRotate(self):
+        self.pane.splitRotate()
+    splitRotate.interactive_contexts = ["all"]
+
+    def splitSwap(self):
+        self.pane.splitSwap()
+    splitSwap.interactive_contexts = ["all"]
+
+    def toggleMaximized(self):
+        self.pane.setIsMaximized(not self.pane.isMaximized())
+    toggleMaximized.interactive_contexts = ["all"]
+
+    def togglePaneTabs(self):
+        self.pane.showPaneTabs(not self.pane.isShowingPaneTabs())
+    togglePaneTabs.interactive_contexts = ["all"]
+
+    def toggleSplitMaximized(self):
+        self.pane.setIsSplitMaximized(not self.pane.isSplitMaximized())
+    toggleSplitMaximized.interactive_contexts = ["all"]
+
+
+
+class PaneTab(object):
+    def __init__(self, paneTab):
+        self.paneTab = paneTab
+
+    def close(self):
+        self.paneTab.close()
+    close.interactive_contexts = ["all"]
+
+    def currentNode(self):
+        if self.paneTab.hasNetworkControls():
+            return self.paneTab.currentNode()
+    currentNode.interactive_contexts = ["none"]
+
+    def path(self):
+        if self.paneTab.hasNetworkControls():
+            return self.paneTab.pwd().path()
+        else:
+            return "No path"
+    path.interactive_contexts = ["none"]
+
+    def only(self):
+        for paneTab in self.parent.desktop.paneTabs:
+            if paneTab != self.paneTab:
                 paneTab.close()
-paneOnly.interactive_contexts = ["all"]
+    only.interactive_contexts = ["all"]
+
+    def setTypeDetailsView(self):
+        self.paneTab.setType(hou.paneTabType.DetailsView)
+    setTypeDetailsView.interactive_contexts = ["all"]
+
+    def setTypeNetworkEditor(self):
+        self.paneTab.setType(hou.paneTabType.NetworkEditor)
+    setTypeNetworkEditor.interactive_contexts = ["all"]
+
+    def setTypeParm(self):
+        self.paneTab.setType(hou.paneTabType.Parm)
+    setTypeParm.interactive_contexts = ["all"]
+
+    def setTypePythonShell(self):
+        self.paneTab.setType(hou.paneTabType.PythonShell)
+    setTypePythonShell.interactive_contexts = ["all"]
+
+    def setTypeSceneViewer(self):
+        self.paneTab.setType(hou.paneTabType.SceneViewer)
+    setTypeSceneViewer.interactive_contexts = ["all"]
+
+    def toggleNetworkControls(self):
+        if self.paneTab.hasNetworkControls():
+            self.paneTab.showNetworkControls(not self.paneTab.isShowingNetworkControls())
+    toggleNetworkControls.interactive_contexts = ["all"]
+
+    def togglePin(self):
+        self.paneTab.setPin(not self.paneTab.isPin())
+    togglePin.interactive_contexts = ["all"]
 
 
-def paneRatioGet(pane):
-    return pane.getSplitFraction()
-paneRatioGet.interactive_contexts = ["none"]
+
+class Printer():
+    def __init__(self):
+        self.message = ""
+
+    def layout(self):
+        message = "Layout:"
+        desktop = hou.ui.curDesktop()
+        panes = desktop.panes()
+        ct = 0
+        for pane in panes:
+            message += " Pane" + str(ct) + " -"
+            if pane.isSplit():
+                message += " split"
+            else:
+                message += " whole"
+                message += "    "
+            ct += 1
+        message = message[0:-1]
+        hou.ui.setStatusMessage(message)
+    layout.interactive_contexts = ["all"]
 
 
-def paneRatioSet(pane, ratio):
-    pane.setSplitFraction(ratio)
-paneRatioSet.interactive_contexts = ["none"]
 
+class SceneViewer():
+    def __init__(self, sceneViewer):
+        self.sceneViewer = self.sceneViewer
+        self.update()
 
-def paneRatioHalf(paneTab):
-    pane = paneTab.pane()
-    pane.setSplitFraction(0.5)
-paneRatioHalf.interactive_contexts = ["all"]
+    def getDisplaySets(self):
+        displaySets = []
+        for viewport in self.viewports:
+            settings = viewport.settings()
+            displaySet = settings.displaySet(hou.displaySetType.DisplayModel)
+            displaySets.append(displaySet)
+        return(displaySets)
+    getDisplaySets.interactive_contexts = ["none"]
 
+    def layoutDoubleSide(self):
+        self.sceneViewer.setViewportLayout(hou.geometryViewportLayout.DoubleSide)
+    layoutDoubleSide.interactive_contexts = ["paneTabType.SceneViewer"]
 
-def paneRatioQuarter(paneTab):
-    pane = paneTab.pane()
-    pane.setSplitFraction(0.25)
-paneRatioQuarter.interactive_contexts = ["all"]
+    def layoutDoubleStack(self):
+        self.sceneViewer.setViewportLayout(hou.geometryViewportLayout.DoubleStack)
+    layoutDoubleStack.interactive_contexts = ["paneTabType.SceneViewer"]
 
+    def layoutQuad(self):
+        self.sceneViewer.setViewportLayout(hou.geometryViewportLayout.Quad)
+    layoutQuad.interactive_contexts = ["paneTabType.SceneViewer"]
 
-def paneRatioThird(paneTab):
-    pane = paneTab.pane()
-    pane.setSplitFraction(0.333)
-paneRatioThird.interactive_contexts = ["all"]
+    def layoutQuadBottomSplit(self):
+        self.sceneViewer.setViewportLayout(hou.geometryViewportLayout.QuadBottomSplit)
+    layoutQuadBottomSplit.interactive_contexts = ["paneTabType.SceneViewer"]
 
+    def layoutQuadLeftSplit(self):
+        self.sceneViewer.setViewportLayout(hou.geometryViewportLayout.QuadLeftSplit)
+    layoutQuadLeftSplit.interactive_contexts = ["paneTabType.SceneViewer"]
 
-def paneResize(paneTab):
-    pane = paneTab.pane()
-    reload(hctl_resize)
-    resizeWidget = hctl_resize.resizeWidget(pane)
-    resizeWidget.show()
-paneResize.interactive_contexts = ["all"]
+    def layoutSingle(self):
+        self.sceneViewer.setViewportLayout(hou.geometryViewportLayout.Single)
+    layoutSingle.interactive_contexts = ["paneTabType.SceneViewer"]
 
+    def layoutTripleBottomSplit(self):
+        self.sceneViewer.setViewportLayout(hou.geometryViewportLayout.TripleBottomSplit)
+    layoutTripleBottomSplit.interactive_contexts = ["paneTabType.SceneViewer"]
 
-def paneSplitHorizontal(paneTab):
-    pane = paneTab.pane()
-    newPane = pane.splitHorizontally()
-paneSplitHorizontal.interactive_contexts = ["all"]
+    def layoutTripleLeftSplit(self):
+        self.sceneViewer.setViewportLayout(hou.geometryViewportLayout.TripleLeftSplit)
+    layoutTripleLeftSplit.interactive_contexts = ["paneTabType.SceneViewer"]
 
+    def lopToggleLightGeo(self):
+        visible = self.sceneViewer.showLights()
+        self.sceneViewer.setShowLights(not visible)
+    lopToggleLightGeo.interactive_contexts = ["paneTabType.SceneViewer"]
 
-def paneSplitVertical(paneTab):
-    pane = paneTab.pane()
-    newPane = pane.splitVertically()
-paneSplitVertical.interactive_contexts = ["all"]
+    def visualizerMenu(self):
+        reload(hctl_vis_menu)
+        visualizerMenu = hctl_vis_menu.visualizerMenu()
+        visualizerMenu.show()
+    visualizerMenu.interactive_contexts = ["paneTabType.SceneViewer"]
 
+    def toggleBackface(self):
+        visible = 0
+        for displaySet in self.displaySets:
+            if displaySet.isShowingPrimBackfaces():
+                visible = 1
+        for displaySet in self.displaySets:
+            displaySet.showPrimBackfaces(not visible)
+    toggleBackface.interactive_contexts = ["paneTabType.SceneViewer"]
 
-def paneSplitRotate(paneTab):
-    pane = paneTab.pane()
-    pane.splitRotate()
-paneSplitRotate.interactive_contexts = ["all"]
+    def toggleDisplayOptionsToolbar():
+        visible = 0
+        if self.sceneViewer.isShowingDisplayOptionsBar():
+            visible = 1
+        self.sceneViewer.showDisplayOptionsBar(not visible)
+    toggleDisplayOptionsToolbar.interactive_contexts = ["paneTabType.SceneViewer"]
 
+    def toggleGrid(self):
+        visible = self.sceneViewer.referencePlane().isVisible()
+        self.sceneViewer.referencePlane().setIsVisible(not visible)
+    toggleGrid.interactive_contexts = ["paneTabType.SceneViewer"]
 
-def paneSplitSwap(paneTab):
-    pane = paneTab.pane()
-    pane.splitSwap()
-paneSplitSwap.interactive_contexts = ["all"]
+    def toggleGroupList(self):
+        visible = 0
+        if self.sceneViewer.isGroupListVisible():
+            visible = 1
+        self.sceneViewer.setGroupListVisible(not visible)
+    toggleGroupList.interactive_contexts = ["paneTabType.SceneViewer"]
 
-
-def paneToggleMaximized(paneTab):
-    pane = paneTab.pane()
-    pane.setIsMaximized(not pane.isMaximized())
-paneToggleMaximized.interactive_contexts = ["all"]
-
-
-def paneTogglePaneTabs(paneTab):
-    pane = paneTab.pane()
-    pane.showPaneTabs(not pane.isShowingPaneTabs())
-paneTogglePaneTabs.interactive_contexts = ["all"]
-
-
-def paneToggleSplitMaximized(paneTab):
-    pane = paneTab.pane()
-    pane.setIsSplitMaximized(not pane.isSplitMaximized())
-paneToggleSplitMaximized.interactive_contexts = ["all"]
-
-
-###########
-# Panetab #
-###########
-
-def paneTabClose(paneTab):
-    paneTab.close()
-paneTabClose.interactive_contexts = ["all"]
-
-
-def paneTabCurrentNode(paneTab):
-    if paneTab.hasNetworkControls():
-        return paneTab.currentNode()
-paneTabCurrentNode.interactive_contexts = ["none"]
-
-
-def paneTabPath(paneTab):
-    if paneTab.hasNetworkControls():
-        return paneTab.pwd().path()
-    else:
-        return "No path"
-paneTabPath.interactive_contexts = ["none"]
-
-
-def paneTabOnly(this_paneTab):
-    for paneTab in desktopPaneTabs():
-        if paneTab != this_paneTab:
-            paneTab.close()
-paneTabOnly.interactive_contexts = ["all"]
-
-
-def paneTabSetTypeDetailsView(paneTab):
-    paneTab.setType(hou.paneTabType.DetailsView)
-paneTabSetTypeDetailsView.interactive_contexts = ["all"]
-
-
-def paneTabSetTypeNetworkEditor(paneTab):
-    paneTab.setType(hou.paneTabType.NetworkEditor)
-paneTabSetTypeNetworkEditor.interactive_contexts = ["all"]
-
-
-def paneTabSetTypeParm(paneTab):
-    paneTab.setType(hou.paneTabType.Parm)
-paneTabSetTypeParm.interactive_contexts = ["all"]
-
-
-def paneTabSetTypePythonShell(paneTab):
-    paneTab.setType(hou.paneTabType.PythonShell)
-paneTabSetTypePythonShell.interactive_contexts = ["all"]
-
-
-def paneTabSetTypeSceneViewer(paneTab):
-    paneTab.setType(hou.paneTabType.SceneViewer)
-paneTabSetTypeSceneViewer.interactive_contexts = ["all"]
-
-
-def paneTabToggleNetworkControls(paneTab):
-    if paneTab.hasNetworkControls():
-        paneTab.showNetworkControls(not paneTab.isShowingNetworkControls())
-paneTabToggleNetworkControls.interactive_contexts = ["all"]
-
-
-def paneTabTogglePin(paneTab):
-    paneTab.setPin(not paneTab.isPin())
-paneTabTogglePin.interactive_contexts = ["all"]
-
-
-#########
-# Print #
-#########
-
-def printLayout(*args):
-    message = "Layout:"
-    desktop = hou.ui.curDesktop()
-    panes = desktop.panes()
-    ct = 0
-    for pane in panes:
-        message += " Pane" + str(ct) + " -"
-        if pane.isSplit():
-            message += " split"
+    def toggleKeycam(self):
+        context = self.sceneViewer.pwd()
+        context_type = context.childTypeCategory().name()
+        if context_type == "Object":
+            self.sceneViewer.setCurrentState("keycam")
+            hou.ui.setStatusMessage("Entered keycam viewer state in Obj context.")
+        elif context_type == "Sop":
+            self.sceneViewer.setCurrentState("keycam")
+            hou.ui.setStatusMessage("Entered keycam viewer state in Sop context.")
+        elif context_type == "Lop":
+            self.sceneViewer.setCurrentState("keycam")
+            hou.ui.setStatusMessage("Entered keycam viewer state in Lop context.")
         else:
-            message += " whole"
-            message += "    "
-        ct += 1
-    message = message[0:-1]
-    hou.ui.setStatusMessage(message)
-printLayout.interactive_contexts = ["all"]
+            hou.ui.setStatusMessage("No Obj, Sop or Lop context.", hou.severityType.Error)
+    toggleKeycam.interactive_contexts = ["paneTabType.SceneViewer"]
 
+    def togglePointMarkers(self):
+        visible = 0
+        for displaySet in self.displaySets:
+            if displaySet.isShowingPointMarkers():
+                visible = 1
+        for displaySet in self.displaySets:
+            displaySet.showPointMarkers(not visible)
+    togglePointMarkers.interactive_contexts = ["paneTabType.SceneViewer"]
 
-################
-# Scene Viewer #
-################
+    def togglePointNormals(self):
+        visible = 0
+        for displaySet in self.displaySets:
+            if displaySet.isShowingPointNormals():
+                visible = 1
+        for displaySet in self.displaySets:
+            displaySet.showPointNormals(not visible)
+    togglePointNormals.interactive_contexts = ["paneTabType.SceneViewer"]
 
-def sceneViewerCurrentViewport(sceneViewer):
-    return sceneViewer.curViewport()
-sceneViewerCurrentViewport.interactive_contexts = ["none"]
+    def togglePointNumbers(self):
+        visible = 0
+        for displaySet in self.displaySets:
+            if displaySet.isShowingPointNumbers():
+                visible = 1
+        for displaySet in self.displaySets:
+            displaySet.showPointNumbers(not visible)
+    togglePointNumbers.interactive_contexts = ["paneTabType.SceneViewer"]
 
+    def togglePrimNormals(self):
+        visible = 0
+        for displaySet in self.displaySets:
+            if displaySet.isShowingPrimNormals():
+                visible = 1
+            for displaySet in displaySets:
+                displaySet.showPrimNormals(not_visible)
+    togglePrimNormals.interactive_contexts = ["paneTabType.SceneViewer"]
 
-def sceneViewerDisplaySets(sceneViewer):
-    viewports = sceneViewer.viewports()
-    displaySets = []
-    for viewport in viewports:
-        settings = viewport.settings()
-        displaySet = settings.displaySet(hou.displaySetType.DisplayModel)
-        displaySets.append(displaySet)
-    return(displaySets)
-sceneViewerDisplaySets.interactive_contexts = ["none"]
+    def togglePrimNumbers(self):
+        visible = 0
+        for displaySet in self.displaySets:
+            if displaySet.isShowingPrimNumbers():
+                visible = 1
+        for displaySet in self.displaySets:
+            displaySet.showPrimNumbers(not visible)
+    togglePrimNumbers.interactive_contexts = ["paneTabType.SceneViewer"]
 
-
-def sceneViewerLayoutDoubleSide(sceneViewer):
-    sceneViewer.setViewportLayout(hou.geometryViewportLayout.DoubleSide)
-sceneViewerLayoutDoubleSide.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerLayoutDoubleStack(sceneViewer):
-    sceneViewer.setViewportLayout(hou.geometryViewportLayout.DoubleStack)
-sceneViewerLayoutDoubleStack.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerLayoutQuad(sceneViewer):
-    sceneViewer.setViewportLayout(hou.geometryViewportLayout.Quad)
-sceneViewerLayoutQuad.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerLayoutQuadBottomSplit(sceneViewer):
-    sceneViewer.setViewportLayout(hou.geometryViewportLayout.QuadBottomSplit)
-sceneViewerLayoutQuadBottomSplit.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerLayoutQuadLeftSplit(sceneViewer):
-    sceneViewer.setViewportLayout(hou.geometryViewportLayout.QuadLeftSplit)
-sceneViewerLayoutQuadLeftSplit.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerLayoutSingle(sceneViewer):
-    sceneViewer.setViewportLayout(hou.geometryViewportLayout.Single)
-sceneViewerLayoutSingle.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerLayoutTripleBottomSplit(sceneViewer):
-    sceneViewer.setViewportLayout(hou.geometryViewportLayout.TripleBottomSplit)
-sceneViewerLayoutTripleBottomSplit.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerLayoutTripleLeftSplit(sceneViewer):
-    sceneViewer.setViewportLayout(hou.geometryViewportLayout.TripleLeftSplit)
-sceneViewerLayoutTripleLeftSplit.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerLopToggleLightGeo(sceneViewer):
-    visible = sceneViewer.showLights()
-    sceneViewer.setShowLights(not visible)
-sceneViewerLopToggleLightGeo.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerVisualizerMenu(sceneViewer):
-    reload(hctl_vis_menu)
-    visualizerMenu = hctl_vis_menu.visualizerMenu()
-    visualizerMenu.show()
-sceneViewerVisualizerMenu.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerToggleBackface(sceneViewer):
-    visible = 0
-    displaySets = sceneViewerDisplaySets(sceneViewer)
-    for displaySet in displaySets:
-        if displaySet.isShowingPrimBackfaces():
-            visible = 1
-    for displaySet in displaySets:
-        displaySet.showPrimBackfaces(not visible)
-sceneViewerToggleBackface.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerToggleDisplayOptionsToolbar(sceneViewer):
-    visible = 0
-    if sceneViewer.isShowingDisplayOptionsBar():
-        visible = 1
-    sceneViewer.showDisplayOptionsBar(not visible)
-sceneViewerToggleDisplayOptionsToolbar.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerToggleGrid(sceneViewer):
-    visible = sceneViewer.referencePlane().isVisible()
-    sceneViewer.referencePlane().setIsVisible(not visible)
-sceneViewerToggleGrid.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerToggleGroupList(sceneViewer):
-    visible = 0
-    if sceneViewer.isGroupListVisible():
-        visible = 1
-    sceneViewer.setGroupListVisible(not visible)
-sceneViewerToggleGroupList.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerToggleKeycam(sceneViewer):
-    context = sceneViewer.pwd()
-    context_type = context.childTypeCategory().name()
-    if context_type == "Object":
-        sceneViewer.setCurrentState("keycam")
-        hou.ui.setStatusMessage("Entered keycam viewer state in Obj context.")
-    elif context_type == "Sop":
-        sceneViewer.setCurrentState("keycam")
-        hou.ui.setStatusMessage("Entered keycam viewer state in Sop context.")
-    elif context_type == "Lop":
-        sceneViewer.setCurrentState("keycam")
-        hou.ui.setStatusMessage("Entered keycam viewer state in Lop context.")
-    else:
-        hou.ui.setStatusMessage("No Obj, Sop or Lop context.", hou.severityType.Error)
-sceneViewerToggleKeycam.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerTogglePointMarkers(sceneViewer):
-    visible = 0
-    displaySets = sceneViewerGetDisplaySets(sceneViewer)
-    for displaySet in displaySets:
-        if displaySet.isShowingPointMarkers():
-            visible = 1
-    for displaySet in displaySets:
-        displaySet.showPointMarkers(not visible)
-sceneViewerTogglePointMarkers.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerTogglePointNormals(sceneViewer):
-    visible = 0
-    displaySets = sceneViewerGetDisplaySets(sceneViewer)
-    for displaySet in displaySets:
-        if displaySet.isShowingPointNormals():
-            visible = 1
-    for displaySet in displaySets:
-        displaySet.showPointNormals(not visible)
-sceneViewerTogglePointNormals.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerTogglePointNumbers(sceneViewer):
-    visible = 0
-    displaySets = sceneViewerGetDisplaySets(sceneViewer)
-    for displaySet in displaySets:
-        if displaySet.isShowingPointNumbers():
-            visible = 1
-    for displaySet in displaySets:
-        displaySet.showPointNumbers(not visible)
-sceneViewerTogglePointNumbers.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerTogglePrimNormals(sceneViewer):
-    visible = 0
-    displaySets = sceneViewerGetDisplaySets(sceneViewer)
-    for displaySet in displaySets:
-        if displaySet.isShowingPrimNormals():
-            visible = 1
-        for displaySet in displaySets:
-            displaySet.showPrimNormals(not_visible)
-sceneViewerTogglePrimNormals.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerTogglePrimNumbers(sceneViewer):
-    visible = 0
-    displaySets = sceneViewerGetDisplaySets(sceneViewer)
-    for displaySet in displaySets:
-        if displaySet.isShowingPrimNumbers():
-            visible = 1
-    for displaySet in displaySets:
-        displaySet.showPrimNumbers(not visible)
-sceneViewerTogglePrimNumbers.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerToggleToolbars(sceneViewer):
-    state1 = sceneViewer.isShowingOperationBar()
-    state2 = sceneViewer.isShowingDisplayOptionsBar()
-    state3 = sceneViewer.isShowingSelectionBar()
-    if state1 + state2 + state3 > 0:
-        sceneViewer.showOperationBar(0)
-        sceneViewer.showDisplayOptionsBar(0)
-        sceneViewer.showSelectionBar(0)
-    else:
-        sceneViewer.showOperationBar(1)
-        sceneViewer.showDisplayOptionsBar(1)
-        sceneViewer.showSelectionBar(1)
-sceneViewerToggleToolbars.interactive_contexts = ["paneTabType.SceneViewer"]
-
-
-def sceneViewerToggleVectors(sceneViewer):
-    viewports = sceneViewer.viewports()
-    for viewport in viewports:
-        viewportSettings = viewport.settings()
-        vector_scale = viewportSettings.vectorScale()
-        if vector_scale == 1:
-            viewportSettings.setVectorScale(0)
-        elif vector_scale == 0:
-            viewportSettings.setVectorScale(1)
+    def toggleToolbars(self):
+        state1 = self.sceneViewer.isShowingOperationBar()
+        state2 = self.sceneViewer.isShowingDisplayOptionsBar()
+        state3 = self.sceneViewer.isShowingSelectionBar()
+        if state1 + state2 + state3 > 0:
+            self.sceneViewer.showOperationBar(0)
+            self.sceneViewer.showDisplayOptionsBar(0)
+            self.sceneViewer.showSelectionBar(0)
         else:
-            viewportSettings.setVectorScale(1)
-sceneViewerToggleVectors.interactive_contexts = ["paneTabType.SceneViewer"]
+            self.sceneViewer.showOperationBar(1)
+            self.sceneViewer.showDisplayOptionsBar(1)
+            self.sceneViewer.showSelectionBar(1)
+    toggleToolbars.interactive_contexts = ["paneTabType.SceneViewer"]
+
+    def toggleVectors(self):
+        for viewport in self.viewports:
+            viewportSettings = viewport.settings()
+            vector_scale = viewportSettings.vectorScale()
+            if vector_scale == 1:
+                viewportSettings.setVectorScale(0)
+            elif vector_scale == 0:
+                viewportSettings.setVectorScale(1)
+            else:
+                viewportSettings.setVectorScale(1)
+    toggleVectors.interactive_contexts = ["paneTabType.SceneViewer"]
+
+    def update(self):
+        self.displaySets = self.getDisplaySets()
+        self.viewport = self.sceneViewer.curViewport()
+        self.viewports = self.sceneViewer.viewports()
 
 
-###########
-# Session #
-###########
+class Session():
+    def __init__(self):
+        self.update()
+        return
 
-def sessionAutoSaveState(*args):
-    state = hou.getPreference("autoSave")
-    return state
-sessionAutoSaveState.interactive_contexts = ["none"]
+    def reloadKeyBindings(self):
+        reload(hctl_bindings)
+        hctl_bindings.updateBindings()
+    reloadKeyBindings.interactive_contexts = ["all"]
 
+    def reloadColorSchemes(self):
+        hou.ui.reloadColorScheme()
+    reloadColorSchemes.interactive_contexts = ["all"]
 
-def sessionEvalBindings(*args):
-    reload(hctl_bindings)
-    hctl_bindings.updateBindings()
-sessionEvalBindings.interactive_contexts = ["all"]
+    def openFile(self):
+        hou.ui.selectFile()
+    openFile.interactive_contexts = ["all"]
 
+    def removeEventLoopCallbacks(self):
+        callbacks = hou.ui.eventLoopCallbacks()
+        for callback in callbacks:
+            hou.ui.removeEventLoopCallback(callback)
+    removeEventLoopCallbacks.interactive_contexts = ["all"]
 
-def sessionOpenFile(*args):
-    hou.ui.selectFile()
-sessionOpenFile.interactive_contexts = ["all"]
+    def reloadKeycam(self):
+        hou.ui.reloadViewerState("keycam")
+    reloadKeycam.interactive_contexts = ["all"]
 
+    def restart(self):
+        print("This function does nothing")
+    restart.interactive_contexts = ["none"]
 
-def sessionRemoveEventLoopCallbacks(*args):
-    callbacks = hou.ui.eventLoopCallbacks()
-    for callback in callbacks:
-        hou.ui.removeEventLoopCallback(callback)
-sessionRemoveEventLoopCallbacks.interactive_contexts = ["all"]
+    def triggerUpdate(self):
+        hou.ui.triggerUpdate()
+    triggerUpdate.interactive_contexts = ["all"]
 
+    def updateModeAuto(self):
+        hou.setUpdateMode(hou.updateMode.AutoUpdate)
+    updateModeAuto.interactive_contexts = ["all"]
 
-def sessionReloadKeycam(*args):
-    hou.ui.reloadViewerState("keycam")
-sessionReloadKeycam.interactive_contexts = ["all"]
+    def updateModeManual(self):
+        hou.setUpdateMode(hou.updateMode.Manual)
+    updateModeManual.interactive_contexts = ["all"]
 
+    def toggleAutoSave(self):
+        if self.autosave_state == "0":
+            self.autosave_state = "1"
+        else:
+            self.autosave_state = "0"
+        hou.setPreference("autoSave", self.autosave_state)
+    toggleAutoSave.interactive_contexts = ["none"]
 
-def sessionRestart(*args):
-    return
-sessionRestart.interactive_contexts = ["none"]
-
-
-def sessionTriggerUpdate(*args):
-    hou.ui.triggerUpdate()
-sessionTriggerUpdate.interactive_contexts = ["all"]
-
-
-def sessionUpdateModeAuto(*args):
-    hou.setUpdateMode(hou.updateMode.AutoUpdate)
-sessionUpdateModeAuto.interactive_contexts = ["all"]
-
-
-def sessionUpdateModeManual(*args):
-    hou.setUpdateMode(hou.updateMode.Manual)
-sessionUpdateModeManual.interactive_contexts = ["all"]
-
-
-def sessionToggleAutoSave(*args):
-    autosave = hou.getPreference("autoSave")
-    if autosave == "0":
-        hou.setPreference("autoSave", "1")
-    else:
-        hou.setPreference("autoSave", "0");
-sessionToggleAutoSave.interactive_contexts = ["none"]
+    def update(self):
+        self.autosave_state = hou.getPreference("autoSave")
 
 
-############
-# Viewport #
-############
 
-def viewportVisualizers(viewport):
-    category = hou.viewportVisualizerCategory.Scene
-    vis_arr = hou.viewportVisualizers.visualizers(category)
-    return vis_arr
+class Viewport():
+    def __init__(self, viewport):
+        self.viewport = viewport
+
+    def update():
+        pass
+
+    def visualizers(self):
+        category = hou.viewportVisualizerCategory.Scene
+        vis_arr = hou.viewportVisualizers.visualizers(category)
+        return vis_arr
