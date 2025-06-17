@@ -100,15 +100,6 @@ class Controls(QtWidgets.QFrame):
         def togglePin(self):
             hcu.paneTabTogglePin(self.paneTab)
 
-        
-
-    #############
-    # Listeners #
-    #############
-        
-            
-    def closeEvent(self, event):
-        self.setParent(None)
 
 
 class FunctionList(QtWidgets.QFrame):
