@@ -9,9 +9,18 @@ import time
 
 
 class Desktop():
-    def __init__(self, paneTab):
+    def __init__(self):
         self.update()
         return
+
+    def update(self):
+        self.desktop = hou.ui.curDesktop()
+        self.editors = self.getNetworkEditors()
+        self.panes = self.getPanes()
+        self.paneTab = hou.ui.paneTabUnderCursor()
+        self.paneTabs = self.getPaneTabs()
+        self.pane = self.paneTab.pane()
+        self.sceneViewers = self.getSceneViewers()
 
     def clearLayout(self):
         self.paneOnly(self.pane)
@@ -21,7 +30,7 @@ class Desktop():
 
     def getNetworkEditors(self):
         editors = []
-        for paneTab in self.paneTabs():
+        for paneTab in self.getPaneTabs():
             if paneTab.type() == hou.paneTabType.NetworkEditor:
                 editors.append(paneTab)
         return editors
@@ -34,7 +43,7 @@ class Desktop():
 
     def getPaneTabs(self):
         paneTabs = []
-        for pane in hou.desktopPanes():
+        for pane in hou.ui.curDesktop().panes():
             for paneTab in pane.tabs():
                 paneTabs.append(paneTab)
         return paneTabs
@@ -217,11 +226,11 @@ class Desktop():
         elif any(paneTab.isShowingNetworkControls() for paneTab in self.paneTabs):
             visible = 1
         # scene viewer toolbars (top, right, left)
-        elif any(viewer.isShowingOperationBar() for viewer in self.sceneViewers):
+        elif any(sceneViewer.isShowingOperationBar() for sceneViewer in self.sceneViewers):
             visible = 1
-        elif any(viewer.isShowingDisplayOptionsBar() for viewer in self.sceneViewers):
+        elif any(sceneViewer.isShowingDisplayOptionsBar() for sceneViewer in self.sceneViewers):
             visible = 1
-        elif any(viewer.isShowingSelectionBar() for sceneViewer in self.sceneViewers):
+        elif any(sceneViewer.isShowingSelectionBar() for sceneViewer in self.sceneViewers):
             visible = 1
         # paneTabs
         elif any(pane.isShowingPaneTabs() for pane in self.panes):
@@ -258,7 +267,7 @@ class Desktop():
 
     def toggleHctl(self):
         reload(hctl)
-        hctl.dialog().show()
+        hctl.Dialog().show()
     toggleHctl.interactive_contexts = ["all"]
 
     def toggleNetworkControls(self):
@@ -284,16 +293,7 @@ class Desktop():
         hou.ui.setHideAllMinimizedStowbars(not hidden)
     toggleStowbars.interactive_contexts = ["all"]
 
-    def update(self):
-        self.desktop = hou.ui.curDesktop()
-        self.editors = self.getNetworkEditors()
-        self.pane = self.paneTab.pane()
-        self.panes = self.getPanes()
-        self.paneTab = self.hou.ui.paneTabUnderCursor()
-        self.paneTabs = self.getPaneTabs()
-        self.viewers = self.getSceneViewers()
-
-    def updateMainMenuBar(*args):
+    def updateMainMenuBar(self):
         hou.ui.updateMainMenuBar()
     updateMainMenuBar.interactive_contexts = ["all"]
 
@@ -304,6 +304,11 @@ class NetworkEditor():
         self.editor = editor
         self.networkBox = None
         self.stickyNote = None
+
+    def update(self):
+        context = self.editor.pwd()
+        node = self.editor.currentNode()
+        pass
 
     def addNetworkBox(self):
         context = self.editor.pwd()
@@ -398,10 +403,6 @@ class NetworkEditor():
         self.editor.setPref("gridmode", str(not visible))
     toggleGridPoints.interactive_contexts = ["all"]
 
-    def update(self):
-        context = self.editor.pwd()
-        node = self.editor.currentNode()
-        pass
 
 
 
@@ -428,6 +429,11 @@ class Pane():
     def getRatio(self):
         return self.pane.getSplitFraction()
     getRatio.interactive_contexts = ["none"]
+
+    def getTabs(self):
+        tabs = self.pane.tabs()
+        return tabs
+    getTabs.interactive_contexts = ["none"]
 
     def newPaneTab(self):
         reload(hctl_new_pane_tab_menu)
@@ -497,6 +503,10 @@ class Pane():
 class PaneTab(object):
     def __init__(self, paneTab):
         self.paneTab = paneTab
+        self.update()
+
+    def update(self):
+        self.isPin = self.paneTab.isPin()
 
     def close(self):
         self.paneTab.close()
@@ -507,18 +517,29 @@ class PaneTab(object):
             return self.paneTab.currentNode()
     currentNode.interactive_contexts = ["none"]
 
-    def path(self):
+    def getPath(self):
         if self.paneTab.hasNetworkControls():
             return self.paneTab.pwd().path()
         else:
             return "No path"
-    path.interactive_contexts = ["none"]
+    getPath.interactive_contexts = ["none"]
+
+    def getType(self):
+        type = self.paneTab.type()
+        return type
+    getType.interactive_contexts = ["none"]
 
     def only(self):
         for paneTab in self.parent.desktop.paneTabs:
             if paneTab != self.paneTab:
                 paneTab.close()
     only.interactive_contexts = ["all"]
+
+    # def setPin(self, bool):
+        # if bool:
+            # self.paneTab.setCheckState(Qt.Checked)
+        # else:
+            # self.
 
     def setTypeDetailsView(self):
         self.paneTab.setType(hou.paneTabType.DetailsView)
@@ -576,8 +597,13 @@ class Printer():
 
 class SceneViewer():
     def __init__(self, sceneViewer):
-        self.sceneViewer = self.sceneViewer
+        self.sceneViewer = sceneViewer
         self.update()
+
+    def update(self):
+        self.viewports = self.sceneViewer.viewports()
+        self.viewport = self.sceneViewer.curViewport()
+        self.displaySets = self.getDisplaySets()
 
     def getDisplaySets(self):
         displaySets = []
@@ -746,16 +772,15 @@ class SceneViewer():
                 viewportSettings.setVectorScale(1)
     toggleVectors.interactive_contexts = ["paneTabType.SceneViewer"]
 
-    def update(self):
-        self.displaySets = self.getDisplaySets()
-        self.viewport = self.sceneViewer.curViewport()
-        self.viewports = self.sceneViewer.viewports()
 
 
 class Session():
     def __init__(self):
         self.update()
         return
+
+    def update(self):
+        self.autosave_state = hou.getPreference("autoSave")
 
     def reloadKeyBindings(self):
         reload(hctl_bindings)
@@ -803,9 +828,6 @@ class Session():
             self.autosave_state = "0"
         hou.setPreference("autoSave", self.autosave_state)
     toggleAutoSave.interactive_contexts = ["none"]
-
-    def update(self):
-        self.autosave_state = hou.getPreference("autoSave")
 
 
 
