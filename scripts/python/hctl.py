@@ -1,6 +1,5 @@
 import hou, inspect, platform
 from PySide2 import QtCore, QtGui, QtWidgets
-from PySide2.QtWidgets import QFrame, QLineEdit, QGridLayout, QLabel, QVBoxLayout, QListWidgetItem, QBoxLayout, QDialog, QListWidget
 from PySide2.QtCore import Qt
 from fuzzyfinder import fuzzyfinder
 import hctl_utils as hcu
