@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!-- Please note, that the files defining the main menu (ie, MainMenuCommon,
      MainMenuMaster, and MainMenuEscape)
      can exist in $HOME/houdiniX.Y/ directory and will supplement
@@ -10,67 +10,78 @@
 
       <scriptItem id="desktopReloadColorSchemes">
         <label>desktopReloadColorSchemes</label>
-        <scriptCode><![CDATA[import hctl_utils
+        <scriptCode
+                ><![CDATA[import hctl_utils
 hctl_utils.desktopReloadColorSchemes()]]></scriptCode>
       </scriptItem>
 
       <scriptItem id="desktopToggleHctl">
         <label>desktopToggleHctl</label>
-        <scriptCode><![CDATA[import hctl_utils
-hctl_utils.desktopToggleHctl()]]></scriptCode>
+        <scriptCode
+                ><![CDATA[import hctl_utils
+desktop = hctl_utils.Desktop()
+desktop.toggleHctl()]]></scriptCode>
       </scriptItem>
 
       <scriptItem id="desktopToggleMenus">
         <label>desktopToggleMenus</label>
-        <scriptCode><![CDATA[import hctl_utils
+        <scriptCode
+                ><![CDATA[import hctl_utils
 hctl_utils.desktopToggleMenus()]]></scriptCode>
       </scriptItem>
 
       <scriptItem id="desktopToggleNetworkControls">
         <label>desktopToggleNetworkControls</label>
-        <scriptCode><![CDATA[import hctl_utils
+        <scriptCode
+                ><![CDATA[import hctl_utils
 hctl_utils.desktopToggleNetworkControls()]]></scriptCode>
       </scriptItem>
 
       <scriptItem id="desktopTogglePaneTabs">
         <label>desktopTogglePaneTabs</label>
-        <scriptCode><![CDATA[import hctl_utils
+        <scriptCode
+                ><![CDATA[import hctl_utils
 hctl_utils.desktopTogglePaneTabs()]]></scriptCode>
       </scriptItem>
 
       <scriptItem id="desktopToggleStowbars">
         <label>desktopToggleStowbars</label>
-        <scriptCode><![CDATA[import hctl_utils
+        <scriptCode
+                ><![CDATA[import hctl_utils
 hctl_utils.desktopToggleStowbars()]]></scriptCode>
       </scriptItem>
-      
+
       <scriptItem id="desktopUpdateMainMenuBar">
         <label>desktopUpdateMainMenuBar</label>
-        <scriptCode><![CDATA[import hctl_utils
+        <scriptCode
+                ><![CDATA[import hctl_utils
 hctl_utils.desktopUpdateMainMenuBar()]]></scriptCode>
       </scriptItem>
 
-      <separatorItem/>
+      <separatorItem />
 
       <scriptItem id="openColorEditor">
         <label>openColorEditor</label>
-        <scriptCode><![CDATA[import hctl_utils
+        <scriptCode
+                ><![CDATA[import hctl_utils
 hctl_utils.openColorEditor()]]></scriptCode>
       </scriptItem>
 
-      <separatorItem/>
+      <separatorItem />
 
       <scriptItem id="sceneViewerToggleKeycam">
         <label>sceneViewerToggleKeycam</label>
-        <scriptCode><![CDATA[import hctl_utils
+        <scriptCode
+                ><![CDATA[import hctl_utils
 hctl_utils.sceneViewerToggleKeycam()]]></scriptCode>
       </scriptItem>
 
-      <separatorItem/>
+      <separatorItem />
 
       <scriptItem id="sessionReloadKeycam">
         <label>sessionReloadKeycam</label>
-        <scriptCode><![CDATA[import hctl_utils
+        <scriptCode
+                ><![CDATA[import hctl_utils
 hctl_utils.sessionReloadKeycam()]]></scriptCode>
       </scriptItem>
 
