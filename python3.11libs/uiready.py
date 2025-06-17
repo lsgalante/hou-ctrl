@@ -3,7 +3,6 @@ from PySide2.QtCore import Qt
 
 print("--BEGIN uiready.py--")
 
-
 qt_commands = 0
 ui_setup = 1
 hotkey_setup = 1
@@ -17,18 +16,18 @@ if qt_commands:
 
 if ui_setup:
     # Houdini starts with some ui elements visible regardless of desktop file.
-    hcu.desktopToggleMenus()
-
-    # Re-enable main menu bar and pane tabs
-    hcu.desktopToggleMainMenuBar()
+    desktop = hcu.Desktop()
+    desktop.toggleMenus()
+    desktop.toggleMainMenuBar()
     # hcu.desktopTogglePaneTabs()
 
     # Set network grid points to on
-    networkEditors = hcu.desktopNetworkEditors()
+    networkEditors = desktop.getNetworkEditors()
     for networkEditor in networkEditors:
         networkEditor.setPref("gridmode", "1")
 
 if hotkey_setup:
-    hcu.sessionEvalBindings()
-    
+    session = hcu.Session()
+    session.reloadKeyBindings()
+
 print("--END uiready.py--")
