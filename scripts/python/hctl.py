@@ -5,6 +5,52 @@ from fuzzyfinder import fuzzyfinder
 import hctl_utils as hcu
 from importlib import reload
 
+
+class Dialog(QtWidgets.QDialog):
+    def __init__(self):
+        super(Dialog, self).__init__(hou.qt.mainWindow())
+        self.update()
+        self.upperPanel = UpperPanel(self)
+        self.lowerPanel = LowerPanel(self)
+        self.layout = QtWidgets.QVBoxLayout()
+        self.layout.addWidget(self.upperPanel)
+        self.layout.addWidget(self.lowerPanel)
+        self.setLayout(self.layout)
+        # Window Appearance
+        self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint)
+        self.resize(600, 400)
+        self.setWindowTitle("hctl")
+
+
+    def update(self):
+        # pane = hou.ui.paneUnderCursor()
+        # paneTab = hou.ui.paneTabUnderCursor()
+
+        reload(hcu)
+        self.session = hcu.HctlSession()
+        # self.desktop = hcu.Desktop(self)
+        # self.pane = hcu.Pane(self, pane)
+        # self.paneTab = hcu.PaneTab(self, paneTab)
+        # self.printer = hcu.Printer()
+
+        # self.context = self.paneTab.getType()
+
+        # if self.context == hou.paneTabType.SceneViewer:
+            # self.sceneViewer = hcu.SceneViewer(self, paneTab)
+            # self.viewport = self.sceneViewer.viewport
+        # if self.context == hou.paneTabType.NetworkEditor:
+            # self.networkEditor = hcu.NetworkEditor(self, paneTab)
+
+        # self.networkPath = self.paneTab.getPath()
+        # self.paneTabs = self.pane.getTabs()
+        # self.node = self.paneTab.currentNode()
+        # self.filePath = hou.hipFile.name()
+
+
+    def closeEvent(self, event):
+        self.setParent(None)
+
+
 class UpperPanel(QtWidgets.QFrame):
     def __init__(self, owner, parent=None):
         super().__init__(parent)
@@ -38,18 +84,19 @@ class UpperPanel(QtWidgets.QFrame):
         self.setLayout(layout)
         self.setFixedHeight(top_frame_h)
 
+        self.pane_tab_types = (hou.paneTabType.ApexEditor, hou.paneTabType.CompositorViewer, hou.paneTabType.DetailsView, hou.paneTabType.NetworkEditor, hou.paneTabType.Parm, hou.paneTabType.PythonPanel, hou.paneTabType.PythonShell, hou.paneTabType.SceneViewer, hou.paneTabType.Textport)
+        self.pane_tab_names = [paneTab.name() for paneTab in owner.paneTabs]
+        self.pane_tab_type_names = ("ApexEditor", "CompositorViewer", "DetailsView", "NetworkEditor", "Parm", "PythonPanel", "PythonShell", "SceneViewer", "Textport")
+        self.pane_tab_labels = []
+        for paneTab in owner.paneTabs:
+            index = self.pane_tab_types.index(paneTab.type())
+            label = self.pane_tab_type_names[index]
+            self.pane_tab_labels.append(label)
+
 
     class PaneTabMenu(QtWidgets.QComboBox):
         def __init__(self, owner, parent=None):
             super().__init__(parent)
-            self.pane_tab_types = (hou.paneTabType.ApexEditor, hou.paneTabType.CompositorViewer, hou.paneTabType.DetailsView, hou.paneTabType.NetworkEditor, hou.paneTabType.Parm, hou.paneTabType.PythonPanel, hou.paneTabType.PythonShell, hou.paneTabType.SceneViewer, hou.paneTabType.Textport)
-            self.pane_tab_names = [paneTab.name() for paneTab in owner.paneTabs]
-            self.pane_tab_type_names = ("ApexEditor", "CompositorViewer", "DetailsView", "NetworkEditor", "Parm", "PythonPanel", "PythonShell", "SceneViewer", "Textport")
-            self.pane_tab_labels = []
-            for paneTab in owner.paneTabs:
-                index = self.pane_tab_types.index(paneTab.type())
-                label = self.pane_tab_type_names[index]
-                self.pane_tab_labels.append(label)
             self.addItems(self.pane_tab_labels)
             self.activated.connect(self.change)
 
@@ -101,6 +148,7 @@ class UpperPanel(QtWidgets.QFrame):
 
         def togglePin(self):
             hcu.paneTabTogglePin(self.paneTab)
+
 
 class LowerPanel(QtWidgets.QFrame):
     def __init__(self, owner, parent=None):
@@ -258,49 +306,3 @@ class LowerPanel(QtWidgets.QFrame):
             index = items.index(currentItem)
             index = (index - 1) % len(items)
             self.setIndex(index)
-
-
-
-class Dialog(QtWidgets.QDialog):
-    def __init__(self):
-        super(Dialog, self).__init__(hou.qt.mainWindow())
-        self.update()
-        self.upperPanel = UpperPanel(self)
-        self.lowerPanel = LowerPanel(self)
-        self.layout = QtWidgets.QVBoxLayout()
-        self.layout.addWidget(self.upperPanel)
-        self.layout.addWidget(self.lowerPanel)
-        self.setLayout(self.layout)
-        # Window Appearance
-        self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint)
-        self.resize(600, 400)
-        self.setWindowTitle("hctl")
-
-
-    def update(self):
-        pane = hou.ui.paneUnderCursor()
-        paneTab = hou.ui.paneTabUnderCursor()
-
-        reload(hcu)
-        self.session = hcu.Session()
-        self.desktop = hcu.Desktop(self)
-        self.pane = hcu.Pane(self, pane)
-        self.paneTab = hcu.PaneTab(self, paneTab)
-        self.printer = hcu.Printer()
-
-        self.context = self.paneTab.getType()
-
-        if self.context == hou.paneTabType.SceneViewer:
-            self.sceneViewer = hcu.SceneViewer(self, paneTab)
-            self.viewport = self.sceneViewer.viewport
-        if self.context == hou.paneTabType.NetworkEditor:
-            self.networkEditor = hcu.NetworkEditor(self, paneTab)
-
-        self.networkPath = self.paneTab.getPath()
-        self.paneTabs = self.pane.getTabs()
-        self.node = self.paneTab.currentNode()
-        self.filePath = hou.hipFile.name()
-
-
-    def closeEvent(self, event):
-        self.setParent(None)

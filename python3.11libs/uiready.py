@@ -27,7 +27,7 @@ if qt_commands:
         # networkEditor.setPref("gridmode", "1")
 
 if hotkey_setup:
-    session = hcu.Session()
+    session = hcu.HctlSession()
     session.reloadKeyBindings()
 
 print("--END uiready.py--")

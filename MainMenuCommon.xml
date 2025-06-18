@@ -18,9 +18,10 @@ hctl_utils.desktopReloadColorSchemes()]]></scriptCode>
       <scriptItem id="desktopToggleHctl">
         <label>desktopToggleHctl</label>
         <scriptCode
-                ><![CDATA[import hctl_utils
-desktop = hctl_utils.Desktop()
-desktop.toggleHctl()]]></scriptCode>
+                ><![CDATA[import hctl
+from importlib import reload
+reload(hctl)
+hctl.Dialog().show()]]></scriptCode>
       </scriptItem>
 
       <scriptItem id="desktopToggleMenus">
