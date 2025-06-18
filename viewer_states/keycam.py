@@ -851,6 +851,7 @@ class State(object):
             # cam_type: 0 = Keycam, 1 = Default Perspective, 2 = Default Linear, 3 = Other
 
             if cam_type == 0:
+                print(key)
                 if key == "m": self.hud.nextMode(); return True
                 elif key == "o": self.cam.nextProjection(); return True
                 elif key == "h": self.cam.rotateLeft(); return True
