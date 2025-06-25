@@ -43,6 +43,7 @@ def updateBindings():
 
         "h.pane.gview.decrease_subd",
         "h.pane.gview.increase_subd",
+        "h.pane.gview.state.volatile_chmodify",
 
         # "h.pane.edit_bookmark",
         # "h.pane.nexttab",
