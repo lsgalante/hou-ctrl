@@ -1,19 +1,16 @@
 import hou
 from hou import Desktop, Pane, PaneTab, SceneViewer, GeometryViewport
 from importlib import reload
-import hctl
-import hctl_vis_menu
-import hctl_new_tab_menu
-import hctl_resize
+import hctl_panel
+import hctl_vis_panel
+# import hctl_new_tab_panel
+import hctl_resize_panel
 import hctl_bindings
-
-
 
 
 class HctlNetworkEditor(PaneTab):
     def __init__(self):
         pass
-
 
     def update(self):
         context = self.pwd()
@@ -194,10 +191,12 @@ class HctlPane(Pane):
         self.showPaneTabs(not self.isShowingPaneTabs())
     togglePaneTabs.interactive_contexts = ["all"]
 
+
     def toggleSplitMaximized(self):
         self.setIsSplitMaximized(not self.isSplitMaximized())
     toggleSplitMaximized.interactive_contexts = ["all"]
 
+    # Wrapped functions
 
 
 class HctlPaneTab(PaneTab):
@@ -289,7 +288,6 @@ class Printer():
 class HctlSceneViewer(SceneViewer):
     def __init__(self):
         self.update()
-
 
     def update(self):
         self.viewports = self.viewports()
@@ -486,7 +484,6 @@ class HctlSceneViewer(SceneViewer):
 class HctlSession(Desktop):
     def __init__(self):
         self.update()
-
 
     def update(self):
         self.desktop = hou.ui.curDesktop()
@@ -705,20 +702,20 @@ class HctlDesktop(Desktop):
         # main menu
         if hou.getPreference("showmenu.val") == "1":
             visible = 1
-        # network editor menu
+        # Network editor menu
         elif any(editor.getPref("showmenu") == "1" for editor in editors):
             visible = 1
-        # network controls
+        # Network controls
         elif any(paneTab.isShowingNetworkControls() for paneTab in paneTabs):
             visible = 1
-        # scene viewer toolbars (top, right, left)
+        # Scene viewer toolbars (top, right, left)
         elif any(sceneViewer.isShowingOperationBar() for sceneViewer in sceneViewers):
             visible = 1
         elif any(sceneViewer.isShowingDisplayOptionsBar() for sceneViewer in sceneViewers):
             visible = 1
         elif any(sceneViewer.isShowingSelectionBar() for sceneViewer in sceneViewers):
             visible = 1
-        # paneTabs
+        # Panetabs
         elif any(pane.isShowingPaneTabs() for pane in panes):
             visible = 1
         # hide all
@@ -765,7 +762,7 @@ class HctlDesktop(Desktop):
             if paneTab.isShowingNetworkControls():
                 visible = 1
         for paneTab in paneTabs:
-            paneTab.showNetworkControls((visible + 1) % 2)
+            paneTab.showNetworkControls(not visible)
     toggleNetworkControls.interactive_contexts = ["all"]
 
 
@@ -857,7 +854,6 @@ class HctlViewport(GeometryViewport):
     def __init__(self):
         pass
         # self.viewport = viewport
-
 
     def update():
         pass
