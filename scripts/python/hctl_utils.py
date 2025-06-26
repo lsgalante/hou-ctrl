@@ -104,6 +104,12 @@ class HctlPane(hou.Pane):
     __init__.interactive = False
 
 
+    def close(self):
+        for tab in self.tabs():
+            tab.close()
+    close.interactive = True
+
+
     def contract(self):
         fraction = self.getSplitFraction()
         fraction = round(fraction, 3) + 0.1
@@ -164,9 +170,9 @@ class HctlPane(hou.Pane):
     toggleMaximized.interactive = True
 
 
-    def togglePaneTabs(self):
+    def toggleTabs(self):
         self.showPaneTabs(not self.isShowingPaneTabs())
-    togglePaneTabs.interactive = True
+    toggleTabs.interactive = True
 
 
     def toggleSplitMaximized(self):
@@ -219,12 +225,6 @@ class HctlPane(hou.Pane):
 class HctlPaneTab():
     def __init__(self, paneTab):
         self.paneTab = paneTab
-    __init__.interactive = False
-
-
-    def currentNode(self):
-        return self.paneTab.currentNode()
-    currentNode.interactive = False
 
 
     def path(self):
@@ -233,11 +233,6 @@ class HctlPaneTab():
         else:
             return "No path"
     path.interactive = False
-
-
-    def pwd(self):
-        return self.paneTab.pwd()
-    pwd.interactive = False
 
 
     def only(self):
@@ -292,9 +287,29 @@ class HctlPaneTab():
 
     # Wrapped functions
 
+    def close(self):
+        self.paneTab.close()
+    close.interactive = True
+
+
+    def currentNode(self):
+        return self.paneTab.currentNode()
+    currentNode.interactive = False
+
+
+    def hasNetworkControls(self):
+        return self.paneTab.hasNetworkControls()
+    hasNetworkControls.interactive = False
+
+
     def isPin(self):
         return self.paneTab.isPin()
     isPin.interactive = False
+
+
+    def pwd(self):
+        return self.paneTab.pwd()
+    pwd.interactive = False
 
 
     def setCheckState(self, bool):
@@ -305,6 +320,11 @@ class HctlPaneTab():
     def setPin(self, bool):
         self.paneTab.setPin(bool)
     setPin.interactive = False
+
+
+    def tabs(self):
+        return self.paneTab.tabs()
+    tabs.interactive = False
 
 
     def type(self):
@@ -539,24 +559,34 @@ class HctlSceneViewer(SceneViewer):
 
 class HctlSession(Desktop):
     def __init__(self):
-        self.update()
-    __init__.interactive = False
+        pass
+        # self.update()
 
 
-    def update(self):
-        self.desktop = hou.ui.curDesktop()
-        self.pane = hou.ui.paneUnderCursor()
-        self.panes = self.desktop.panes()
-        self.paneTab = hou.ui.paneTabUnderCursor()
-        self.paneTabs = self.desktop.paneTabs()
-        self.autosave_state = hou.getPreference("autoSave")
-    update.interactive = False
+    def autosaveState(self):
+        return hou.getPreference("autoSave")
+    autosaveState.interactive = False
 
 
-    def clearLayout(self, paneTab):
-        self.paneOnly(paneTab.pane())
-        self.paneTabOnly(paneTab)
-        self.update()
+    # def update(self):
+        # self.desktop = hou.ui.curDesktop()
+        # self.pane = hou.ui.paneUnderCursor()
+        # self.panes = self.desktop.panes()
+        # self.tab = hou.ui.paneTabUnderCursor()
+        # self.tabs = self.desktop.paneTabs()
+        # self.node = self.tab.currentNode()
+        # self.autosave_state = hou.getPreference("autoSave")
+    # update.interactive = False
+
+
+    def clearLayout(self):
+        tabs = self.tabs()
+        for tab in tabs:
+            if tab != tabs[0]:
+                tab.close()
+        # self.paneOnly(paneTab.pane())
+        # self.paneTabOnly(paneTab)
+        # self.update()
     clearLayout.interactive = True
 
 
@@ -565,12 +595,15 @@ class HctlSession(Desktop):
     colorEditor.interactive = True
 
 
-    def floatingParameterEditor(self, paneTab):
-        if paneTab.type() == hou.paneTabType.NetworkEditor:
-            node = paneTab.currentNode()
-            hou.ui.showFloatingParameterEditor(node)
-        else:
-            hou.ui.setStatusMessage("Not a network editor", hou.severityType.Error)
+    def desktop(self):
+        return hou.ui.curDesktop()
+    desktop.interactive = False
+
+
+    def floatingParameterEditor(self):
+        tab = self.tab()
+        if tab.type() == hou.paneTabType.NetworkEditor: hou.ui.showFloatingParameterEditor(self.node())
+        else: hou.ui.setStatusMessage("Not a network editor", hou.severityType.Error)
     floatingParameterEditor.interactive = True
 
 
@@ -580,14 +613,18 @@ class HctlSession(Desktop):
     hctlPanel.interactive = True
 
 
-    def hideShelf(self, desktop):
-        desktop.shelfDock().show(0)
-        hou.ui.reloadViewportColorSchemes()
+    def hideShelf(self):
+        self.desktop().shelfDock().show(0)
     hideShelf.interactive = True
 
 
-    def setLayoutA(self, paneTab):
-        self.clearLayout(paneTab)
+    def node(self):
+        return self.tab().currentNode()
+    node.interactive = False
+
+
+    def setLayoutA(self):
+        self.clearLayout()
         # pin network editor(?) pane
         # self.panes[0].tabs()[0].setPin(False)
         # Main center split
@@ -600,21 +637,21 @@ class HctlSession(Desktop):
         self.panes()[1].splitVertically()
         self.panes()[1].setSplitFraction(0.666)
         # Assign
-        self.paneTabs()[0].setType(hou.paneTabType.SceneViewer) # Top left
-        self.paneTabs()[1].setType(hou.paneTabType.DetailsView) # Bas left
-        self.paneTabs()[2].setType(hou.paneTabType.Parm) # Top right
-        self.paneTabs()[3].setType(hou.paneTabType.NetworkEditor) # Bas right
+        self.tabs()[0].setType(hou.paneTabType.SceneViewer) # Top left
+        self.tabs()[1].setType(hou.paneTabType.DetailsView) # Bas left
+        self.tabs()[2].setType(hou.paneTabType.Parm) # Top right
+        self.tabs()[3].setType(hou.paneTabType.NetworkEditor) # Bas right
         # Hide etc
-        # paneTabs[3].setPin(True)
-        # desktopToggleMenus()
+        # tabs[3].setPin(True)
+        # self.toggleMenus()
         self.toggleStowbars()
         self.toggleStowbars()
     setLayoutA.interactive = True
 
 
-    def setLayoutB(self, paneTab):
-        self.clearLayout(paneTab)
-        self.panes()[0].tabs()[0].setType(hou.paneTabType.PythonShell)
+    def setLayoutB(self):
+        self.clearLayout()
+        self.tabs()[0].setType(hou.paneTabType.PythonShell)
         self.panes()[0].splitHorizontally()
         self.panes()[0].splitVertically()
         self.panes()[1].splitVertically()
@@ -624,20 +661,28 @@ class HctlSession(Desktop):
     setLayoutB.interactive = True
 
 
-    def setLayoutQuad(self, paneTab):
-        self.clearLayout(paneTab)
-        self.panes()[0].tabs()[0].setType(hou.paneTabType.PythonShell)
+    def setLayoutQuad(self):
+        self.clearLayout()
+        self.tabs()[0].setType(hou.paneTabType.PythonShell)
         self.panes()[0].splitHorizontally()
         self.panes()[0].splitVertically()
         self.panes()[1].splitVertically()
     setLayoutQuad.interactive = True
 
 
-    def setLayoutTriH(self, paneTab):
-        self.session.removeEventLoopCallbacks()
-        self.clearLayout(paneTab)
+    def setLayoutRamp(self):
+        self.removeEventLoopCallbacks()
+        self.clearLayout()
+        self.panes()[0].splitVertically()
+        self.tabs()[1].setType(hou.paneTabType.NetworkEditor)
+    setLayoutRamp.interactive = True
+
+
+    def setLayoutTriH(self):
+        self.removeEventLoopCallbacks()
+        self.clearLayout()
         # Make panes
-        self.panes()[0].tabs()[0].setType(hou.paneTabType.PythonShell)
+        self.tabs()[0].setType(hou.paneTabType.PythonShell)
         self.panes()[0].splitHorizontally()
         self.panes()[1].splitHorizontally()
         # Make paneTabs
@@ -650,8 +695,8 @@ class HctlSession(Desktop):
         self.panes()[2].tabs()[0].setType(hou.paneTabType.NetworkEditor)
         # Ratios
         self.panes()[0].setSplitFraction(0.5)
-        hou.session.lastPane = hou.ui.paneUnderCursor()
-        hou.ui.addEventLoopCallback(self.layoutTriHCallback)
+        hou.session.lastPane = self.pane()
+        hou.ui.addEventLoopCallback(self.setLayoutTriHCallback)
     setLayoutTriH.interactive = True
 
 
@@ -668,9 +713,9 @@ class HctlSession(Desktop):
     setLayoutTriHCallback.interactive = False
 
 
-    def setLayoutTriV(self, paneTab):
-        self.session.removeEventLoopCallbacks()
-        self.clearLayout(paneTab)
+    def setLayoutTriV(self):
+        self.removeEventLoopCallbacks()
+        self.clearLayout()
         # Make panes
         self.panes()[0].tabs()[0].setType(hou.paneTabType.PythonShell)
         self.panes()[0].splitHorizontally()
@@ -687,11 +732,11 @@ class HctlSession(Desktop):
         self.panes()[0].setSplitFraction(0.66)
         # Ok
         hou.session.lastPane = hou.ui.paneUnderCursor()
-        hou.ui.addEventLoopCallback(self.layoutTriVCallback)
+        hou.ui.addEventLoopCallback(self.setLayoutTriVCallback)
     setLayoutTriV.interactive = True
 
 
-    def layoutTriVCallback():
+    def setLayoutTriVCallback(self):
         panes = hou.ui.panes()
         pane = hou.ui.paneUnderCursor()
         if str(pane) != str(hou.session.lastPane):
@@ -701,7 +746,7 @@ class HctlSession(Desktop):
             elif str(pane) == str(panes[2]):
                 pane.setSplitFraction(0.66)
         return True
-    layoutTriVCallback = False
+    setLayoutTriVCallback.interactive = False
 
 
     def networkEditors(self):
@@ -718,17 +763,18 @@ class HctlSession(Desktop):
     openFile.interactive = True
 
 
-    def paneTabs(self):
-        paneTabs = []
-        for pane in self.panes():
-            for paneTab in pane.tabs():
-                paneTabs.append(paneTab)
-        return paneTabs
-    paneTabs.interactive = False
+    def pane(self):
+        return hou.ui.paneUnderCursor()
+
+
+    def panes(self):
+        return self.desktop().panes()
+    panes.interactive = False
 
 
     def reloadColorSchemes(self):
         hou.ui.reloadColorScheme()
+        hou.ui.reloadViewportColorSchemes()
     reloadColorSchemes.interactive = True
 
 
@@ -765,6 +811,16 @@ class HctlSession(Desktop):
     def showShelf(self):
         self.shelfDock().show(1)
     showShelf.interactive = True
+
+
+    def tab(self):
+        return hou.ui.paneTabUnderCursor()
+    tab.interactive = False
+
+
+    def tabs(self):
+        return hou.ui.curDesktop().paneTabs()
+    tabs.interactive = False
 
 
     def toggleMainMenuBar(self):

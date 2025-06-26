@@ -135,7 +135,7 @@ class UpperPanel(QtWidgets.QFrame):
     class AutoSaveCheckBox(QtWidgets.QCheckBox):
         def __init__(self, owner):
             super().__init__("Autosave")
-            state = owner.session.autosave_state
+            state = owner.session.autosaveState()
             if state == "1": self.setCheckState(Qt.Checked)
             elif state == "0": self.setCheckState(Qt.Unchecked)
             self.clicked.connect(owner.session.toggleAutoSave)
@@ -238,7 +238,7 @@ class LowerPanel(QtWidgets.QFrame):
                 if hasattr(obj, "interactive") and obj.interactive:
                     items.append(("HctlSceneViewer", name))
 
-            for name_obj in inspect.getmembers(hcu.HctlSession, inspect.isfunction):
+            for name, obj in inspect.getmembers(hcu.HctlSession, inspect.isfunction):
                 if hasattr(obj, "interactive") and obj.interactive:
                     items.append(("HctlSession", name))
 
