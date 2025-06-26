@@ -127,6 +127,16 @@ class HctlPane(hou.Pane):
     expand.interactive = True
 
 
+    def getSplitFraction(self):
+        return self.pane.getSplitFraction()
+    getSplitFraction.interactive = False
+
+
+    def isShowingTabs(self):
+        return self.pane.isShowingPaneTabs()
+    isShowingTabs.interactive = 0
+
+
     def newTab(self):
         reload(hctl_new_tab_menu)
         newPaneTabMenu = hctl_new_tab_menu.newPaneTabMenu()
@@ -150,6 +160,11 @@ class HctlPane(hou.Pane):
     resize.interactive = True
 
 
+    def setIsMaximized(self, bool):
+        self.pane.setIsMaximized(bool)
+    setIsMaximized.interactive = False
+
+
     def setRatioHalf(self):
         self.setSplitFraction(0.5)
     setRatioHalf.interactive = True
@@ -165,35 +180,13 @@ class HctlPane(hou.Pane):
     setRatioThird.interactive = True
 
 
-    def toggleMaximized(self):
-        self.setIsMaximized(not self.isMaximized())
-    toggleMaximized.interactive = True
-
-
-    def toggleTabs(self):
-        self.showPaneTabs(not self.isShowingPaneTabs())
-    toggleTabs.interactive = True
-
-
-    def toggleSplitMaximized(self):
-        self.setIsSplitMaximized(not self.isSplitMaximized())
-    toggleSplitMaximized.interactive = True
-
-    # Wrapped functions
-
-    def getSplitFraction(self):
-        return self.pane.getSplitFraction()
-    getSplitFraction.interactive = False
-
-
-    def setIsMaximized(self, bool):
-        self.pane.setIsMaximized(bool)
-    setIsMaximized.interactive = False
-
-
     def setSplitFraction(self, fraction):
         self.pane.setSplitFraction(fraction)
     setSplitFraction.interactive = False
+
+
+    def showTabs(self, bool):
+        self.pane.showPaneTabs(bool)
 
 
     def splitHorizontally(self):
@@ -219,6 +212,21 @@ class HctlPane(hou.Pane):
     def tabs(self):
         return self.pane.tabs()
     tabs.interactive = False
+
+
+    def toggleMaximized(self):
+        self.setIsMaximized(not self.isMaximized())
+    toggleMaximized.interactive = True
+
+
+    def toggleTabs(self):
+        self.showTabs(not self.isShowingTabs())
+    toggleTabs.interactive = True
+
+
+    def toggleSplitMaximized(self):
+        self.setIsSplitMaximized(not self.isSplitMaximized())
+    toggleSplitMaximized.interactive = True
 
 
 
@@ -674,7 +682,9 @@ class HctlSession(Desktop):
         self.removeEventLoopCallbacks()
         self.clearLayout()
         self.panes()[0].splitVertically()
-        self.tabs()[1].setType(hou.paneTabType.NetworkEditor)
+        self.tabs()[1].setType(hou.paneTabType.Parm)
+        self.panes()[1].setSplitRatio(0.3)
+        self.panes()[1].createTab()
     setLayoutRamp.interactive = True
 
 
@@ -751,9 +761,9 @@ class HctlSession(Desktop):
 
     def networkEditors(self):
         editors = []
-        for paneTab in self.paneTabs:
-            if paneTab.type() == hou.paneTabType.NetworkEditor:
-                editors.append(paneTab)
+        for tab in self.tabs():
+            if tab.type() == hou.paneTabType.NetworkEditor:
+                editors.append(tab)
         return editors
     networkEditors.interactive = False
 
@@ -802,8 +812,7 @@ class HctlSession(Desktop):
 
 
     def sceneViewers(self):
-        paneTabs = self.paneTabs()
-        sceneViewers = [paneTab for paneTab in paneTabs if paneTab.type() == hou.paneTabType.SceneViewer]
+        sceneViewers = [tab for tab in self.tabs() if tab.type() == hou.paneTabType.SceneViewer]
         return sceneViewers
     sceneViewers.interactive = False
 
@@ -834,7 +843,7 @@ class HctlSession(Desktop):
     def toggleMenus(self):
         visible = 0
         panes = self.panes()
-        paneTabs = self.paneTabs()
+        tabs = self.tabs()
         editors = self.networkEditors()
         sceneViewers = self.sceneViewers()
         # Main menu
@@ -844,7 +853,7 @@ class HctlSession(Desktop):
         elif any(editor.getPref("showmenu") == "1" for editor in editors):
             visible = 1
         # Network controls
-        elif any(paneTab.isShowingNetworkControls() for paneTab in paneTabs):
+        elif any(tab.isShowingNetworkControls() for tab in tabs):
             visible = 1
         # Scene viewer toolbars (top, right, left)
         elif any(sceneViewer.isShowingOperationBar() for sceneViewer in sceneViewers):
@@ -856,19 +865,20 @@ class HctlSession(Desktop):
         # Panetabs
         elif any(pane.isShowingPaneTabs() for pane in panes):
             visible = 1
-        #
+
         # Set state
         hou.setPreference("showmenu.val", str(not visible))
         for editor in editors:
             editor.setPref("showmenu", str(not visible))
-        for paneTab in paneTabs:
-            paneTab.showNetworkControls(not visible)
+        for tab in tabs:
+            tab.showNetworkControls(not visible)
         for pane in panes:
             pane.showPaneTabs(not visible)
         for viewer in sceneViewers:
             viewer.showOperationBar(not visible)
             viewer.showDisplayOptionsBar(not visible)
             viewer.showSelectionBar(not visible)
+        hou.ui.setHideAllMinimizedStowbars(visible)
         hou.ui.setHideAllMinimizedStowbars(visible)
     toggleMenus.interactive = True
 
