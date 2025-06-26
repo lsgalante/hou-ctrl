@@ -45,7 +45,6 @@ class Dialog(QtWidgets.QDialog):
         self.pane = hcu.HctlPane(pane)
         # self.paneTab = hcu.PaneTab(self, paneTab)
         # self.printer = hcu.Printer()
-        print()
         self.context = self.paneTab.type()
 
         # if self.context == hou.paneTabType.SceneViewer:
@@ -222,16 +221,27 @@ class LowerPanel(QtWidgets.QFrame):
 
         def populate(self):
             items = []
-            for class_name, class_obj in inspect.getmembers(hcu, inspect.isclass):
-                if class_obj.__module__ == hcu.__name__: # skip over imported modules
-                    for func_name, func_obj in inspect.getmembers(class_obj, inspect.isfunction):
-                        if hasattr(func_obj, "interactive_contexts"):
-                            # print(self.owner.context, func_obj.interactive_contexts)
-                            if "all" in func_obj.interactive_contexts:
-                                return
-                                # items.append((class_name, func_name))
-                            # elif str(self.owner.context) in func_obj.interactive_contexts:
-                                # items.append((class_name, func_name))
+
+            for name, obj in inspect.getmembers(hcu.HctlNetworkEditor, inspect.isfunction):
+                if hasattr(obj, "interactive") and obj.interactive:
+                    items.append(("HctlNetworkEditor", name))
+
+            for name, obj in inspect.getmembers(hcu.HctlPane, inspect.isfunction):
+                if hasattr(obj, "interactive") and obj.interactive:
+                    items.append(("HctlPane", name))
+
+            for name, obj in inspect.getmembers(hcu.HctlPaneTab, inspect.isfunction):
+                if hasattr(obj, "interactive") and obj.interactive:
+                    items.append(("HctlPaneTab", name))
+
+            for name, obj in inspect.getmembers(hcu.HctlSceneViewer, inspect.isfunction):
+                if hasattr(obj, "interactive") and obj.interactive:
+                    items.append(("HctlSceneViewer", name))
+
+            for name_obj in inspect.getmembers(hcu.HctlSession, inspect.isfunction):
+                if hasattr(obj, "interactive") and obj.interactive:
+                    items.append(("HctlSession", name))
+
             for item in items:
                 self.addItem(item[0] + "." + item[1])
 
