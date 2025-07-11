@@ -48,9 +48,10 @@ class Dialog(QtWidgets.QDialog):
         # self.printer = hcu.Printer()
         self.context = self.paneTab.type()
 
-        # if self.context == hou.paneTabType.SceneViewer:
-            # self.sceneViewer = hcu.SceneViewer(self, paneTab)
+        if self.context == hou.paneTabType.SceneViewer:
+            self.sceneViewer = hcu.HctlSceneViewer(paneTab)
             # self.viewport = self.sceneViewer.viewport
+            #
         # if self.context == hou.paneTabType.NetworkEditor:
             # self.networkEditor = hcu.NetworkEditor(self, paneTab)
 
