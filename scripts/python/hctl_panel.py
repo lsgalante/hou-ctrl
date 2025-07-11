@@ -19,9 +19,10 @@ class Dialog(QtWidgets.QDialog):
         self.setLayout(self.layout)
 
         # Window
-        self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint)
         self.resize(600, 400)
         self.setWindowTitle("hctl")
+        self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint)
+        self.lowerPanel.inputLine.setFocus() # Focus must be set after setting window flags
 
 
     def update(self):
