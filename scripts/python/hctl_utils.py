@@ -241,12 +241,29 @@ class HctlPaneTab():
         self.paneTab = paneTab
 
 
-    def path(self):
-        if self.hasNetworkControls():
-            return self.pwd().path()
-        else:
-            return "No path"
-    path.interactive = False
+    def close(self):
+        self.paneTab.close()
+    close.interactive = True
+
+
+    def currentNode(self):
+        return self.paneTab.currentNode()
+    currentNode.interactive = False
+
+
+    def hasNetworkControls(self):
+        return self.paneTab.hasNetworkControls()
+    hasNetworkControls.interactive = False
+
+
+    def isPin(self):
+        return self.paneTab.isPin()
+    isPin.interactive = False
+
+
+    def isShowingNetworkControls(self):
+        return self.paneTab.isShowingNetworkControls()
+    isShowingNetworkControls.interactive = False
 
 
     def only(self):
@@ -256,11 +273,29 @@ class HctlPaneTab():
     only.interactive = True
 
 
-    def setPin(self, enable):
-        if enable:
-            self.paneTab.setCheckState(Qt.Checked)
+    def path(self):
+        if self.hasNetworkControls():
+            return self.pwd().path()
         else:
-            self.paneTab.setCheckState(Qt.Unchecked)
+            return "No path"
+    path.interactive = False
+
+
+    def pwd(self):
+        if self.paneTab.hasNetworkControls:
+            return self.paneTab.pwd()
+        else:
+            return "No path"
+    pwd.interactive = False
+
+
+    def setCheckState(self, bool):
+        if bool: self.paneTab.setCheckState()
+    setCheckState.interactive = False
+
+
+    def setPin(self, bool):
+        self.paneTab.setPin(bool)
     setPin.interactive = False
 
 
@@ -289,6 +324,16 @@ class HctlPaneTab():
     setTypeSceneViewer.interactive = True
 
 
+    def showNetworkControls(self, bool):
+        self.paneTab.showNetworkControls(bool)
+    showNetworkControls.interactive = False
+
+
+    def tabs(self):
+        return self.paneTab.tabs()
+    tabs.interactive = False
+
+
     def toggleNetworkControls(self):
         if self.hasNetworkControls():
             self.showNetworkControls(not self.isShowingNetworkControls())
@@ -298,47 +343,6 @@ class HctlPaneTab():
     def togglePin(self):
         self.setPin(not self.isPin())
     togglePin.interactive = True
-
-    # Wrapped functions
-
-    def close(self):
-        self.paneTab.close()
-    close.interactive = True
-
-
-    def currentNode(self):
-        return self.paneTab.currentNode()
-    currentNode.interactive = False
-
-
-    def hasNetworkControls(self):
-        return self.paneTab.hasNetworkControls()
-    hasNetworkControls.interactive = False
-
-
-    def isPin(self):
-        return self.paneTab.isPin()
-    isPin.interactive = False
-
-
-    def pwd(self):
-        return self.paneTab.pwd()
-    pwd.interactive = False
-
-
-    def setCheckState(self, bool):
-        if bool: self.paneTab.setCheckState()
-    setCheckState.interactive = False
-
-
-    def setPin(self, bool):
-        self.paneTab.setPin(bool)
-    setPin.interactive = False
-
-
-    def tabs(self):
-        return self.paneTab.tabs()
-    tabs.interactive = False
 
 
     def type(self):
@@ -372,16 +376,16 @@ class Printer():
 
 
 
-class HctlSceneViewer(SceneViewer):
-    def __init__(self):
+class HctlSceneViewer():
+    def __init__(self, sceneViewer):
+        self.sceneViewer = sceneViewer
         self.update()
     __init__.interactive = False
 
 
     def update(self):
-        self.viewports = self.viewports()
-        self.viewport = self.curViewport()
-        self.displaySets = self.getDisplaySets()
+        self.viewports = self.sceneViewer.viewports()
+        self.viewport = self.sceneViewer.curViewport()
     update.interactive = False
 
 
@@ -393,6 +397,11 @@ class HctlSceneViewer(SceneViewer):
             displaySets.append(displaySet)
         return(displaySets)
     displaySets.interactive = False
+
+
+    def isShowingDisplayOptionsBar(self):
+        return self.sceneViewer.isShowingDisplayOptionsBar()
+    isShowingDisplayOptionsBar.interactive = False
 
 
     def keycam(self):
@@ -450,6 +459,11 @@ class HctlSceneViewer(SceneViewer):
     def setLayoutTripleLeftSplit(self):
         self.setViewportLayout(hou.geometryViewportLayout.TripleLeftSplit)
     setLayoutTripleLeftSplit.interactive = True
+
+
+    def showDisplayOptionsBar(self, bool):
+        self.sceneViewer.showDisplayOptionsBar(bool)
+    showDisplayOptionsBar.interactive = False
 
 
     def toggleLightGeo(self):
@@ -527,6 +541,7 @@ class HctlSceneViewer(SceneViewer):
                 displaySet.showPrimNormals(not visible)
     togglePrimNormals.interactive = True
 
+
     def togglePrimNumbers(self):
         visible = 0
         displaySets = self.displaySets()
@@ -536,6 +551,7 @@ class HctlSceneViewer(SceneViewer):
         for displaySet in displaySets:
             displaySet.showPrimNumbers(not visible)
     togglePrimNumbers.interactive = True
+
 
     def toggleToolbars(self):
         state1 = self.isShowingOperationBar()
@@ -550,6 +566,7 @@ class HctlSceneViewer(SceneViewer):
             self.showDisplayOptionsBar(1)
             self.showSelectionBar(1)
     toggleToolbars.interactive = True
+
 
     def toggleVectors(self):
         for viewport in self.viewports():
@@ -571,15 +588,11 @@ class HctlSceneViewer(SceneViewer):
     visualizerPanel.interactive = True
 
 
+
 class HctlSession(Desktop):
     def __init__(self):
         pass
         # self.update()
-
-
-    def autosaveState(self):
-        return hou.getPreference("autoSave")
-    autosaveState.interactive = False
 
 
     # def update(self):
@@ -591,6 +604,11 @@ class HctlSession(Desktop):
         # self.node = self.tab.currentNode()
         # self.autosave_state = hou.getPreference("autoSave")
     # update.interactive = False
+
+
+    def autosaveState(self):
+        return hou.getPreference("autoSave")
+    autosaveState.interactive = False
 
 
     def clearLayout(self):
@@ -632,9 +650,67 @@ class HctlSession(Desktop):
     hideShelf.interactive = True
 
 
+    def networkEditors(self):
+        editors = []
+        for tab in self.tabs():
+            if tab.type() == hou.paneTabType.NetworkEditor:
+                editors.append(tab)
+        return editors
+    networkEditors.interactive = False
+
+
     def node(self):
         return self.tab().currentNode()
     node.interactive = False
+
+
+    def openFile(self):
+        hou.ui.selectFile()
+    openFile.interactive = True
+
+
+    def pane(self):
+        return hou.ui.paneUnderCursor()
+
+
+    def panes(self):
+        return self.desktop().panes()
+    panes.interactive = False
+
+
+    def reloadColorSchemes(self):
+        hou.ui.reloadColorScheme()
+        hou.ui.reloadViewportColorSchemes()
+    reloadColorSchemes.interactive = True
+
+
+    def reloadKeyBindings(self):
+        reload(hctl_bindings)
+        hctl_bindings.updateBindings()
+    reloadKeyBindings.interactive = True
+
+
+    def reloadKeycam(self):
+        hou.ui.reloadViewerState("keycam")
+    reloadKeycam.interactive = True
+
+
+    def removeEventLoopCallbacks(self):
+        callbacks = hou.ui.eventLoopCallbacks()
+        for callback in callbacks:
+            hou.ui.removeEventLoopCallback(callback)
+    removeEventLoopCallbacks.interactive = True
+
+
+    def restart(self):
+        print("This function does nothing")
+    restart.interactive = True
+
+
+    def sceneViewers(self):
+        sceneViewers = [tab for tab in self.tabs() if tab.type() == hou.paneTabType.SceneViewer]
+        return sceneViewers
+    sceneViewers.interactive = False
 
 
     def setLayoutA(self):
@@ -765,62 +841,14 @@ class HctlSession(Desktop):
     setLayoutTriVCallback.interactive = False
 
 
-    def networkEditors(self):
-        editors = []
-        for tab in self.tabs():
-            if tab.type() == hou.paneTabType.NetworkEditor:
-                editors.append(tab)
-        return editors
-    networkEditors.interactive = False
+    def setUpdateModeAuto(self):
+        hou.setUpdateMode(hou.updateMode.AutoUpdate)
+    setUpdateModeAuto.interactive = True
 
 
-    def openFile(self):
-        hou.ui.selectFile()
-    openFile.interactive = True
-
-
-    def pane(self):
-        return hou.ui.paneUnderCursor()
-
-
-    def panes(self):
-        return self.desktop().panes()
-    panes.interactive = False
-
-
-    def reloadColorSchemes(self):
-        hou.ui.reloadColorScheme()
-        hou.ui.reloadViewportColorSchemes()
-    reloadColorSchemes.interactive = True
-
-
-    def reloadKeyBindings(self):
-        reload(hctl_bindings)
-        hctl_bindings.updateBindings()
-    reloadKeyBindings.interactive = True
-
-
-    def reloadKeycam(self):
-        hou.ui.reloadViewerState("keycam")
-    reloadKeycam.interactive = True
-
-
-    def removeEventLoopCallbacks(self):
-        callbacks = hou.ui.eventLoopCallbacks()
-        for callback in callbacks:
-            hou.ui.removeEventLoopCallback(callback)
-    removeEventLoopCallbacks.interactive = True
-
-
-    def restart(self):
-        print("This function does nothing")
-    restart.interactive = True
-
-
-    def sceneViewers(self):
-        sceneViewers = [tab for tab in self.tabs() if tab.type() == hou.paneTabType.SceneViewer]
-        return sceneViewers
-    sceneViewers.interactive = False
+    def setUpdateModeManual(self):
+        hou.setUpdateMode(hou.updateMode.Manual)
+    setUpdateModeManual.interactive = True
 
 
     def showShelf(self):
@@ -933,16 +961,6 @@ class HctlSession(Desktop):
     def updateMainMenuBar(self):
         hou.ui.updateMainMenuBar()
     updateMainMenuBar.interactive = True
-
-
-    def setUpdateModeAuto(self):
-        hou.setUpdateMode(hou.updateMode.AutoUpdate)
-    setUpdateModeAuto.interactive = True
-
-
-    def setUpdateModeManual(self):
-        hou.setUpdateMode(hou.updateMode.Manual)
-    setUpdateModeManual.interactive = True
 
 
     def viewports(self):
