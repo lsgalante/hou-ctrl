@@ -86,7 +86,7 @@ def updateBindings():
 
         # ("h.copy", "cmd+w"),
         # ("h.cut", "ctrl+w"),
-        ("h.desktopToggleHctl", "alt+x"),
+        ("h.hctlSession_hctlPanel", "alt+x"),
         # ("h.find", "ctrl+s"),
         # ("h.open", "ctrl+o"),
         # ("h.paste", "ctrl+y"),
