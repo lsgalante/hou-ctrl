@@ -55,7 +55,7 @@ class Dialog(QtWidgets.QDialog):
         # if self.context == hou.paneTabType.NetworkEditor:
             # self.networkEditor = hcu.NetworkEditor(self, paneTab)
 
-        self.project_path= hou.hipFile.name()
+        self.project_path = hou.hipFile.name()
         self.network_path = self.paneTab.pwd()
         self.node = self.paneTab.currentNode()
 
