@@ -175,7 +175,6 @@ class LowerPanel(QtWidgets.QFrame):
         self.setFrameShape(QtWidgets.QFrame.Panel)
         self.setLineWidth(1)
         self.setLayout(layout)
-        self.inputLine.setFocus()
 
 
 
@@ -186,7 +185,6 @@ class LowerPanel(QtWidgets.QFrame):
             self.populate()
             self.itemClicked.connect(self.execute)
             self.setSelectionMode(QtWidgets.QListWidget.SingleSelection)
-            self.setFocusPolicy(Qt.StrongFocus)
             self.setIndex(0)
 
 
