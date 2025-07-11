@@ -138,8 +138,10 @@ class UpperPanel(QtWidgets.QFrame):
         def __init__(self, owner):
             super().__init__("Autosave")
             state = owner.session.autosaveState()
-            if state == "1": self.setCheckState(Qt.Checked)
-            elif state == "0": self.setCheckState(Qt.Unchecked)
+            if state == "1":
+                self.setCheckState(Qt.Checked)
+            elif state == "0":
+                self.setCheckState(Qt.Unchecked)
             self.clicked.connect(owner.session.toggleAutoSave)
 
 
