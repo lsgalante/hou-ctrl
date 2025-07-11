@@ -234,9 +234,10 @@ class LowerPanel(QtWidgets.QFrame):
                 if hasattr(obj, "interactive") and obj.interactive:
                     items.append(("HctlPaneTab", name))
 
-            for name, obj in inspect.getmembers(hcu.HctlSceneViewer, inspect.isfunction):
-                if hasattr(obj, "interactive") and obj.interactive:
-                    items.append(("HctlSceneViewer", name))
+            if self.owner.context == hou.paneTabType.SceneViewer:
+                for name, obj in inspect.getmembers(hcu.HctlSceneViewer, inspect.isfunction):
+                    if hasattr(obj, "interactive") and obj.interactive:
+                        items.append(("HctlSceneViewer", name))
 
             for name, obj in inspect.getmembers(hcu.HctlSession, inspect.isfunction):
                 if hasattr(obj, "interactive") and obj.interactive:
