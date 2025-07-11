@@ -8,6 +8,12 @@ import hctl_resize_panel
 import hctl_bindings
 
 
+## Always available functions
+
+
+
+## Classes
+
 class HctlNetworkEditor(PaneTab):
     def __init__(self):
         pass
