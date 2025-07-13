@@ -79,18 +79,19 @@ class UpperLeftPanel(QtWidgets.QFrame):
 
         layout = QtWidgets.QGridLayout()
 
+        # Project path label
         layout.addWidget(QtWidgets.QLabel("Project path:"), 0, 0)
         layout.addWidget(QtWidgets.QLabel(owner.project_path), 0, 1)
-
+        # Network path label
         layout.addWidget(QtWidgets.QLabel("Network path:"), 1, 0)
         layout.addWidget(QtWidgets.QLabel(str(owner.network_path) + "/" + str(owner.node)), 1, 1)
-
+        # Tab index menu
         layout.addWidget(QtWidgets.QLabel("Tab index:"), 2, 0)
         layout.addWidget(self.PaneTabMenu(owner), 2, 1)
-
+        # Tab type menu
         layout.addWidget(QtWidgets.QLabel("Tab type:"), 3, 0)
         layout.addWidget(self.PaneTabTypeMenu(owner), 3, 1)
-
+        # Check boxes
         layout.addWidget(self.AutoSaveCheckBox(owner),  4, 0)
         layout.addWidget(self.PinCheckBox(owner), 5, 0)
 
@@ -122,7 +123,6 @@ class UpperLeftPanel(QtWidgets.QFrame):
             paneTab.setIsCurrentTab()
 
 
-
     class PaneTabTypeMenu(QtWidgets.QComboBox):
         def __init__(self, owner):
             super().__init__()
@@ -140,7 +140,6 @@ class UpperLeftPanel(QtWidgets.QFrame):
             self.paneTab = self.paneTab.setType(self.owner.paneTab_types[index])
 
 
-
     class AutoSaveCheckBox(QtWidgets.QCheckBox):
         def __init__(self, owner):
             super().__init__("Autosave")
@@ -150,7 +149,6 @@ class UpperLeftPanel(QtWidgets.QFrame):
             elif state == "0":
                 self.setCheckState(Qt.Unchecked)
             self.clicked.connect(owner.session.toggleAutoSave)
-
 
 
     class PinCheckBox(QtWidgets.QCheckBox):
