@@ -650,6 +650,20 @@ class HctlSession(Desktop):
     hideShelf.interactive = True
 
 
+    def layout(self):
+        desktop = self.desktop()
+        panes = desktop.panes()
+        lefts = []
+        tops = []
+        for pane in panes:
+            geo = pane.qtScreenGeometry()
+            lefts.append(geo.left())
+            tops.append(geo.top())
+        print(lefts)
+        print(tops)
+    layout.interactive = False
+
+
     def networkEditors(self):
         editors = []
         for tab in self.tabs():
