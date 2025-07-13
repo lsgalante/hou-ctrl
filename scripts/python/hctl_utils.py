@@ -782,7 +782,9 @@ class HctlSession(Desktop):
 
 
     def setLayoutTriV(self):
+        # Remove other callbacks
         self.removeEventLoopCallbacks()
+        # Reset pane layout
         self.clearLayout()
         # Make panes
         self.panes()[0].tabs()[0].setType(hou.paneTabType.PythonShell)
