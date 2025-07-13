@@ -60,6 +60,9 @@ class Dialog(QtWidgets.QDialog):
             # self.networkEditor = hcu.NetworkEditor(self, paneTab)
 
         self.project_path = hou.hipFile.name()
+        ct = self.project_path.count("/")
+        self.project_path = self.project_path.split("/", ct - 2)[-1]
+
         self.network_path = self.paneTab.pwd()
         self.node = self.paneTab.currentNode()
 
