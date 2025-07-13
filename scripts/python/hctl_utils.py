@@ -764,11 +764,11 @@ class HctlSession(Desktop):
         # Ratios
         self.panes()[0].setSplitFraction(0.5)
         hou.session.lastPane = self.pane()
-        hou.ui.addEventLoopCallback(self.setLayoutTriHCallback)
+        hou.ui.addEventLoopCallback(self.triHCallback)
     setLayoutTriH.interactive = True
 
 
-    def setLayoutTriHCallback():
+    def triHCallback():
         panes = hou.ui.panes()
         pane = hou.ui.paneUnderCursor()
         if str(pane) != str(hou.session.lastPane):
@@ -778,7 +778,7 @@ class HctlSession(Desktop):
             elif str(pane) == str(panes[2]):
                 pane.setSplitFraction(0.3)
         return True
-    setLayoutTriHCallback.interactive = False
+    triHCallback.interactive = False
 
 
     def setLayoutTriV(self):
@@ -800,11 +800,11 @@ class HctlSession(Desktop):
         self.panes()[0].setSplitFraction(0.66)
         # Ok
         hou.session.lastPane = hou.ui.paneUnderCursor()
-        hou.ui.addEventLoopCallback(self.setLayoutTriVCallback)
+        hou.ui.addEventLoopCallback(self.triVCallback)
     setLayoutTriV.interactive = True
 
 
-    def setLayoutTriVCallback(self):
+    def triVCallback(self):
         panes = hou.ui.panes()
         pane = hou.ui.paneUnderCursor()
         if str(pane) != str(hou.session.lastPane):
@@ -814,7 +814,7 @@ class HctlSession(Desktop):
             elif str(pane) == str(panes[2]):
                 pane.setSplitFraction(0.66)
         return True
-    setLayoutTriVCallback.interactive = False
+    triVCallback.interactive = False
 
 
     def setUpdateModeAuto(self):
