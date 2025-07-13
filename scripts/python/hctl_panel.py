@@ -9,15 +9,19 @@ from importlib import reload
 class Dialog(QtWidgets.QDialog):
     def __init__(self):
         super(Dialog, self).__init__(hou.qt.mainWindow())
-
+        # Update
         self.update()
-        self.upperPanel = UpperPanel(self)
+        # Instance layout objects
+        self.upperLeftPanel = UpperLeftPanel(self)
+        self.upperRightPanel = UpperRightPanel(self)
         self.lowerPanel = LowerPanel(self)
-        self.layout = QtWidgets.QVBoxLayout()
-        self.layout.addWidget(self.upperPanel)
-        self.layout.addWidget(self.lowerPanel)
+        # Add instances to layout
+        self.layout = QtWidgets.QGridLayout()
+        self.layout.addWidget(self.upperLeftPanel, 0, 0)
+        self.layout.addWidget(self.upperRightPanel, 0, 1)
+        self.layout.addWidget(self.lowerPanel, 1, 0)
+        # Set the layout
         self.setLayout(self.layout)
-
         # Window
         self.resize(600, 400)
         self.setWindowTitle("hctl")
@@ -27,7 +31,7 @@ class Dialog(QtWidgets.QDialog):
 
     def update(self):
         reload(hcu)
-
+        # Get pane and panetab under cursor
         pane = hou.ui.paneUnderCursor()
         self.paneTab = hcu.HctlPaneTab(hou.ui.paneTabUnderCursor())
         self.paneTabs = pane.tabs()
@@ -36,11 +40,11 @@ class Dialog(QtWidgets.QDialog):
         self.paneTab_names = [paneTab.name() for paneTab in self.paneTabs]
         self.paneTab_type_names = ("ApexEditor", "CompositorViewer", "DetailsView", "NetworkEditor", "Parm", "PythonPanel", "PythonShell", "SceneViewer", "Textport")
         self.paneTab_labels = []
+
         for paneTab in self.paneTabs:
             index = self.paneTab_types.index(paneTab.type())
             label = self.paneTab_type_names[index]
             self.paneTab_labels.append(label)
-
 
         self.session = hcu.HctlSession()
         self.pane = hcu.HctlPane(pane)
@@ -51,7 +55,7 @@ class Dialog(QtWidgets.QDialog):
         if self.context == hou.paneTabType.SceneViewer:
             self.sceneViewer = hcu.HctlSceneViewer(paneTab)
             # self.viewport = self.sceneViewer.viewport
-            #
+
         # if self.context == hou.paneTabType.NetworkEditor:
             # self.networkEditor = hcu.NetworkEditor(self, paneTab)
 
@@ -65,7 +69,7 @@ class Dialog(QtWidgets.QDialog):
 
 
 
-class UpperPanel(QtWidgets.QFrame):
+class UpperLeftPanel(QtWidgets.QFrame):
     def __init__(self, owner):
         super().__init__()
         self.owner = owner
@@ -98,7 +102,7 @@ class UpperPanel(QtWidgets.QFrame):
         self.setLineWidth(1)
         self.setLayout(layout)
         self.setFixedHeight(180)
-
+        self.setFixedWidth(350)
 
 
     class PaneTabMenu(QtWidgets.QComboBox):
@@ -160,6 +164,18 @@ class UpperPanel(QtWidgets.QFrame):
         def togglePin(self):
             self.owner.paneTab.togglePin()
 
+
+
+class UpperRightPanel(QtWidgets.QFrame):
+    def __init__(self, owner):
+        super().__init__()
+        self.owner = owner
+        self.setFrameShape(QtWidgets.QFrame.Panel)
+        self.setLineWidth(1)
+        # self.setLayout
+        self.setFixedHeight(180)
+        self.setFixedWidth(250)
+        desktop = self.owner.session.layout()
 
 
 class LowerPanel(QtWidgets.QFrame):
