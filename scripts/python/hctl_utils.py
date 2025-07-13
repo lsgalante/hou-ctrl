@@ -811,9 +811,13 @@ class HctlSession(Desktop):
         pane = hou.ui.paneUnderCursor()
         if str(pane) != str(hou.session.lastPane):
             hou.session.lastPane = pane
-            if str(pane) == str(panes[1]):
+            if str(pane) == str(panes[0]):
+                pane.setSplitFraction(0.7)
+            elif str(pane) == str(panes[1]):
+                panes[0].setSplitFraction(0.4)
                 pane.setSplitFraction(0.33)
             elif str(pane) == str(panes[2]):
+                panes[0].setSplitFraction(0.4)
                 pane.setSplitFraction(0.66)
         return True
     triVCallback.interactive = False
