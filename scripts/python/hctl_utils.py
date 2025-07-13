@@ -727,44 +727,6 @@ class HctlSession(Desktop):
     sceneViewers.interactive = False
 
 
-    def setLayoutA(self):
-        self.clearLayout()
-        # pin network editor(?) pane
-        # self.panes[0].tabs()[0].setPin(False)
-        # Main center split
-        self.panes()[0].splitHorizontally()
-        self.panes()[0].setSplitFraction(0.6)
-        # Left vertical split
-        self.panes()[0].splitVertically()
-        self.panes()[0].setSplitFraction(0.2)
-        # Right vertical split
-        self.panes()[1].splitVertically()
-        self.panes()[1].setSplitFraction(0.666)
-        # Assign
-        self.tabs()[0].setType(hou.paneTabType.SceneViewer) # Top left
-        self.tabs()[1].setType(hou.paneTabType.DetailsView) # Bas left
-        self.tabs()[2].setType(hou.paneTabType.Parm) # Top right
-        self.tabs()[3].setType(hou.paneTabType.NetworkEditor) # Bas right
-        # Hide etc
-        # tabs[3].setPin(True)
-        # self.toggleMenus()
-        self.toggleStowbars()
-        self.toggleStowbars()
-    setLayoutA.interactive = True
-
-
-    def setLayoutB(self):
-        self.clearLayout()
-        self.tabs()[0].setType(hou.paneTabType.PythonShell)
-        self.panes()[0].splitHorizontally()
-        self.panes()[0].splitVertically()
-        self.panes()[1].splitVertically()
-        # Assign top left
-        self.panes()[0].tabs()[0].setType(hou.paneTabType.SceneViewer)
-        self.panes()[1].tabs()[0].setType(hou.paneTabType.Parm)
-    setLayoutB.interactive = True
-
-
     def setLayoutQuad(self):
         self.clearLayout()
         self.tabs()[0].setType(hou.paneTabType.PythonShell)
