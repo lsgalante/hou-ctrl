@@ -143,12 +143,11 @@ class HctlPane(hou.Pane):
     isShowingTabs.interactive = 0
 
 
-    def newTab(self):
-        reload(hctl_new_tab_menu)
-        newPaneTabMenu = hctl_new_tab_menu.newPaneTabMenu()
-        newPaneTabMenu.show()
-    newTab.interactive = True
-
+    # def newTab(self):
+    #     reload(hctl_new_tab_menu)
+    #     newPaneTabMenu = hctl_new_tab_menu.newPaneTabMenu()
+    #     newPaneTabMenu.show()
+    # newTab.interactive = True
 
     def only(self):
         panes = hou.ui.curDesktop().panes()
