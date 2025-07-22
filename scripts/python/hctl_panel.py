@@ -34,42 +34,45 @@ class Dialog(QtWidgets.QDialog):
 
     def update(self):
         reload(hcu)
-        # Get pane and panetab under cursor
+        # Get pane under cursor
         pane = hou.ui.paneUnderCursor()
+        # Get pane tab under cursor
         self.paneTab = hcu.HctlPaneTab(hou.ui.paneTabUnderCursor())
+        # Get all pane tabs
         self.paneTabs = pane.tabs()
-
+        # Define various arrays for navigating pane tabs
         self.paneTab_types = (hou.paneTabType.ApexEditor, hou.paneTabType.CompositorViewer, hou.paneTabType.DetailsView, hou.paneTabType.NetworkEditor, hou.paneTabType.Parm, hou.paneTabType.PythonPanel, hou.paneTabType.PythonShell, hou.paneTabType.SceneViewer, hou.paneTabType.Textport)
         self.paneTab_names = [paneTab.name() for paneTab in self.paneTabs]
         self.paneTab_type_names = ("ApexEditor", "CompositorViewer", "DetailsView", "NetworkEditor", "Parm", "PythonPanel", "PythonShell", "SceneViewer", "Textport")
+        # Populate pane tab labels array
         self.paneTab_labels = []
-
         for paneTab in self.paneTabs:
             index = self.paneTab_types.index(paneTab.type())
             label = self.paneTab_type_names[index]
             self.paneTab_labels.append(label)
-
+        # Get session item (should probably be done first)
         self.session = hcu.HctlSession()
+        # Transform pane into HctlPane (should probably be done when first gettings pane item)
         self.pane = hcu.HctlPane(pane)
-        # self.paneTab = hcu.PaneTab(self, paneTab)
-        # self.printer = hcu.Printer()
+        # Get context (should be done when first getting pane tab)
         self.context = self.paneTab.type()
-
+        # Set hctl panel context based on current pane tab type
         if self.context == hou.paneTabType.SceneViewer:
             self.sceneViewer = hcu.HctlSceneViewer(paneTab)
             # self.viewport = self.sceneViewer.viewport
-
         # if self.context == hou.paneTabType.NetworkEditor:
             # self.networkEditor = hcu.NetworkEditor(self, paneTab)
-
+        # Get and format project path
         self.project_path = hou.hipFile.name()
         ct = self.project_path.count("/")
         self.project_path = self.project_path.split("/", ct - 2)[-1]
-
+        # Get network path
         self.network_path = self.paneTab.pwd()
+        # Get node
         self.node = self.paneTab.currentNode()
 
 
+    # Unparent from main houdini window when closing
     def closeEvent(self, event):
         self.setParent(None)
 
@@ -268,17 +271,14 @@ class MiddleColumn(QtWidgets.QVBoxLayout):
                     if hasattr(obj, "interactive") and obj.interactive:
                         items.append(("HctlPane", name))
 
-class UpperRightPanel(QtWidgets.QFrame):
-    def __init__(self, owner):
-        super().__init__()
-        self.owner = owner
-        self.setFrameShape(QtWidgets.QFrame.Panel)
-        self.setLineWidth(1)
-        # self.setLayout
-        self.setFixedHeight(180)
-        self.setFixedWidth(250)
-        desktop = self.owner.session.layout()
+                for name, obj in inspect.getmembers(hcu.HctlPaneTab, inspect.isfunction):
+                    if hasattr(obj, "interactive") and obj.interactive:
+                        items.append(("HctlPaneTab", name))
 
+                if self.owner.owner.context == hou.paneTabType.SceneViewer:
+                    for name, obj in inspect.getmembers(hcu.HctlSceneViewer, inspect.isfunction):
+                        if hasattr(obj, "interactive") and obj.interactive:
+                            items.append(("HctlSceneViewer", name))
 
                 for name, obj in inspect.getmembers(hcu.HctlSession, inspect.isfunction):
                     if hasattr(obj, "interactive") and obj.interactive:
