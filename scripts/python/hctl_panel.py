@@ -8,7 +8,7 @@ from importlib import reload
 
 class Dialog(QtWidgets.QDialog):
     def __init__(self):
-        super(Dialog, self).__init__(hou.qt.mainWindow())
+        super(Dialog, self).__init__( hou.qt.mainWindow() )
         # Update
         self.update()
         # Instance layout objects
