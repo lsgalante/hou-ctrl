@@ -127,7 +127,7 @@ class ControlPanel(QtWidgets.QFrame):
         # PANE CONTROLS
         paneColumn = QtWidgets.QVBoxLayout()
         paneColumn.addWidget(QtWidgets.QLabel("Pane"))
-        # Current tab
+        # Tab switcher
         paneColumn.addWidget(self.PaneTabMenu(owner))
         # Pane expand
         paneExpandButton = QtWidgets.QPushButton("Expand")
