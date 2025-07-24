@@ -102,21 +102,21 @@ class ControlPanel(QtWidgets.QFrame):
         # Autosave
         sessionColumn.addWidget(self.AutoSaveCheckBox(owner))
         # Toggle all menus
-        toggleSessionMenusButton = QtWidgets.QPushButton("Toggle Menus")
-        toggleSessionMenusButton.clicked.connect(owner.hctlSession.toggleMenus)
-        sessionColumn.addWidget(toggleSessionMenusButton)
+        sessionMenusButton = QtWidgets.QPushButton("Menus")
+        sessionMenusButton.clicked.connect(owner.hctlSession.toggleMenus)
+        sessionColumn.addWidget(sessionMenusButton)
         # Toggle all network controls
-        toggleSessionNetworkControlsButton = QtWidgets.QPushButton("Network Controls")
-        toggleSessionNetworkControlsButton.clicked.connect(owner.hctlSession.toggleNetworkControls)
-        sessionColumn.addWidget(toggleSessionNetworkControlsButton)
+        sessionNetworkControlsButton = QtWidgets.QPushButton("Network Controls")
+        sessionNetworkControlsButton.clicked.connect(owner.hctlSession.toggleNetworkControls)
+        sessionColumn.addWidget(sessionNetworkControlsButton)
         # Toggle all panetabs
-        toggleSessionPaneTabsButton = QtWidgets.QPushButton("Pane Tabs")
-        toggleSessionPaneTabsButton.clicked.connect(owner.hctlSession.togglePaneTabs)
-        sessionColumn.addWidget(toggleSessionPaneTabsButton)
+        sessionPaneTabsButton = QtWidgets.QPushButton("Pane Tabs")
+        sessionPaneTabsButton.clicked.connect(owner.hctlSession.togglePaneTabs)
+        sessionColumn.addWidget(sessionPaneTabsButton)
         # Toggle all stowbars
-        toggleStowbarsButton = QtWidgets.QPushButton("Stowbars")
-        toggleStowbarsButton.clicked.connect(owner.hctlSession.toggleStowbars)
-        sessionColumn.addWidget(toggleStowbarsButton)
+        stowbarsButton = QtWidgets.QPushButton("Stowbars")
+        stowbarsButton.clicked.connect(owner.hctlSession.toggleStowbars)
+        sessionColumn.addWidget(stowbarsButton)
         # Reload color schems
         reloadColorsButton = QtWidgets.QPushButton("Reload colors")
         reloadColorsButton.clicked.connect(owner.hctlSession.reloadColorSchemes)
@@ -138,17 +138,17 @@ class ControlPanel(QtWidgets.QFrame):
         paneContractButton.clicked.connect(owner.hctlPane.contract)
         paneColumn.addWidget(paneContractButton)
         # Toggle pane tabs
-        paneTogglePaneTabsButton = QtWidgets.QPushButton("Pane Tabs")
-        paneTogglePaneTabsButton.clicked.connect(owner.hctlPane.toggleTabs)
-        paneColumn.addWidget(paneTogglePaneTabsButton)
+        panePaneTabsButton = QtWidgets.QPushButton("Pane Tabs")
+        panePaneTabsButton.clicked.connect(owner.hctlPane.toggleTabs)
+        paneColumn.addWidget(panePaneTabsButton)
         # Toggle maximized
-        paneToggleMaximizedButton = QtWidgets.QPushButton("Maximized")
-        paneToggleMaximizedButton.clicked.connect(owner.hctlPane.toggleMaximized)
-        paneColumn.addWidget(paneToggleMaximizedButton)
+        paneMaximizedButton = QtWidgets.QPushButton("Maximized")
+        paneMaximizedButton.clicked.connect(owner.hctlPane.toggleMaximized)
+        paneColumn.addWidget(paneMaximizedButton)
         # Toggle network controls
-        paneToggleNetworkControlsButton = QtWidgets.QPushButton("Network Controls")
-        paneToggleNetworkControlsButton.clicked.connect(owner.hctlPaneTab.toggleNetworkControls)
-        paneColumn.addWidget(paneToggleNetworkControlsButton)
+        paneNetworkControlsButton = QtWidgets.QPushButton("Network Controls")
+        paneNetworkControlsButton.clicked.connect(owner.hctlPaneTab.toggleNetworkControls)
+        paneColumn.addWidget(paneNetworkControlsButton)
         # Fill empty space
         paneColumn.addStretch()
 
@@ -170,7 +170,6 @@ class ControlPanel(QtWidgets.QFrame):
         # Fill empty space
         paneTabColumn.addStretch()
 
-
         # Finish control columns
         layout = QtWidgets.QHBoxLayout()
         layout.addLayout(sessionColumn)
@@ -181,6 +180,7 @@ class ControlPanel(QtWidgets.QFrame):
         self.setLineWidth(1)
         self.setLayout(layout)
         self.setFixedWidth(600)
+
 
 
     class AutoSaveCheckBox(QtWidgets.QCheckBox):
