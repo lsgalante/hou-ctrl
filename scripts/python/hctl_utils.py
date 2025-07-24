@@ -900,7 +900,7 @@ class HctlSession(Desktop):
 
     def toggleNetworkControls(self):
         visible = 0
-        paneTabs = self.paneTabs()
+        paneTabs = self.tabs()
         for paneTab in paneTabs:
             if paneTab.isShowingNetworkControls():
                 visible = 1
