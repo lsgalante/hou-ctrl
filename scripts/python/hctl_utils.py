@@ -426,6 +426,10 @@ class HctlSceneViewer():
     keycam.interactive = True
 
 
+    def pwd(self):
+        return self.paneTab.pwd()
+
+
     def setLayoutDoubleSide(self):
         self.setViewportLayout(hou.geometryViewportLayout.DoubleSide)
     setLayoutDoubleSide.interactive = True
