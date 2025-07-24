@@ -105,14 +105,14 @@ class ControlPanel(QtWidgets.QFrame):
         sessionMenusButton = QtWidgets.QPushButton("Menus")
         sessionMenusButton.clicked.connect(owner.hctlSession.toggleMenus)
         sessionColumn.addWidget(sessionMenusButton)
-        # Toggle all network controls
-        sessionNetworkControlsButton = QtWidgets.QPushButton("Network Controls")
-        sessionNetworkControlsButton.clicked.connect(owner.hctlSession.toggleNetworkControls)
-        sessionColumn.addWidget(sessionNetworkControlsButton)
         # Toggle all panetabs
         sessionPaneTabsButton = QtWidgets.QPushButton("Pane Tabs")
         sessionPaneTabsButton.clicked.connect(owner.hctlSession.togglePaneTabs)
         sessionColumn.addWidget(sessionPaneTabsButton)
+        # Toggle all network controls
+        sessionNetworkControlsButton = QtWidgets.QPushButton("Network Controls")
+        sessionNetworkControlsButton.clicked.connect(owner.hctlSession.toggleNetworkControls)
+        sessionColumn.addWidget(sessionNetworkControlsButton)
         # Toggle all stowbars
         stowbarsButton = QtWidgets.QPushButton("Stowbars")
         stowbarsButton.clicked.connect(owner.hctlSession.toggleStowbars)
@@ -159,6 +159,7 @@ class ControlPanel(QtWidgets.QFrame):
         paneTabColumn.addWidget(self.PinCheckBox(owner))
         # Tab type
         paneTabColumn.addWidget(self.PaneTabTypeMenu(owner))
+
         # NETWORK EDITOR
         if self.owner.hctlPaneTab.type() == hou.paneTabType.NetworkEditor:
             networkEditorMenuButton = QtWidgets.QPushButton("NE Menu")
