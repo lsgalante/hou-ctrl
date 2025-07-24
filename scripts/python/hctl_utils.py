@@ -138,6 +138,11 @@ class HctlPane(hou.Pane):
     getSplitFraction.interactive = False
 
 
+    def isMaximized(self):
+        return self.pane.isMaximized()
+    isMaximized.interactive = 0
+
+
     def isShowingTabs(self):
         return self.pane.isShowingPaneTabs()
     isShowingTabs.interactive = 0
@@ -148,6 +153,7 @@ class HctlPane(hou.Pane):
     #     newPaneTabMenu = hctl_new_tab_menu.newPaneTabMenu()
     #     newPaneTabMenu.show()
     # newTab.interactive = True
+
 
     def only(self):
         panes = hou.ui.curDesktop().panes()
