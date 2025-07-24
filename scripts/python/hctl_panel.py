@@ -129,6 +129,14 @@ class ControlPanel(QtWidgets.QFrame):
         paneColumn.addWidget(QtWidgets.QLabel("Pane"))
         # Tab switcher
         paneColumn.addWidget(self.PaneTabMenu(owner))
+        # Toggle pane tabs
+        panePaneTabsButton = QtWidgets.QPushButton("Pane Tabs")
+        panePaneTabsButton.clicked.connect(owner.hctlPane.toggleTabs)
+        paneColumn.addWidget(panePaneTabsButton)
+        # Toggle network controls
+        paneNetworkControlsButton = QtWidgets.QPushButton("Network Controls")
+        paneNetworkControlsButton.clicked.connect(owner.hctlPaneTab.toggleNetworkControls)
+        paneColumn.addWidget(paneNetworkControlsButton)
         # Pane expand
         paneExpandButton = QtWidgets.QPushButton("Expand")
         paneExpandButton.clicked.connect(owner.hctlPane.expand)
@@ -137,18 +145,10 @@ class ControlPanel(QtWidgets.QFrame):
         paneContractButton = QtWidgets.QPushButton("Contract")
         paneContractButton.clicked.connect(owner.hctlPane.contract)
         paneColumn.addWidget(paneContractButton)
-        # Toggle pane tabs
-        panePaneTabsButton = QtWidgets.QPushButton("Pane Tabs")
-        panePaneTabsButton.clicked.connect(owner.hctlPane.toggleTabs)
-        paneColumn.addWidget(panePaneTabsButton)
         # Toggle maximized
         paneMaximizedButton = QtWidgets.QPushButton("Maximized")
         paneMaximizedButton.clicked.connect(owner.hctlPane.toggleMaximized)
         paneColumn.addWidget(paneMaximizedButton)
-        # Toggle network controls
-        paneNetworkControlsButton = QtWidgets.QPushButton("Network Controls")
-        paneNetworkControlsButton.clicked.connect(owner.hctlPaneTab.toggleNetworkControls)
-        paneColumn.addWidget(paneNetworkControlsButton)
         # Fill empty space
         paneColumn.addStretch()
 
