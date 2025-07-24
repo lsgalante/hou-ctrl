@@ -416,10 +416,10 @@ class HctlSceneViewer():
             self.setCurrentState("keycam")
             hou.ui.setStatusMessage("Entered keycam viewer state in Obj context.")
         elif context_type == "Sop":
-            self.setCurrentState("keycam")
+            self.paneTab.setCurrentState("keycam")
             hou.ui.setStatusMessage("Entered keycam viewer state in Sop context.")
         elif context_type == "Lop":
-            self.setCurrentState("keycam")
+            self.paneTab.setCurrentState("keycam")
             hou.ui.setStatusMessage("Entered keycam viewer state in Lop context.")
         else:
             hou.ui.setStatusMessage("No Obj, Sop or Lop context.", hou.severityType.Error)
