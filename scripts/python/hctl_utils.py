@@ -382,15 +382,15 @@ class Printer():
 
 
 class HctlSceneViewer():
-    def __init__(self, sceneViewer):
-        self.sceneViewer = sceneViewer
+    def __init__(self, paneTab):
+        self.paneTab = paneTab
         self.update()
     __init__.interactive = False
 
 
     def update(self):
-        self.viewports = self.sceneViewer.viewports()
-        self.viewport = self.sceneViewer.curViewport()
+        self.viewports = self.paneTab.viewports()
+        self.viewport = self.paneTab.curViewport()
     update.interactive = False
 
 
@@ -405,7 +405,7 @@ class HctlSceneViewer():
 
 
     def isShowingDisplayOptionsBar(self):
-        return self.sceneViewer.isShowingDisplayOptionsBar()
+        return self.paneTab.isShowingDisplayOptionsBar()
     isShowingDisplayOptionsBar.interactive = False
 
 
@@ -471,7 +471,7 @@ class HctlSceneViewer():
 
 
     def showDisplayOptionsBar(self, bool):
-        self.sceneViewer.showDisplayOptionsBar(bool)
+        self.paneTab.showDisplayOptionsBar(bool)
     showDisplayOptionsBar.interactive = False
 
 
