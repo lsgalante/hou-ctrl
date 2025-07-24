@@ -39,7 +39,7 @@ class Dialog(QtWidgets.QDialog):
             self.hctlSceneViewer = hcu.HctlSceneViewer(paneTab)
         if self.hctlPaneTab.type() == hou.paneTabType.NetworkEditor:
             self.hctlNetworkEditor = hcu.HctlNetworkEditor(paneTab)
-        # Scene viewer (needs work)
+        # Viewport (needs work)
         # self.viewport = self.sceneViewer.viewport
 
 
