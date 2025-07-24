@@ -14,8 +14,8 @@ import hctl_bindings
 
 ## Classes
 
-class HctlNetworkEditor(PaneTab):
-    def __init__(self):
+class HctlNetworkEditor():
+    def __init__(self, paneTab):
         pass
     __init__.interactive: False
 
