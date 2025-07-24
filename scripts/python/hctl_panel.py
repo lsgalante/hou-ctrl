@@ -160,13 +160,17 @@ class ControlPanel(QtWidgets.QFrame):
         # Tab type
         paneTabColumn.addWidget(self.PaneTabTypeMenu(owner))
         # NETWORK EDITOR
-        networkEditorMenuButton = QtWidgets.QPushButton("NE Menu")
-        networkEditorMenuButton.clicked.connect(owner.hctlNetworkEditor.toggleMenu)
-        paneTabColumn.addWidget(networkEditorMenuButton)
+        if self.owner.hctlPaneTab.type() == hou.paneTabType.NetworkEditor:
+            networkEditorMenuButton = QtWidgets.QPushButton("NE Menu")
+            networkEditorMenuButton.clicked.connect(owner.hctlNetworkEditor.toggleMenu)
+            paneTabColumn.addWidget(networkEditorMenuButton)
+
         # SCENE VIEWER
-        keycamButton = QtWidgets.QPushButton("Keycam")
-        # keycamButton.clicked.connect(owner.hctlSceneViewer.keycam)
-        paneTabColumn.addWidget(keycamButton)
+        if self.owner.hctlPaneTab.type() == hou.paneTabType.SceneViewer:
+            keycamButton = QtWidgets.QPushButton("Keycam")
+            keycamButton.clicked.connect(owner.hctlSceneViewer.keycam)
+            paneTabColumn.addWidget(keycamButton)
+
         # Fill empty space
         paneTabColumn.addStretch()
 
