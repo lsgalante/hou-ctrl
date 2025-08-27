@@ -1,6 +1,6 @@
 import hou
 import hctl_utils as hcu
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore, QtGui, QtWidgets
 from importlib import reload
 
 class resizeWidget(QtWidgets.QDialog):

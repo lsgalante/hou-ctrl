@@ -1,6 +1,6 @@
 import hou, inspect, platform
-from PySide2 import QtCore, QtGui, QtWidgets
-from PySide2.QtCore import Qt
+from PySide6 import QtCore, QtGui, QtWidgets
+from PySide6.QtCore import Qt
 from fuzzyfinder import fuzzyfinder
 import hctl_utils as hcu
 from importlib import reload
@@ -424,7 +424,7 @@ class FunctionPanel(QtWidgets.QFrame):
             for item in items:
                 if not item.isHidden():
                     if counter == index:
-                        self.setItemSelected(item, 1)
+                        self.setCurrentItem(item)
                     counter += 1
 
 
