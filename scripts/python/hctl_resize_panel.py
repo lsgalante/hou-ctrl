@@ -9,14 +9,14 @@ class resizeWidget(QtWidgets.QDialog):
         reload(hcu)
 
         self.pane = pane
-        
+
         # Keys
         key_j = QtWidgets.QShortcut(QtGui.QKeySequence("J"), self)
         key_j.activated.connect(self.onJ)
         key_k = QtWidgets.QShortcut(QtGui.QKeySequence("K"), self)
         key_k.activated.connect(self.onK)
 
-        
+
         self.paneLabel = QtWidgets.QLabel()
         self.paneLabel.setText("Pane: " + str(pane.currentTab().type()))
 
@@ -33,7 +33,7 @@ class resizeWidget(QtWidgets.QDialog):
 
         self.setLayout(self.layout)
 
-        
+
     def onJ(self):
         split_fraction = self.pane.getSplitFraction()
         split_fraction += 0.05

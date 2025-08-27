@@ -7,7 +7,6 @@ from importlib import reload
 
 
 class Dialog(QtWidgets.QDialog):
-
     def __init__(self):
         super(Dialog, self).__init__( hou.qt.mainWindow() )
         # Update class attributes
@@ -191,11 +190,13 @@ class ControlPanel(QtWidgets.QFrame):
     class AutoSaveCheckBox(QtWidgets.QCheckBox):
         def __init__(self, owner):
             super().__init__("Autosave")
+
             state = owner.hctlSession.autosaveState()
             if state == "1":
                 self.setCheckState(Qt.Checked)
             elif state == "0":
                 self.setCheckState(Qt.Unchecked)
+
             self.clicked.connect(owner.hctlSession.toggleAutoSave)
 
 
@@ -241,6 +242,7 @@ class ControlPanel(QtWidgets.QFrame):
         def change(self):
             index = self.paneTabTypeMenu.currentIndex()
             self.paneTab = self.paneTab.setType(self.owner.paneTab_types[index])
+
 
 
 class FunctionPanel(QtWidgets.QFrame):
