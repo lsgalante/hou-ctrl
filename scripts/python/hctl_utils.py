@@ -409,6 +409,16 @@ class HctlSceneViewer():
     isShowingDisplayOptionsBar.interactive = False
 
 
+    def isShowingOperationBar(self):
+        return self.paneTab.isShowingOperationBar()
+    isShowingOperationBar.interactive = False
+
+
+    def isShowingSelectionBar(self):
+        return self.paneTab.isShowingSelectionBar()
+    isShowingSelectionBar.interactive = False
+
+
     def keycam(self):
         context = self.pwd()
         context_type = context.childTypeCategory().name()
@@ -475,6 +485,16 @@ class HctlSceneViewer():
     showDisplayOptionsBar.interactive = False
 
 
+    def showOperationBar(self, bool):
+        self.paneTab.showOperationBar(bool)
+    showOperationBar.interactive = False
+
+
+    def showSelectionBar(self, bool):
+        self.paneTab.showSelectionBar(bool)
+    showSelectionBar.interactive = False
+
+
     def toggleLightGeo(self):
         self.setShowLights(not self.showLights())
     toggleLightGeo.interactive = True
@@ -494,6 +514,16 @@ class HctlSceneViewer():
     def toggleDisplayOptionsToolbar(self):
         self.showDisplayOptionsBar(not self.isShowingDisplayOptionsBar())
     toggleDisplayOptionsToolbar.interactive = True
+
+
+    def toggleOperationBar(self):
+        self.showOperationBar(not self.isShowingOperationBar())
+    toggleOperationBar.interactive = True
+
+
+    def toggleSelectionBar(self):
+        self.showSelectionBar(not self.isShowingSelectionBar())
+    toggleSelectionBar.interactive = True
 
 
     def toggleGrid(self):
