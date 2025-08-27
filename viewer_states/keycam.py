@@ -141,22 +141,22 @@ class Camera():
         self.update()
 
     def translateUp(self):
-        move = self.local_y * self.t_delta * -1
+        move = self.local_y * self.parms["t_delta"]["value"] * -1
         self.t += move
         self.update()
 
     def translateDown(self):
-        move = self.local_y * self.t_delta
+        move = self.local_y * self.parms["t_delta"]["value"]
         self.t += move
         self.update()
 
     def translateLeft(self):
-        move = self.local_x * self.t_delta * -1
+        move = self.local_x * self.parms["t_delta"]["value"] * -1
         self.t += move
         self.update()
 
     def translateRight(self):
-        move = self.local_x * self.t_delta
+        move = self.local_x * self.parms["t_delta"]["value"]
         self.t += move
         self.update()
 
@@ -253,7 +253,6 @@ class Geo():
         self.displayNode = None
         pwd = self.sceneViewer.pwd()
         self.context = pwd.childTypeCategory().label()
-        # print(self.context)
 
 
 class Guides():
@@ -851,17 +850,16 @@ class State(object):
             # cam_type: 0 = Keycam, 1 = Default Perspective, 2 = Default Linear, 3 = Other
 
             if cam_type == 0:
-                print(key)
                 if key == "m": self.hud.nextMode(); return True
                 elif key == "o": self.cam.nextProjection(); return True
                 elif key == "h": self.cam.rotateLeft(); return True
                 elif key == "l": self.cam.rotateRight(); return True
                 elif key == "k": self.cam.rotateUp(); return True
                 elif key == "j": self.cam.rotateDown(); return True
-                elif key == "Shift+h": self.cam.TranslateLeft(); return True
-                elif key == "Shift+l": self.cam.TranslateRight(); return True
-                elif key == "Shift+k": self.cam.TranslateUp(); return True
-                elif key == "Shift+j": self.cam.TranslateDown(); return True
+                elif key == "Shift+h": self.cam.translateLeft(); return True
+                elif key == "Shift+l": self.cam.translateRight(); return True
+                elif key == "Shift+k": self.cam.translateUp(); return True
+                elif key == "Shift+j": self.cam.translateDown(); return True
                 elif key == "-": self.cam.zoomOut(); return True
                 elif key == "=": self.cam.zoomIn(); return True
                 elif key == "Shift+-": self.cam.orthoZoomOut(); return True
