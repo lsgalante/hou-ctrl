@@ -1,7 +1,7 @@
 import hctl_utils as hcu
 from PySide6.QtCore import Qt
 
-print("--BEGIN uiready.py--")
+print("\n----------------\nBegin uiready.py\n----------------\n")
 
 qt_commands = 0
 ui_setup = 0
@@ -29,4 +29,4 @@ if qt_commands:
 if hotkey_setup:
     session = hcu.HctlSession().reloadKeyBindings()
 
-print("--END uiready.py--")
+print("\n--------------\nEnd uiready.py\n--------------\n")
