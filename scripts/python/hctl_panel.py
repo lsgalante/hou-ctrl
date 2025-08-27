@@ -366,19 +366,19 @@ class FunctionPanel(QtWidgets.QFrame):
             obj_name, method_name = label.split(".")
             # Populate functions based on context
             if obj_name == "HctlNetworkEditor":
-                method = getattr(self.owner.networkEditor, method_name)
+                method = getattr(self.owner.hctlNetworkEditor, method_name)
                 method()
             elif obj_name == "HctlPane":
-                method = getattr(self.owner.pane, method_name)
+                method = getattr(self.owner.hctlPane, method_name)
                 method()
             elif obj_name == "HctlPaneTab":
-                method = getattr(self.owner.paneTab, method_name)
+                method = getattr(self.owner.hctlPaneTab, method_name)
                 method()
             elif obj_name == "HctlSceneViewer":
-                method = getattr(self.owner.sceneViewer, method_name)
+                method = getattr(self.owner.hctlSceneViewer, method_name)
                 method()
             elif obj_name == "HctlSession":
-                method = getattr(self.owner.session, method_name)
+                method = getattr(self.owner.hctlSession, method_name)
                 method()
             # Close window on function execution
             # self.accept()
