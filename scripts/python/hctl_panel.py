@@ -45,9 +45,13 @@ class Dialog(QtWidgets.QDialog):
     def layout(self):
         # Top-level layout
         self.mainLayout = QtWidgets.QHBoxLayout()
-        # Controls column
-        self.controlPanel = ControlPanel(self)
-        self.mainLayout.addWidget(self.controlPanel)
+        # Control columns
+        self.sessionControls = SessionControls(self)
+        self.mainLayout.addLayout(self.sessionControls)
+        self.paneControls = PaneControls(self)
+        self.mainLayout.addLayout(self.paneControls)
+        self.tabControls = TabControls(self)
+        self.mainLayout.addLayout(self.tabControls)
         # Functions column
         self.functionPanel = FunctionPanel(self)
         self.mainLayout.addWidget(self.functionPanel)
@@ -94,97 +98,72 @@ class ControlPanel(QtWidgets.QFrame):
     def __init__(self, owner):
         super().__init__()
         self.owner = owner
-
-        # SESSION CONTROLS
-        sessionColumn = QtWidgets.QVBoxLayout()
-        sessionColumn.addWidget(QtWidgets.QLabel("Session"))
-        # Autosave
-        sessionColumn.addWidget(self.AutoSaveCheckBox(owner))
-        # Toggle all menus
-        sessionMenusButton = QtWidgets.QPushButton("Menus")
-        sessionMenusButton.clicked.connect(owner.hctlSession.toggleMenus)
-        sessionColumn.addWidget(sessionMenusButton)
-        # Toggle all panetabs
-        sessionPaneTabsButton = QtWidgets.QPushButton("Pane Tabs")
-        sessionPaneTabsButton.clicked.connect(owner.hctlSession.togglePaneTabs)
-        sessionColumn.addWidget(sessionPaneTabsButton)
-        # Toggle all network controls
-        sessionNetworkControlsButton = QtWidgets.QPushButton("Network Controls")
-        sessionNetworkControlsButton.clicked.connect(owner.hctlSession.toggleNetworkControls)
-        sessionColumn.addWidget(sessionNetworkControlsButton)
-        # Toggle all stowbars
-        stowbarsButton = QtWidgets.QPushButton("Stowbars")
-        stowbarsButton.clicked.connect(owner.hctlSession.toggleStowbars)
-        sessionColumn.addWidget(stowbarsButton)
-        # Reload color schems
-        reloadColorsButton = QtWidgets.QPushButton("Reload colors")
-        reloadColorsButton.clicked.connect(owner.hctlSession.reloadColorSchemes)
-        sessionColumn.addWidget(reloadColorsButton)
-        # Fill empty space
-        sessionColumn.addStretch()
-
-        # PANE CONTROLS
-        paneColumn = QtWidgets.QVBoxLayout()
-        paneColumn.addWidget(QtWidgets.QLabel("Pane"))
-        # Tab switcher
-        paneColumn.addWidget(self.PaneTabMenu(owner))
-        # Toggle pane tabs
-        panePaneTabsButton = QtWidgets.QPushButton("Pane Tabs")
-        panePaneTabsButton.clicked.connect(owner.hctlPane.toggleTabs)
-        paneColumn.addWidget(panePaneTabsButton)
-        # Toggle network controls
-        paneNetworkControlsButton = QtWidgets.QPushButton("Network Controls")
-        paneNetworkControlsButton.clicked.connect(owner.hctlPaneTab.toggleNetworkControls)
-        paneColumn.addWidget(paneNetworkControlsButton)
-        # Pane expand
-        paneExpandButton = QtWidgets.QPushButton("Expand")
-        paneExpandButton.clicked.connect(owner.hctlPane.expand)
-        paneColumn.addWidget(paneExpandButton)
-        # Pane contract
-        paneContractButton = QtWidgets.QPushButton("Contract")
-        paneContractButton.clicked.connect(owner.hctlPane.contract)
-        paneColumn.addWidget(paneContractButton)
-        # Toggle maximized
-        paneMaximizedButton = QtWidgets.QPushButton("Maximized")
-        paneMaximizedButton.clicked.connect(owner.hctlPane.toggleMaximized)
-        paneColumn.addWidget(paneMaximizedButton)
-        # Fill empty space
-        paneColumn.addStretch()
-
-        # PANE TAB CONTROLS
-        paneTabColumn = QtWidgets.QVBoxLayout()
-        paneTabColumn.addWidget(QtWidgets.QLabel("Pane Tab"))
-        # Pin tab
-        paneTabColumn.addWidget(self.PinCheckBox(owner))
-        # Tab type
-        paneTabColumn.addWidget(self.PaneTabTypeMenu(owner))
-
-        # NETWORK EDITOR
-        if self.owner.hctlPaneTab.type() == hou.paneTabType.NetworkEditor:
-            networkEditorMenuButton = QtWidgets.QPushButton("NE Menu")
-            networkEditorMenuButton.clicked.connect(owner.hctlNetworkEditor.toggleMenu)
-            paneTabColumn.addWidget(networkEditorMenuButton)
-
-        # SCENE VIEWER
-        if self.owner.hctlPaneTab.type() == hou.paneTabType.SceneViewer:
-            keycamButton = QtWidgets.QPushButton("Keycam")
-            keycamButton.clicked.connect(owner.hctlSceneViewer.keycam)
-            paneTabColumn.addWidget(keycamButton)
-
-        # Fill empty space
-        paneTabColumn.addStretch()
-
-        # Finish control columns
+        # Control columns
         layout = QtWidgets.QHBoxLayout()
-        layout.addLayout(sessionColumn)
-        layout.addLayout(paneColumn)
-        layout.addLayout(paneTabColumn)
-
+        layout.addLayout(self.SessionControls(self))
+        layout.addLayout(self.PaneControls(self))
+        layout.addLayout(self.TabControls(self))
+        #
         self.setFrameShape(QtWidgets.QFrame.Panel)
         self.setLineWidth(1)
         self.setLayout(layout)
         self.setFixedWidth(600)
 
+
+
+
+class SessionControls(QtWidgets.QVBoxLayout):
+    def __init__(self, owner):
+        super().__init__()
+
+        # Label
+        self.addWidget(QtWidgets.QLabel("Session"))
+
+        # Separator
+        sep0 = QtWidgets.QFrame()
+        sep0.setFrameShape(QtWidgets.QFrame.HLine)
+        self.addWidget(sep0)
+
+        # Autosave
+        self.addWidget(self.AutoSaveCheckBox(owner))
+
+        # Separator
+        sep1 = QtWidgets.QFrame()
+        sep1.setFrameShape(QtWidgets.QFrame.HLine)
+        self.addWidget(sep1)
+
+        # Toggle all menus
+        menusButton = QtWidgets.QPushButton("Menus")
+        menusButton.clicked.connect(owner.hctlSession.toggleMenus)
+        menusButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        self.addWidget(menusButton)
+
+        # Panetab visibility
+        paneTabsButton = QtWidgets.QPushButton("Pane Tabs")
+        paneTabsButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        paneTabsButton.clicked.connect(owner.hctlSession.togglePaneTabs)
+        self.addWidget(paneTabsButton)
+
+        # Toggle all network controls
+        networkControlsButton = QtWidgets.QPushButton("Network Controls")
+        networkControlsButton.clicked.connect(owner.hctlSession.toggleNetworkControls)
+        networkControlsButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        self.addWidget(networkControlsButton)
+
+        # Stowbar visibility
+        stowbarsButton = QtWidgets.QPushButton("Stowbars")
+        stowbarsButton.clicked.connect(owner.hctlSession.toggleStowbars)
+        stowbarsButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        self.addWidget(stowbarsButton)
+
+        # Reload color schems
+        reloadColorsButton = QtWidgets.QPushButton("Reload colors")
+        reloadColorsButton.clicked.connect(owner.hctlSession.reloadColorSchemes)
+        reloadColorsButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        self.addWidget(reloadColorsButton)
+
+        # Fill empty space
+        self.addStretch()
 
 
     class AutoSaveCheckBox(QtWidgets.QCheckBox):
@@ -200,19 +179,53 @@ class ControlPanel(QtWidgets.QFrame):
             self.clicked.connect(owner.hctlSession.toggleAutoSave)
 
 
-    class PinCheckBox(QtWidgets.QCheckBox):
-        def __init__(self, owner):
-            super().__init__("Pin tab")
-            self.owner = owner
-            self.clicked.connect(self.togglePin)
-            if owner.hctlPaneTab.isPin():
-                self.setCheckState(Qt.Checked)
-            else:
-                self.setCheckState(Qt.Unchecked)
 
-        def togglePin(self):
-            self.owner.hctlPaneTab.togglePin()
+class PaneControls(QtWidgets.QVBoxLayout):
+    def __init__(self, owner):
+        super().__init__()
 
+        # Label
+        self.addWidget(QtWidgets.QLabel("Pane"))
+
+        # Separator
+        sep0 = QtWidgets.QFrame()
+        sep0.setFrameShape(QtWidgets.QFrame.HLine)
+        self.addWidget(sep0)
+
+        # Tab switcher
+        self.addWidget(self.PaneTabMenu(owner))
+
+        # Separator
+        sep1 = QtWidgets.QFrame()
+        sep1.setFrameShape(QtWidgets.QFrame.HLine)
+        self.addWidget(sep1)
+
+        # Maximize
+        maximizeButton = QtWidgets.QPushButton("Maximize")
+        maximizeButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        maximizeButton.clicked.connect(owner.hctlPane.toggleMaximized)
+        self.addWidget(maximizeButton)
+
+        # Expand
+        expandButton = QtWidgets.QPushButton("Expand")
+        expandButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        expandButton.clicked.connect(owner.hctlPane.expand)
+        self.addWidget(expandButton)
+
+        # Contract
+        contractButton = QtWidgets.QPushButton("Contract")
+        contractButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        contractButton.clicked.connect(owner.hctlPane.contract)
+        self.addWidget(contractButton)
+
+        # Toggle pane tabs
+        paneTabsButton = QtWidgets.QPushButton("Pane Tabs")
+        paneTabsButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        paneTabsButton.clicked.connect(owner.hctlPane.toggleTabs)
+        self.addWidget(paneTabsButton)
+
+        # Fill empty space
+        self.addStretch()
 
     class PaneTabMenu(QtWidgets.QComboBox):
         def __init__(self, owner):
@@ -227,7 +240,62 @@ class ControlPanel(QtWidgets.QFrame):
             paneTab.setIsCurrentTab()
 
 
-    class PaneTabTypeMenu(QtWidgets.QComboBox):
+class TabControls(QtWidgets.QVBoxLayout):
+    def __init__(self, owner):
+        super().__init__()
+        self.owner = owner
+
+        self.addWidget(QtWidgets.QLabel("Tab"))
+
+        # Separator
+        sep0 = QtWidgets.QFrame()
+        sep0.setFrameShape(QtWidgets.QFrame.HLine)
+        self.addWidget(sep0)
+
+        # Tab type menu
+        self.addWidget(self.TabTypeMenu(owner))
+
+        # Pin
+        self.addWidget(self.PinCheckBox(owner))
+
+        # Separator
+        sep1 = QtWidgets.QFrame()
+        sep1.setFrameShape(QtWidgets.QFrame.HLine)
+        self.addWidget(sep1)
+
+        # Network controls
+        networkControlsButton = QtWidgets.QPushButton("Network Controls")
+        networkControlsButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        networkControlsButton.clicked.connect(owner.hctlPaneTab.toggleNetworkControls)
+        self.addWidget(networkControlsButton)
+
+        # Conditionals
+        if self.owner.hctlPaneTab.type() == hou.paneTabType.SceneViewer:
+            keycamButton = QtWidgets.QPushButton("Keycam")
+            keycamButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+            keycamButton.clicked.connect(owner.hctlSceneViewer.keycam)
+            self.addWidget(keycamButton)
+
+        # Fill empty space
+        self.addStretch()
+
+
+    class PinCheckBox(QtWidgets.QCheckBox):
+        def __init__(self, owner):
+            super().__init__("Pin")
+            self.owner = owner
+            self.clicked.connect(self.togglePin)
+
+            if owner.hctlPaneTab.isPin():
+                self.setCheckState(Qt.Checked)
+            else:
+                self.setCheckState(Qt.Unchecked)
+
+        def togglePin(self):
+            self.owner.hctlPaneTab.togglePin()
+
+
+    class TabTypeMenu(QtWidgets.QComboBox):
         def __init__(self, owner):
             super().__init__()
             self.owner = owner
@@ -428,49 +496,3 @@ class FunctionPanel(QtWidgets.QFrame):
                     if counter == index:
                         self.setCurrentItem(item)
                     counter += 1
-
-
-
-class MiddleColumn(QtWidgets.QVBoxLayout):
-    def __init__(self, owner):
-        super().__init__()
-        self.owner = owner
-        self.topPanel = self.TopPanel(self)
-        self.bottomPanel = self.BottomPanel(self)
-        self.addWidget(self.topPanel)
-        self.addWidget(self.bottomPanel)
-
-
-    class TopPanel(QtWidgets.QFrame):
-        def __init__(self, owner):
-            super().__init__()
-            self.owner = owner
-            # Main layout
-            layout = QtWidgets.QGridLayout()
-            # Project path label
-            layout.addWidget(QtWidgets.QLabel("Project path:"), 0, 0)
-            layout.addWidget(QtWidgets.QLabel(owner.owner.project_path), 0, 1)
-            layout.setRowMinimumHeight(0, 20)
-            # Network path label
-            layout.addWidget(QtWidgets.QLabel("Network path:"), 1, 0)
-            layout.addWidget(QtWidgets.QLabel(str(owner.owner.network_path) + "/" + str(owner.owner.node)), 1, 1)
-            layout.setRowMinimumHeight(1, 20)
-            # Formatting
-            self.setFrameShape(QtWidgets.QFrame.Panel)
-            self.setLineWidth(1)
-            self.setLayout(layout)
-            # self.setFixedHeight(180)
-            self.setFixedWidth(300)
-
-
-
-class RightPanel(QtWidgets.QFrame):
-    def __init__(self, owner):
-        super().__init__()
-        self.owner = owner
-        self.setFrameShape(QtWidgets.QFrame.Panel)
-        self.setLineWidth(1)
-        # self.setLayout
-        # self.setFixedHeight(180)
-        self.setFixedWidth(300)
-        desktop = self.owner.session.layout()
