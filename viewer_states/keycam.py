@@ -55,7 +55,7 @@ class kCam():
             self.set_orthowidth(10)
             # self.parms["orthowidth"]["value"] = 10
         self.update()
-        self.Guides.update()
+        self.kGuides.update()
 
     def nextProjection(self):
         projParm = self.cam.parm("projection")
