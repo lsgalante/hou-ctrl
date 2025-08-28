@@ -2,7 +2,7 @@
 import hou
 # import hctl_utils as hcu # pyright: ignore
 
-class Camera():
+class kCam():
     def __init__(self, state):
         self.state = state
         self.kwargs = state.kwargs
@@ -209,7 +209,7 @@ class Camera():
         self.update()
 
 
-class Geo():
+class kGeo():
     def __init__(self, state):
         self.state = state
         self.geo = hou.Geometry()
@@ -256,7 +256,7 @@ class Geo():
         self.context = pwd.childTypeCategory().label()
 
 
-class Guides():
+class kGuides():
     def __init__(self, state):
         self.state = state
         self.scene_viewer = state.scene_viewer
@@ -476,7 +476,8 @@ class Guides():
         return
 
 
-class Hud():
+
+class kHud():
     def update(self):
         # Update graph bar count
         self.updateGraph()
@@ -594,7 +595,9 @@ class Hud():
         self.updateHud()
 
 
-class Layout():
+
+class kLayout():
+
     def __init__(self, state):
         self.state = state
         self.parms = state.parms
@@ -827,11 +830,11 @@ class State(object):
         kwargs["state_flags"]["exit_on_node_select"] = False # Prevent exiting the state when current node changes
         self.kwargs = kwargs
         self.parms = kwargs["state_parms"]
-        self.layout = Layout(self)
-        self.cam = Camera(self)
-        self.geo = Geo(self)
-        self.guides = Guides(self)
-        self.hud = Hud()
+        self.layout = kLayout(self)
+        self.cam = kCam(self)
+        self.geo = kGeo(self)
+        self.guides = kGuides(self)
+        self.hud = kHud()
         self.updateNetworkContext()
         self.updateOptions()
         self.cam.frame()
