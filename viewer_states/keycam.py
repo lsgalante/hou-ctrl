@@ -1,4 +1,4 @@
-from sys import version
+# from sys import version
 import hou
 # import hctl_utils as hcu # pyright: ignore
 
@@ -60,12 +60,13 @@ class Camera():
 
     def movePivot(self):
         # if origin
-        if self.parms["target"]["value"] == 0:
-            dist = self.parms["dist"]["value"]
-            self.t = [0, 0, dist]
-            self.r = [45, 45, 0]
-            self.p = [0, 0, -dist]
-            # self.orthowidth = 10
+        if self.params.target() == 0:
+            dist = self.params.dist()
+            self.set_t([0, 0, dist])
+            self.set_r([45, 45, 0])
+            self.set_p([0, 0, -dist])
+            self.set_orthowidth(10)
+            # self.parms["orthowidth"]["value"] = 10
         self.update()
         self.Guides.update()
 
