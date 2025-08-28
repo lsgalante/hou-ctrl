@@ -5,49 +5,36 @@ import hou
 class kCam():
     def __init__(self, state):
         self.state = state
+        self.params = state.params
         self.kwargs = state.kwargs
         self.parms = state.kwargs["state_parms"]
         self.nodeCheck()
         self.lock()
 
-        self.parms["t"]["value"] = [0, 0, 0]
-        self.parms["r"]["value"] = [0, 0, 0]
-        self.parms["p"]["value"] = [0, 0, 0]
-        self.parms["orthowidth"]["value"] = 10
-        self.parms["local_x"]["value"] = [1, 0, 0]
-        self.parms["local_y"]["value"] = [0, 1, 0]
-        self.parms["local_z"]["value"] = [0, 0, 1]
-        self.parms["global_x"]["value"] = [1, 0, 0]
-        self.parms["global_y"]["value"] = [0, 1, 0]
-        self.parms["global_z"]["value"] = [0, 0, 1]
-
-        self.t = hou.Vector3(self.parms["t"]["value"])
-        self.r = hou.Vector3(self.parms["r"]["value"])
-        self.p = hou.Vector3(self.parms["p"]["value"])
-        self.orthowidth = self.parms["orthowidth"]["value"]
-        self.local_x = hou.Vector3(self.parms["local_x"]["value"])
-        self.local_y = hou.Vector3(self.parms["local_y"]["value"])
-        self.local_z = hou.Vector3(self.parms["local_z"]["value"])
-        self.global_x = hou.Vector3(self.parms["global_x"]["value"])
-        self.global_y = hou.Vector3(self.parms["global_y"]["value"])
-        self.global_z = hou.Vector3(self.parms["global_z"]["value"])
-        self.t_delta = self.parms["t_delta"]["value"]
-        self.r_delta = self.parms["r_delta"]["value"]
-        self.z_delta = self.parms["z_delta"]["value"]
+        self.params.set_t([0, 0, 0])
+        self.params.set_r([0, 0, 0])
+        self.params.set_p([0, 0, 0])
+        self.params.set_orthowidth(10)
+        self.params.set_local_x([1, 0, 0])
+        self.params.set_local_y([0, 1, 0])
+        self.params.set_local_z([0, 0, 1])
+        self.params.set_global_x([1, 0, 0])
+        self.params.set_global_y([0, 1, 0])
+        self.params.set_global_z([0, 0, 1])
 
     def frame(self):
         centroid = self.state.geo.centroid()
-        self.t = centroid
-        self.p = centroid
-        # self.orthowidth = 10
+        self.params.set_t(centroid)
+        self.params.set_p(centroid)
+        # self.params.set_orthowidth(10)
         self.zoomSet(6)
         self.update()
 
     def home(self):
         centroid = self.state.geo.centroid()
-        self.t = centroid
-        self.p = centroid
-        # self.orthowidth = 10
+        self.params.set_t(centroid)
+        self.params.set_p(centroid)
+        # self.params.set_orthowidth(10)
         # self.zoom(6)
         self.update()
 
@@ -87,90 +74,82 @@ class kCam():
         self.cam = hou.node("/obj/keycam")
 
     def reset(self):
-        self.t = hou.Vector3(0, 0, 0)
-        self.r = hou.Vector3(0, 0, 0)
-        self.local_x = hou.Vector3(1, 0, 0)
-        self.local_y = hou.Vector3(0, 1, 0)
-        self.local_z = hou.Vector3(0, 0, 1)
-        self.global_x = hou.Vector3(1, 0, 0)
-        self.global_y = hou.Vector3(0, 1, 0)
-        self.global_z = hou.Vector3(0, 0, 1)
+        self.params.set_t(hou.Vector3(0, 0, 0))
+        self.params.set_r(hou.Vector3(0, 0, 0))
+        self.params.set_local_x(hou.Vector3(1, 0, 0))
+        self.params.set_local_y(hou.Vector3(0, 1, 0))
+        self.params.set_local_z(hou.Vector3(0, 0, 1))
+        self.params.set_global_x(hou.Vector3(1, 0, 0))
+        self.params.set_global_y(hou.Vector3(0, 1, 0))
+        self.params.set_global_z(hou.Vector3(0, 0, 1))
         self.update()
 
     def rotateUp(self):
-        self.r[0] += self.r_delta
-        m = hou.hmath.buildRotateAboutAxis(self.local_x, self.r_delta)
-        self.t -= self.p
-        self.t *= m
-        self.t += self.p
-        self.local_x *= m
-        self.local_y *= m
-        self.local_z *= m
+        self.params.set_r([self.params.r()[0] + self.params.delta_r(), self.params.r()[1], self.params.r()[2]])
+        m = hou.hmath.buildRotateAboutAxis(self.params.local_x(), self.params.delta_r())
+        self.params.set_t(self.params.t() - self.params.p())
+        self.params.set_t(self.params.t() * m)
+        self.params.set_t(self.params.t() + self.params.p())
+        self.params.set_local_x(self.params.local_x() * m)
+        self.params.set_local_y(self.params.local_y() * m)
+        self.params.set_local_z(self.params.local_z() * m)
         self.update()
 
     def rotateDown(self):
-        self.r[0] -= self.r_delta
-        m = hou.hmath.buildRotateAboutAxis(self.local_x, -self.r_delta)
-        self.t -= self.p
-        self.t *= m
-        self.t += self.p
-        self.local_x *= m
-        self.local_y *= m
-        self.local_z *= m
+        self.params.set_r([self.params.r()[0] - self.params.delta_r(), self.params.r()[1], self.params.r()[2]])
+        m = hou.hmath.buildRotateAboutAxis(self.params.local_x(), self.params.delta_r() * -1)
+        self.params.set_t(self.params.t() - self.params.p())
+        self.params.set_t(self.params.t() * m)
+        self.params.set_t(self.params.t() + self.params.p())
+        self.params.set_local_x(self.params.local_x() * m)
+        self.params.set_local_y(self.params.local_y() * m)
+        self.params.set_local_z(self.params.local_z() * m)
         self.update()
 
     def rotateLeft(self):
-        self.r[1] -= self.r_delta
-        m = hou.hmath.buildRotateAboutAxis(self.global_y, -self.r_delta)
-        self.t -= self.p
-        self.t *= m
-        self.t += self.p
-        self.local_x *= m
-        self.local_y *= m
-        self.local_z *= m
+        self.params.set_r([self.params.r()[0], self.params.r()[1] - self.params.delta_r(), self.params.r()[2]])
+        m = hou.hmath.buildRotateAboutAxis(self.params.global_y(), self.params.delta_r() * -1)
+        self.params.set_t(self.params.t() - self.params.p())
+        self.params.set_t(self.params.t() * m)
+        self.params.set_t(self.params.t() + self.params.p())
+        self.params.set_local_x(self.params.local_x() * m)
+        self.params.set_local_y(self.params.local_y() * m)
+        self.params.set_local_z(self.params.local_z() * m)
         self.update()
 
     def rotateRight(self):
-        self.r[1] += self.r_delta
-        m = hou.hmath.buildRotateAboutAxis(self.global_y, self.r_delta)
-        self.t -= self.p
-        self.t *= m
-        self.t += self.p
-        self.local_x *= m
-        self.local_y *= m
-        self.local_z *= m
+        self.params.set_r([self.params.r()[0], self.params.r()[1] + self.params.delta_r(), self.params.r()[2]])
+        m = hou.hmath.buildRotateAboutAxis(self.params.global_y(), self.params.delta_r())
+        self.params.set_t(self.params.t() - self.params.p())
+        self.params.set_t(self.params.t() * m)
+        self.params.set_t(self.params.t() + self.params.p())
+        self.params.set_local_x(self.params.local_x() * m)
+        self.params.set_local_y(self.params.local_y() * m)
+        self.params.set_local_z(self.params.local_z() * m)
         self.update()
 
     def translateUp(self):
-        move = self.local_y * self.parms["t_delta"]["value"] * -1
-        self.t += move
+        move = self.params.local_y() * self.params.delta_t() * -1
+        self.params.set_t(self.params.t() + move)
         self.update()
 
     def translateDown(self):
-        move = self.local_y * self.parms["t_delta"]["value"]
-        self.t += move
+        move = self.params.local_y() * self.params.delta_t()
+        self.params.set_t(self.params.t() + move)
         self.update()
 
     def translateLeft(self):
-        move = self.local_x * self.parms["t_delta"]["value"] * -1
-        self.t += move
+        move = self.params.local_x() * self.params.delta_t() * -1
+        self.params.set_t(self.params.t() + move)
         self.update()
 
     def translateRight(self):
-        move = self.local_x * self.parms["t_delta"]["value"]
-        self.t += move
+        move = self.params.local_x() * self.params.delta_t()
+        self.params.set_t(self.params.t() + move)
         self.update()
 
     def update(self):
-        self.parms["t"]["value"] = list(self.t)
-        self.parms["r"]["value"] = list(self.r)
-        self.parms["p"]["value"] = list(self.p)
-        self.parms["orthowidth"]["value"] = self.orthowidth
-        self.parms["local_x"]["value"] = list(self.local_x)
-        self.parms["local_y"]["value"] = list(self.local_y)
-        self.parms["local_z"]["value"] = list(self.local_z)
-
-        self.cam.parmTuple("t").set(list(self.parms["t"]["value"]))
+        self.cam.parmTuple("t").set(list(self.params.t()))
         self.cam.parmTuple("r").set(list(self.parms["r"]["value"]))
         self.cam.parm("orthowidth").set(self.parms["orthowidth"]["value"])
 
@@ -182,30 +161,32 @@ class kCam():
         self.cam.parm("aspect").set(ratio)
 
     def zoomSet(self, zoom):
-        move = self.local_z * zoom
-        self.t += move
+        move = self.params.local_z() * zoom
+        self.params.set_t(self.params.t() + move)
         self.update()
 
     def zoomIn(self):
-        move = self.local_z * self.z_delta * -1
-        self.t += move
+        print(self.params.t())
+        move = self.params.local_z() * self.params.delta_z() * -1
+        self.params.set_t(self.params.t() + move)
+        print(self.params.t())
         self.update()
 
     def zoomOut(self):
-        move = self.local_z * self.z_delta
-        self.t += move
+        move = self.params.local_z() * self.params.delta_z()
+        self.params.set_t(self.params.t() + move)
         self.update()
 
     def orthoZoomSet(self, zoom):
-        self.orthowidth = zoom
+        self.params.set_orthowidth(zoom)
         self.update()
 
     def orthoZoomIn(self):
-        self.orthowidth += self.z_delta * -1
+        self.params.set_orthowidth(self.params.orthowidth() + self.params.delta_z() * -1)
         self.update()
 
     def orthoZoomOut(self):
-        self.orthowidth += self.z_delta
+        self.params.set_orthowidth(self.params.orthowidth() + self.params.delta_z())
         self.update()
 
 
@@ -315,9 +296,11 @@ class kGuides():
             params={"color1": hou.Vector4((1, 0.8, 1, 0.5))}
         )
 
+
     def toggle(self, kwargs, guide):
         kwargs[guide] = not kwargs[guide]
         self.update_bbox()
+
 
     def update(self):
         if self.guide_states["axis_cam"]: self.updateAxisCam()
@@ -351,7 +334,7 @@ class kGuides():
 
 
     def updateAxisCam(self):
-        axes = (self.local_x, self.local_y, self.local_z)
+        axes = (self.params.local_x(), self.params.local_y(), self.params.local_z())
         geo = hou.Geometry()
         for i in range(3):
             P0 = axes[i] * 1 + self.T_cam
@@ -365,7 +348,7 @@ class kGuides():
 
 
     def updateAxisPivot(self):
-        t = hou.Vector3(self.parms["p"]["value"])
+        t = self.params.p()
         axes = (hou.Vector3(1, 0, 0), hou.Vector3(0, 1, 0), hou.Vector3(0, 0, 1))
         colors = ([1.0, 0.7, 0.7], [0.7, 1.0, 0.7], [0.7, 0.7, 1.0])
         geo = hou.Geometry()
@@ -424,10 +407,10 @@ class kGuides():
 
 
     def updatePivot2d(self):
-        r = list(self.parms["r"]["value"])
-        t = list(self.parms["t"]["value"])
-        p = list(self.parms["p"]["value"])
-        ow = self.parms["orthowidth"]["value"]
+        r = self.params.r()
+        t = self.params.t()
+        p = self.params.p()
+        ow = self.params.orthowidth()
         P = hou.Vector3(p) + hou.Vector3(t)
         verb = hou.sopNodeTypeCategory().nodeVerb("circle")
         verb.setParms({
@@ -523,6 +506,7 @@ class kHud():
                 # Set the number of bars in the graph.
                 self.HUD_TEMPLATE["rows"][i]["count"] = len(arr)
 
+
     def hudControlNext(self):
         self.hude_state["huds"] = self.hud_names
         self.hud_state["hud"] = self.hud_name
@@ -606,6 +590,7 @@ class kLayout():
         self.layout = state.scene_viewer.viewportLayout()
         self.update()
 
+
     def update(self):
         indices = (0, 0)
         if self.layout == hou.geometryViewportLayout.DoubleSide:
@@ -659,8 +644,10 @@ class kLayout():
     # 0 3
     # 1
 
+
     def viewportFocus(self):
         return
+
 
     def viewportFrame(self):
         for viewport in self.viewports:
@@ -669,6 +656,7 @@ class kLayout():
             if cam == None: viewport.frameAll()
             else: viewport.frameAll()
         self.camToState()
+
 
     # def viewportSwap(self):
         # viewport_names = [viewport.name() for viewport in self.viewports]
@@ -680,14 +668,16 @@ class kLayout():
             # viewport.changeName(self.viewports[i])
             # viewport.changeType(viewportTypes[i])
 
+
     def currentViewport(self):
-        viewports = self.parms["viewports"]["value"]
-        viewport_index = self.parms["viewport_index"]["value"]
+        viewports = self.params.viewports()
+        viewport_index = self.parms.viewport_index()
         viewport = viewports[viewport_index]
         return viewport
 
+
     def setLayout(self):
-        layout = self.parms["layout"]["value"]
+        layout = self.params.layout()
         self.sceneViewer.setViewportLayout(getattr(hou.geometryViewportLayout, layout))
 
         viewport_ct = 0
@@ -712,6 +702,97 @@ class kLayout():
         viewport.changeType(viewportType)
 
 
+
+class kParms():
+
+    def __init__(self, parms):
+        self.parms = parms
+
+    def set_p(self, val):
+        self.parms["p"]["value"] = val
+    def set_r(self, val):
+        self.parms["r"]["value"] = val
+    def set_t(self, val):
+        print(self.parms)
+        self.parms["t"]["value"] = val
+    #
+    def set_dist(self, val):
+        self.parms["dist"]["value"] = val
+    def set_orthowidth(self, val):
+        self.parms["orthowidth"]["value"] = val
+    def set_target(self, val):
+        self.parms["target"]["value"] = val
+    #
+    def set_global_x(self, val):
+        self.parms["global_x"]["value"] = val
+    def set_global_y(self, val):
+        self.parms["global_y"]["value"] = val
+    def set_global_z(self, val):
+        self.parms["global_z"]["value"] = val
+    #
+    def set_local_x(self, val):
+        self.parms["local_x"]["value"] = val
+    def set_local_y(self, val):
+        self.parms["local_y"]["value"] = val
+    def set_local_z(self, val):
+        self.parms["local_z"]["value"] = val
+    #
+    def set_delta_r(self, val):
+        self.parms["delta_r"]["value"] = val
+    def set_delta_t(self, val):
+        self.parms["delta_t"]["value"] = val
+    #
+    def set_layout(self, val):
+        self.parms["layout"]["value"] = val
+    def set_viewports(self, val):
+        self.parms["viewports"]["value"] = val
+
+    #############
+
+    def p(self):
+        return self.parms["p"]["value"]
+    def r(self):
+        return self.parms["r"]["value"]
+    def t(self):
+        return self.parms["t"]["value"]
+    #
+    def dist(self):
+        return self.parms["dist"]["value"]
+    def orthowidth(self):
+        return self.parms["orthowidth"]["value"]
+    def target(self):
+        return self.parms["target"]["value"]
+    #
+    def global_x(self):
+        return self.parms["global_x"]["value"]
+    def global_y(self):
+        return self.parms["global_y"]["value"]
+    def global_z(self):
+        return self.parms["global_z"]["value"]
+    #
+    def local_x(self):
+        return self.parms["local_x"]["value"]
+    def local_y(self):
+        return self.parms["local_y"]["value"]
+    def local_z(self):
+        return self.parms["local_z"]["value"]
+    #
+    def delta_r(self):
+        return self.parms["delta_r"]["value"]
+    def delta_t(self):
+        return self.parms["delta_t"]["value"]
+    def delta_z(self):
+        return self.parms["delta_z"]["value"]
+    #
+    def layout(self):
+        return self.parms["layout"]["value"]
+    def viewport_index(self):
+        return self.parms["viewports"]["value"]
+    def viewports(self):
+        return self.parms["viewports"]["value"]
+
+
+
 class State(object):
     HUD_TEMPLATE={
         "title": "test",
@@ -734,10 +815,10 @@ class State(object):
 
             # Delta
             {"id": "divider1", "type": "divider"},
-            {"id": "r", "label": "r_delta"},
-            {"id": "t", "label": "t_delta"},
-            {"id": "dist", "label": "dist_delta"},
-            {"id": "ow", "label": "ow_delta"},
+            {"id": "r", "label": "delta_r"},
+            {"id": "t", "label": "delta_t"},
+            {"id": "dist", "label": "delta_d"},
+            {"id": "ow", "label": "delta_ow"},
 
             # Vis
             {"id": "divider2", "type": "divider"},
@@ -822,13 +903,17 @@ class State(object):
         self.guides.Ray.draw(handle, {})
         # self.guides.Text.draw(handle, {})
 
+
     def onExit(self, kwargs):
         for viewport in self.scene_viewer.viewports():
             viewport.lockCameraToView(False)
 
+
     def onGenerate(self, kwargs):
-        kwargs["state_flags"]["exit_on_node_select"] = False # Prevent exiting the state when current node changes
+        # Prevent exiting the state when current node changes
+        kwargs["state_flags"]["exit_on_node_select"] = False
         self.kwargs = kwargs
+        self.params = kParms(kwargs["state_parms"])
         self.parms = kwargs["state_parms"]
         self.layout = kLayout(self)
         self.cam = kCam(self)
@@ -838,6 +923,7 @@ class State(object):
         self.updateNetworkContext()
         self.updateOptions()
         self.cam.frame()
+
 
     def onKeyEvent(self, kwargs):
         self.cam.updateAspectRatio()
@@ -864,10 +950,12 @@ class State(object):
                 elif key == "Shift+l": self.cam.translateRight(); return True
                 elif key == "Shift+k": self.cam.translateUp(); return True
                 elif key == "Shift+j": self.cam.translateDown(); return True
+                # elif key == "Shift+-": self.cam.orthoZoomOut(); return True
+                # elif key == "Shift+=": self.cam.orthoZoomIn(); return True
+                elif key == "Shift+_": self.cam.orthoZoomOut(); return True
+                elif key == "Shift++": self.cam.orthoZoomIn(); return True
                 elif key == "-": self.cam.zoomOut(); return True
                 elif key == "=": self.cam.zoomIn(); return True
-                elif key == "Shift+-": self.cam.orthoZoomOut(); return True
-                elif key == "Shift+=": self.cam.orthoZoomIn(); return True
                 self.cam.update()
 
             elif cam_type == 1:
@@ -1100,10 +1188,10 @@ def createViewerStateTemplate():
     template.bindParameter(hou.parmTemplateType.Separator)
     template.bindParameter(hou.parmTemplateType.Menu, name="target", label="Target", default_value="cam", menu_items=[("cam", "Cam"), ("pivot", "Pivot")])
     template.bindParameter(hou.parmTemplateType.Separator)
-    template.bindParameter(hou.parmTemplateType.Float, name="r_delta", label="Rotation Delta", default_value=7.5, min_limit=-180.0, max_limit=180.0)
-    template.bindParameter(hou.parmTemplateType.Float, name="t_delta", label="Translation Delta", default_value=1.0, min_limit=0, max_limit=10.0)
-    template.bindParameter(hou.parmTemplateType.Float, name="orthowidth_delta", label="Ortho Width Delta", default_value=1.0, min_limit=0, max_limit=10.0)
-    template.bindParameter(hou.parmTemplateType.Float, name="z_delta", label="Zoom Delta", default_value=1.0, min_limit=0, max_limit=10.0)
+    template.bindParameter(hou.parmTemplateType.Float, name="delta_r", label="Rotation Delta", default_value=7.5, min_limit=-180.0, max_limit=180.0)
+    template.bindParameter(hou.parmTemplateType.Float, name="delta_t", label="Translation Delta", default_value=1.0, min_limit=0, max_limit=10.0)
+    template.bindParameter(hou.parmTemplateType.Float, name="delta_ow", label="Ortho Width Delta", default_value=1.0, min_limit=0, max_limit=10.0)
+    template.bindParameter(hou.parmTemplateType.Float, name="delta_z", label="Zoom Delta", default_value=1.0, min_limit=0, max_limit=10.0)
     template.bindParameter(hou.parmTemplateType.Separator)
     template.bindParameter(hou.parmTemplateType.Float, name="t", label="Translation", num_components=3)
     template.bindParameter(hou.parmTemplateType.Float, name="r", label="Rotation", num_components=3)
