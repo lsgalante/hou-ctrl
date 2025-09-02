@@ -61,100 +61,65 @@ class State(object):
     def onKeyEvent(self, kwargs):
         self.kCam.updateAspectRatio()
 
+        # Persp cam
+        keymap = {
+            "-": self.kCam.zoomOut,
+            "+": self.kCam.zoomIn,
+            "o": self.kCam.nextProjection,
+            "h": self.kCam.rotateLeft,
+            "j": self.kCam.rotateDown,
+            "k": self.kCam.rotateUp,
+            "l": self.kCam.rotateRight,
+            "Shift+_": self.kCam.orthoZoomOut,
+            "Shift++": self.kCam.orthoZoomIn,
+            "Shift+h": self.kCam.translateLeft,
+            "Shift+j": self.kCam.translateDown,
+            "Shift+k": self.kCam.translateUp,
+            "Shift+l": self.kCam.translateDown
+        }
+
         key = kwargs["ui_event"].device().keyString()
-        functions = ()
-        keys = ()
+        keymap.get(key, lambda: False)()
 
-        # mode: 0 = Camera, 1 = Settings
-        mode = kwargs["state_parms"]["mode"]["value"]
-
-        if mode == 0:
-            cam_type = kwargs["state_parms"]["camera"]["value"]
-            # cam_type: 0 = Keycam, 1 = Default Perspective, 2 = Default Linear, 3 = Other
-
-            if cam_type == 0:
-                if key == "m":         self.kHud.nextMode();       return True
-                elif key == "o":       self.kCam.nextProjection(); return True
-                elif key == "h":       self.kCam.rotateLeft();     return True
-                elif key == "l":       self.kCam.rotateRight();    return True
-                elif key == "k":       self.kCam.rotateUp();       return True
-                elif key == "j":       self.kCam.rotateDown();     return True
-                elif key == "Shift+h": self.kCam.translateLeft();  return True
-                elif key == "Shift+l": self.kCam.translateRight(); return True
-                elif key == "Shift+k": self.kCam.translateUp();    return True
-                elif key == "Shift+j": self.kCam.translateDown();  return True
-                # elif key == "Shift+-": self.kCam.orthoZoomOut(); return True
-                # elif key == "Shift+=": self.kCam.orthoZoomIn(); return True
-                elif key == "Shift+_": self.kCam.orthoZoomOut();   return True
-                elif key == "Shift++": self.kCam.orthoZoomIn();    return True
-                elif key == "-":       self.kCam.zoomOut();        return True
-                elif key == "=":       self.kCam.zoomIn();         return True
-                self.kCam.update()
-
-            elif cam_type == 1:
-                kCam = self.viewport.defaultCamera()
-                if self.viewport.type() == hou.geometryViewportType.Perspective:
-                    if key == "m":   self.kHud.nextMode();            return True
-                    elif key == "o": self.kCam.nextProjection();     return True
-                    elif key == "h": self.kDefaultCam.rotateLeft();  return True
-                    elif key == "l": self.kDefaultCam.rotateRight(); return True
-                    elif key == "j": self.kDefaultCam.rotateUp();    return True
-                    elif key == "k": self.kDefaultCam.rotateDown();  return True
-                    elif key == "-": self.kDefaultCam.zoomOut();     return True
-                    elif key == "=": self.kDefaultCam.zoomIn();      return True
-                    elif key == "f": self.kDefaultCam.frame()
-
-            elif cam_type == 2:
-                indices = (0, 0)
-                if self.viewport.type() ==   hou.geometryViewportType.Top:    indices = (0, 1)
-                elif self.viewport.type() == hou.geometryViewportType.Bottom: indices = (2, 0)
-                elif self.viewport.type() == hou.geometryViewportType.Front:  indices = (0, 1)
-                elif self.viewport.type() == hou.geometryViewportType.Back:   indices = (1, 0)
-                elif self.viewport.type() == hou.geometryViewportType.Right:  indices = (0, 1)
-                elif self.viewport.type() == hou.geometryViewportType.Left:   indices = (1, 2)
-                functions = (
-                    self.hudModeCycle, self.defaultCamProjectionCycle,
-                    self.defaultcamR, self.defaultcamR,
-                    self.defaultcamR, self.defaultcamR,
-                    self.defaultcamT(indices), self.defaultcamT(indices),
-                    self.defaultcamT(indices), self.defaultcamT(indices),
-                    cam.setOrthoWidth(cam.orthoWidth() - 1),
-                    cam.setOrthoWidth(cam.orthoWidth() + 1)
-                )
-                args = (
-                    None, None,
-                    (hou.Vector3(1, 0, 0), -15),
-                    (hou.Vector3(1, 0, 0), 15),
-                    (hou.Vector3(0, 1, 0), -15), (hou.Vector3(0, 1, 0), 15),
-                    hou.Vector3(0, 1, 0), hou.Vector3(0, -1, 0),
-                    hou.Vector3(-1, 0, 0), hou.Vector3(1, 0, -1)
-                )
-
-            elif cam_type == 3:
-                return
-
-        elif mode == 1:
-            # m:next mode, h/l:prev/next option, k/j:prev/next control
-            keys = ("m", "h", "l", "k", "j",)
-            functions = (self.kHud.nextMode, self.kHud.prevOption, self.kHud.nextOption, self.kHud.prevControl, self.kHud.nextControl)
-            # args = [None] * len(functions)
-            # index = keys.index(key)
-
-        else:
-            return False
+        # Default cam
+        # elif kwargs["state_parms"]["camera"]["value"] == 1:
+        #     indices = (0, 0)
+        #     if self.viewport.type() ==   hou.geometryViewportType.Top:    indices = (0, 1)
+        #     elif self.viewport.type() == hou.geometryViewportType.Bottom: indices = (2, 0)
+        #     elif self.viewport.type() == hou.geometryViewportType.Front:  indices = (0, 1)
+        #     elif self.viewport.type() == hou.geometryViewportType.Back:   indices = (1, 0)
+        #     elif self.viewport.type() == hou.geometryViewportType.Right:  indices = (0, 1)
+        #     elif self.viewport.type() == hou.geometryViewportType.Left:   indices = (1, 2)
+            # functions = (
+            #     self.defaultcamR, self.defaultcamR,
+            #     self.defaultcamR, self.defaultcamR,
+            #     self.defaultcamT(indices), self.defaultcamT(indices),
+            #     self.defaultcamT(indices), self.defaultcamT(indices),
+            #     cam.setOrthoWidth(cam.orthoWidth() - 1),
+            #     cam.setOrthoWidth(cam.orthoWidth() + 1)
+            # )
+            # args = (
+            #     None, None,
+            #     (hou.Vector3(1, 0, 0), -15),
+            #     (hou.Vector3(1, 0, 0), 15),
+            #     (hou.Vector3(0, 1, 0), -15), (hou.Vector3(0, 1, 0), 15),
+            #     hou.Vector3(0, 1, 0), hou.Vector3(0, -1, 0),
+            #     hou.Vector3(-1, 0, 0), hou.Vector3(1, 0, -1)
+            # )
 
 
     def onMenuAction(self, kwargs):
-        item = kwargs["menu_item"]
-        if item == "kCam.frame":          self.kKam.frame()
-        elif item == "kCam.reset":        self.kCam.reset()
-        elif item == "kViewport.frame":   self.kViewport.frame()
-        elif item == "kGuides.axisCam":   self.kGuides.axisCam.toggle()
-        elif item == "kGuides.axisPivot": self.kGuides.axisPivot.toggle()
-        elif item == "kGuides.perim":     self.kGuides.perim.toggle()
-        elif item == "kGuides.pivot2d":   self.kGuides.pivot2d.toggle()
-        elif item == "kGuides.pivot3d":   self.kGuides.pivot3d.toggle()
-        elif item == "kGuides.ray":       self.kGuides.ray.toggle()
+        map = {
+            "kCam.frame": self.kCam.frame,
+            "kCam.reset": self.kCam.reset,
+            "kViewport.frame": self.kViewport.frame,
+            "kGuides.camAxis": self.kGuides.camAxis.toggle,
+            "kGuides.pivotAxis": self.kGuides.pivotAxis.toggle,
+            "kGuides.perim": self.kGuides.perim.toggle,
+            "kGuides.pivot2d": self.kGuides.pivot2d.toggle,
+            "kGuides.ray": self.kGuides.ray.toggle
+        }
+        map.get(kwargs["menu_item"], lambda: False)
         self.kGuides.update()
 
 
