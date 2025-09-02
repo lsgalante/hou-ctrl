@@ -5,12 +5,9 @@ class State(object):
 
     def __init__(self, state_name, scene_viewer):
         # General Variables #
-        self.kUtil = KUtil()
         self.sceneViewer = scene_viewer
         self.cam_type = None
         self.context = None
-        self.modes = ("camera","settings")
-        self.mode = "camera"
         self.state_name = state_name
 
         self.options = {
@@ -47,6 +44,7 @@ class State(object):
         # Prevent exiting the state when current node changes
         kwargs["state_flags"]["exit_on_node_select"] = False
         self.kwargs = kwargs
+        self.kUtils =       KUtils()
         self.kSceneViewer = KSceneViewer(self)
         self.kCam =         KCam(self)
         self.kParms =       KParms(self)
@@ -124,8 +122,15 @@ class State(object):
 
 
     def onParmChangeEvent(self, kwargs):
-        name = kwargs["parm_name"]
-        self.kParms.stateToCam()
+        if kwargs["parm_name"] == "t":
+            self.kParms._t = self.kParms.parms["t"]["value"]
+            self.kCam.cam.parmTuple("t").set(self.kParms.t)
+        elif kwargs["parm_name"] == "p":
+            self.kParms._p = self.kParms.parms["p"]["value"]
+            self.kCam.cam.parmTuple("t").set(self.kParms.p)
+        elif kwargs["parm_name"] == "r":
+            self.kParms._r = self.kParms.parms["r"]["value"]
+            self.kCam.cam.parmTuple("r").set(self.kParms.r)
         # self.kGuides.update()
 
 
@@ -168,8 +173,6 @@ def createViewerStateTemplate():
     template.bindIcon("DESKTOP_application_sierra")
 
     # State parameters
-    template.bindParameter(hou.parmTemplateType.Menu,      name="mode",     label="Mode",           default_value="camera", menu_items=[("camera","Camera"), ("settings","Settings  ")])
-    template.bindParameter(hou.parmTemplateType.Separator, toolbox=False)
     template.bindParameter(hou.parmTemplateType.Menu,      name="layout",   label="Layout",         default_value="single", menu_items=[("doubleside","DoubleSide"), ("doublestack","DoubleStack"), ("quad","Quad"), ("quadbottomsplit","QuadBottomSplit"), ("quadleftsplit","QuadLeftSplit"), ("single","Single"), ("triplebottomsplit","TripleBottomSplit"), ("tripleleftsplit","TripleLeftSplit")])
     template.bindParameter(hou.parmTemplateType.Menu,      name="viewport", label="Viewport",       default_value="center", menu_items=[("center","Center")])
     template.bindParameter(hou.parmTemplateType.Menu,      name="view",     label="View",           default_value="persp",  menu_items=[("persp","Persp"), ("top","Top"), ("front","Front"), ("right","Right"), ("uv","UV"), ("bottom","Bottom"), ("back","Back"), ("left","Left")])
@@ -266,34 +269,34 @@ class KCam():
 
 
     def rotate(self, m):
-        self.state.kParms.r -= self.state.kParms.p
-        self.state.kParms.r *= m
-        self.state.kParms.r += self.state.kParms.p
+        self.state.kParms.t -= self.state.kParms.p
+        self.state.kParms.t *= m
+        self.state.kParms.t += self.state.kParms.p
         self.state.kParms.local_x *= m
         self.state.kParms.local_y *= m
         self.state.kParms.local_z *= m
 
 
     def rotateUp(self):
-        self.state.kParms.r[0] += self.state.kParms.delta_r
+        self.state.kParms.r = hou.Vector3(self.state.kParms.r[0] + self.state.kParms.delta_r, self.state.kParms.r[1], self.state.kParms.r[2])
         m = hou.hmath.buildRotateAboutAxis(self.state.kParms.local_x, self.state.kParms.delta_r)
         self.rotate(m)
 
 
     def rotateDown(self):
-        self.state.kParms.r[0] -= self.state.kParms.delta_r
+        self.state.kParms.r = hou.Vector3(self.state.kParms.r[0] - self.state.kParms.delta_r, self.state.kParms.r[1], self.state.kParms.r[2])
         m = hou.hmath.buildRotateAboutAxis(self.state.kParms.local_x, self.state.kParms.delta_r * -1)
         self.rotate(m)
 
 
     def rotateLeft(self):
-        self.state.kParms.r[1] -= self.state.kParms.delta_r
+        self.state.kParms.r = hou.Vector3(self.state.kParms.r[0], self.state.kParms.r[1] - self.state.kParms.delta_r, self.state.kParms.r[2])
         m = hou.hmath.buildRotateAboutAxis(self.state.kParms.global_y, self.state.kParms.delta_r * -1)
         self.rotate(m)
 
 
     def rotateRight(self):
-        self.state.kParms.r[1] += self.state.kParms.delta_r
+        self.state.kParms.r = hou.Vector3(self.state.kParms.r[0], self.state.kParms.r[1] + self.state.kParms.delta_r, self.state.kParms.r[2])
         m = hou.hmath.buildRotateAboutAxis(self.state.kParms.global_y, self.state.kParms.delta_r)
         self.rotate(m)
 
@@ -605,90 +608,94 @@ class KHud():
 
     def __init__(self, state):
         self.state = state
-        self.hud_state={
-            "controls": ("layout", "viewport", "set_view", "target", "r", "t", "ow", "dist", "vis", "focus"),
-            "control": "layout",
-            "layouts": ("DoubleSide", "DoubleStack", "Quad", "QuadBottomSplit", "QuadLeftSplit", "Single", "TripleBottomSplit", "TripleLeftSplit"),
-            "layout": "Single",
-            "viewports": ("0"),
-            "viewport": "0",
-            "views": ("top", "bottom", "left", "right", "front", "back", "persp", "none"),
-            "view": "persp",
-            "targets": ("cam", "pivot"),
-            "target": "cam",
-            "r": self.state.kParms.delta_r,
-            "t": self.state.kParms.delta_t,
-            "ow": self.state.kParms.delta_z,
-            "dist": self.state.kParms.delta_z,
-            "vis_arr": ("test1", "test2", "test3"),
-            "vis": "test1",
-            "focuss": ("test1", "test2", "test3"),
-            "focus": "test1"
-        }
 
         self.template = {
             "title": "test",
             "rows": [
-                {"id":"mode",        "type":"plain",       "label":"Mode", "key":"M"},
-                # Layout
-                {"id":"divider",     "type":"divider"},
-                {"id":"layout",      "type":"plain",       "label":"Layout"},
-                {"id":"layout_g",    "type":"choicegraph"},
-                {"id":"viewport",    "type":"plain",       "label":"Viewport"},
-                {"id":"viewport_g",  "type":"choicegraph"},
-                {"id":"set_view",    "type":"plain",       "label":"View"},
-                {"id":"set_view_g",  "type":"choicegraph"},
-                # Movement
-                {"id":"divider0",    "type":"divider"},
-                {"id":"target",      "type":"plain",       "label":"Target"},
-                {"id":"target_g",    "type":"choicegraph"},
+                {"id":"layout",     "type":"plain",       "label":"Layout",   "value":"Single", "key":"Ctl+l"},
+                {"id":"layout_g",   "type":"choicegraph", "count":8},
+                {"id":"viewport",   "type":"plain",       "label":"Viewport", "value":"0",      "key":"Ctl+v"},
+                {"id":"viewport_g", "type":"choicegraph", "count":4},
+                {"id":"view"   ,    "type":"plain",       "label":"View",     "value":"Persp",  "key":"v"},
+                {"id":"view_g",     "type":"choicegraph", "count":8},
+                {"id":"divider0",   "type":"divider"},
+                {"id":"target",     "type":"plain",       "label":"Target",   "value":"Cam",    "key":"t"},
+                {"id":"target_g",   "type":"choicegraph", "count":2},
                 # Delta
-                {"id":"divider1",    "type":"divider"},
-                {"id":"r",           "type":"plain",       "label":"Delta r"},
-                {"id":"t",           "type":"plain",       "label":"Delta t"},
-                {"id":"dist",        "type":"plain",       "label":"Delta d"},
-                {"id":"ow",          "type":"plain",       "label":"Delta ow"},
+                {"id":"divider1",   "type":"divider"},
+                {"id":"r",          "type":"plain",       "label":"Delta r"},
+                {"id":"t",          "type":"plain",       "label":"Delta t"},
+                {"id":"z",          "type":"plain",       "label":"Delta z"},
+                {"id":"ow",         "type":"plain",       "label":"Delta ow"},
                 # Vis
-                {"id":"divider2",    "type":"divider"},
-                {"id":"vis",         "type":"plain",       "label":"Vis"},
+                {"id":"divider2",   "type":"divider"},
+                {"id":"vis",        "type":"plain",       "label":"Vis"},
                 # Focus
-                {"id":"divider3",    "type":"divider"},
-                {"id":"focus",       "type":"plain",       "label":"Focus", "value":0},
-                {"id":"focus_g",     "type":"choicegraph", "count":10}
+                {"id":"divider3",   "type":"divider"},
+                {"id":"focus",      "type":"plain",       "label":"Focus", "value":0},
+                {"id":"focus_g",    "type":"choicegraph", "count":10}
             ]
         }
+
+        self.hud_state = {
+            "controls":  ("layout", "viewport", "set_view", "target", "r", "t", "ow", "dist", "vis", "focus"),
+            "control":   "layout",
+            "layouts":   ("DoubleSide", "DoubleStack", "Quad", "QuadBottomSplit", "QuadLeftSplit", "Single", "TripleBottomSplit", "TripleLeftSplit"),
+            "layout":    "Single",
+            "viewports": ("0"),
+            "viewport":  "0",
+            "views":     ("top", "bottom", "left", "right", "front", "back", "persp", "none"),
+            "view":      "persp",
+            "targets":   ("cam", "pivot"),
+            "target":    "cam",
+            "r":         self.state.kParms.delta_r,
+            "t":         self.state.kParms.delta_t,
+            "ow":        self.state.kParms.delta_z,
+            "z":      self.state.kParms.delta_z,
+            "vis_arr":   ("test1", "test2", "test3"),
+            "vis":       "test1",
+            "focuss":    ("test1", "test2", "test3"),
+            "focus":     "test1"
+        }
+
+        self.state.sceneViewer.hudInfo(template=self.template)
+        self.update()
 
 
     def update(self):
         # Update graph bar count
-        self.updateGraph()
-        # Find the new update values.
-        updates = {}
-        for row in self.template["rows"]:
+        # self.updateGraph()
+
+        updates = {
+            "r": self.state.kParms.delta_r,
+            "t": self.state.kParms.delta_t,
+            "z": self.state.kParms.delta_z,
+            "ow": self.state.kParms.delta_z
+        }
+
+        self.template["rows"][3]["count"] = 3 # layout_g
+
+        # for row in self.template["rows"]:
             # Skip processing dividers.
-            if "divider" not in row["id"]:
-                if row["id"] == "mode": updates["mode"] = {"value": self.state.mode}
+        #     if "divider" not in row["id"]:
 
-                # Graph
-                elif row["id"][-2:] == "_g":
-                    control_name = row["id"][0:-2]
-                    control_value = self.hud_state[control_name]
-                    control_values = self.hud_state[control_name + "s"]
+        #         # Graph
+        #         elif row["id"][-2:] == "_g":
+        #             control_name = row["id"][0:-2]
+        #             control_value = self.hud_state[control_name]
+        #             control_values = self.hud_state[control_name + "s"]
 
-                    updates[row["id"]] = {"value": control_values.index(control_value)}
+        #             updates[row["id"]] = {"value": control_values.index(control_value)}
 
-                # Other
-                else:
-                    control_name = row["id"]
-                    control_value = self.hud_state[control_name]
-                    updates[row["id"]] = {"value": control_value}
+        #         # Other
+        #         else:
+        #             control_name = row["id"]
+        #             control_value = self.hud_state[control_name]
+        #             updates[row["id"]] = {"value": control_value}
 
-        # Add selection indicator in setting mode
-        if self.state.mode == "settings":
-            updates[self.hud_state["control"]]["value"] = "[" + updates[self.hud_state["control"]]["value"] + "]"
+        #     updates[self.hud_state["control"]]["value"] = "[" + updates[self.hud_state["control"]]["value"] + "]"
         # Apply
-        # self.state.scene_viewer.hudInfo(hud_values=updates)
-        self.state.scene_viewer.hudInfo(template=self.template)
+        self.state.sceneViewer.hudInfo(hud_values=updates)
 
 
     def updateGraph(self):
@@ -704,78 +711,6 @@ class KHud():
                     arr = self.hud_state[row["id"][0:-2] + "s"]
                 # Set the number of bars in the graph.
                 self.template["rows"][i]["count"] = len(arr)
-
-
-    def hudControlNext(self):
-        self.hud_state["huds"] = self.hud_names
-        self.hud_state["hud"] = self.hud_name
-        controls = self.hud_state["controls"]
-        control = self.hud_state["control"]
-        control_index = controls.index(control)
-        control_index += 1
-        control_index %= len(controls)
-        new_control = controls[control_index]
-        self.hud_state["control"] = new_control
-        self.hud_name = self.hud_state["hud"]
-        self.update()
-
-
-    def hudControlPrev(self):
-        self.hud_state["huds"] = self.hud_names
-        self.hud_state["hud"] = self.hud_name
-        controls = self.hud_state["controls"]
-        control = self.hud_state["control"]
-        control_index = controls.index(control)
-        control_index -= 1
-        control_index %= len(controls)
-        new_control = controls[control_index]
-        self.hud_state["control"] = new_control
-        self.hud_name = self.hud_state["hud"]
-        self.update()
-
-
-    def nextMode(self):
-        index = self.state.kUtils.arrNext(self.state.modes, self.state.mode)
-        self.state.mode = self.state.modes[index]
-        self.update()
-
-
-    def hudOptionNext(self):
-        control = self.hud_state["control"]
-        values = self.hud_state[control + "s"]
-        value = self.hud_state[control]
-        index = values.index(value)
-        if control == "attr":
-            self.setFocusAttr()
-        else:
-            index += 1
-            index %= len(values)
-            new_value = values[index]
-            self.hud_state[control] = new_value
-        # Extra handling
-        if control == "layout":           self.viewportLayoutSet()
-        elif control == "viewport": self.viewportFocus()
-        elif control == "set_view":       self.setView()
-        self.update()
-
-
-    def hudOptionPrev(self):
-        control = self.hud_state["control"]
-        values = self.hud_state[control + "s"]
-        value = self.hud_state[control]
-        index = values.index(value)
-        if control == "attr":
-            self.setFocusAttr()
-        else:
-            index -= 1
-            index %= len(values)
-            new_value = values[index]
-            self.hud_state[control] = new_value
-        # Extra handling
-        if control == "layout":     self.viewportLayoutSet()
-        elif control == "viewport": self.viewportFocus()
-        elif control == "set_view": self.setView()
-        self.update()
 
 
 
@@ -854,12 +789,12 @@ class KParms():
     @r.setter
     def r(self, val):
         self._r = val
-        self.parms["r"]["value"] = val
+        self.parms["r"]["value"] = list(val)
         self.state.kCam.cam.parmTuple("r").set(val)
     @t.setter
     def t(self, val):
         self._t = val
-        self.parms["t"]["value"] = val
+        self.parms["t"]["value"] = list(val)
         self.state.kCam.cam.parmTuple("t").set(val)
     @dist.setter
     def dist(self, val):
@@ -869,6 +804,7 @@ class KParms():
     def ow(self, val):
         self._ow = val
         self.parms["ow"]["value"] = val
+        self.state.kCam.cam.parm("orthowidth").set(val)
     @target.setter
     def target(self, val):
         self._target = val
@@ -950,6 +886,8 @@ class KSceneViewer():
     def curViewport(self):
         return self.sceneViewer.curViewport()
 
+    def nextViewport(self):
+        return
 
     def setViewportLayout(self, layout):
         self.sceneViewer.setViewportLayout(layout)
@@ -969,7 +907,7 @@ class KSceneViewer():
 
 
 
-class KUtil():
+class KUtils():
 
     def __init__(self):
         return
