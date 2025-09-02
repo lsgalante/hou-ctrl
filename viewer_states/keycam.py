@@ -44,7 +44,6 @@ class State(object):
         # Prevent exiting the state when current node changes
         kwargs["state_flags"]["exit_on_node_select"] = False
         self.kwargs = kwargs
-        self.kUtils =       KUtils()
         self.kSceneViewer = KSceneViewer(self)
         self.kCam =         KCam(self)
         self.kParms =       KParms(self)
@@ -68,12 +67,14 @@ class State(object):
             "j": self.kCam.rotateDown,
             "k": self.kCam.rotateUp,
             "l": self.kCam.rotateRight,
+            "v": self.kSceneViewer.nextView,
             "Shift+_": self.kCam.orthoZoomOut,
             "Shift++": self.kCam.orthoZoomIn,
             "Shift+h": self.kCam.translateLeft,
             "Shift+j": self.kCam.translateDown,
             "Shift+k": self.kCam.translateUp,
-            "Shift+l": self.kCam.translateDown
+            "Shift+l": self.kCam.translateDown,
+            "Ctrl+l": self.kSceneViewer.nextLayout
         }
 
         key = kwargs["ui_event"].device().keyString()
@@ -233,12 +234,12 @@ class KCam():
 
 
     def lock(self):
-        self.state.kSceneViewer.viewport.setCamera(self.cam)
-        self.state.kSceneViewer.viewport.lockCameraToView(1)
+        self.state.kSceneViewer.viewport().setCamera(self.cam)
+        self.state.kSceneViewer.viewport().lockCameraToView(1)
 
 
     def unlock(self):
-        self.state.kSceneViewer.viewport.lockCameraToView(0)
+        self.state.kSceneViewer.viewport().lockCameraToView(0)
 
 
     def movePivot(self):
@@ -365,13 +366,12 @@ class KCam():
 
 class KDefaultCam():
 
-    def __init__(self):
+    def __init__(self, state):
         return
 
 
     def frame(self):
-        viewports = self.sceneViewer.viewports()
-        for viewport in viewports:
+        for viewport in self.kSceneViewer.viewports():
             cam = viewport.camera()
             # Is cam default or node.
             if cam == None:
@@ -612,106 +612,55 @@ class KHud():
         self.template = {
             "title": "test",
             "rows": [
-                {"id":"layout",     "type":"plain",       "label":"Layout",   "value":"Single", "key":"Ctl+l"},
-                {"id":"layout_g",   "type":"choicegraph", "count":8},
-                {"id":"viewport",   "type":"plain",       "label":"Viewport", "value":"0",      "key":"Ctl+v"},
-                {"id":"viewport_g", "type":"choicegraph", "count":4},
-                {"id":"view"   ,    "type":"plain",       "label":"View",     "value":"Persp",  "key":"v"},
-                {"id":"view_g",     "type":"choicegraph", "count":8},
-                {"id":"divider0",   "type":"divider"},
-                {"id":"target",     "type":"plain",       "label":"Target",   "value":"Cam",    "key":"t"},
-                {"id":"target_g",   "type":"choicegraph", "count":2},
+                {"id": "layout",     "type": "plain",       "label": "Layout",   "value": "Single", "key": "Ctrl + L"},
+                {"id": "layout_g",   "type": "choicegraph", "count": 8},
+                {"id": "viewport",   "type": "plain",       "label": "Viewport", "value": "0",      "key": "Ctrl + V"},
+                {"id": "viewport_g", "type": "choicegraph", "count": 4},
+                {"id": "view"   ,    "type": "plain",       "label": "View",     "value": "Persp",  "key": "V"},
+                {"id": "view_g",     "type": "choicegraph", "count": 8},
+                {"id": "divider0",   "type": "divider"},
+                {"id": "target",     "type": "plain",       "label": "Target",   "value": "Cam",    "key": "T"},
+                {"id": "target_g",   "type": "choicegraph", "count": 2},
                 # Delta
-                {"id":"divider1",   "type":"divider"},
-                {"id":"r",          "type":"plain",       "label":"Delta r"},
-                {"id":"t",          "type":"plain",       "label":"Delta t"},
-                {"id":"z",          "type":"plain",       "label":"Delta z"},
-                {"id":"ow",         "type":"plain",       "label":"Delta ow"},
+                {"id": "divider1",   "type": "divider"},
+                {"id": "r",          "type": "plain",       "label": "Delta r"},
+                {"id": "t",          "type": "plain",       "label": "Delta t"},
+                {"id": "z",          "type": "plain",       "label": "Delta z"},
+                {"id": "ow",         "type": "plain",       "label": "Delta ow"},
                 # Vis
-                {"id":"divider2",   "type":"divider"},
-                {"id":"vis",        "type":"plain",       "label":"Vis"},
+                {"id": "divider2",   "type": "divider"},
+                {"id": "vis",        "type": "plain",       "label": "Vis"},
                 # Focus
-                {"id":"divider3",   "type":"divider"},
-                {"id":"focus",      "type":"plain",       "label":"Focus", "value":0},
-                {"id":"focus_g",    "type":"choicegraph", "count":10}
+                {"id": "divider3",   "type": "divider"},
+                {"id": "focus",      "type": "plain",       "label": "Focus", "value": 0},
+                {"id": "focus_g",    "type": "choicegraph", "count": 10}
             ]
         }
 
-        self.hud_state = {
-            "controls":  ("layout", "viewport", "set_view", "target", "r", "t", "ow", "dist", "vis", "focus"),
-            "control":   "layout",
-            "layouts":   ("DoubleSide", "DoubleStack", "Quad", "QuadBottomSplit", "QuadLeftSplit", "Single", "TripleBottomSplit", "TripleLeftSplit"),
-            "layout":    "Single",
-            "viewports": ("0"),
-            "viewport":  "0",
-            "views":     ("top", "bottom", "left", "right", "front", "back", "persp", "none"),
-            "view":      "persp",
-            "targets":   ("cam", "pivot"),
-            "target":    "cam",
-            "r":         self.state.kParms.delta_r,
-            "t":         self.state.kParms.delta_t,
-            "ow":        self.state.kParms.delta_z,
-            "z":      self.state.kParms.delta_z,
-            "vis_arr":   ("test1", "test2", "test3"),
-            "vis":       "test1",
-            "focuss":    ("test1", "test2", "test3"),
-            "focus":     "test1"
-        }
-
-        self.state.sceneViewer.hudInfo(template=self.template)
         self.update()
 
 
     def update(self):
-        # Update graph bar count
-        # self.updateGraph()
+        if self.state.kSceneViewer.layout() == hou.geometryViewportLayout.DoubleSide:          self.template["rows"][3]["count"] = 2
+        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.DoubleStack:       self.template["rows"][3]["count"] = 2
+        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.Quad:              self.template["rows"][3]["count"] = 4
+        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.QuadBottomSplit:   self.template["rows"][3]["count"] = 4
+        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.QuadLeftSplit:     self.template["rows"][3]["count"] = 4
+        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.TripleBottomSplit: self.template["rows"][3]["count"] = 3
+        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.TripleLeftSplit:   self.template["rows"][3]["count"] = 3
+        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.Single:            self.template["rows"][3]["count"] = 1
+        self.state.sceneViewer.hudInfo(template=self.template)
 
         updates = {
             "r": self.state.kParms.delta_r,
             "t": self.state.kParms.delta_t,
             "z": self.state.kParms.delta_z,
-            "ow": self.state.kParms.delta_z
+            "ow": self.state.kParms.delta_z,
+            "layout": str(self.state.kSceneViewer.layout())[23:-1],
+            "layout_g": self.state.kSceneViewer.layouts().index(self.state.kSceneViewer.layout())
         }
 
-        self.template["rows"][3]["count"] = 3 # layout_g
-
-        # for row in self.template["rows"]:
-            # Skip processing dividers.
-        #     if "divider" not in row["id"]:
-
-        #         # Graph
-        #         elif row["id"][-2:] == "_g":
-        #             control_name = row["id"][0:-2]
-        #             control_value = self.hud_state[control_name]
-        #             control_values = self.hud_state[control_name + "s"]
-
-        #             updates[row["id"]] = {"value": control_values.index(control_value)}
-
-        #         # Other
-        #         else:
-        #             control_name = row["id"]
-        #             control_value = self.hud_state[control_name]
-        #             updates[row["id"]] = {"value": control_value}
-
-        #     updates[self.hud_state["control"]]["value"] = "[" + updates[self.hud_state["control"]]["value"] + "]"
-        # Apply
         self.state.sceneViewer.hudInfo(hud_values=updates)
-
-
-    def updateGraph(self):
-        # Calculate the number of bars in a graph based on the length of the appropriate array
-        for i, row in enumerate(self.template["rows"]):
-            # If row ID indicates it is a graph
-            if row["id"][-2:] == "_g":
-                arr = None
-                # Count the number of items in the array
-                if row["id"] == "hud_g":
-                    arr = self.hud_names
-                else:
-                    arr = self.hud_state[row["id"][0:-2] + "s"]
-                # Set the number of bars in the graph.
-                self.template["rows"][i]["count"] = len(arr)
-
 
 
 class KParms():
@@ -781,6 +730,7 @@ class KParms():
     @property
     def viewport(self): return self._viewport
 
+
     @p.setter
     def p(self, val):
         self._p = val
@@ -825,15 +775,7 @@ class KParms():
     def layout(self, val):
         self._layout = val
         self.parms["layout"]["value"] = val
-        indices = (0, 0)
-        if val == 0:   self.state.kSceneViewer.setViewportLayout(hou.geometryViewportLayout.DoubleSide);        indices = (2, 3)
-        elif val == 1: self.state.kSceneViewer.setViewportLayout(hou.geometryViewportLayout.DoubleStack);       indices = (3, 0)
-        elif val == 2: self.state.kSceneViewer.setViewportLayout(hou.geometryViewportLayout.Quad);              indices = (2, 3, 1, 0)
-        elif val == 3: self.state.kSceneViewer.setViewportLayout(hou.geometryViewportLayout.QuadBottomSplit);   indices = (3, 2, 1, 0)
-        elif val == 4: self.state.kSceneViewer.setViewportLayout(hou.geometryViewportLayout.QuadLeftSplit);     indices = (2, 1, 0, 3)
-        elif val == 5: self.state.kSceneViewer.setViewportLayout(hou.geometryViewportLayout.Single);            indices = (3)
-        elif val == 6: self.state.kSceneViewer.setViewportLayout(hou.geometryViewportLayout.TripleBottomSplit); indices = (3, 1, 0)
-        elif val == 7: self.state.kSceneViewer.setViewportLayout(hou.geometryViewportLayout.TripleLeftSplit);   indices = (2, 3, 1)
+        self.state.kSceneViewer.setLayout(self.state.kSceneViewer.layouts()[val])
     @viewport.setter
     def set_viewport(self, val):
         self._viewport = val
@@ -877,25 +819,35 @@ class KSceneViewer():
     def __init__(self, state):
         self.state = state
         self.sceneViewer = state.sceneViewer
-        self.viewport = self.curViewport()
-        self.viewports = self.viewports()
-        self.viewports = self.viewports[::-1]
-        self.curLayout = self.viewportLayout()
 
+    def layout(self):
+        return self.sceneViewer.viewportLayout()
 
-    def curViewport(self):
-        return self.sceneViewer.curViewport()
+    def layouts(self):
+        return (hou.geometryViewportLayout.DoubleSide, hou.geometryViewportLayout.DoubleStack, hou.geometryViewportLayout.Quad, hou.geometryViewportLayout.QuadBottomSplit, hou.geometryViewportLayout.QuadLeftSplit, hou.geometryViewportLayout.TripleBottomSplit, hou.geometryViewportLayout.TripleLeftSplit, hou.geometryViewportLayout.Single)
+
+    def layoutIndices(self):
+        return ((2,3), (3,0), (2,3,1,0), (3,2,1,0), (2,1,0,3), (3,1,0), (2,3,1), (3))
+
+    def nextLayout(self):
+        index = self.layouts().index(self.layout())
+        new_index = (index + 1) % len(self.layouts())
+        self.setLayout(self.layouts()[new_index])
+        self.state.kHud.update()
+        return
+
+    def nextView(self):
+        return
 
     def nextViewport(self):
         return
 
-    def setViewportLayout(self, layout):
+    def setLayout(self, layout):
+        print(layout)
         self.sceneViewer.setViewportLayout(layout)
 
-
-    def viewportLayout(self):
-        return self.sceneViewer.viewportLayout()
-
+    def viewport(self):
+        return self.sceneViewer.curViewport()
 
     def viewports(self):
         return self.sceneViewer.viewports()
@@ -904,25 +856,6 @@ class KSceneViewer():
     def setType(self, viewportType):
         viewport = self.sceneViewer.findViewport(self.layout_state["viewport"])
         viewport.changeType(viewportType)
-
-
-
-class KUtils():
-
-    def __init__(self):
-        return
-
-
-    def arrNext(self, arr, cur):
-        index = arr.index(cur)
-        index = (index + 1) % len(arr)
-        return index
-
-
-    def arrPrev(self, arr, cur):
-        index = arr.index(cur)
-        index = (index - 1) % len(arr)
-        return index
 
 
 
