@@ -1,32 +1,31 @@
 import hou
-import hctl_utils as hcu
-from PySide6 import QtCore, QtGui, QtWidgets
-from importlib import reload
+from PySide6 import QtGui, QtWidgets
+from PySide6.QtWidgets import QLabel, QShortcut, QBoxLayout
 
-class resizeWidget(QtWidgets.QDialog):
+
+class Dialog(QtWidgets.QDialog):
     def __init__(self, pane):
-        super(resizeWidget, self).__init__(hou.qt.mainWindow())
-        reload(hcu)
+        super(Dialog, self).__init__(hou.qt.mainWindow())
 
         self.pane = pane
 
         # Keys
-        key_j = QtWidgets.QShortcut(QtGui.QKeySequence("J"), self)
+        key_j = QShortcut(QtGui.QKeySequence("J"), self)
         key_j.activated.connect(self.onJ)
-        key_k = QtWidgets.QShortcut(QtGui.QKeySequence("K"), self)
+        key_k = QShortcut(QtGui.QKeySequence("K"), self)
         key_k.activated.connect(self.onK)
 
 
-        self.paneLabel = QtWidgets.QLabel()
+        self.paneLabel = QLabel()
         self.paneLabel.setText("Pane: " + str(pane.currentTab().type()))
 
-        self.isMaximizedLabel = QtWidgets.QLabel()
+        self.isMaximizedLabel = QLabel()
         self.isMaximizedLabel.setText("Maximized: " + str(pane.isMaximized))
 
-        self.splitFractionLabel = QtWidgets.QLabel()
+        self.splitFractionLabel = QLabel()
         self.splitFractionLabel.setText("Split Fraction: " + str(pane.getSplitFraction()))
 
-        self.layout = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.TopToBottom)
+        self.layout = QBoxLayout(QBoxLayout.Direction.TopToBottom)
         self.layout.addWidget(self.paneLabel)
         self.layout.addWidget(self.isMaximizedLabel)
         self.layout.addWidget(self.splitFractionLabel)

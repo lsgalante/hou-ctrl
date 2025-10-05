@@ -1,10 +1,9 @@
 {
-    "pythonVersion": "3.10",
-    "pythonPlatform": "darwin",
-    "pythonPath": "/Applications/Houdini/Current/Frameworks/Python.framework/Versions/Current/bin/python3.11",
-    "extraPaths": [
-        "/Applications/Houdini/Current/Frameworks/Houdini.framework/Versions/Current/Resources/houdini/python3.11libs",
-        "./scripts/python"
-    ],
-    "typeCheckingMode": "off"
+    "reportMissingImports": "none",
+    "reportMissingParameterType": "none",
+    "reportUnknownParameterType": "none",
+    "reportUnannotatedClassAttribute": "none",
+    "reportUnknownVariableType": "none",
+    "reportUnknownMemberType": "none",
+    "reportUnknownArgumentType": "none"
 }

@@ -9,18 +9,17 @@ from importlib import reload
 class Dialog(QtWidgets.QDialog):
     def __init__(self):
         super(Dialog, self).__init__( hou.qt.mainWindow() )
-        # Update class attributes
-        self.update()
-        # Window appearance
         self.resize(900, 400)
         self.setWindowTitle("hctl")
         self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint)
-        # Finally, focus the input line AFTER setting window flags
+
+        self.update()
+
+        # Focus the input line AFTER setting window flags
         self.functionPanel.inputLine.setFocus()
 
 
     def closeEvent(self, event):
-        # Unparent from main houdini window when closing
         self.setParent(None)
 
 
@@ -46,12 +45,6 @@ class Dialog(QtWidgets.QDialog):
         # Top-level layout
         self.mainLayout = QtWidgets.QHBoxLayout()
         # Control columns
-        self.sessionControls = SessionControls(self)
-        self.mainLayout.addLayout(self.sessionControls)
-        self.paneControls = PaneControls(self)
-        self.mainLayout.addLayout(self.paneControls)
-        self.tabControls = TabControls(self)
-        self.mainLayout.addLayout(self.tabControls)
         # Functions column
         self.functionPanel = FunctionPanel(self)
         self.mainLayout.addWidget(self.functionPanel)
@@ -97,18 +90,17 @@ class Dialog(QtWidgets.QDialog):
 class ControlPanel(QtWidgets.QFrame):
     def __init__(self, owner):
         super().__init__()
+        self.setFrameShape(QtWidgets.QFrame.Panel)
+        self.setLineWidth(1)
+        self.setLayout(layout)
+        self.setFixedWidth(600)
         self.owner = owner
+
         # Control columns
         layout = QtWidgets.QHBoxLayout()
         layout.addLayout(self.SessionControls(self))
         layout.addLayout(self.PaneControls(self))
         layout.addLayout(self.TabControls(self))
-        #
-        self.setFrameShape(QtWidgets.QFrame.Panel)
-        self.setLineWidth(1)
-        self.setLayout(layout)
-        self.setFixedWidth(600)
-
 
 
 
@@ -127,39 +119,39 @@ class SessionControls(QtWidgets.QVBoxLayout):
         # Autosave
         self.addWidget(self.AutoSaveCheckBox(owner))
 
-        # Separator
-        sep1 = QtWidgets.QFrame()
-        sep1.setFrameShape(QtWidgets.QFrame.HLine)
-        self.addWidget(sep1)
-
         # Toggle all menus
         menusButton = QtWidgets.QPushButton("Menus")
         menusButton.clicked.connect(owner.hctlSession.toggleMenus)
-        menusButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        menusButton.setStyleSheet("text-align: left; padding: 2 2 2 10")
+        menusButton.setFlat(1)
         self.addWidget(menusButton)
 
         # Panetab visibility
         paneTabsButton = QtWidgets.QPushButton("Pane Tabs")
-        paneTabsButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        paneTabsButton.setStyleSheet("text-align: left; padding: 2 2 2 10")
         paneTabsButton.clicked.connect(owner.hctlSession.togglePaneTabs)
+        paneTabsButton.setFlat(1)
         self.addWidget(paneTabsButton)
 
         # Toggle all network controls
         networkControlsButton = QtWidgets.QPushButton("Network Controls")
         networkControlsButton.clicked.connect(owner.hctlSession.toggleNetworkControls)
-        networkControlsButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        networkControlsButton.setStyleSheet("text-align: left; padding: 2 2 2 10")
+        networkControlsButton.setFlat(1)
         self.addWidget(networkControlsButton)
 
         # Stowbar visibility
         stowbarsButton = QtWidgets.QPushButton("Stowbars")
         stowbarsButton.clicked.connect(owner.hctlSession.toggleStowbars)
-        stowbarsButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        stowbarsButton.setStyleSheet("text-align: left; padding: 2 2 2 10")
+        stowbarsButton.setFlat(1)
         self.addWidget(stowbarsButton)
 
         # Reload color schems
         reloadColorsButton = QtWidgets.QPushButton("Reload colors")
         reloadColorsButton.clicked.connect(owner.hctlSession.reloadColorSchemes)
-        reloadColorsButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        reloadColorsButton.setStyleSheet("text-align: left; padding: 2 2 2 10")
+        reloadColorsButton.setFlat(1)
         self.addWidget(reloadColorsButton)
 
         # Fill empty space
@@ -195,33 +187,32 @@ class PaneControls(QtWidgets.QVBoxLayout):
         # Tab switcher
         self.addWidget(self.PaneTabMenu(owner))
 
-        # Separator
-        sep1 = QtWidgets.QFrame()
-        sep1.setFrameShape(QtWidgets.QFrame.HLine)
-        self.addWidget(sep1)
-
         # Maximize
         maximizeButton = QtWidgets.QPushButton("Maximize")
-        maximizeButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        maximizeButton.setStyleSheet("text-align: left; padding: 2 2 2 10")
         maximizeButton.clicked.connect(owner.hctlPane.toggleMaximized)
+        maximizeButton.setFlat(1)
         self.addWidget(maximizeButton)
 
         # Expand
         expandButton = QtWidgets.QPushButton("Expand")
-        expandButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        expandButton.setStyleSheet("text-align: left; padding: 2 2 2 10")
         expandButton.clicked.connect(owner.hctlPane.expand)
+        expandButton.setFlat(1)
         self.addWidget(expandButton)
 
         # Contract
         contractButton = QtWidgets.QPushButton("Contract")
-        contractButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        contractButton.setStyleSheet("text-align: left; padding: 2 2 2 10")
         contractButton.clicked.connect(owner.hctlPane.contract)
+        contractButton.setFlat(1)
         self.addWidget(contractButton)
 
         # Toggle pane tabs
         paneTabsButton = QtWidgets.QPushButton("Pane Tabs")
-        paneTabsButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        paneTabsButton.setStyleSheet("text-align: left; padding: 2 2 2 10")
         paneTabsButton.clicked.connect(owner.hctlPane.toggleTabs)
+        paneTabsButton.setFlat(1)
         self.addWidget(paneTabsButton)
 
         # Fill empty space
@@ -252,27 +243,23 @@ class TabControls(QtWidgets.QVBoxLayout):
         sep0.setFrameShape(QtWidgets.QFrame.HLine)
         self.addWidget(sep0)
 
-        # Tab type menu
-        self.addWidget(self.TabTypeMenu(owner))
-
         # Pin
         self.addWidget(self.PinCheckBox(owner))
 
-        # Separator
-        sep1 = QtWidgets.QFrame()
-        sep1.setFrameShape(QtWidgets.QFrame.HLine)
-        self.addWidget(sep1)
+        # Tab type menu
+        self.addWidget(self.TabTypeMenu(owner))
 
         # Network controls
         networkControlsButton = QtWidgets.QPushButton("Network Controls")
-        networkControlsButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+        networkControlsButton.setStyleSheet("text-align: left; padding: 2 2 2 10")
         networkControlsButton.clicked.connect(owner.hctlPaneTab.toggleNetworkControls)
+        networkControlsButton.setFlat(1)
         self.addWidget(networkControlsButton)
 
         # Conditionals
         if self.owner.hctlPaneTab.type() == hou.paneTabType.SceneViewer:
             keycamButton = QtWidgets.QPushButton("Keycam")
-            keycamButton.setStyleSheet("text-align: left; padding: 4 4 4 10")
+            keycamButton.setStyleSheet("text-align: left; padding: 2 2 2 10")
             keycamButton.clicked.connect(owner.hctlSceneViewer.keycam)
             self.addWidget(keycamButton)
 

@@ -177,7 +177,7 @@ class editorBindings:
 
 
     def zoomIn(self):
-        scale = (0.5, 0.5)
+        scale = (0.75, 0.75)
         self.visible_bounds.scale(scale)
         self.editor.setVisibleBounds(self.visible_bounds)
         print(self.zoom_level)
@@ -189,6 +189,6 @@ class editorBindings:
 
 
     def zoomOut(self):
-        scale = (2, 2)
+        scale = (1.25, 1.25)
         self.visible_bounds.scale(scale)
         self.editor.setVisibleBounds(self.visible_bounds)

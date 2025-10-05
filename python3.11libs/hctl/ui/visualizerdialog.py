@@ -1,34 +1,33 @@
 import hou
 from fuzzyfinder import fuzzyfinder
-from importlib import reload
-import hctl_utils as hcu
-from PySide6 import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore
+from PySide6.QtWidgets import QListWidget, QListWidgetItem, QDialog, QLineEdit, QBoxLayout
 from PySide6.QtCore import Qt, QEvent
 
-class filterBox(QtWidgets.QLineEdit):
-    # Key handler
-    onTab = QtCore.Signal()
+
+class filterBox(QLineEdit):
+    def __init__(self):
+        # Key handler
+        self.onTab = QtCore.Signal()
+
 
     def event(self, event):
-
         if event.type() == QEvent.Type.KeyPress:
             key = event.key()
-
             if key == Qt.Key_Tab:
                 self.onTab.emit()
                 return True
+        return QLineEdit.event(self, event)
 
-        return QtWidgets.QLineEdit.event(self, event)
 
 
-class visualizerMenu(QtWidgets.QDialog):
-
+class visualizerMenu(QDialog):
     def __init__(self):
         super(visualizerMenu, self).__init__(hou.qt.mainWindow())
-        reload(hcu)
 
         # Resources
-        self.viewport = hcu.paneTabGetCurViewport()
+        self.viewport = hou.session.hctlSession.viewport()
+        self.vis_arr = self.viewport.visualizers()
 
         # Filter box
         self.filterBox = filterBox()
@@ -36,15 +35,11 @@ class visualizerMenu(QtWidgets.QDialog):
         self.filterBox.returnPressed.connect(self.itemToggle)
         self.filterBox.textEdited.connect(self.listFilter)
 
-        # Resources
-        self.vis_arr = hcu.viewportGetVisualizers()
-        self.curViewport = hcu.paneTabGetCurViewport()
-
         # List widget
-        self.listWidget = QtWidgets.QListWidget()
+        self.listWidget = QListWidget()
         if self.vis_arr:
             for vis in self.vis_arr:
-                listItem = QtWidgets.QListWidgetItem()
+                listItem = QListWidgetItem()
                 itemLabel = vis.label()
                 itemState = vis.isActive(self.curViewport)
 
@@ -60,7 +55,7 @@ class visualizerMenu(QtWidgets.QDialog):
         self.listWidget.itemClicked.connect(self.itemToggle)
 
         # Layout
-        self.layout = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.TopToBottom)
+        self.layout = QBoxLayout(QBoxLayout.Direction.TopToBottom)
         self.layout.addWidget(self.filterBox)
         self.layout.addWidget(self.listWidget)
         self.setLayout(self.layout)

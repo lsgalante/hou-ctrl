@@ -1,30 +1,30 @@
 import hou
 from fuzzyfinder import fuzzyfinder
-from importlib import reload
-import hctl_utils as hcu
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore, QtWidgets
+from PySide6.QtWidgets import QLineEdit, QDialog
 
-class inputBox(QtWidgets.QLineEdit):
+
+class inputBox(QLineEdit):
     onTab = QtCore.Signal()
     def event(self, event):
         if event.type() == QtCore.QEvent.Type.KeyPress and event.key() == QtCore.Qt.Key_Tab:
             self.onTab.emit()
             return True
         else:
-            return QtWidgets.QLineEdit.event(self, event)
+            return QLineEdit.event(self, event)
 
-class newTabMenu(QtWidgets.QDialog):
-    def __init__(self):	
+
+class newTabMenu(QDialog):
+    def __init__(self):
         super(newTabMenu, self).__init__(hou.qt.mainWindow())
-        reload(hcu)
 
-        # input box
-        self.inputBox = inputBox() 
+        # Input box
+        self.inputBox = inputBox()
         self.inputBox.onTab.connect(self.nextItem)
         self.inputBox.textEdited.connect(self.filter)
         self.inputBox.returnPressed.connect(self.execAction)
 
-        # item array
+        # Item array
         self.items = []
         self.items.append(("Geometry Spreadsheet", hou.paneTabType.DetailsView))
         self.items.append(("Network Editor",       hou.paneTabType.NetworkEditor))
@@ -32,31 +32,34 @@ class newTabMenu(QtWidgets.QDialog):
         self.items.append(("Python Shell",         hou.paneTabType.PythonShell))
         self.items.append(("Scene Viewer",         hou.paneTabType.SceneViewer))
 
-        # list widget
+        # List widget
         self.listWidget = QtWidgets.QListWidget()
         for item in self.items:
             self.listWidget.addItem(item[0])
         self.listWidget.itemClicked.connect(self.execAction)
 
-        # make layout
+        # Make layout
         self.layout = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.TopToBottom)
         self.layout.addWidget(self.inputBox)
-        self.layout.addWidget(self.listWidget) 
+        self.layout.addWidget(self.listWidget)
         self.setLayout(self.layout)
         self.setIndex(0)
+
 
     def closeEvent(self, event):
         print("closing")
         self.setParent(None)
 
+
     def execAction(self):
-        current_item = self.listWidget.selectedItems()[0]       
+        current_item = self.listWidget.selectedItems()[0]
         items = self.getItems()
         index = items.index(current_item)
 
         tab = hou.ui.paneUnderCursor()
         tab.createTab(self.items[index][1])
         self.accept()
+
 
     def filter(self):
         text = self.inputBox.text()
@@ -66,24 +69,27 @@ class newTabMenu(QtWidgets.QDialog):
         suggestions = list(suggestions)
         for item in items:
             if item.text() in suggestions:
-                item.setHidden(0)    
+                item.setHidden(0)
             else:
                 item.setHidden(1)
         self.setIndex(0)
+
 
     def getItems(self):
         item_count = self.listWidget.count()
         items = [self.listWidget.item(i) for i in range(item_count)]
         return(items)
 
+
     def getVisibleItems(self):
         item_count = self.listWidget.count()
         items = []
         for i in range(item_count):
             item = self.listWidget.item(i)
-            if not item.isHidden(): 
+            if not item.isHidden():
                 items.append(item)
         return(items)
+
 
     def nextItem(self):
         items = self.getVisibleItems()
@@ -91,6 +97,7 @@ class newTabMenu(QtWidgets.QDialog):
         index = items.index(selected_item)
         index = (index + 1) % len(items)
         self.setIndex(index)
+
 
     def setIndex(self, idx):
         items = self.getItems()
@@ -100,4 +107,3 @@ class newTabMenu(QtWidgets.QDialog):
                 if counter == idx:
                     self.listWidget.setItemSelected(item, 1)
                 counter += 1
-

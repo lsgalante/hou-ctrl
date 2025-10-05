@@ -1,32 +1,42 @@
-import hctl_utils as hcu
+import hou
+from hctl.core.session import HctlSession
+from hctl.utils.listener import HctlListener
 from PySide6.QtCore import Qt
 
-print("\n----------------\nBegin uiready.py\n----------------\n")
+hou.session.hctlSession = HctlSession()
 
+# Settings
+hotkeys = 1
 qt_commands = 0
-ui_setup = 0
-hotkey_setup = 1
+layout = 0
+listener = 0
 
-if qt_commands:
-    window = hou.qt.mainWindow()
-    flags = Qt.FramelessWindowHint
-    window.setWindowFlags(flags)
-    window.setFixedWidth(1710)
-    window.setFixedHeight(1100)
 
-# if ui_setup:
-    # Houdini starts with some ui elements visible regardless of desktop file.
-    # desktop = hcu.Desktopx("test")
-    # desktop.toggleMenus()
-    # desktop.toggleMainMenuBar()
-    # hcu.desktopTogglePaneTabs()
+# Hotkeys
+if hotkeys:
+    session = hou.session.hctlSession.reloadHotkeys()
+
+
+# Layout
+if layout:
+    hou.session.hctlSession.toggleMenus()
+    hou.session.hctlSession.toggleMainMenuBar()
+    hou.session.hctlSession.togglePaneTabs()
 
     # Set network grid points to on
     # networkEditors = desktop.getNetworkEditors()
     # for networkEditor in networkEditors:
         # networkEditor.setPref("gridmode", "1")
 
-if hotkey_setup:
-    session = hcu.HctlSession().reloadKeyBindings()
 
-print("\n--------------\nEnd uiready.py\n--------------\n")
+# Listener
+if listener:
+    hou.ui.addEventLoopCallback(HctlListener().listener)
+
+
+# Qt
+if qt_commands:
+    window = hou.qt.mainWindow()
+    window.setWindowFlags(Qt.FramelessWindowHint)
+    window.setFixedWidth(1710)
+    window.setFixedHeight(1100)
