@@ -14,119 +14,119 @@
       </titleItem>
 
 
-      <scriptItem id="h.hctlSessionOpenColorEditor">
+      <scriptItem id="h.hCSessionOpenColorEditor">
         <label>Color Editor</label>
         <scriptCode>
-<![CDATA[from hctl.core.scene_viewer import HctlSession
-HctlSession().openColorEditor()]]>
+<![CDATA[from hctl.core.hcsession import HCSession
+HCSession().openColorEditor()]]>
         </scriptCode>
       </scriptItem>
 
 
-      <scriptItem id="h.hctlSessionKeycam">
+      <scriptItem id="h.hCSessionKeycam">
         <label>Keycam</label>
         <scriptCode>
-<![CDATA[from hctl.core.scene_viewer import HctlSceneViewer
-HctlSceneViewer().keycam()]]>
+<![CDATA[from hctl.core.hcpanetab import HCPaneTab
+HCPaneTab().keycam()]]>
         </scriptCode>
       </scriptItem>
 
 
-      <scriptItem id="h.hctlSessionPanel">
+      <scriptItem id="h.hCSessionPanel">
         <label>Panel</label>
         <scriptCode>
-<![CDATA[from hctl.core.session import HctlSession
-HctlSession().panel()]]>
+<![CDATA[from hctl.core.hcsession import HCSession
+HCSession().hCPanel()]]>
         </scriptCode>
       </scriptItem>
 
 
-      <scriptItem id="h.hctlSessionReloadColorSchemes">
+      <scriptItem id="h.hCSessionReloadColorSchemes">
         <label>Reload Color Schemes</label>
         <scriptCode>
-<![CDATA[from hctl.core.session import HctlSession
-HctlSession().reloadColorSchemes()]]>
+<![CDATA[from hctl.core.hcsession import HCSession
+HCSession().reloadColorSchemes()]]>
         </scriptCode>
       </scriptItem>
 
 
-      <scriptItem id="h.hctlSessionReloadHotkeys">
+      <scriptItem id="h.hCSessionReloadHotkeys">
         <label>Reload Hotkeys</label>
         <scriptCode>
-<![CDATA[from hctl.core.session import HctlSession
-HctlSession().reloadHotkeys()]]>
+<![CDATA[from hctl.core.hcsession import HCSession
+HCSession().reloadHotkeys()]]>
         </scriptCode>
     </scriptItem>
 
 
-      <scriptItem id="h.hctlSessionReloadKeycam">
+      <scriptItem id="h.hCSessionReloadKeycam">
         <label>Reload Keycam</label>
         <scriptCode>
-<![CDATA[from hctl.core.session import HctlSession
-HctlSession().reloadKeycam()]]>
+<![CDATA[from hctl.core.hcsession import HCSession
+HCSession().reloadKeycam()]]>
         </scriptCode>
       </scriptItem>
 
 
-      <scriptItem id="h.hctlSessionRestartHoudini">
+      <scriptItem id="h.hCSessionRestartHoudini">
         <label>Restart Houdini</label>
         <scriptCode>
-<![CDATA[from hctl.core.session import HctlSession
-HctlSession().restartHoudini()]]>
+<![CDATA[from hctl.core.hcsession import HCSession
+HCSession().restartHoudini()]]>
         </scriptCode>
     </scriptItem>
 
 
-      <scriptItem id="h.hctlSessionStatus">
+      <scriptItem id="h.hCSessionStatus">
         <label>Status</label>
         <scriptCode>
-<![CDATA[from hctl.core.session import HctlSession
-HctlSession().status()]]>
+<![CDATA[from hctl.core.hcsession import HCSession
+HCSession().status()]]>
         </scriptCode>
       </scriptItem>
 
 
-      <scriptItem id="h.hctlSessionToggleMenus">
+      <scriptItem id="h.hCSessionToggleMenus">
         <label>Toggle Menus</label>
         <scriptCode>
-<![CDATA[from hctl.core.session import HctlSession
-HctlSession().toggleMenus()]]>
+<![CDATA[from hctl.core.hcsession import HCSession
+HCSession().toggleMenus()]]>
         </scriptCode>
       </scriptItem>
 
 
-      <scriptItem id="h.hctlSessionToggleNetworkControls">
+      <scriptItem id="h.hCSessionToggleNetworkControls">
         <label>Toggle Network Controls</label>
         <scriptCode>
-<![CDATA[from hctl.core.session import HctlSession
-HctlSession().toggleNetworkControls()]]>
+<![CDATA[from hctl.core.hcsession import HCSession
+HCSession().toggleNetworkControls()]]>
         </scriptCode>
       </scriptItem>
 
 
-      <scriptItem id="h.hctlSessionToggleTabs">
+      <scriptItem id="h.hCSessionToggleTabs">
         <label>Toggle Tabs</label>
         <scriptCode>
-<![CDATA[from hctl.core.session import HctlSession
-HctlSession().toggleTabs()]]>
+<![CDATA[from hctl.core.hcsession import HCSession
+HCSession().toggleTabs()]]>
         </scriptCode>
       </scriptItem>
 
 
-      <scriptItem id="h.hctlSessionToggleStowbars">
+      <scriptItem id="h.hCSessionToggleStowbars">
         <label>Toggle Stowbars</label>
         <scriptCode>
-<![CDATA[from hctl.core.session import HctlSession
-HctlSession().toggleStowbars()]]>
+<![CDATA[from hctl.core.hcsession import HCSession
+HCSession().toggleStowbars()]]>
         </scriptCode>
       </scriptItem>
 
 
-      <scriptItem id="h.hctlSessionUpdateMainMenuBar">
+      <scriptItem id="h.hCSessionUpdateMainMenuBar">
         <label>Update Main Menu Bar</label>
         <scriptCode>
-<![CDATA[from hctl.core.session import HctlSession
-HctlSession().updateMainMenuBar()]]>
+<![CDATA[from hctl.core.hcsession import HCSession
+HCSession().updateMainMenuBar()]]>
         </scriptCode>
       </scriptItem>
 

@@ -1,9 +1,9 @@
 import hou
-from hctl.core.session import HctlSession
-from hctl.utils.listener import HctlListener
+from hctl.core.hcsession import HCSession
+from hctl.utils.hclistener import HCListener
 from PySide6.QtCore import Qt
 
-hou.session.hctlSession = HctlSession()
+hou.session.hCSession = HCSession()
 
 # Settings
 hotkeys = 1
@@ -14,14 +14,14 @@ listener = 0
 
 # Hotkeys
 if hotkeys:
-    session = hou.session.hctlSession.reloadHotkeys()
+    session = hou.session.hCSession.reloadHotkeys()
 
 
 # Layout
 if layout:
-    hou.session.hctlSession.toggleMenus()
-    hou.session.hctlSession.toggleMainMenuBar()
-    hou.session.hctlSession.togglePaneTabs()
+    hou.session.hCSession.toggleMenus()
+    hou.session.hCSession.toggleMainMenuBar()
+    hou.session.hCSession.togglePaneTabs()
 
     # Set network grid points to on
     # networkEditors = desktop.getNetworkEditors()
@@ -31,7 +31,7 @@ if layout:
 
 # Listener
 if listener:
-    hou.ui.addEventLoopCallback(HctlListener().listener)
+    hou.ui.addEventLoopCallback(HCListener().listener)
 
 
 # Qt

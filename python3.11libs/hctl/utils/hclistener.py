@@ -1,14 +1,12 @@
 import hou
 # from importlib import reload
-from hctl.core.network_editor import HctlNetworkEditor
-from hctl.core.pane           import HctlPane
-from hctl.core.scene_viewer   import HctlSceneViewer
-from hctl.core.session        import HctlSession
-from hctl.core.tab            import HctlTab
-from hctl.core.viewport       import HctlViewport
+from hctl.core.hcpane           import HCPane
+from hctl.core.hcsession        import HCSession
+from hctl.core.hcpanetab            import HCPaneTab
+# from hctl.core.hcviewport       import HCViewport
 
 
-class HctlListener():
+class HCListener():
     def __init__(self):
         self.report_tab = 1
 

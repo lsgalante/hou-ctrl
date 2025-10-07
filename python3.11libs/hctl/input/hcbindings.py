@@ -88,13 +88,13 @@ def load():
         # Generic bindings
         # ("h.copy", "cmd+w"),
         # ("h.cut", "ctrl+w"),
-        ("h.hctlSessionPanel", "alt+x"),
+        ("h.hCSessionPanel", "alt+x"),
         # ("h.find", "ctrl+s"),
         # ("h.open", "ctrl+o"),
         # ("h.paste", "ctrl+y"),
         # ("h.redo", "ctrl+shift+z"),
         # ("h.save", "cmd+s"),
-        ("h.hctlSessionKeycam", "shift+k"),
+        ("h.hCSessionKeycam", "shift+k"),
         # ("h.undo", "ctrl+/"),
 
         #

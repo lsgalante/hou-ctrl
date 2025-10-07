@@ -3,9 +3,9 @@ from PySide6 import QtGui, QtWidgets
 from PySide6.QtWidgets import QLabel, QShortcut, QBoxLayout
 
 
-class Dialog(QtWidgets.QDialog):
+class HCResizePanel(QtWidgets.QDialog):
     def __init__(self, pane):
-        super(Dialog, self).__init__(hou.qt.mainWindow())
+        super(HCResizePanel, self).__init__(hou.qt.mainWindow())
 
         self.pane = pane
 

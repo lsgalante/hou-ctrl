@@ -5,5 +5,7 @@
     "reportUnannotatedClassAttribute": "none",
     "reportUnknownVariableType": "none",
     "reportUnknownMemberType": "none",
-    "reportUnknownArgumentType": "none"
+    "reportUnknownArgumentType": "none",
+    "reportAttributeAccessIssue": "none",
+    "reportUntypedBaseClass": "none"
 }

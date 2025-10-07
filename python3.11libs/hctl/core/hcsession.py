@@ -37,6 +37,12 @@ class HCSession():
             hou.ui.setStatusMessage("Not a network editor", hou.severityType.Error)
 
 
+    def hCPanel(self):
+        from hctl.ui.hcpanel import HCPanel
+        from hctl.core.hcpanetab import HCPaneTab
+        HCPanel(HCPaneTab(self.paneTab())).show()
+
+
     def hideShelf(self):
         self.desktop().shelfDock().show(0)
 
@@ -88,14 +94,16 @@ class HCSession():
         return hou.ui.paneUnderCursor()
 
 
-    def panel(self):
-        from hctl.ui.hcpanel import Dialog
-        from hctl.core.hcpanetab import HCPaneTab
-        Dialog(HCPaneTab(self.paneTab())).show()
-
-
     def panes(self):
         return self.desktop().panes()
+
+
+    def paneTab(self):
+        return hou.ui.paneTabUnderCursor()
+
+
+    def paneTabs(self):
+        return self.desktop().paneTabs()
 
 
     def projectPath(self):
@@ -108,7 +116,7 @@ class HCSession():
 
 
     def reloadHotkeys(self):
-        from hctl.input.bindings import load
+        from hctl.input.hcbindings import load
         load()
 
 
@@ -123,12 +131,13 @@ class HCSession():
 
 
     def restartHoudini(self):
-        import os
-        import subprocess
+        # import os
+        # import subprocess
         # executable = sys.argv[0]
-        executable = os.environ.get("HFS") + "/bin/houdini"
-        subprocess.Popen([executable])
-        hou.exit()
+        # executable = os.environ.get("HFS") + "/bin/houdini"
+        # subprocess.Popen([executable])
+        # hou.exit()
+        return
 
 
     def sceneViewers(self):
@@ -178,8 +187,9 @@ class HCSession():
 
 
     def status(self):
-        from hctl.ui.statusdialog import Dialog
-        Dialog().show()
+        from .ui.hcstatuspanel import HCStatusPanel
+        panel = HCStatusPanel()
+        panel.show()
 
 
     def triHCallback():
@@ -246,14 +256,6 @@ class HCSession():
         self.shelfDock().show(1)
 
 
-    def tab(self):
-        return hou.ui.paneTabUnderCursor()
-
-
-    def paneTabs(self):
-        return self.desktop().paneTabs()
-
-
     def toggleMainMenuBar(self):
         if hou.getPreference("showmenu.val") == "1":
             hou.setPreference("showmenu.val", "0")
@@ -301,18 +303,16 @@ class HCSession():
             viewer.showSelectionBar(not visible)
         hou.ui.setHideAllMinimizedStowbars(visible)
         hou.ui.setHideAllMinimizedStowbars(visible)
-    toggleMenus.interactive = True
 
 
     def toggleNetworkControls(self):
         visible = 0
-        paneTabs = self.tabs()
+        paneTabs = self.paneTabs()
         for paneTab in paneTabs:
             if paneTab.isShowingNetworkControls():
                 visible = 1
         for paneTab in paneTabs:
             paneTab.showNetworkControls(not visible)
-    toggleNetworkControls.interactive = True
 
 
     def toggleTabs(self):
@@ -324,18 +324,15 @@ class HCSession():
                 visible = 1
         for pane in panes:
             pane.showPaneTabs(not visible)
-    toggleTabs.interactive = True
 
 
     def toggleStowbars(self):
         hidden = hou.ui.hideAllMinimizedStowbars()
         hou.ui.setHideAllMinimizedStowbars(not hidden)
-    toggleStowbars.interactive = True
 
 
     def triggerUpdate(self):
         hou.ui.triggerUpdate()
-    triggerUpdate.interactive = True
 
 
     def toggleAutoSave(self):
@@ -343,12 +340,10 @@ class HCSession():
             hou.setPreference("autoSave", "0")
         else:
             hou.setPreference("autoSave", "1")
-    toggleAutoSave.interactive = True
 
 
     def updateMainMenuBar(self):
         hou.ui.updateMainMenuBar()
-    updateMainMenuBar.interactive = True
 
 
     def viewports(self):
@@ -358,4 +353,3 @@ class HCSession():
             for viewport in sceneViewer.viewports():
                 viewports.append(viewport)
         return(viewports)
-    viewports.interactive = False

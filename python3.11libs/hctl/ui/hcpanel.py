@@ -1,215 +1,183 @@
 import hou
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QCheckBox, QVBoxLayout, QLabel, QMenu, QDialog, QHBoxLayout
-from .widgets import HctlButton
-from .core.hcsession import HctlSession
+from .hcwidgets import HCButton
+from hctl.core.hcsession import HCSession
+from hctl.core.hcpane import HCPane
 
 
-class Dialog(QDialog):
-    def __init__(self, hctlPaneTab):
-        super(Dialog, self).__init__(hou.qt.mainWindow())
+class HCPanel(QDialog):
+
+    def __init__(self, hCPaneTab):
+        super(HCPanel, self).__init__(hou.qt.mainWindow())
+
+        ## OBJECTS
+        self.hCSession = HCSession()
+        self.hCPaneTab = hCPaneTab
+        self.hCPane = HCPane(hCPaneTab.pane())
+
+        ## WINDOW PARAMETERS
+        pane_geo = self.hCPane.qtScreenGeometry()
         self.resize(400, 150)
-        self.setWindowTitle("hctl")
+        # self.moveCenter(pane_geo.center)
+        self.setWindowTitle("hctl panel")
         self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint )
-        self.hctlPaneTab = hctlPaneTab
-        self.hctlSession = HctlSession()
-        self.update()
 
+        ## UTILITY LISTSs
+        self.pane_tab_types = (hou.paneTabType.ApexEditor, hou.paneTabType.CompositorViewer, hou.paneTabType.DetailsView, hou.paneTabType.NetworkEditor, hou.paneTabType.Parm, hou.paneTabType.PythonPanel, hou.paneTabType.PythonShell, hou.paneTabType.SceneViewer, hou.paneTabType.Textport)
+        self.pane_tab_names = [paneTab.name() for paneTab in self.hCSession.paneTabs()]
+        self.pane_tab_type_names = ("ApexEditor", "CompositorViewer", "DetailsView", "NetworkEditor", "Parm", "PythonPanel", "PythonShell", "SceneViewer", "Textport")
+        self.pane_tab_labels = []
+        for paneTab in self.hCSession.paneTabs():
+            index = self.pane_tab_types.index(paneTab.type())
+            label = self.pane_tab_type_names[index]
+            self.pane_tab_labels.append(label)
 
-    def change(self):
-        self.setText(self.sender().text())
-        index = self.tabMenu.currentIndex()
-        tab = self.session.tabs()[index]
-        tab.setIsCurrentTab()
+        ## PATHS
+        self.projectpath = hou.hipFile.name()
+        ct = self.projectpath.count("/")
+        self.projectpath = self.projectpath.split("/", ct - 2)[-1]
+        self.networkpath = self.hCPaneTab.pwd()
 
+        ## SESSION COLUMN
+        sessionCol = QVBoxLayout()
+        # Session label
+        sessionLabel = QLabel("Session")
+        sessionLabel.setStyleSheet("color: #909090")
+        sessionCol.addWidget(sessionLabel)
+        # Session autosave widget
+        sessionCol.addWidget(self.SessionAutosaveCheckBox(self))
+        # Session toggle menus
+        sessionMenusBtn = HCButton("Menus")
+        sessionMenusBtn.clicked.connect(self.hCSession.toggleMenus)
+        sessionCol.addWidget(sessionMenusBtn)
+        # Session tab visibility
+        sessionTabsBtn = HCButton("Tabs")
+        sessionTabsBtn.clicked.connect(self.hCSession.toggleTabs)
+        sessionCol.addWidget(sessionTabsBtn)
+        # Session toggle network controls
+        sessionNetworkControlsBtn = HCButton("Network Controls")
+        sessionNetworkControlsBtn.clicked.connect(self.hCSession.toggleNetworkControls)
+        sessionCol.addWidget(sessionNetworkControlsBtn)
+        # Session stowbars
+        sessionStowbarsBtn = HCButton("Stowbars")
+        sessionStowbarsBtn.clicked.connect(self.hCSession.toggleStowbars)
+        sessionCol.addWidget(sessionStowbarsBtn)
+        # Fill empty space
+        sessionCol.addStretch()
+
+        ## PANE COLUMN
+        paneCol = QVBoxLayout()
+        # Pane label
+        paneLabel = QLabel("Pane")
+        paneLabel.setStyleSheet("color: #909090")
+        paneCol.addWidget(paneLabel)
+        # Pane maximize
+        paneMaximizeBtn = HCButton("Maximize")
+        paneMaximizeBtn.clicked.connect(self.hCPane.toggleMaximized)
+        paneCol.addWidget(paneMaximizeBtn)
+        # Pane expand
+        paneExpandBtn = HCButton("Expand")
+        paneExpandBtn.clicked.connect(self.hCPane.expand)
+        paneCol.addWidget(paneExpandBtn)
+        # Pane contract
+        paneContractBtn = HCButton("Contract")
+        paneContractBtn.clicked.connect(self.hCPane.contract)
+        paneCol.addWidget(paneContractBtn)
+        # Pane toggle tabs
+        panePaneTabsBtn = HCButton("Tabs")
+        panePaneTabsBtn.clicked.connect(self.hCPane.togglePaneTabs)
+        paneCol.addWidget(panePaneTabsBtn)
+        # Fill empty space
+        paneCol.addStretch()
+
+        ## PANE TAB COLUMN
+        paneTabCol = QVBoxLayout()
+        # Pane tab label
+        paneTabLabel = QLabel("Tab")
+        paneTabLabel.setStyleSheet("color: #909090")
+        paneTabCol.addWidget(paneTabLabel)
+        # Pane tab pin
+        paneTabCol.addWidget(self.PaneTabPinCheckBox(self))
+        # Pane tab menu
+        paneTabCol.addWidget(self.PaneTabMenu(self))
+        # Pane tab type menu
+        paneTabCol.addWidget(self.PaneTabTypeMenu(self))
+        # Pane tab network controls
+        paneTabNetworkControlsBtn = HCButton("Network Controls")
+        paneTabNetworkControlsBtn.clicked.connect(self.hCPaneTab.toggleNetworkControls)
+        paneTabCol.addWidget(paneTabNetworkControlsBtn)
+        # Pane tab scene viewer controls
+        if self.hCPaneTab.type() == hou.paneTabType.SceneViewer:
+            paneTabKeycamBtn = HCButton("Keycam")
+            paneTabKeycamBtn.clicked.connect(self.hCSession.keycam)
+            paneTabCol.addWidget(paneTabKeycamBtn)
+        # Fill empty space
+        paneTabCol.addStretch()
+
+        ## LAYOUT
+        self.layout = QHBoxLayout()
+        self.layout.addLayout(sessionCol)
+        self.layout.addLayout(paneCol)
+        self.layout.addLayout(paneTabCol)
+        self.setLayout(self.layout)
 
     def closeEvent(self, event):
         self.setParent(None)
 
 
-    def lists(self):
-        # TYPE/NAME ARRAYS
-        self.paneTab_types = (hou.paneTabType.ApexEditor, hou.paneTabType.CompositorViewer, hou.paneTabType.DetailsView, hou.paneTabType.NetworkEditor, hou.paneTabType.Parm, hou.paneTabType.PythonPanel, hou.paneTabType.PythonShell, hou.paneTabType.SceneViewer, hou.paneTabType.Textport)
-        self.paneTab_names = [paneTab.name() for paneTab in self.hctlSession.paneTabs()]
-        self.paneTab_type_names = ("ApexEditor", "CompositorViewer", "DetailsView", "NetworkEditor", "Parm", "PythonPanel", "PythonShell", "SceneViewer", "Textport")
-        # Populate pane tab labels array
-        self.paneTab_labels = []
-        for paneTab in self.hctlSession.tabs():
-            index = self.paneTab_types.index(paneTab.type())
-            label = self.paneTab_type_names[index]
-            self.paneTab_labels.append(label)
+    class SessionAutosaveCheckBox(QCheckBox):
 
-
-    def paths(self):
-        # Project path
-        self.project_path = hou.hipFile.name()
-        ct = self.project_path.count("/")
-        self.project_path = self.project_path.split("/", ct - 2)[-1]
-        # Network path
-        self.network_path = self.hctlPaneTab.pwd()
-
-
-    def update(self):
-        self.lists()
-        # Layout
-        self.layout = QHBoxLayout()
-        self.controls = self.Controls(self)
-        self.layout.addLayout(self.controls)
-        self.paneControls = PaneControls(self)
-        self.layout.addLayout(self.paneControls)
-        self.tabControls = TabControls(self)
-        self.layout.addLayout(self.tabControls)
-        self.setLayout(self.layout)
-
-
-    def sessionToggleAutosave():
-        hou.session.hctlSession.toggleAutoSave()
-    def sessionToggleMenus():
-        hou.session.hctlSession.toggleMenus()
-
-
-    def paneToggleMaximized():
-        hou.session.hctlPane.toggleMaximized()
-    def paneExpand():
-        hou.session.hctlPane.expand()
-    def paneContract():
-        hou.session.hctlPane.contract()
-    def paneToggleTabs():
-        hou.session.hctlPane.toggleTabs()
-
-
-    # CONTROL COLUMNS
-
-    class SessionControls(QVBoxLayout):
-        def __init__(self, owner):
-            super().__init__()
-            # LABEL
-            sessionLabel = QLabel("Session")
-            sessionLabel.setStyleSheet("color: #909090")
-            self.addWidget(sessionLabel)
-            # AUTOSAVE
-            self.addWidget(self.AutosaveCheckBox(owner))
-            # TOGGLE ALL MENUS
-            sessionMenusButton = HctlButton("Menus")
-            sessionMenusButton.clicked.connect(owner.session.toggleMenus)
-            self.addWidget(sessionMenusButton)
-            # TAB VISIBILITY
-            sessionTabsButton = HctlButton("Tabs")
-            sessionTabsButton.clicked.connect(owner.session.toggleTabs)
-            self.addWidget(sessionTabsButton)
-            # TOGGLE ALL NETWORK CONTROLS
-            sessionNetworkControlsButton = HctlButton("Network Controls")
-            sessionNetworkControlsButton.clicked.connect(owner.session.toggleNetworkControls)
-            self.addWidget(sessionNetworkControlsButton)
-            # STOWBAR VISIBILITY
-            sessionStowbarsButton = HctlButton("Stowbars")
-            sessionStowbarsButton.clicked.connect(owner.session.toggleStowbars)
-            self.addWidget(sessionStowbarsButton)
-            # Fill empty space
-            self.addStretch()
-
-
-    class PaneControls(QVBoxLayout):
-        def __init__(self, owner):
-            super().__init__()
-
-            # LABEL
-            paneLabel = QLabel("Pane")
-            paneLabel.setStyleSheet("color: #909090")
-            self.addWidget(paneLabel)
-            # TAB SWITCHER
-            # tabMenu = self.TabMenu(owner, "menu")
-            # self.addWidget(tabMenu)
-            # MAXIMIZE TOGGLE
-            paneMaximizeBtn = HctlButton("Maximize")
-            paneMaximizeBtn.clicked.connect(owner.hctlPane.toggleMaximize)
-            self.addWidget(paneMaximizeBtn)
-            # EXPAND
-            paneExpandBtn = HctlButton("Expand")
-            paneExpandBtn.clicked.connect(owner.hctlPane.expand)
-            self.addWidget(paneExpandBtn)
-            # CONTRACT
-            paneContractBtn = HctlButton("Contract")
-            paneContractBtn.clicked.connect(owner.hctlPane.contract)
-            self.addWidget(paneContractBtn)
-            # TOGGLE TABS
-            panePaneTabsBtn = HctlButton("Tabs")
-            panePaneTabsBtn.clicked.connect(owner.hctlPane.togglePaneTabs)
-            self.addWidget(panePaneTabsBtn)
-            # FILL EMPTY SPACE
-            self.addStretch()
-
-
-    class AutosaveCheckBox(QCheckBox):
         def __init__(self, owner):
             super().__init__("Autosave")
-            state = owner.hctlSession.autosave()
+            state = owner.hCSession.autosave()
             if state == "1":
                 self.setCheckState(Qt.Checked)
             elif state == "0":
                 self.setCheckState(Qt.Unchecked)
-            self.clicked.connect(owner.session.toggleAutosave)
+            self.clicked.connect(owner.hCSession.toggleAutoSave)
 
 
-    class PinCheckBox(QCheckBox):
+    class PaneTabPinCheckBox(QCheckBox):
+
         def __init__(self, owner):
             super().__init__("Pin")
             self.owner = owner
-            self.clicked.connect(self.owner.tab.togglePin)
-            if self.owner.tab.isPin():
+            self.clicked.connect(self.owner.hCPaneTab.togglePin)
+            if self.owner.hCPaneTab.isPin():
                 self.setCheckState(Qt.Checked)
             else:
                 self.setCheckState(Qt.Unchecked)
 
 
+    class PaneTabMenu(HCButton):
 
-    class TabControls(QVBoxLayout):
         def __init__(self, owner):
-            super().__init__()
+            super().__init__("k")
             self.owner = owner
-            # LABEL
-            label = QLabel("Tab")
-            label.setStyleSheet("color: #909090")
-            self.addWidget(label)
-            # PIN
-            self.addWidget(self.PinCheckBox(owner))
-            # TAB TYPE MENU
-            self.addWidget(self.TabTypeMenu(owner))
-            # NETWORK CONTROLS
-            tabNetworkControlsButton = HctlButton("Network Controls")
-            tabNetworkControlsButton.clicked.connect(owner.hcTab.toggleNetworkControls)
-            self.addWidget(tabNetworkControlsButton)
-            # SCENE VIEWER CONTROLS
-            if owner.paneTab.type() == hou.paneTabType.SceneViewer:
-                paneTabKeycamButton = HctlButton("Keycam")
-                paneTabKeycamButton.clicked.connect(owner.hctlSession.keycam)
-                self.addWidget(paneTabKeycamButton)
-            # FILL EMPTY SPACE
-            self.addStretch()
-
-
-
-    class PaneTabMenu(HctlButton):
-        def __init__(self, owner, text):
-            super().__init__(text)
             menu = QMenu(self)
-            for label in owner.tab_labels:
+            for label in self.owner.pane_tab_labels:
                 action = menu.addAction(label)
                 action.triggered.connect(self.change)
             self.setMenu(menu)
 
+        def change(self):
+            self.setText(self.sender().text())
+            index = self.tabMenu.currentIndex()
+            tab = self.hCSession.tabs()[index]
+            tab.setIsCurrentTab()
 
 
-    class TabTypeMenu(HctlButton):
+    class PaneTabTypeMenu(HCButton):
+
         def __init__(self, owner):
             super().__init__("menu")
             self.owner = owner
             menu = QMenu(self)
-            for label in owner.tab_type_names:
+            for label in owner.pane_tab_type_names:
                 menu.addAction(label)
             menu.triggered.connect(self.on_action_triggered)
             self.setMenu(menu)
-
 
         def on_action_triggered(self, action):
             self.setText(action.text())
