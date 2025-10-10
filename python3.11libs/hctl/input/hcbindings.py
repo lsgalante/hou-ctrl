@@ -13,7 +13,6 @@ import hou
 
 def load():
     hou.hotkeys.revertToDefaults("h", "", False)
-
     # Clear all assignments from command
     assignment_clear_arr = (
         "deskmgr.new",
@@ -31,7 +30,7 @@ def load():
         # "h.copy",
         # "h.cut",
         "h.desktop_mgr",
-        "h.desktopToggleHctl"
+        "h.desktopToggleHctl",
         # "h.find",
         "h.mat_palette",
         # "h.open",
@@ -43,6 +42,7 @@ def load():
 
         "h.pane.gview.decrease_subd",
         "h.pane.gview.increase_subd",
+        "h.pane.gview.restore_prevcam",
         "h.pane.gview.state.volatile_chmodify",
 
         # "h.pane.edit_bookmark",
@@ -89,6 +89,7 @@ def load():
         # ("h.copy", "cmd+w"),
         # ("h.cut", "ctrl+w"),
         ("h.hCSessionPanel", "alt+x"),
+        ("h.hCSessionPanel", "\\"),
         # ("h.find", "ctrl+s"),
         # ("h.open", "ctrl+o"),
         # ("h.paste", "ctrl+y"),
