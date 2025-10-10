@@ -1,5 +1,6 @@
 import hou
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QCheckBox, QVBoxLayout, QLabel, QMenu, QDialog, QHBoxLayout
 from .hcwidgets import HCButton
 from hctl.core.hcsession import HCSession
@@ -18,12 +19,16 @@ class HCPanel(QDialog):
 
         ## WINDOW PARAMETERS
         pane_geo = self.hCPane.qtScreenGeometry()
+        pane_center = pane_geo.center()
+        x = pane_center.x() - 200
+        y = pane_center.y() - 75
         self.resize(400, 150)
+        self.move(x, y)
         # self.moveCenter(pane_geo.center)
         self.setWindowTitle("hctl panel")
         self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint )
 
-        ## UTILITY LISTSs
+        ## UTILITY LISTS
         self.pane_tab_types = (hou.paneTabType.ApexEditor, hou.paneTabType.CompositorViewer, hou.paneTabType.DetailsView, hou.paneTabType.NetworkEditor, hou.paneTabType.Parm, hou.paneTabType.PythonPanel, hou.paneTabType.PythonShell, hou.paneTabType.SceneViewer, hou.paneTabType.Textport)
         self.pane_tab_names = [paneTab.name() for paneTab in self.hCSession.paneTabs()]
         self.pane_tab_type_names = ("ApexEditor", "CompositorViewer", "DetailsView", "NetworkEditor", "Parm", "PythonPanel", "PythonShell", "SceneViewer", "Textport")
@@ -122,8 +127,10 @@ class HCPanel(QDialog):
         self.layout.addLayout(paneTabCol)
         self.setLayout(self.layout)
 
+
     def closeEvent(self, event):
         self.setParent(None)
+
 
 
     class SessionAutosaveCheckBox(QCheckBox):
@@ -138,6 +145,7 @@ class HCPanel(QDialog):
             self.clicked.connect(owner.hCSession.toggleAutoSave)
 
 
+
     class PaneTabPinCheckBox(QCheckBox):
 
         def __init__(self, owner):
@@ -150,22 +158,36 @@ class HCPanel(QDialog):
                 self.setCheckState(Qt.Unchecked)
 
 
+
     class PaneTabMenu(HCButton):
 
         def __init__(self, owner):
             super().__init__("k")
             self.owner = owner
-            menu = QMenu(self)
-            for label in self.owner.pane_tab_labels:
-                action = menu.addAction(label)
-                action.triggered.connect(self.change)
-            self.setMenu(menu)
+            self.paneTabs = self.owner.hCPane.paneTabs()
+            self.paneTabNames = [str(paneTab) for paneTab in self.paneTabs]
+            self.actions = []
+            self.menu = QMenu(self)
+            for paneTabName in self.paneTabNames:
+                action = self.menu.addAction(paneTabName)
+                action.triggered.connect(self.changeTab)
+                self.actions.append(action)
+            self.setMenu(self.menu)
 
-        def change(self):
-            self.setText(self.sender().text())
-            index = self.tabMenu.currentIndex()
-            tab = self.hCSession.tabs()[index]
-            tab.setIsCurrentTab()
+
+        def changeTab(self):
+            print(action)
+            return
+            # self.setText(self.sender().text())
+            # index = self.actions.index(QAction)
+            # print(index)
+            # print(self.paneTabNames)
+            # print(self.menu.activeAction())
+            # return
+            # index = self.paneTabNames.index(self.menu.activeAction())
+            # newPaneTab = self.paneTab[index]
+            # newPaneTab.setIsCurrentTab()
+
 
 
     class PaneTabTypeMenu(HCButton):
@@ -178,6 +200,7 @@ class HCPanel(QDialog):
                 menu.addAction(label)
             menu.triggered.connect(self.on_action_triggered)
             self.setMenu(menu)
+
 
         def on_action_triggered(self, action):
             self.setText(action.text())
