@@ -1,14 +1,14 @@
 import hou
-
-IS_NETWORK_EDITOR = False
-IS_SCENE_VIEWER = False
+import types
 
 class HCPaneTab():
 
     def __init__(self, paneTab):
         self.paneTab = paneTab
-        if self.type() == hou.paneTabType.NetworkEditor: IS_NETWORK_EDITOR = True
-        elif self.type() == hou.paneTabType.SceneViewer: IS_SCENE_VIEWER = True
+        if self.type() == hou.paneTabType.NetworkEditor:
+            addNetworkEditorFunctions(self)
+        elif self.type() == hou.paneTabType.SceneViewer:
+            addSceneViewerFunctions(self)
 
 
     def close(self):
@@ -55,6 +55,10 @@ class HCPaneTab():
     def setCheckState(self, bool):
         if bool:
             self.paneTab.setCheckState()
+
+
+    # def setIsCurrentTab(self):
+        # self.paneTab.setIsCurrentTab()
 
 
     def setPin(self, bool):
@@ -111,276 +115,335 @@ class HCPaneTab():
         return self.paneTab.type()
 
 
-    if IS_NETWORK_EDITOR:
 
-        def addNetworkBox(self):
-            networkBox = self.pwd().createNetworkBox()
-            networkBox.setPosition(self.currentNode().position())
+## NETWORK EDITOR FUNCTIONS
 
+def addNetworkEditorFunctions(hcPaneTab):
+    hcPaneTab.addNetworkBox = types.MethodType(addNetworkBox, hcPaneTab)
+    hcPaneTab.addStickyNote = types.MethodType(addStickyNote, hcPaneTab)
+    hcPaneTab.nextGrid = types.MethodType(nextGrid, hcPaneTab)
+    hcPaneTab.deselectAll = types.MethodType(nextGrid, hcPaneTab)
+    hcPaneTab.renameNode = types.MethodType(renameNode, hcPaneTab)
+    hcPaneTab.selectDisplayNode = types.MethodType(selectDisplayNode, hcPaneTab)
+    hcPaneTab.toggleDimUnusedNodes = types.MethodType(toggleDimUnusedNodes, hcPaneTab)
+    hcPaneTab.toggleLocating = types.MethodType(toggleLocating, hcPaneTab)
+    hcPaneTab.toggleMenu = types.MethodType(toggleMenu, hcPaneTab)
+    hcPaneTab.toggleGridPoints = types.MethodType(toggleGridPoints, hcPaneTab)
 
-        def addStickyNote(self):
-            stickyNote = self.pwd().createStickyNote()
-            cursor_pos = self.cursorPosition()
-            stickyNote.setPosition(cursor_pos)
-            stickyNote.setColor(hou.Color(0.71, 0.78, 1.0))
 
+def addNetworkBox(self):
+    networkBox = self.pwd().createNetworkBox()
+    networkBox.setPosition(self.currentNode().position())
 
-        # def connectNode(self):
-        # return
-        # choices = ("a", "b", "c")
-        # popup = hou.ui.selectFromList(choices)
 
+def addStickyNote(self):
+    stickyNote = self.pwd().createStickyNote()
+    cursor_pos = self.cursorPosition()
+    stickyNote.setPosition(cursor_pos)
+    stickyNote.setColor(hou.Color(0.71, 0.78, 1.0))
 
-        def nextGrid(self):
-            mode = int(self.getPref("gridmode"))
-            mode = (mode + 1) % 3
-            self.setPref("gridmode", mode)
 
+# def connectNode(self):
+# return
+# choices = ("a", "b", "c")
+# popup = hou.ui.selectFromList(choices)
 
-        def deselectAll(self):
-            self.currentNode().setSelected(False)
 
+def nextGrid(self):
+    mode = int(self.getPref("gridmode"))
+    mode = (mode + 1) % 3
+    self.setPref("gridmode", mode)
 
-        def renameNode(self):
-            node = self.currentNode()
-            name = hou.ui.readInput("rename_node", buttons=("yes", "no"))
-            if name[0] == 0:
-                node.setName(name[1])
 
+def deselectAll(self):
+    self.currentNode().setSelected(False)
 
-        # def rotateNodeInputs(self):
-        # return
-        # node = self.currentNode()
-        # connectors = node.inputConnectors()
 
+def renameNode(self):
+    node = self.currentNode()
+    name = hou.ui.readInput("rename_node", buttons=("yes", "no"))
+    if name[0] == 0:
+        node.setName(name[1])
 
-        def selectDisplayNode(self):
-            self.pwd().setCurrent(True, True)
 
+# def rotateNodeInputs(self):
+# return
+# node = self.currentNode()
+# connectors = node.inputConnectors()
 
-        def toggleDimUnusedNodes(self):
-            dim = int(self.getPref("dimunusednodes"))
-            self.setPref("dimunusednodes", str(not dim))
 
+def selectDisplayNode(self):
+    self.pwd().setCurrent(True, True)
 
-        def toggleLocating(self):
-            self.setLocatingEnabled(not self.locatingEnabled())
 
+def toggleDimUnusedNodes(self):
+    dim = int(self.getPref("dimunusednodes"))
+    self.setPref("dimunusednodes", str(not dim))
 
-        def toggleMenu(self):
-            visible = int(self.getPref("showmenu"))
-            self.setPref("showmenu", str(not visible))
 
+def toggleLocating(self):
+    self.setLocatingEnabled(not self.locatingEnabled())
 
-        def toggleGridPoints(self):
-            visible = int(self.getPref("gridmode"))
-            self.setPref("gridmode", str(not visible))
 
+def toggleMenu(self):
+    visible = int(self.getPref("showmenu"))
+    self.setPref("showmenu", str(not visible))
 
-    if IS_SCENE_VIEWER:
 
-        def displaySets(self):
-            displaySets = []
-            for viewport in self.viewports():
-                settings = viewport.settings()
-                displaySet = settings.displaySet(hou.displaySetType.DisplayModel)
-                displaySets.append(displaySet)
-            return(displaySets)
+def toggleGridPoints(self):
+    visible = int(self.getPref("gridmode"))
+    self.setPref("gridmode", str(not visible))
 
 
-        def isShowingDisplayOptionsBar(self):
-            return self.paneTab.isShowingDisplayOptionsBar()
 
+## SCENE VIEWER FUNCTIONS
 
-        def isShowingOperationBar(self):
-            return self.paneTab.isShowingOperationBar()
+def addSceneViewerFunctions(hcPaneTab):
+    hcPaneTab.displaySets = types.MethodType(displaySets, hcPaneTab)
+    hcPaneTab.homeAllViewports = types.MethodType(homeAllViewports, hcPaneTab)
+    print("a")
+    hcPaneTab.isShowingDisplayOptionsBar = types.MethodType(isShowingDisplayOptionsBar, hcPaneTab)
+    hcPaneTab.isShowingOperationBar = types.MethodType(isShowingOperationBar, hcPaneTab)
+    hcPaneTab.isShowingSelectionBar = types.MethodType(isShowingSelectionBar, hcPaneTab)
+    hcPaneTab.keycam = types.MethodType(keycam, hcPaneTab)
+    hcPaneTab.setLayoutDoubleSide = types.MethodType(setLayoutDoubleSide, hcPaneTab)
+    hcPaneTab.setLayoutDoubleStack = types.MethodType(setLayoutDoubleStack, hcPaneTab)
+    hcPaneTab.setLayoutQuad = types.MethodType(setLayoutQuad, hcPaneTab)
+    hcPaneTab.setLayoutQuadBottomSplit = types.MethodType(setLayoutQuadBottomSplit, hcPaneTab)
+    hcPaneTab.setLayoutQuadLeftSplit = types.MethodType(setLayoutQuadLeftSplit, hcPaneTab)
+    hcPaneTab.setLayoutSingle = types.MethodType(setLayoutSingle, hcPaneTab)
+    hcPaneTab.setLayoutTripleBottomSplit = types.MethodType(setLayoutTripleBottomSplit, hcPaneTab)
+    hcPaneTab.setLayoutTripleLeftSplit = types.MethodType(setLayoutTripleLeftSplit, hcPaneTab)
+    hcPaneTab.showDisplayOptionsBar = types.MethodType(showDisplayOptionsBar, hcPaneTab)
+    hcPaneTab.showOperationBar = types.MethodType(showOperationBar, hcPaneTab)
+    hcPaneTab.showSelectionBar = types.MethodType(showSelectionBar, hcPaneTab)
+    hcPaneTab.toggleLightGeo = types.MethodType(toggleLightGeo, hcPaneTab)
+    hcPaneTab.toggleBackface = types.MethodType(toggleBackface, hcPaneTab)
+    hcPaneTab.toggleDisplayOptionsToolbar = types.MethodType(toggleDisplayOptionsToolbar, hcPaneTab)
+    hcPaneTab.toggleOperationBar = types.MethodType(toggleOperationBar, hcPaneTab)
+    hcPaneTab.toggleSelectionBar = types.MethodType(toggleSelectionBar, hcPaneTab)
+    hcPaneTab.toggleGrid = types.MethodType(toggleGrid, hcPaneTab)
+    hcPaneTab.toggleGroupList = types.MethodType(toggleGroupList, hcPaneTab)
+    hcPaneTab.togglePointMarkers = types.MethodType(togglePointMarkers, hcPaneTab)
+    hcPaneTab.togglePointNormals = types.MethodType(togglePointNormals, hcPaneTab)
+    hcPaneTab.togglePointNumbers = types.MethodType(togglePointNumbers, hcPaneTab)
+    hcPaneTab.togglePrimNormals = types.MethodType(togglePrimNormals, hcPaneTab)
+    hcPaneTab.togglePrimNumbers = types.MethodType(togglePrimNumbers, hcPaneTab)
+    hcPaneTab.toggleToolbars = types.MethodType(toggleToolbars, hcPaneTab)
+    hcPaneTab.toggleVectors = types.MethodType(toggleVectors, hcPaneTab)
+    hcPaneTab.viewport = types.MethodType(viewport, hcPaneTab)
+    hcPaneTab.viewports = types.MethodType(viewports, hcPaneTab)
+    hcPaneTab.visualizerPanel = types.MethodType(visualizerPanel, hcPaneTab)
 
 
-        def isShowingSelectionBar(self):
-            return self.paneTab.isShowingSelectionBar()
+def displaySets(self):
+    displaySets = []
+    for viewport in self.viewports():
+        settings = viewport.settings()
+        displaySet = settings.displaySet(hou.displaySetType.DisplayModel)
+        displaySets.append(displaySet)
+    return(displaySets)
 
 
-        def keycam(self):
-            # Contexts:
-            # Chop, ChopNet, Cop, Cop2, CopNet, Data, Director, Dop, Driver, Lop, Manager, Object, Shop, Sop, Top, TopNet, Vop, VopNet
-            context = self.pwd().childTypeCategory().name()
-            if context == "Object":
-                self.paneTab.setCurrentState("keycam")
-                hou.ui.setStatusMessage("Entered keycam viewer state in Obj context.")
-            elif context == "Sop":
-                self.paneTab.setCurrentState("keycam")
-                hou.ui.setStatusMessage("Entered keycam viewer state in Sop context.")
-            elif context == "Lop":
-                self.paneTab.setCurrentState("keycam")
-                hou.ui.setStatusMessage("Entered keycam viewer state in Lop context.")
-            else:
-                hou.ui.setStatusMessage("No Obj, Sop or Lop context.", hou.severityType.Error)
+def homeAllViewports(self):
+    print("b")
+    for viewport in self.viewports():
+        viewport.home()
 
 
-        def setLayoutDoubleSide(self):
-            self.setViewportLayout(hou.geometryViewportLayout.DoubleSide)
+def isShowingDisplayOptionsBar(self):
+    return self.paneTab.isShowingDisplayOptionsBar()
 
 
-        def setLayoutDoubleStack(self):
-            self.setViewportLayout(hou.geometryViewportLayout.DoubleStack)
+def isShowingOperationBar(self):
+    return self.paneTab.isShowingOperationBar()
 
 
-        def setLayoutQuad(self):
-            self.setViewportLayout(hou.geometryViewportLayout.Quad)
+def isShowingSelectionBar(self):
+    return self.paneTab.isShowingSelectionBar()
 
 
-        def setLayoutQuadBottomSplit(self):
-            self.setViewportLayout(hou.geometryViewportLayout.QuadBottomSplit)
+def keycam(self):
+    # Contexts:
+    # Chop, ChopNet, Cop, Cop2, CopNet, Data, Director, Dop, Driver, Lop, Manager, Object, Shop, Sop, Top, TopNet, Vop, VopNet
+    context = self.pwd().childTypeCategory().name()
+    if context == "Object":
+        self.paneTab.setCurrentState("keycam")
+        hou.ui.setStatusMessage("Entered keycam viewer state in Obj context.")
+    elif context == "Sop":
+        self.paneTab.setCurrentState("keycam")
+        hou.ui.setStatusMessage("Entered keycam viewer state in Sop context.")
+    elif context == "Lop":
+        self.paneTab.setCurrentState("keycam")
+        hou.ui.setStatusMessage("Entered keycam viewer state in Lop context.")
+    else:
+        hou.ui.setStatusMessage("No Obj, Sop or Lop context.", hou.severityType.Error)
 
 
-        def setLayoutQuadLeftSplit(self):
-            self.setViewportLayout(hou.geometryViewportLayout.QuadLeftSplit)
+def setLayoutDoubleSide(self):
+    self.setViewportLayout(hou.geometryViewportLayout.DoubleSide)
 
 
-        def setLayoutSingle(self):
-            self.setViewportLayout(hou.geometryViewportLayout.Single)
+def setLayoutDoubleStack(self):
+    self.setViewportLayout(hou.geometryViewportLayout.DoubleStack)
 
 
-        def setLayoutTripleBottomSplit(self):
-            self.setViewportLayout(hou.geometryViewportLayout.TripleBottomSplit)
+def setLayoutQuad(self):
+    self.setViewportLayout(hou.geometryViewportLayout.Quad)
 
 
-        def setLayoutTripleLeftSplit(self):
-            self.setViewportLayout(hou.geometryViewportLayout.TripleLeftSplit)
+def setLayoutQuadBottomSplit(self):
+    self.setViewportLayout(hou.geometryViewportLayout.QuadBottomSplit)
 
 
-        def showDisplayOptionsBar(self, bool):
-            self.paneTab.showDisplayOptionsBar(bool)
+def setLayoutQuadLeftSplit(self):
+    self.setViewportLayout(hou.geometryViewportLayout.QuadLeftSplit)
 
 
-        def showOperationBar(self, bool):
-            self.paneTab.showOperationBar(bool)
+def setLayoutSingle(self):
+    self.setViewportLayout(hou.geometryViewportLayout.Single)
 
 
-        def showSelectionBar(self, bool):
-            self.paneTab.showSelectionBar(bool)
+def setLayoutTripleBottomSplit(self):
+    self.setViewportLayout(hou.geometryViewportLayout.TripleBottomSplit)
 
 
-        def toggleLightGeo(self):
-            self.setShowLights(not self.showLights())
+def setLayoutTripleLeftSplit(self):
+    self.setViewportLayout(hou.geometryViewportLayout.TripleLeftSplit)
 
 
-        def toggleBackface(self):
-            visible = 0
-            displaySets = self.displaySets()
-            for displaySet in displaySets:
-                if displaySet.isShowingPrimBackfaces():
-                    visible = 1
-            for displaySet in displaySets:
-                displaySet.showPrimBackfaces(not visible)
+def showDisplayOptionsBar(self, bool):
+    self.paneTab.showDisplayOptionsBar(bool)
 
 
-        def toggleDisplayOptionsToolbar(self):
-            self.showDisplayOptionsBar(not self.isShowingDisplayOptionsBar())
+def showOperationBar(self, bool):
+    self.paneTab.showOperationBar(bool)
 
 
-        def toggleOperationBar(self):
-            self.showOperationBar(not self.isShowingOperationBar())
+def showSelectionBar(self, bool):
+    self.paneTab.showSelectionBar(bool)
 
 
-        def toggleSelectionBar(self):
-            self.showSelectionBar(not self.isShowingSelectionBar())
+def toggleLightGeo(self):
+    self.setShowLights(not self.showLights())
 
 
-        def toggleGrid(self):
-            refplane = self.referencePlane()
-            refplane.setIsVisible(not refplane.isVisible())
+def toggleBackface(self):
+    visible = 0
+    displaySets = self.displaySets()
+    for displaySet in displaySets:
+        if displaySet.isShowingPrimBackfaces():
+            visible = 1
+    for displaySet in displaySets:
+        displaySet.showPrimBackfaces(not visible)
 
 
-        def toggleGroupList(self):
-            self.setGroupListVisible(not self.isGroupListVisible())
+def toggleDisplayOptionsToolbar(self):
+    self.showDisplayOptionsBar(not self.isShowingDisplayOptionsBar())
 
 
-        def togglePointMarkers(self):
-            visible = 0
-            displaySets = self.displaySets()
-            for displaySet in displaySets:
-                if displaySet.isShowingPointMarkers():
-                    visible = 1
-            for displaySet in displaySets:
-                displaySet.showPointMarkers(not visible)
+def toggleOperationBar(self):
+    self.showOperationBar(not self.isShowingOperationBar())
 
 
-        def togglePointNormals(self):
-            visible = 0
-            displaySets = self.displaySets()
-            for displaySet in displaySets:
-                if displaySet.isShowingPointNormals():
-                    visible = 1
-            for displaySet in displaySets:
-                displaySet.showPointNormals(not visible)
+def toggleSelectionBar(self):
+    self.showSelectionBar(not self.isShowingSelectionBar())
 
 
-        def togglePointNumbers(self):
-            visible = 0
-            displaySets = self.displaySets()
-            for displaySet in displaySets:
-                if displaySet.isShowingPointNumbers():
-                    visible = 1
-            for displaySet in displaySets:
-                displaySet.showPointNumbers(not visible)
+def toggleGrid(self):
+    refplane = self.referencePlane()
+    refplane.setIsVisible(not refplane.isVisible())
 
 
-        def togglePrimNormals(self):
-            visible = 0
-            displaySets = self.displaySets()
-            for displaySet in displaySets:
-                if displaySet.isShowingPrimNormals():
-                    visible = 1
-                for displaySet in displaySets:
-                    displaySet.showPrimNormals(not visible)
+def toggleGroupList(self):
+    self.setGroupListVisible(not self.isGroupListVisible())
 
 
-        def togglePrimNumbers(self):
-            visible = 0
-            displaySets = self.displaySets()
-            for displaySet in displaySets:
-                if displaySet.isShowingPrimNumbers():
-                    visible = 1
-            for displaySet in displaySets:
-                displaySet.showPrimNumbers(not visible)
+def togglePointMarkers(self):
+    visible = 0
+    displaySets = self.displaySets()
+    for displaySet in displaySets:
+        if displaySet.isShowingPointMarkers():
+            visible = 1
+    for displaySet in displaySets:
+        displaySet.showPointMarkers(not visible)
 
 
-        def toggleToolbars(self):
-            state1 = self.isShowingOperationBar()
-            state2 = self.isShowingDisplayOptionsBar()
-            state3 = self.isShowingSelectionBar()
-            if state1 + state2 + state3 > 0:
-                self.showOperationBar(0)
-                self.showDisplayOptionsBar(0)
-                self.showSelectionBar(0)
-            else:
-                self.showOperationBar(1)
-                self.showDisplayOptionsBar(1)
-                self.showSelectionBar(1)
+def togglePointNormals(self):
+    visible = 0
+    displaySets = self.displaySets()
+    for displaySet in displaySets:
+        if displaySet.isShowingPointNormals():
+            visible = 1
+    for displaySet in displaySets:
+        displaySet.showPointNormals(not visible)
 
 
-        def toggleVectors(self):
-            for viewport in self.viewports():
-                viewportSettings = viewport.settings()
-                vector_scale = viewportSettings.vectorScale()
-                if vector_scale == 1:
-                    viewportSettings.setVectorScale(0)
-                elif vector_scale == 0:
-                    viewportSettings.setVectorScale(1)
-                else:
-                    viewportSettings.setVectorScale(1)
+def togglePointNumbers(self):
+    visible = 0
+    displaySets = self.displaySets()
+    for displaySet in displaySets:
+        if displaySet.isShowingPointNumbers():
+            visible = 1
+    for displaySet in displaySets:
+        displaySet.showPointNumbers(not visible)
 
 
-        def viewport(self):
-            return self.paneTab.curViewport()
+def togglePrimNormals(self):
+    visible = 0
+    displaySets = self.displaySets()
+    for displaySet in displaySets:
+        if displaySet.isShowingPrimNormals():
+            visible = 1
+        for displaySet in displaySets:
+            displaySet.showPrimNormals(not visible)
 
 
-        def viewports(self):
-            return self.paneTab.viewports()
+def togglePrimNumbers(self):
+    visible = 0
+    displaySets = self.displaySets()
+    for displaySet in displaySets:
+        if displaySet.isShowingPrimNumbers():
+            visible = 1
+    for displaySet in displaySets:
+        displaySet.showPrimNumbers(not visible)
 
 
-        def visualizerPanel(self):
-            from .ui.hcvisualizerpanel import HCVisualizerPanel
-            panel = HCVisualizerPanel()
-            panel.show()
+def toggleToolbars(self):
+    state1 = self.isShowingOperationBar()
+    state2 = self.isShowingDisplayOptionsBar()
+    state3 = self.isShowingSelectionBar()
+    if state1 + state2 + state3 > 0:
+        self.showOperationBar(0)
+        self.showDisplayOptionsBar(0)
+        self.showSelectionBar(0)
+    else:
+        self.showOperationBar(1)
+        self.showDisplayOptionsBar(1)
+        self.showSelectionBar(1)
+
+
+def toggleVectors(self):
+    for viewport in self.viewports():
+        viewportSettings = viewport.settings()
+        vector_scale = viewportSettings.vectorScale()
+        if vector_scale == 1:
+            viewportSettings.setVectorScale(0)
+        elif vector_scale == 0:
+            viewportSettings.setVectorScale(1)
+        else:
+            viewportSettings.setVectorScale(1)
+
+
+def viewport(self):
+    return self.paneTab.curViewport()
+
+
+def viewports(self):
+    return self.paneTab.viewports()
+
+
+def visualizerPanel(self):
+    from .ui.hcvisualizerpanel import HCVisualizerPanel
+    panel = HCVisualizerPanel()
+    panel.show()

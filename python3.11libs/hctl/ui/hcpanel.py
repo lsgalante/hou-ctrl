@@ -1,39 +1,37 @@
 import hou
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QAction
-from PySide6.QtWidgets import QCheckBox, QVBoxLayout, QLabel, QMenu, QDialog, QHBoxLayout
+from PySide6.QtWidgets import QCheckBox, QSlider, QDialog, QLabel, QMenu, QHBoxLayout, QVBoxLayout
 from .hcwidgets import HCButton
-from hctl.core.hcsession import HCSession
-from hctl.core.hcpane import HCPane
+from ..core.hcsession import HCSession
+from ..core.hcpane import HCPane
 
 
 class HCPanel(QDialog):
 
-    def __init__(self, hCPaneTab):
+    def __init__(self, hcPaneTab):
         super(HCPanel, self).__init__(hou.qt.mainWindow())
 
         ## OBJECTS
-        self.hCSession = HCSession()
-        self.hCPaneTab = hCPaneTab
-        self.hCPane = HCPane(hCPaneTab.pane())
+        self.hcSession = HCSession()
+        self.hcPaneTab = hcPaneTab
+        self.hcPane = HCPane(hcPaneTab.pane())
 
         ## WINDOW PARAMETERS
-        pane_geo = self.hCPane.qtScreenGeometry()
+        pane_geo = self.hcPane.qtScreenGeometry()
         pane_center = pane_geo.center()
         x = pane_center.x() - 200
         y = pane_center.y() - 75
-        self.resize(400, 150)
+        self.resize(400, 200)
         self.move(x, y)
-        # self.moveCenter(pane_geo.center)
         self.setWindowTitle("hctl panel")
         self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint )
 
         ## UTILITY LISTS
         self.pane_tab_types = (hou.paneTabType.ApexEditor, hou.paneTabType.CompositorViewer, hou.paneTabType.DetailsView, hou.paneTabType.NetworkEditor, hou.paneTabType.Parm, hou.paneTabType.PythonPanel, hou.paneTabType.PythonShell, hou.paneTabType.SceneViewer, hou.paneTabType.Textport)
-        self.pane_tab_names = [paneTab.name() for paneTab in self.hCSession.paneTabs()]
+        self.pane_tab_names = [paneTab.name() for paneTab in self.hcSession.paneTabs()]
         self.pane_tab_type_names = ("ApexEditor", "CompositorViewer", "DetailsView", "NetworkEditor", "Parm", "PythonPanel", "PythonShell", "SceneViewer", "Textport")
         self.pane_tab_labels = []
-        for paneTab in self.hCSession.paneTabs():
+        for paneTab in self.hcSession.paneTabs():
             index = self.pane_tab_types.index(paneTab.type())
             label = self.pane_tab_type_names[index]
             self.pane_tab_labels.append(label)
@@ -42,81 +40,92 @@ class HCPanel(QDialog):
         self.projectpath = hou.hipFile.name()
         ct = self.projectpath.count("/")
         self.projectpath = self.projectpath.split("/", ct - 2)[-1]
-        self.networkpath = self.hCPaneTab.pwd()
+        self.networkpath = self.hcPaneTab.pwd()
 
         ## SESSION COLUMN
         sessionCol = QVBoxLayout()
-        # Session label
+        # Label
         sessionLabel = QLabel("Session")
         sessionLabel.setStyleSheet("color: #909090")
         sessionCol.addWidget(sessionLabel)
-        # Session autosave widget
+        # Toggle autosave
         sessionCol.addWidget(self.SessionAutosaveCheckBox(self))
-        # Session toggle menus
+        # Toggle menus
         sessionMenusBtn = HCButton("Menus")
-        sessionMenusBtn.clicked.connect(self.hCSession.toggleMenus)
+        sessionMenusBtn.clicked.connect(self.hcSession.toggleMenus)
         sessionCol.addWidget(sessionMenusBtn)
-        # Session tab visibility
+        # Toggle tabs
         sessionTabsBtn = HCButton("Tabs")
-        sessionTabsBtn.clicked.connect(self.hCSession.toggleTabs)
+        sessionTabsBtn.clicked.connect(self.hcSession.toggleTabs)
         sessionCol.addWidget(sessionTabsBtn)
-        # Session toggle network controls
+        # Toggle network controls
         sessionNetworkControlsBtn = HCButton("Network Controls")
-        sessionNetworkControlsBtn.clicked.connect(self.hCSession.toggleNetworkControls)
+        sessionNetworkControlsBtn.clicked.connect(self.hcSession.toggleNetworkControls)
         sessionCol.addWidget(sessionNetworkControlsBtn)
-        # Session stowbars
+        # Toggle stowbars
         sessionStowbarsBtn = HCButton("Stowbars")
-        sessionStowbarsBtn.clicked.connect(self.hCSession.toggleStowbars)
+        sessionStowbarsBtn.clicked.connect(self.hcSession.toggleStowbars)
         sessionCol.addWidget(sessionStowbarsBtn)
         # Fill empty space
         sessionCol.addStretch()
 
         ## PANE COLUMN
         paneCol = QVBoxLayout()
-        # Pane label
+        # Label
         paneLabel = QLabel("Pane")
         paneLabel.setStyleSheet("color: #909090")
         paneCol.addWidget(paneLabel)
-        # Pane maximize
+        # Toggle maximize
         paneMaximizeBtn = HCButton("Maximize")
-        paneMaximizeBtn.clicked.connect(self.hCPane.toggleMaximized)
+        paneMaximizeBtn.clicked.connect(self.hcPane.toggleMaximized)
         paneCol.addWidget(paneMaximizeBtn)
-        # Pane expand
-        paneExpandBtn = HCButton("Expand")
-        paneExpandBtn.clicked.connect(self.hCPane.expand)
-        paneCol.addWidget(paneExpandBtn)
-        # Pane contract
-        paneContractBtn = HCButton("Contract")
-        paneContractBtn.clicked.connect(self.hCPane.contract)
-        paneCol.addWidget(paneContractBtn)
-        # Pane toggle tabs
+        # Expand
+        # paneExpandBtn = HCButton("Expand")
+        # paneExpandBtn.clicked.connect(self.hcPane.expand)
+        # paneCol.addWidget(paneExpandBtn)
+        # Contract
+        # paneContractBtn = HCButton("Contract")
+        # paneContractBtn.clicked.connect(self.hcPane.contract)
+        # paneCol.addWidget(paneContractBtn)
+        # Toggle tabs
         panePaneTabsBtn = HCButton("Tabs")
-        panePaneTabsBtn.clicked.connect(self.hCPane.togglePaneTabs)
+        panePaneTabsBtn.clicked.connect(self.hcPane.togglePaneTabs)
         paneCol.addWidget(panePaneTabsBtn)
+        # Size slider
+        sizeSlider= QSlider(Qt.Horizontal)
+        sizeSlider.setFixedWidth(400/3)
+        sizeSlider.setValue(self.hcPane.splitFraction()*100)
+        sizeSlider.valueChanged.connect(self.sliderChange)
+        paneCol.addWidget(sizeSlider)
         # Fill empty space
         paneCol.addStretch()
 
         ## PANE TAB COLUMN
         paneTabCol = QVBoxLayout()
-        # Pane tab label
+        # Label
         paneTabLabel = QLabel("Tab")
         paneTabLabel.setStyleSheet("color: #909090")
         paneTabCol.addWidget(paneTabLabel)
-        # Pane tab pin
+        # Toggle pin
         paneTabCol.addWidget(self.PaneTabPinCheckBox(self))
-        # Pane tab menu
+        # Switch
         paneTabCol.addWidget(self.PaneTabMenu(self))
-        # Pane tab type menu
-        paneTabCol.addWidget(self.PaneTabTypeMenu(self))
-        # Pane tab network controls
+        # Change type
+        # paneTabCol.addWidget(self.PaneTabTypeMenu(self))
+        # Toggle network controls
         paneTabNetworkControlsBtn = HCButton("Network Controls")
-        paneTabNetworkControlsBtn.clicked.connect(self.hCPaneTab.toggleNetworkControls)
+        paneTabNetworkControlsBtn.clicked.connect(self.hcPaneTab.toggleNetworkControls)
         paneTabCol.addWidget(paneTabNetworkControlsBtn)
-        # Pane tab scene viewer controls
-        if self.hCPaneTab.type() == hou.paneTabType.SceneViewer:
+        # Scene viewer controls
+        if self.hcPaneTab.type() == hou.paneTabType.SceneViewer:
+            # Toggle keycam
             paneTabKeycamBtn = HCButton("Keycam")
-            paneTabKeycamBtn.clicked.connect(self.hCSession.keycam)
+            paneTabKeycamBtn.clicked.connect(self.hcSession.keycam)
             paneTabCol.addWidget(paneTabKeycamBtn)
+            # Home all viewports
+            paneTabHomeBtn = HCButton("Home")
+            paneTabHomeBtn.clicked.connect(self.hcPaneTab.homeAllViewports)
+            paneTabCol.addWidget(paneTabHomeBtn)
         # Fill empty space
         paneTabCol.addStretch()
 
@@ -128,6 +137,10 @@ class HCPanel(QDialog):
         self.setLayout(self.layout)
 
 
+    def sliderChange(self, value):
+        self.hcPane.setSplitFraction(value/100)
+
+
     def closeEvent(self, event):
         self.setParent(None)
 
@@ -137,12 +150,12 @@ class HCPanel(QDialog):
 
         def __init__(self, owner):
             super().__init__("Autosave")
-            state = owner.hCSession.autosave()
+            state = owner.hcSession.autosave()
             if state == "1":
                 self.setCheckState(Qt.Checked)
             elif state == "0":
                 self.setCheckState(Qt.Unchecked)
-            self.clicked.connect(owner.hCSession.toggleAutoSave)
+            self.clicked.connect(owner.hcSession.toggleAutoSave)
 
 
 
@@ -151,8 +164,8 @@ class HCPanel(QDialog):
         def __init__(self, owner):
             super().__init__("Pin")
             self.owner = owner
-            self.clicked.connect(self.owner.hCPaneTab.togglePin)
-            if self.owner.hCPaneTab.isPin():
+            self.clicked.connect(self.owner.hcPaneTab.togglePin)
+            if self.owner.hcPaneTab.isPin():
                 self.setCheckState(Qt.Checked)
             else:
                 self.setCheckState(Qt.Unchecked)
@@ -162,31 +175,22 @@ class HCPanel(QDialog):
     class PaneTabMenu(HCButton):
 
         def __init__(self, owner):
-            super().__init__("k")
+            super().__init__(str(owner.hcPane.currentTab().type()).split(".")[-1])
             self.owner = owner
-            self.paneTabs = self.owner.hCPane.paneTabs()
-            self.paneTabNames = [str(paneTab) for paneTab in self.paneTabs]
-            self.actions = []
+            self.tabs = self.owner.hcPane.tabs()
+            self.tabNames = [str(tab.type()).split(".")[-1] for tab in self.tabs]
             self.menu = QMenu(self)
-            for paneTabName in self.paneTabNames:
-                action = self.menu.addAction(paneTabName)
-                action.triggered.connect(self.changeTab)
-                self.actions.append(action)
+            idx = 0
+            for tabName in self.tabNames:
+                action = self.menu.addAction(tabName)
+                action.triggered.connect(lambda checked=False, index=idx: self.changeTab(index))
+                idx += 1
             self.setMenu(self.menu)
 
-
-        def changeTab(self):
-            print(action)
-            return
-            # self.setText(self.sender().text())
-            # index = self.actions.index(QAction)
-            # print(index)
-            # print(self.paneTabNames)
-            # print(self.menu.activeAction())
-            # return
-            # index = self.paneTabNames.index(self.menu.activeAction())
-            # newPaneTab = self.paneTab[index]
-            # newPaneTab.setIsCurrentTab()
+        def changeTab(self, index):
+            newTab = self.tabs[index]
+            newTab.setIsCurrentTab()
+            self.owner.close()
 
 
 

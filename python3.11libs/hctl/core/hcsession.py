@@ -38,9 +38,16 @@ class HCSession():
 
 
     def hCPanel(self):
-        from hctl.ui.hcpanel import HCPanel
-        from hctl.core.hcpanetab import HCPaneTab
-        HCPanel(HCPaneTab(self.paneTab())).show()
+        from ..ui.hcpanel import HCPanel
+        from .hcpanetab import HCPaneTab
+        mainWindow = hou.qt.mainWindow()
+        children = mainWindow.children()
+        for child in children:
+            if isinstance(child, HCPanel):
+                child.close()
+                # return
+        hCPaneTab = HCPaneTab(self.paneTab())
+        HCPanel(hCPaneTab).show()
 
 
     def hideShelf(self):
@@ -116,7 +123,7 @@ class HCSession():
 
 
     def reloadHotkeys(self):
-        from hctl.input.hcbindings import load
+        from ..input.hcbindings import load
         load()
 
 
@@ -187,7 +194,7 @@ class HCSession():
 
 
     def status(self):
-        from .ui.hcstatuspanel import HCStatusPanel
+        from ..ui.hcstatuspanel import HCStatusPanel
         panel = HCStatusPanel()
         panel.show()
 

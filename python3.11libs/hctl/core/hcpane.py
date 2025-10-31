@@ -21,6 +21,10 @@ class HCPane:
         self.setSplitFraction(fraction)
 
 
+    def currentTab(self):
+        return self.pane.currentTab()
+
+
     def expand(self):
         fraction = self.splitFraction()
         fraction = round(fraction, 3) - 0.1
@@ -108,11 +112,7 @@ class HCPane:
         self.pane.splitVertically()
 
 
-    def paneTab(self):
-        return self.pane.currentTab()
-
-
-    def paneTabs(self):
+    def tabs(self):
         return self.pane.tabs()
 
 
