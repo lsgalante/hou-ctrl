@@ -1,10 +1,11 @@
 
 #include "NodeGraphCommon.inc"
+#include "hc_colors.inc"
 
-#define BG_HI                 0.2137 0.2162 0.2208
-#define BG_LO                 0.1175 0.1188 0.1214
+#define BG_HI                       0.2137 0.2162 0.2208
+#define BG_LO                       0.1175 0.1188 0.1214
 
-#define GREY(g)               g g g
+#define GREY(g)                     g g g
 
 PaletteBackground:                  GREY(0.15)
 PaletteSelected:                    YELLOW
