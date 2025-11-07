@@ -21,13 +21,23 @@ class HCPanel(QDialog):
         pane_center = pane_geo.center()
         x = pane_center.x() - 200
         y = pane_center.y() - 75
-        self.resize(400, 200)
+        self.resize(300, 200)
         self.move(x, y)
         self.setWindowTitle("hctl panel")
         self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint )
 
-        ## UTILITY LISTS
-        self.pane_tab_types = (hou.paneTabType.ApexEditor, hou.paneTabType.CompositorViewer, hou.paneTabType.DetailsView, hou.paneTabType.NetworkEditor, hou.paneTabType.Parm, hou.paneTabType.PythonPanel, hou.paneTabType.PythonShell, hou.paneTabType.SceneViewer, hou.paneTabType.Textport)
+        # UTILITY LISTS
+        self.pane_tab_types = (
+            hou.paneTabType.ApexEditor,
+            hou.paneTabType.CompositorViewer,
+            hou.paneTabType.DetailsView,
+            hou.paneTabType.NetworkEditor,
+            hou.paneTabType.Parm,
+            hou.paneTabType.PythonPanel,
+            hou.paneTabType.PythonShell,
+            hou.paneTabType.SceneViewer,
+            hou.paneTabType.Textport
+        )
         self.pane_tab_names = [paneTab.name() for paneTab in self.hcSession.paneTabs()]
         self.pane_tab_type_names = ("ApexEditor", "CompositorViewer", "DetailsView", "NetworkEditor", "Parm", "PythonPanel", "PythonShell", "SceneViewer", "Textport")
         self.pane_tab_labels = []
@@ -36,13 +46,13 @@ class HCPanel(QDialog):
             label = self.pane_tab_type_names[index]
             self.pane_tab_labels.append(label)
 
-        ## PATHS
+        # PATHS
         self.projectpath = hou.hipFile.name()
         ct = self.projectpath.count("/")
         self.projectpath = self.projectpath.split("/", ct - 2)[-1]
         self.networkpath = self.hcPaneTab.pwd()
 
-        ## SESSION COLUMN
+        # SESSION COLUMN
         sessionCol = QVBoxLayout()
         # Label
         sessionLabel = QLabel("Session")
@@ -69,71 +79,55 @@ class HCPanel(QDialog):
         # Fill empty space
         sessionCol.addStretch()
 
-        ## PANE COLUMN
+        # PANE COLUMN
         paneCol = QVBoxLayout()
         # Label
-        paneLabel = QLabel("Pane")
+        paneLabel = QLabel("Pane/Tab")
         paneLabel.setStyleSheet("color: #909090")
         paneCol.addWidget(paneLabel)
+        # Toggle pin
+        paneCol.addWidget(self.PaneTabPinCheckBox(self))
+        # Tab switcher
+        paneCol.addWidget(self.PaneTabMenu(self))
+        # Tab type switcher
+        # paneTabCol.addWidget(self.PaneTabTypeMenu(self))
         # Toggle maximize
         paneMaximizeBtn = HCButton("Maximize")
         paneMaximizeBtn.clicked.connect(self.hcPane.toggleMaximized)
         paneCol.addWidget(paneMaximizeBtn)
-        # Expand
-        # paneExpandBtn = HCButton("Expand")
-        # paneExpandBtn.clicked.connect(self.hcPane.expand)
-        # paneCol.addWidget(paneExpandBtn)
-        # Contract
-        # paneContractBtn = HCButton("Contract")
-        # paneContractBtn.clicked.connect(self.hcPane.contract)
-        # paneCol.addWidget(paneContractBtn)
         # Toggle tabs
         panePaneTabsBtn = HCButton("Tabs")
         panePaneTabsBtn.clicked.connect(self.hcPane.togglePaneTabs)
         paneCol.addWidget(panePaneTabsBtn)
         # Size slider
         sizeSlider= QSlider(Qt.Horizontal)
-        sizeSlider.setFixedWidth(400/3)
+        sizeSlider.setFixedWidth(300/2)
         sizeSlider.setValue(self.hcPane.splitFraction()*100)
         sizeSlider.valueChanged.connect(self.sliderChange)
         paneCol.addWidget(sizeSlider)
-        # Fill empty space
-        paneCol.addStretch()
-
-        ## PANE TAB COLUMN
-        paneTabCol = QVBoxLayout()
-        # Label
-        paneTabLabel = QLabel("Tab")
-        paneTabLabel.setStyleSheet("color: #909090")
-        paneTabCol.addWidget(paneTabLabel)
-        # Toggle pin
-        paneTabCol.addWidget(self.PaneTabPinCheckBox(self))
-        # Switch
-        paneTabCol.addWidget(self.PaneTabMenu(self))
-        # Change type
-        # paneTabCol.addWidget(self.PaneTabTypeMenu(self))
         # Toggle network controls
         paneTabNetworkControlsBtn = HCButton("Network Controls")
         paneTabNetworkControlsBtn.clicked.connect(self.hcPaneTab.toggleNetworkControls)
-        paneTabCol.addWidget(paneTabNetworkControlsBtn)
+        paneCol.addWidget(paneTabNetworkControlsBtn)
+
         # Scene viewer controls
         if self.hcPaneTab.type() == hou.paneTabType.SceneViewer:
             # Toggle keycam
             paneTabKeycamBtn = HCButton("Keycam")
             paneTabKeycamBtn.clicked.connect(self.hcSession.keycam)
-            paneTabCol.addWidget(paneTabKeycamBtn)
+            paneCol.addWidget(paneTabKeycamBtn)
             # Home all viewports
             paneTabHomeBtn = HCButton("Home")
             paneTabHomeBtn.clicked.connect(self.hcPaneTab.homeAllViewports)
-            paneTabCol.addWidget(paneTabHomeBtn)
-        # Fill empty space
-        paneTabCol.addStretch()
+            paneCol.addWidget(paneTabHomeBtn)
 
-        ## LAYOUT
+        # Fill empty space
+        paneCol.addStretch()
+
+        # LAYOUT
         self.layout = QHBoxLayout()
         self.layout.addLayout(sessionCol)
         self.layout.addLayout(paneCol)
-        self.layout.addLayout(paneTabCol)
         self.setLayout(self.layout)
 
 
