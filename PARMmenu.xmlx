@@ -8,12 +8,13 @@
     <removeItem id="set_curr_as_def"/>
     <removeItem id="export_parm_type_props"/>
 
+
     <scriptItem id="vector_set_x">
       <label>Set to X</label>
       <context>
         <expression><![CDATA[
 import hctl_menu_utils as hmu
-answer = hmu.vector3Test(kwargs)        
+answer = hmu.vector3Test(kwargs)
 return answer
 ]]></expression>
       </context>
@@ -23,13 +24,14 @@ hmu.setVector3(kwargs, 1, 0, 0)
 ]]></scriptCode>
     </scriptItem>
 
+
     <scriptItem id="vector_lock">
       <label>Lock Y and Z to X</label>
       <context>
         <expression><![CDATA[
 import hctl_menu_utils as hmu
 answer = hmu.vector3Test(kwargs)
-return answer       
+return answer
 ]]></expression>
       </context>
       <scriptCode><![CDATA[
