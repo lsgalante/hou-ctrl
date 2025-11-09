@@ -2,7 +2,6 @@ import hou
 
 
 class HCSession():
-
     def __init__(self):
         return
 

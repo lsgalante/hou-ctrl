@@ -1,8 +1,8 @@
 import hou
 import types
 
-class HCPaneTab():
 
+class HCPaneTab():
     def __init__(self, paneTab):
         self.paneTab = paneTab
         if self.type() == hou.paneTabType.NetworkEditor:
@@ -116,19 +116,19 @@ class HCPaneTab():
 
 
 
-## NETWORK EDITOR FUNCTIONS
+# Network editor functions
 
 def addNetworkEditorFunctions(hcPaneTab):
-    hcPaneTab.addNetworkBox = types.MethodType(addNetworkBox, hcPaneTab)
-    hcPaneTab.addStickyNote = types.MethodType(addStickyNote, hcPaneTab)
-    hcPaneTab.nextGrid = types.MethodType(nextGrid, hcPaneTab)
-    hcPaneTab.deselectAll = types.MethodType(nextGrid, hcPaneTab)
-    hcPaneTab.renameNode = types.MethodType(renameNode, hcPaneTab)
-    hcPaneTab.selectDisplayNode = types.MethodType(selectDisplayNode, hcPaneTab)
+    hcPaneTab.addNetworkBox        = types.MethodType(addNetworkBox, hcPaneTab)
+    hcPaneTab.addStickyNote        = types.MethodType(addStickyNote, hcPaneTab)
+    hcPaneTab.nextGrid             = types.MethodType(nextGrid, hcPaneTab)
+    hcPaneTab.deselectAll          = types.MethodType(nextGrid, hcPaneTab)
+    hcPaneTab.renameNode           = types.MethodType(renameNode, hcPaneTab)
+    hcPaneTab.selectDisplayNode    = types.MethodType(selectDisplayNode, hcPaneTab)
     hcPaneTab.toggleDimUnusedNodes = types.MethodType(toggleDimUnusedNodes, hcPaneTab)
-    hcPaneTab.toggleLocating = types.MethodType(toggleLocating, hcPaneTab)
-    hcPaneTab.toggleMenu = types.MethodType(toggleMenu, hcPaneTab)
-    hcPaneTab.toggleGridPoints = types.MethodType(toggleGridPoints, hcPaneTab)
+    hcPaneTab.toggleLocating       = types.MethodType(toggleLocating, hcPaneTab)
+    hcPaneTab.toggleMenu           = types.MethodType(toggleMenu, hcPaneTab)
+    hcPaneTab.toggleGridPoints     = types.MethodType(toggleGridPoints, hcPaneTab)
 
 
 def addNetworkBox(self):
@@ -196,7 +196,7 @@ def toggleGridPoints(self):
 
 
 
-## SCENE VIEWER FUNCTIONS
+# Scene viewer functions
 
 def addSceneViewerFunctions(hcPaneTab):
     hcPaneTab.displaySets = types.MethodType(displaySets, hcPaneTab)
