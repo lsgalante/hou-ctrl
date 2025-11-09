@@ -7,16 +7,15 @@ from ..core.hcpane import HCPane
 
 
 class HCPanel(QDialog):
-
     def __init__(self, hcPaneTab):
         super(HCPanel, self).__init__(hou.qt.mainWindow())
 
-        ## OBJECTS
+        # Objects
         self.hcSession = HCSession()
         self.hcPaneTab = hcPaneTab
         self.hcPane = HCPane(hcPaneTab.pane())
 
-        ## WINDOW PARAMETERS
+        # Window parameters
         pane_geo = self.hcPane.qtScreenGeometry()
         pane_center = pane_geo.center()
         x = pane_center.x() - 200
@@ -26,33 +25,50 @@ class HCPanel(QDialog):
         self.setWindowTitle("hctl panel")
         self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint )
 
-        # UTILITY LISTS
+        # Utility lists
         self.pane_tab_types = (
             hou.paneTabType.ApexEditor,
+            hou.paneTabType.ChannelEditor,
+            hou.paneTabType.ChannelViewer,
             hou.paneTabType.CompositorViewer,
             hou.paneTabType.DetailsView,
+            hou.paneTabType.IPRViewer,
             hou.paneTabType.NetworkEditor,
             hou.paneTabType.Parm,
             hou.paneTabType.PythonPanel,
             hou.paneTabType.PythonShell,
             hou.paneTabType.SceneViewer,
-            hou.paneTabType.Textport
+            hou.paneTabType.Textport,
+            hou.paneTabType.TreeView
         )
         self.pane_tab_names = [paneTab.name() for paneTab in self.hcSession.paneTabs()]
-        self.pane_tab_type_names = ("ApexEditor", "CompositorViewer", "DetailsView", "NetworkEditor", "Parm", "PythonPanel", "PythonShell", "SceneViewer", "Textport")
+        self.pane_tab_type_names = (
+            "ApexEditor",
+            "Channel Editor",
+            "Channel Viewer",
+            "CompositorViewer",
+            "DetailsView",
+            "IPR Viewer",
+            "NetworkEditor",
+            "Parm", "PythonPanel",
+            "PythonShell",
+            "SceneViewer",
+            "Textport",
+            "Tree View")
         self.pane_tab_labels = []
         for paneTab in self.hcSession.paneTabs():
+            print(paneTab.type())
             index = self.pane_tab_types.index(paneTab.type())
             label = self.pane_tab_type_names[index]
             self.pane_tab_labels.append(label)
 
-        # PATHS
+        # Paths
         self.projectpath = hou.hipFile.name()
         ct = self.projectpath.count("/")
         self.projectpath = self.projectpath.split("/", ct - 2)[-1]
         self.networkpath = self.hcPaneTab.pwd()
 
-        # SESSION COLUMN
+        # Session column
         sessionCol = QVBoxLayout()
         # Label
         sessionLabel = QLabel("Session")
@@ -79,7 +95,7 @@ class HCPanel(QDialog):
         # Fill empty space
         sessionCol.addStretch()
 
-        # PANE COLUMN
+        # Pane column
         paneCol = QVBoxLayout()
         # Label
         paneLabel = QLabel("Pane/Tab")
@@ -141,7 +157,6 @@ class HCPanel(QDialog):
 
 
     class SessionAutosaveCheckBox(QCheckBox):
-
         def __init__(self, owner):
             super().__init__("Autosave")
             state = owner.hcSession.autosave()
@@ -154,7 +169,6 @@ class HCPanel(QDialog):
 
 
     class PaneTabPinCheckBox(QCheckBox):
-
         def __init__(self, owner):
             super().__init__("Pin")
             self.owner = owner
@@ -167,7 +181,6 @@ class HCPanel(QDialog):
 
 
     class PaneTabMenu(HCButton):
-
         def __init__(self, owner):
             super().__init__(str(owner.hcPane.currentTab().type()).split(".")[-1])
             self.owner = owner
@@ -181,6 +194,7 @@ class HCPanel(QDialog):
                 idx += 1
             self.setMenu(self.menu)
 
+
         def changeTab(self, index):
             newTab = self.tabs[index]
             newTab.setIsCurrentTab()
@@ -189,7 +203,6 @@ class HCPanel(QDialog):
 
 
     class PaneTabTypeMenu(HCButton):
-
         def __init__(self, owner):
             super().__init__("menu")
             self.owner = owner
