@@ -2,13 +2,11 @@ import hou
 
 
 class State(object):
-
     def __init__(self, state_name, scene_viewer):
         self.sceneViewer = scene_viewer
         self.cam_type = None
         self.context = None
         self.state_name = state_name
-
         self.options = {
             "center_on_geo": 1,
             "lock_cam": 1,
@@ -75,7 +73,6 @@ class State(object):
 
         key = kwargs["ui_event"].device().keyString()
         keymap.get(key, lambda: False)()
-
         self.kGuides.update()
 
         # Default cam
@@ -208,13 +205,11 @@ def createViewerStateTemplate():
 
 
 class KCam():
-
     def __init__(self, state):
         self.state = state
         # self.cam = hou.node("/obj/keycam")
         self.nodeCheck()
         self.lock()
-
 
     def frame(self):
         centroid = self.state.kGeo.centroid()
@@ -223,7 +218,6 @@ class KCam():
         # self.state.kParms.ow = 10
         self.setZoom(6)
 
-
     def home(self):
         centroid = self.state.kGeo.centroid()
         self.state.kParms.t = centroid
@@ -231,15 +225,12 @@ class KCam():
         # self.state.kParms.ow = 10
         # self.setZoom(6)
 
-
     def lock(self):
         self.state.kSceneViewer.viewport().setCamera(self.cam)
         self.state.kSceneViewer.viewport().lockCameraToView(1)
 
-
     def unlock(self):
         self.state.kSceneViewer.viewport().lockCameraToView(0)
-
 
     def movePivot(self):
         # If origin
@@ -249,13 +240,11 @@ class KCam():
             self.kParms.p = [0, 0, self.kParms.dist * -1]
             self.kParms.ow = 10
 
-
     def nextProjection(self):
         parm = self.cam.parm("projection")
         proj = parm.evalAsString()
         if proj == "ortho": parm.set("perspective")
         elif proj == "perspective": parm.set("ortho")
-
 
     # Create keycam node if nonexistant
     def nodeCheck(self):
@@ -267,7 +256,6 @@ class KCam():
             cam.parm("xOrd").set(0)
         self.cam = hou.node("/obj/keycam")
 
-
     def rotate(self, m):
         self.state.kParms.t -= self.state.kParms.p
         self.state.kParms.t *= m
@@ -276,56 +264,46 @@ class KCam():
         self.state.kParms.local_y *= m
         self.state.kParms.local_z *= m
 
-
     def rotateUp(self):
         self.state.kParms.r = hou.Vector3(self.state.kParms.r[0] + self.state.kParms.delta_r, self.state.kParms.r[1], self.state.kParms.r[2])
         m = hou.hmath.buildRotateAboutAxis(self.state.kParms.local_x, self.state.kParms.delta_r)
         self.rotate(m)
-
 
     def rotateDown(self):
         self.state.kParms.r = hou.Vector3(self.state.kParms.r[0] - self.state.kParms.delta_r, self.state.kParms.r[1], self.state.kParms.r[2])
         m = hou.hmath.buildRotateAboutAxis(self.state.kParms.local_x, self.state.kParms.delta_r * -1)
         self.rotate(m)
 
-
     def rotateLeft(self):
         self.state.kParms.r = hou.Vector3(self.state.kParms.r[0], self.state.kParms.r[1] - self.state.kParms.delta_r, self.state.kParms.r[2])
         m = hou.hmath.buildRotateAboutAxis(self.state.kParms.global_y, self.state.kParms.delta_r * -1)
         self.rotate(m)
-
 
     def rotateRight(self):
         self.state.kParms.r = hou.Vector3(self.state.kParms.r[0], self.state.kParms.r[1] + self.state.kParms.delta_r, self.state.kParms.r[2])
         m = hou.hmath.buildRotateAboutAxis(self.state.kParms.global_y, self.state.kParms.delta_r)
         self.rotate(m)
 
-
     def translateUp(self):
         move = self.state.kParms.local_y * self.state.kParms.delta_t * -1
         self.state.kParms.t += move
-
 
     def translateDown(self):
         move = self.state.kParms.local_y * self.state.kParms.delta_t
         self.state.kParms.t += move
 
-
     def translateLeft(self):
         move = self.state.kParms.local_x * self.state.kParms.delta_t * -1
         self.state.kParms.t += move
-
 
     def translateRight(self):
         move = self.state.kParms.local_x * self.state.kParms.delta_t
         self.state.kParms.t += move
 
-
     def update(self):
         self.cam.parmTuple("t").set(self.state.kParms.t)
         self.cam.parmTuple("r").set(self.state.kParms.r)
         self.cam.parm("orthowidth").set(self.state.kParms.ow)
-
 
     def updateAspectRatio(self):
         self.cam.parm("resx").set(1000)
@@ -334,29 +312,23 @@ class KCam():
         ratio = viewport.size()[2] / viewport.size()[3]
         self.cam.parm("aspect").set(ratio)
 
-
     def setZoom(self, zoom):
         move = self.state.kParms.local_z * zoom
         self.state.kParms.t += move
-
 
     def zoomIn(self):
         move = self.state.kParms.local_z * self.state.kParms.delta_z
         self.state.kParms.t -= move
 
-
     def zoomOut(self):
         move = self.state.kParms.local_z * self.state.kParms.delta_z
         self.state.kParms.t += move
 
-
     def setOrthoZoom(self, zoom_level):
         self.state.kParms.ow = zoom_level
 
-
     def orthoZoomIn(self):
         self.state.kParms.ow += self.state.kParms.delta_z * -1
-
 
     def orthoZoomOut(self):
         self.state.kParms.ow += self.state.kParms.delta_z
@@ -364,10 +336,8 @@ class KCam():
 
 
 class KDefaultCam():
-
     def __init__(self, state):
         return
-
 
     def frame(self):
         for viewport in self.kSceneViewer.viewports():
@@ -377,26 +347,20 @@ class KDefaultCam():
                 viewport.frameAll()
         self.camToState()
 
-
     def up(self, indices):
         return
-
 
     def down(self, indices):
         return
 
-
     def left(self, indices):
         return
-
 
     def right(self, indices):
         return
 
 
-
 class KGeo():
-
     def __init__(self, state):
         self.state = state
         self.geo = hou.Geometry()
@@ -410,12 +374,10 @@ class KGeo():
             name=self.name,
             params=self.geo_parms)
 
-
     def bbox(self):
         geo = self.get()
         bbox = geo.boundingBox()
         return bbox
-
 
     def centroid(self):
         geo_in = self.get()
@@ -427,7 +389,6 @@ class KGeo():
         centroid = pt.position()
         return centroid
 
-
     def get(self):
         self.displayNode = None
         pwd = self.state.sceneViewer.pwd()
@@ -437,7 +398,6 @@ class KGeo():
         elif self.context == "Objects":  displayNode = pwd.children()[0].displayNode()
         elif self.context == "Geometry": displayNode = pwd.displayNode()
         return displayNode.geometry()
-
 
     def home(self):
         self.displayNode = None
@@ -459,11 +419,9 @@ class KGuides():
         self.pivot3d.setParams({"color1":hou.Vector4(0.8, 0.8, 0.4, 0.7), "fade_factor":0.5})
         self.ray =       hou.GeometryDrawable(scene_viewer=self.state.sceneViewer, geo_type=hou.drawableGeometryType.Line, name="ray",        params={"color1":hou.Vector4((1, 0.8, 1, 0.5))})
 
-
     def toggle(self, kwargs, guide):
         kwargs[guide] = not kwargs[guide]
         self.update_bbox()
-
 
     def update(self):
         self.updatePivotAxis()
@@ -496,7 +454,6 @@ class KGuides():
         #         name="text",
         #         label="test")
 
-
     def updateCamAxis(self):
         axes = (self.state.kParms.local_x, self.state.kParms.local_y, self.state.kParms.local_z)
         geo = hou.Geometry()
@@ -509,7 +466,6 @@ class KGuides():
             poly.addVertex(pts[1])
         self.camAxis.setGeometry(geo)
         self.camAxis.show(1)
-
 
     def updatePivotAxis(self):
         axes = (hou.Vector3(1, 0, 0), hou.Vector3(0, 1, 0), hou.Vector3(0, 0, 1))
@@ -528,7 +484,6 @@ class KGuides():
         self.pivotAxis.setGeometry(geo)
         self.pivotAxis.setParams({"fade_factor": 0.0})
 
-
     def updateBbox(self):
         geo  = self.get_get()
         # bbox = geo.boundingBox()
@@ -544,7 +499,6 @@ class KGuides():
         self.bbox.setGeometry(geo)
         self.bbox.show(1)
 
-
     def updatePerim(self):
         rad  = self.state.kParms.p.distanceTo(self.state.kParms.t)
         verb = hou.sopNodeTypeCategory().nodeVerb("circle")
@@ -554,7 +508,6 @@ class KGuides():
         self.perim.setParams({"color1":hou.Vector4(1.0, 1.0, 1.0, 0.25), "fade_factor":1.0})
         self.perim.setGeometry(geo)
         self.perim.show(1)
-
 
     def updatePivot2d(self):
         P = self.state.kParms.p + self.state.kParms.t
@@ -566,7 +519,6 @@ class KGuides():
         self.pivot2d.setGeometry(geo)
         self.pivot2d.show(1)
 
-
     def updatePivot3d(self):
             verb = hou.sopNodeTypeCategory().nodeVerb("sphere")
             verb.setParms({"type":1, "t":self.state.kParms.p, "scale":self.self.state.kParms.t.distanceTo(self.state.kParms.p) * 0.002})
@@ -574,7 +526,6 @@ class KGuides():
             verb.execute(geo, [])
             self.pivot3d.setGeometry(geo)
             self.pivot3d.show(1)
-
 
     def updateRay(self):
             geo = hou.Geometry()
@@ -586,17 +537,14 @@ class KGuides():
             self.ray.setGeometry(geo)
             self.ray.show(1)
 
-
     def updateText(self):
         return
 
 
 
 class KHud():
-
     def __init__(self, state):
         self.state = state
-
         self.template = {
             "title": "test",
             "rows": [
@@ -628,7 +576,6 @@ class KHud():
         elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.TripleLeftSplit:   self.template["rows"][3]["count"] = 3
         elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.Single:            self.template["rows"][3]["count"] = 1
         self.state.sceneViewer.hudInfo(template=self.template)
-
         updates = {
             "r": self.state.kParms.delta_r,
             "t": self.state.kParms.delta_t,
@@ -637,12 +584,10 @@ class KHud():
             "layout": str(self.state.kSceneViewer.layout())[23:],
             "layout_g": self.state.kSceneViewer.layouts().index(self.state.kSceneViewer.layout())
         }
-
         self.state.sceneViewer.hudInfo(hud_values=updates)
 
 
 class KParms():
-
     def __init__(self, state):
         self.state = state
         self.parms = state.kwargs["state_parms"]
@@ -677,7 +622,6 @@ class KParms():
         self.guide_ray = 0
         self.guide_tie_axis_to_radius = 0
 
-
     def reset(self):
         self._t = hou.Vector3(0, 0, 0)
         self._r = hou.Vector3(0, 0, 0)
@@ -694,85 +638,103 @@ class KParms():
         self.global_y = hou.Vector3(0, 1, 0)
         self.global_z = hou.Vector3(0, 0, 1)
 
-
     @property
     def p(self): return self._p
+
     @property
     def r(self): return self._r
+
     @property
     def t(self): return self._t
+
     @property
     def z(self): return self._z
+
     @property
     def dist(self): return self._dist
+
     @property
     def ow(self): return self._ow
+
     @property
     def target(self): return self._target
+
     @property
     def delta_r(self): return self._delta_r
+
     @property
     def delta_t(self): return self._delta_t
+
     @property
     def delta_z(self): return self._delta_z
+
     @property
     def layout(self): return self._layout
+
     @property
     def viewport(self): return self._viewport
-
 
     @p.setter
     def p(self, val):
         self._p = val
         self.parms["p"]["value"] = val
         self.state.kCam.cam.parmTuple("p").set(val)
+
     @r.setter
     def r(self, val):
         self._r = val
         self.parms["r"]["value"] = list(val)
         self.state.kCam.cam.parmTuple("r").set(val)
         self.state.kGuides.update()
+
     @t.setter
     def t(self, val):
         self._t = val
         self.parms["t"]["value"] = list(val)
         self.state.kCam.cam.parmTuple("t").set(val)
+
     @z.setter
     def z(self, val):
         self._z= val
         self.parms["z"]["value"] = val
         self.state.kCam.setZoom(10)
+
     @ow.setter
     def ow(self, val):
         self._ow = val
         self.parms["ow"]["value"] = val
         self.state.kCam.cam.parm("orthowidth").set(val)
+
     @target.setter
     def target(self, val):
         self._target = val
         self.parms["target"]["value"] = val
+
     @delta_r.setter
     def delta_r(self, val):
         self._delta_r = val
         self.parms["delta_r"]["value"] = val
+
     @delta_t.setter
     def delta_t(self, val):
         self._delta_t = val
         self.parms["delta_t"]["value"] = val
+
     @delta_z.setter
     def delta_z(self, val):
         self._delta_z = val
         self.parms["delta_z"]["value"] = val
+
     @layout.setter
     def layout(self, val):
         self._layout = val
         self.parms["layout"]["value"] = val
         self.state.kSceneViewer.setLayout(self.state.kSceneViewer.layouts()[val])
+
     @viewport.setter
     def set_viewport(self, val):
         self._viewport = val
         self.parms["viewport"]["value"] = val
-
 
     def camToState(self):
         self.t = self.cam.evalParmTuple("t")
@@ -782,48 +744,67 @@ class KParms():
         self.ow = self.cam.evalParm("orthowidth")
 
 
-
 class KSceneViewer():
-# Guide to layout/viewport IDs:
+# Layout/viewport IDs
+#
 # DoubleSide:        2 3
+#
 # DoubleStack:       3
 #                    0
+#
 # Quad:              2 3
 #                    1 0
+#
 # QuadBottomSplit:     3
 #                    2 1 0
+#
 # QuadLeftSplit:     2
 #                    1 3
 #                    0
+#
 # TripleBottomSplit:   3
 #                    1   0
+#
 # TripleLeftSplit:   2
 #                    0 3
 #                    1
+#
 # Single:
 # setViewportLayout(layout, single=-1)
 # -1: current viewport (viewportmouse is/was over)
-# 0: top-left viewport from quad layout (default Top)
-# 1: top-right viewport from quad layout (default Perspective)
-# 2: bottom-left viewport from quad layout (default Front)
-# 3: bottom-right viewport from quad layout (default Right)
+# 0: top-left quad viewport (default: Top)
+# 1: top-right quad viewport (default: Perspective)
+# 2: bottom-left quad viewport (default: Front)
+# 3: bottom-right quad viewport (default: Right)
 
     def __init__(self, state):
         self.state = state
         self.sceneViewer = state.sceneViewer
 
-
     def layout(self):
         return self.sceneViewer.viewportLayout()
 
-
     def layouts(self):
-        return (hou.geometryViewportLayout.DoubleSide, hou.geometryViewportLayout.DoubleStack, hou.geometryViewportLayout.Quad, hou.geometryViewportLayout.QuadBottomSplit, hou.geometryViewportLayout.QuadLeftSplit, hou.geometryViewportLayout.TripleBottomSplit, hou.geometryViewportLayout.TripleLeftSplit, hou.geometryViewportLayout.Single)
-
+        return (
+            hou.geometryViewportLayout.DoubleSide,
+            hou.geometryViewportLayout.DoubleStack,
+            hou.geometryViewportLayout.Quad,
+            hou.geometryViewportLayout.QuadBottomSplit,
+            hou.geometryViewportLayout.QuadLeftSplit,
+            hou.geometryViewportLayout.TripleBottomSplit,
+            hou.geometryViewportLayout.TripleLeftSplit,
+            hou.geometryViewportLayout.Single)
 
     def layoutIndices(self):
-        return ((2,3), (3,0), (2,3,1,0), (3,2,1,0), (2,1,0,3), (3,1,0), (2,3,1), (3))
-
+        return (
+            (2,3),
+            (3,0),
+            (2,3,1,0),
+            (3,2,1,0),
+            (2,1,0,3),
+            (3,1,0),
+            (2,3,1),
+            (3))
 
     def nextLayout(self):
         index = self.layouts().index(self.layout())
@@ -832,43 +813,33 @@ class KSceneViewer():
         self.state.kHud.update()
         return
 
-
     def nextView(self):
         return
 
-
     def nextViewport(self):
         return
-
 
     def setLayout(self, layout):
         print(layout)
         self.sceneViewer.setViewportLayout(layout)
 
-
     def viewport(self):
         return self.sceneViewer.curViewport()
 
-
     def viewports(self):
         return self.sceneViewer.viewports()
-
 
     def setType(self, viewportType):
         viewport = self.sceneViewer.findViewport(self.layout_state["viewport"])
         viewport.changeType(viewportType)
 
 
-
 class KViewport():
-
     def __init__(self):
         return
 
-
     def focus(self):
         return
-
 
     def frame(self):
         for viewport in self.viewports:
@@ -877,7 +848,6 @@ class KViewport():
             if cam == None: viewport.frameAll()
             else: viewport.frameAll()
         self.camToState()
-
 
     # def swap(self):
         # viewport_names = [viewport.name() for viewport in self.viewports]
