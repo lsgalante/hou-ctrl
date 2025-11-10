@@ -556,10 +556,6 @@ class KHud():
                 {"id": "view_g",     "type": "choicegraph", "count": 8},
                 {"id": "target",     "type": "plain",       "label": "Target",   "value": "Camera",      "key": "T"},
                 {"id": "target_g",   "type": "choicegraph", "count": 2},
-                {"id": "r",          "type": "plain",       "label": "Delta R"},
-                {"id": "t",          "type": "plain",       "label": "Delta T"},
-                {"id": "z",          "type": "plain",       "label": "Delta Z"},
-                {"id": "ow",         "type": "plain",       "label": "Delta OW"},
                 {"id": "vis",        "type": "plain",       "label": "Vis"},
                 {"id": "focus",      "type": "plain",       "label": "Focus", "value": 0},
                 {"id": "focus_g",    "type": "choicegraph", "count": 10}
