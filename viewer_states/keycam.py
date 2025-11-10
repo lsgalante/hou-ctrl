@@ -1,6 +1,5 @@
 import hou
 
-
 class State(object):
     def __init__(self, state_name, scene_viewer):
         self.sceneViewer = scene_viewer
@@ -13,7 +12,6 @@ class State(object):
             "reset": 1
         }
 
-
     def onDraw(self, kwargs):
         handle = kwargs["draw_handle"]
         self.kGuides.camAxis.draw(handle, {})
@@ -24,11 +22,9 @@ class State(object):
         self.kGuides.ray.draw(handle, {})
         # self.kGuides.Text.draw(handle, {})
 
-
     def onExit(self, kwargs):
         for viewport in self.sceneViewer.viewports():
             viewport.lockCameraToView(False)
-
 
     def onGenerate(self, kwargs):
         # Prevent exiting the state when current node changes
@@ -40,7 +36,6 @@ class State(object):
         self.kGuides = KGuides(self)
         self.kHud = KHud(self)
         self.kParms = KParms(self)
-
         self.kParms.reset()
         self.kGuides.update()
         # self.kCam.frame()
@@ -48,10 +43,8 @@ class State(object):
         self.updateNetworkContext()
         self.updateOptions()
 
-
     def onKeyEvent(self, kwargs):
         self.kCam.updateAspectRatio()
-
         # Node cam
         keymap = {
             "-": self.kCam.zoomOut,
@@ -70,19 +63,18 @@ class State(object):
             "Shift+l": self.kCam.translateDown,
             "Ctrl+l": self.kSceneViewer.nextLayout
         }
-
         key = kwargs["ui_event"].device().keyString()
         keymap.get(key, lambda: False)()
         self.kGuides.update()
 
         # Default cam
         if 2 == 1:
-            if self.viewport.type() == hou.geometryViewportType.Top:      self.indices = (0, 1)
+            if self.viewport.type() == hou.geometryViewportType.Top: self.indices = (0, 1)
             elif self.viewport.type() == hou.geometryViewportType.Bottom: self.indices = (2, 0)
-            elif self.viewport.type() == hou.geometryViewportType.Front:  self.indices = (0, 1)
-            elif self.viewport.type() == hou.geometryViewportType.Back:   self.indices = (1, 0)
-            elif self.viewport.type() == hou.geometryViewportType.Right:  self.indices = (0, 1)
-            elif self.viewport.type() == hou.geometryViewportType.Left:   self.indices = (1, 2)
+            elif self.viewport.type() == hou.geometryViewportType.Front: self.indices = (0, 1)
+            elif self.viewport.type() == hou.geometryViewportType.Back: self.indices = (1, 0)
+            elif self.viewport.type() == hou.geometryViewportType.Right: self.indices = (0, 1)
+            elif self.viewport.type() == hou.geometryViewportType.Left: self.indices = (1, 2)
 
             keymap = {
                 "-": self.kDefaultCam.zoomOut,
@@ -107,20 +99,20 @@ class State(object):
                 "Ctrl+l": self.kSceneViewer.nextLayout
             }
 
-
     def onMenuAction(self, kwargs):
-        menu_item = kwargs["menu_item"]
-
-        if menu_item == "frame_geo":    self.kCam.frame()
-        elif menu_item == "reset":      self.kParms.reset()
-        elif menu_item == "cam_axis":   self.kGuides.camAxis.show(kwargs["cam_axis"])
-        elif menu_item == "pivot_axis": self.kGuides.pivotAxis.show(kwargs["pivot_axis"])
-        elif menu_item == "perim":      self.kGuides.perim.show(kwargs["perim"])
-        elif menu_item == "2d_pivot":   self.kGuides.pivot2d.show(kwargs["2d_pivot"])
-        elif menu_item == "3d_pivot":   self.kGuides.pivot3d.show(kwargs["3d_pivot"])
-        elif menu_item == "ray":        self.kGuides.ray.show(kwargs["ray"])
+        menumap = {
+            "frame_geo": self.kCam.frame(),
+            "reset": self.kParms.reset(),
+            "cam_axis": self.kGuides.camAxis.show(kwargs["cam_axis"]),
+            "pivot_axis": self.kGuides.pivotAxis.show(kwargs["pivot_axis"]),
+            "perim": self.kGuides.perim.show(kwargs["perim"]),
+            "2d_pivot": self.kGuides.pivot2d.show(kwargs["2d_pivot"]),
+            "3d_pivot": self.kGuides.pivot3d.show(kwargs["3d_pivot"]),
+            "ray": self.kGuides.ray.show(kwargs["ray"])
+        }
+        menuitem = kwargs["menu_item"]
+        menumap.get(menuitem, lambda: False)()
         # self.kGuides.update()
-
 
     def onParmChangeEvent(self, kwargs):
         if kwargs["parm_name"] == "t":
@@ -134,32 +126,30 @@ class State(object):
             self.kCam.cam.parmTuple("r").set(self.kParms.r)
         # self.kGuides.update()
 
-
     def setView(self):
-        if self.kParms.view == "top":      self.kParms.r = hou.Vector3(270, 0, 0)
+        if self.kParms.view == "top": self.kParms.r = hou.Vector3(270, 0, 0)
         elif self.kParms.view == "bottom": self.kParms.r = hou.Vector3(90, 0, 0)
-        elif self.kParms.view == "front":  self.kParms.r = hou.Vector3(0, 180, 0)
-        elif self.kParms.view == "back":   self.kParms.r = hou.Vector3(0, 0, 0)
-        elif self.kParms.view == "right":  self.kParms.r = hou.Vector3(0, 90, 0)
-        elif self.kParms.view == "left":   self.kParms.r = hou.Vector3(0, 270, 0)
-
+        elif self.kParms.view == "front": self.kParms.r = hou.Vector3(0, 180, 0)
+        elif self.kParms.view == "back": self.kParms.r = hou.Vector3(0, 0, 0)
+        elif self.kParms.view == "right": self.kParms.r = hou.Vector3(0, 90, 0)
+        elif self.kParms.view == "left": self.kParms.r = hou.Vector3(0, 270, 0)
 
     def setFocusAttr(self):
-        attr = hou.ui.readInput("focus_attr", buttons=("OK","Cancel"), initial_contents=self.hud_state_focus["focus_attr"])
+        attr = hou.ui.readInput(
+            "focus_attr",
+            buttons=("OK","Cancel"),
+            initial_contents=self.hud_state_focus["focus_attr"])
         if attr[0] == 0: self.focus_state["focus_attr"] = attr[1]
-
 
     def updateNetworkContext(self):
         node = self.sceneViewer.pwd()
         self.context = node.type().name()
-
 
     def updateOptions(self):
         if self.options["reset"]: self.kParms.reset()
         else:                     self.kParms.camToState()
         # keycam node display flag
         # self.cam.setDisplayFlag(self.guide_states["camGeo"])
-
 
 
 def createViewerStateTemplate():
@@ -174,34 +164,33 @@ def createViewerStateTemplate():
     template.bindIcon("DESKTOP_application_sierra")
 
     # State parameters
-    template.bindParameter(hou.parmTemplateType.Menu,  name="layout",   label="Layout",      default_value="single", menu_items=[("doubleside","DoubleSide"), ("doublestack","DoubleStack"), ("quad","Quad"), ("quadbottomsplit","QuadBottomSplit"), ("quadleftsplit","QuadLeftSplit"), ("single","Single"), ("triplebottomsplit","TripleBottomSplit"), ("tripleleftsplit","TripleLeftSplit")])
-    template.bindParameter(hou.parmTemplateType.Menu,  name="viewport", label="Viewport",    default_value="center", menu_items=[("center","Center")])
-    template.bindParameter(hou.parmTemplateType.Menu,  name="view",     label="View",        default_value="persp",  menu_items=[("persp","Perspective"), ("top","Top"), ("front","Front"), ("right","Right"), ("uv","UV"), ("bottom","Bottom"), ("back","Back"), ("left","Left")])
-    template.bindParameter(hou.parmTemplateType.Menu,  name="camera",   label="Camera",      default_value="keycam", menu_items=[("keycam","Keycam"), ("default","Default"), ("other","Other")], toolbox=False)
-    template.bindParameter(hou.parmTemplateType.Menu,  name="target",   label="Target",      default_value="cam",    menu_items=[("cam","Camera"), ("pivot","Pivot")], toolbox=False)
-    template.bindParameter(hou.parmTemplateType.Float, name="delta_r",  label="Delta R",     default_value=15.0,     min_limit=-180.0, max_limit=180.0)
-    template.bindParameter(hou.parmTemplateType.Float, name="delta_t",  label="Delta T",     default_value=1.0,      min_limit=0,      max_limit=10.0)
-    template.bindParameter(hou.parmTemplateType.Float, name="delta_z",  label="Delta Z",     default_value=10.0,     min_limit=0,      max_limit=10.0)
-    template.bindParameter(hou.parmTemplateType.Float, name="delta_ow", label="Delta OW",    default_value=1.0,      min_limit=0,      max_limit=10.0)
-    template.bindParameter(hou.parmTemplateType.Float, name="t",        label="Translation", num_components=3, toolbox=False)
-    template.bindParameter(hou.parmTemplateType.Float, name="r",        label="Rotation",    num_components=3, toolbox=False)
-    template.bindParameter(hou.parmTemplateType.Float, name="p",        label="Pivot",       num_components=3, toolbox=False)
-    template.bindParameter(hou.parmTemplateType.Float, name="z",        label="Zoom",        num_components=1, toolbox=False)
-    template.bindParameter(hou.parmTemplateType.Float, name="ow",       label="Ortho Width", num_components=1, toolbox=False)
+    template.bindParameter(hou.parmTemplateType.Menu, name="layout", label="Layout", default_value="single", menu_items=[("doubleside","DoubleSide"), ("doublestack","DoubleStack"), ("quad","Quad"), ("quadbottomsplit","QuadBottomSplit"), ("quadleftsplit","QuadLeftSplit"), ("single","Single"), ("triplebottomsplit","TripleBottomSplit"), ("tripleleftsplit","TripleLeftSplit")])
+    template.bindParameter(hou.parmTemplateType.Menu, name="viewport", label="Viewport", default_value="center", menu_items=[("center","Center")])
+    template.bindParameter(hou.parmTemplateType.Menu, name="view", label="View", default_value="persp", menu_items=[("persp","Perspective"), ("top","Top"), ("front","Front"), ("right","Right"), ("uv","UV"), ("bottom","Bottom"), ("back","Back"), ("left","Left")])
+    template.bindParameter(hou.parmTemplateType.Menu, name="camera", label="Camera", default_value="keycam", menu_items=[("keycam","Keycam"), ("default","Default"), ("other","Other")], toolbox=False)
+    template.bindParameter(hou.parmTemplateType.Menu, name="target", label="Target", default_value="cam", menu_items=[("cam","Camera"), ("pivot","Pivot")], toolbox=False)
+    template.bindParameter(hou.parmTemplateType.Float, name="delta_r", label="Delta R", default_value=15.0, min_limit=-180.0, max_limit=180.0)
+    template.bindParameter(hou.parmTemplateType.Float, name="delta_t", label="Delta T", default_value=1.0, min_limit=0, max_limit=10.0)
+    template.bindParameter(hou.parmTemplateType.Float, name="delta_z", label="Delta Z", default_value=10.0, min_limit=0, max_limit=10.0)
+    template.bindParameter(hou.parmTemplateType.Float, name="delta_ow", label="Delta OW", default_value=1.0, min_limit=0, max_limit=10.0)
+    template.bindParameter(hou.parmTemplateType.Float, name="t", label="Translation", num_components=3, toolbox=False)
+    template.bindParameter(hou.parmTemplateType.Float, name="r", label="Rotation", num_components=3, toolbox=False)
+    template.bindParameter(hou.parmTemplateType.Float, name="p", label="Pivot", num_components=3, toolbox=False)
+    template.bindParameter(hou.parmTemplateType.Float, name="z", label="Zoom", num_components=1, toolbox=False)
+    template.bindParameter(hou.parmTemplateType.Float, name="ow", label="Ortho Width", num_components=1, toolbox=False)
 
     # State menu
     menu = hou.ViewerStateMenu("keycamMenu", "Keycam Menu")
-    menu.addActionItem("frame_geo",  "Frame Geometry")
-    menu.addActionItem("reset",      "Reset")
-    menu.addToggleItem("cam_axis",   "Camera Axis", 1)
-    menu.addToggleItem("pivot_axis", "Pivot Axis",  1)
-    menu.addToggleItem("perim",      "Perimeter",   0)
-    menu.addToggleItem("2d_pivot",   "2D Pivot",    0)
-    menu.addToggleItem("3d_pivot",   "3D Pivot",    0)
-    menu.addToggleItem("ray",        "Ray",         0)
+    menu.addActionItem("frame_geo", "Frame Geometry")
+    menu.addActionItem("reset", "Reset")
+    menu.addToggleItem("cam_axis", "Camera Axis", 1)
+    menu.addToggleItem("pivot_axis", "Pivot Axis", 1)
+    menu.addToggleItem("perim", "Perimeter", 0)
+    menu.addToggleItem("2d_pivot", "2D Pivot", 0)
+    menu.addToggleItem("3d_pivot", "3D Pivot", 0)
+    menu.addToggleItem("ray", "Ray", 0)
     template.bindMenu(menu)
     return template
-
 
 
 class KCam():
@@ -265,23 +254,43 @@ class KCam():
         self.state.kParms.local_z *= m
 
     def rotateUp(self):
-        self.state.kParms.r = hou.Vector3(self.state.kParms.r[0] + self.state.kParms.delta_r, self.state.kParms.r[1], self.state.kParms.r[2])
-        m = hou.hmath.buildRotateAboutAxis(self.state.kParms.local_x, self.state.kParms.delta_r)
+        self.state.kParms.r = hou.Vector3(
+            self.state.kParms.r[0] + self.state.kParms.delta_r,
+            self.state.kParms.r[1],
+            self.state.kParms.r[2])
+        m = hou.hmath.buildRotateAboutAxis(
+            self.state.kParms.local_x,
+            self.state.kParms.delta_r)
         self.rotate(m)
 
     def rotateDown(self):
-        self.state.kParms.r = hou.Vector3(self.state.kParms.r[0] - self.state.kParms.delta_r, self.state.kParms.r[1], self.state.kParms.r[2])
-        m = hou.hmath.buildRotateAboutAxis(self.state.kParms.local_x, self.state.kParms.delta_r * -1)
+        self.state.kParms.r = hou.Vector3(
+            self.state.kParms.r[0] - self.state.kParms.delta_r,
+            self.state.kParms.r[1],
+            self.state.kParms.r[2])
+        m = hou.hmath.buildRotateAboutAxis(
+            self.state.kParms.local_x,
+            self.state.kParms.delta_r * -1)
         self.rotate(m)
 
     def rotateLeft(self):
-        self.state.kParms.r = hou.Vector3(self.state.kParms.r[0], self.state.kParms.r[1] - self.state.kParms.delta_r, self.state.kParms.r[2])
-        m = hou.hmath.buildRotateAboutAxis(self.state.kParms.global_y, self.state.kParms.delta_r * -1)
+        self.state.kParms.r = hou.Vector3(
+            self.state.kParms.r[0],
+            self.state.kParms.r[1] - self.state.kParms.delta_r,
+            self.state.kParms.r[2])
+        m = hou.hmath.buildRotateAboutAxis(
+            self.state.kParms.global_y,
+            self.state.kParms.delta_r * -1)
         self.rotate(m)
 
     def rotateRight(self):
-        self.state.kParms.r = hou.Vector3(self.state.kParms.r[0], self.state.kParms.r[1] + self.state.kParms.delta_r, self.state.kParms.r[2])
-        m = hou.hmath.buildRotateAboutAxis(self.state.kParms.global_y, self.state.kParms.delta_r)
+        self.state.kParms.r = hou.Vector3(
+            self.state.kParms.r[0],
+            self.state.kParms.r[1] + self.state.kParms.delta_r,
+            self.state.kParms.r[2])
+        m = hou.hmath.buildRotateAboutAxis(
+            self.state.kParms.global_y,
+            self.state.kParms.delta_r)
         self.rotate(m)
 
     def translateUp(self):
@@ -332,7 +341,6 @@ class KCam():
 
     def orthoZoomOut(self):
         self.state.kParms.ow += self.state.kParms.delta_z
-
 
 
 class KDefaultCam():
@@ -393,9 +401,9 @@ class KGeo():
         self.displayNode = None
         pwd = self.state.sceneViewer.pwd()
         self.context = pwd.childTypeCategory().label()
-        if self.context == "dop":        displayNode = pwd.displayNode()
-        elif self.context == "lop":      return None
-        elif self.context == "Objects":  displayNode = pwd.children()[0].displayNode()
+        if self.context == "dop": displayNode = pwd.displayNode()
+        elif self.context == "lop": return None
+        elif self.context == "Objects": displayNode = pwd.children()[0].displayNode()
         elif self.context == "Geometry": displayNode = pwd.displayNode()
         return displayNode.geometry()
 
@@ -405,19 +413,42 @@ class KGeo():
         self.context = pwd.childTypeCategory().label()
 
 
-
 class KGuides():
     def __init__(self, state):
         self.state = state
-
-        self.camAxis =   hou.GeometryDrawable(scene_viewer=self.state.sceneViewer, geo_type=hou.drawableGeometryType.Line, name="Camera axis")
-        self.pivotAxis = hou.GeometryDrawable(scene_viewer=self.state.sceneViewer, geo_type=hou.drawableGeometryType.Line, name="Pivot axis", params={"color1":hou.Vector4((1, 1, 1, 0.5))})
-        self.bbox =      hou.GeometryDrawable(scene_viewer=self.state.sceneViewer, geo_type=hou.drawableGeometryType.Line, name="bbox",       params={"color1":hou.Vector4((1, 1, 1, 0.3))})
-        self.perim =     hou.GeometryDrawable(scene_viewer=self.state.sceneViewer, geo_type=hou.drawableGeometryType.Line, name="perim")
-        self.pivot2d =   hou.GeometryDrawable(scene_viewer=self.state.sceneViewer, geo_type=hou.drawableGeometryType.Line, name="pivot2d")
-        self.pivot3d =   hou.GeometryDrawable(scene_viewer=self.state.sceneViewer, geo_type=hou.drawableGeometryType.Face, name="pivot3d")
-        self.pivot3d.setParams({"color1":hou.Vector4(0.8, 0.8, 0.4, 0.7), "fade_factor":0.5})
-        self.ray =       hou.GeometryDrawable(scene_viewer=self.state.sceneViewer, geo_type=hou.drawableGeometryType.Line, name="ray",        params={"color1":hou.Vector4((1, 0.8, 1, 0.5))})
+        self.camAxis = hou.GeometryDrawable(
+            scene_viewer=self.state.sceneViewer,
+            geo_type=hou.drawableGeometryType.Line,
+            name="Camera axis")
+        self.pivotAxis = hou.GeometryDrawable(
+            scene_viewer=self.state.sceneViewer,
+            geo_type=hou.drawableGeometryType.Line,
+            name="Pivot axis",
+            params={"color1": hou.Vector4((1, 1, 1, 0.5))})
+        self.bbox = hou.GeometryDrawable(
+            scene_viewer=self.state.sceneViewer,
+            geo_type=hou.drawableGeometryType.Line,
+            name="bbox",
+            params={"color1": hou.Vector4((1, 1, 1, 0.3))})
+        self.perim = hou.GeometryDrawable(
+            scene_viewer=self.state.sceneViewer,
+            geo_type=hou.drawableGeometryType.Line,
+            name="perim")
+        self.pivot2d = hou.GeometryDrawable(
+            scene_viewer=self.state.sceneViewer,
+            geo_type=hou.drawableGeometryType.Line,
+            name="pivot2d")
+        self.pivot3d = hou.GeometryDrawable(
+            scene_viewer=self.state.sceneViewer,
+            geo_type=hou.drawableGeometryType.Face,
+            name="pivot3d")
+        self.pivot3d.setParams(
+            {"color1": hou.Vector4(0.8, 0.8, 0.4, 0.7), "fade_factor": 0.5})
+        self.ray = hou.GeometryDrawable(
+            scene_viewer=self.state.sceneViewer,
+            geo_type=hou.drawableGeometryType.Line,
+            name="ray",
+            params={"color1": hou.Vector4((1, 0.8, 1, 0.5))})
 
     def toggle(self, kwargs, guide):
         kwargs[guide] = not kwargs[guide]
@@ -502,26 +533,42 @@ class KGuides():
     def updatePerim(self):
         rad  = self.state.kParms.p.distanceTo(self.state.kParms.t)
         verb = hou.sopNodeTypeCategory().nodeVerb("circle")
-        verb.setParms({"divs":128, "type":1, "t":self.state.kParms.p, "scale":rad, "orient":2})
+        verb.setParms({
+            "divs": 128,
+            "type": 1,
+            "t": self.state.kParms.p,
+            "scale": rad,
+            "orient": 2})
         geo = hou.Geometry()
         verb.execute(geo, [])
-        self.perim.setParams({"color1":hou.Vector4(1.0, 1.0, 1.0, 0.25), "fade_factor":1.0})
+        self.perim.setParams({
+            "color1": hou.Vector4(1.0, 1.0, 1.0, 0.25),
+            "fade_factor": 1.0})
         self.perim.setGeometry(geo)
         self.perim.show(1)
 
     def updatePivot2d(self):
         P = self.state.kParms.p + self.state.kParms.t
         verb = hou.sopNodeTypeCategory().nodeVerb("circle")
-        verb.setParms({"type":1, "r":self.state.kParms.r, "t":P, "scale":self.state.kParms.ow * 0.0075})
+        verb.setParms({
+            "type": 1,
+            "r": self.state.kParms.r,
+            "t": P,
+            "scale": self.state.kParms.ow * 0.0075})
         geo = hou.Geometry()
         verb.execute(geo, [])
-        self.pivot2d.setParams({"color1":hou.Vector4(0.0, 0.0, 1, 1), "fade_factor":1.0})
+        self.pivot2d.setParams({
+            "color1": hou.Vector4(0.0, 0.0, 1, 1),
+            "fade_factor": 1.0})
         self.pivot2d.setGeometry(geo)
         self.pivot2d.show(1)
 
     def updatePivot3d(self):
             verb = hou.sopNodeTypeCategory().nodeVerb("sphere")
-            verb.setParms({"type":1, "t":self.state.kParms.p, "scale":self.self.state.kParms.t.distanceTo(self.state.kParms.p) * 0.002})
+            verb.setParms({
+                "type": 1,
+                "t": self.state.kParms.p,
+                "scale": self.self.state.kParms.t.distanceTo(self.state.kParms.p) * 0.002})
             geo = hou.Geometry()
             verb.execute(geo, [])
             self.pivot3d.setGeometry(geo)
@@ -541,42 +588,37 @@ class KGuides():
         return
 
 
-
 class KHud():
     def __init__(self, state):
         self.state = state
         self.template = {
             "title": "test",
             "rows": [
-                {"id": "layout",     "type": "plain",       "label": "Layout",   "value": "Single",      "key": "Ctrl + L"},
-                {"id": "layout_g",   "type": "choicegraph", "count": 8},
-                {"id": "viewport",   "type": "plain",       "label": "Viewport", "value": "0",           "key": "Ctrl + V"},
+                {"id": "layout", "type": "plain", "label": "Layout", "value": "Single", "key": "Ctrl + L"},
+                {"id": "layout_g", "type": "choicegraph", "count": 8},
+                {"id": "viewport", "type": "plain", "label": "Viewport", "value": "0", "key": "Ctrl + V"},
                 {"id": "viewport_g", "type": "choicegraph", "count": 4},
-                {"id": "view"   ,    "type": "plain",       "label": "View",     "value": "Perspective", "key": "V"},
-                {"id": "view_g",     "type": "choicegraph", "count": 8},
-                {"id": "target",     "type": "plain",       "label": "Target",   "value": "Camera",      "key": "T"},
-                {"id": "target_g",   "type": "choicegraph", "count": 2},
-                {"id": "vis",        "type": "plain",       "label": "Vis"},
-                {"id": "focus",      "type": "plain",       "label": "Focus", "value": 0},
-                {"id": "focus_g",    "type": "choicegraph", "count": 10}
+                {"id": "view", "type": "plain", "label": "View", "value": "Perspective", "key": "V"},
+                {"id": "view_g", "type": "choicegraph", "count": 8},
+                {"id": "target", "type": "plain", "label": "Target", "value": "Camera", "key": "T"},
+                {"id": "target_g", "type": "choicegraph", "count": 2},
+                {"id": "vis", "type": "plain", "label": "Vis"},
+                {"id": "focus", "type": "plain", "label": "Focus", "value": 0},
+                {"id": "focus_g", "type": "choicegraph", "count": 10}
             ]
         }
 
     def update(self):
-        if self.state.kSceneViewer.layout() == hou.geometryViewportLayout.DoubleSide:          self.template["rows"][3]["count"] = 2
-        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.DoubleStack:       self.template["rows"][3]["count"] = 2
-        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.Quad:              self.template["rows"][3]["count"] = 4
-        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.QuadBottomSplit:   self.template["rows"][3]["count"] = 4
-        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.QuadLeftSplit:     self.template["rows"][3]["count"] = 4
+        if self.state.kSceneViewer.layout() == hou.geometryViewportLayout.DoubleSide: self.template["rows"][3]["count"] = 2
+        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.DoubleStack: self.template["rows"][3]["count"] = 2
+        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.Quad: self.template["rows"][3]["count"] = 4
+        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.QuadBottomSplit: self.template["rows"][3]["count"] = 4
+        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.QuadLeftSplit: self.template["rows"][3]["count"] = 4
         elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.TripleBottomSplit: self.template["rows"][3]["count"] = 3
-        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.TripleLeftSplit:   self.template["rows"][3]["count"] = 3
-        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.Single:            self.template["rows"][3]["count"] = 1
+        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.TripleLeftSplit: self.template["rows"][3]["count"] = 3
+        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.Single: self.template["rows"][3]["count"] = 1
         self.state.sceneViewer.hudInfo(template=self.template)
         updates = {
-            "r": self.state.kParms.delta_r,
-            "t": self.state.kParms.delta_t,
-            "z": self.state.kParms.delta_z,
-            "ow": self.state.kParms.delta_z,
             "layout": str(self.state.kSceneViewer.layout())[23:],
             "layout_g": self.state.kSceneViewer.layouts().index(self.state.kSceneViewer.layout())
         }
@@ -636,46 +678,14 @@ class KParms():
 
     @property
     def p(self): return self._p
-
-    @property
-    def r(self): return self._r
-
-    @property
-    def t(self): return self._t
-
-    @property
-    def z(self): return self._z
-
-    @property
-    def dist(self): return self._dist
-
-    @property
-    def ow(self): return self._ow
-
-    @property
-    def target(self): return self._target
-
-    @property
-    def delta_r(self): return self._delta_r
-
-    @property
-    def delta_t(self): return self._delta_t
-
-    @property
-    def delta_z(self): return self._delta_z
-
-    @property
-    def layout(self): return self._layout
-
-    @property
-    def viewport(self): return self._viewport
-
     @p.setter
     def p(self, val):
         self._p = val
         self.parms["p"]["value"] = val
         self.state.kCam.cam.parmTuple("p").set(val)
 
+    @property
+    def r(self): return self._r
     @r.setter
     def r(self, val):
         self._r = val
@@ -683,50 +693,71 @@ class KParms():
         self.state.kCam.cam.parmTuple("r").set(val)
         self.state.kGuides.update()
 
+    @property
+    def t(self): return self._t
     @t.setter
     def t(self, val):
         self._t = val
         self.parms["t"]["value"] = list(val)
         self.state.kCam.cam.parmTuple("t").set(val)
 
+    @property
+    def z(self): return self._z
     @z.setter
     def z(self, val):
         self._z= val
         self.parms["z"]["value"] = val
         self.state.kCam.setZoom(10)
 
+    @property
+    def dist(self): return self._dist
+
+    @property
+    def ow(self): return self._ow
     @ow.setter
     def ow(self, val):
         self._ow = val
         self.parms["ow"]["value"] = val
         self.state.kCam.cam.parm("orthowidth").set(val)
 
+    @property
+    def target(self): return self._target
     @target.setter
     def target(self, val):
         self._target = val
         self.parms["target"]["value"] = val
 
+    @property
+    def delta_r(self): return self._delta_r
     @delta_r.setter
     def delta_r(self, val):
         self._delta_r = val
         self.parms["delta_r"]["value"] = val
 
+    @property
+    def delta_t(self): return self._delta_t
     @delta_t.setter
     def delta_t(self, val):
         self._delta_t = val
         self.parms["delta_t"]["value"] = val
 
+    @property
+    def delta_z(self): return self._delta_z
     @delta_z.setter
     def delta_z(self, val):
         self._delta_z = val
         self.parms["delta_z"]["value"] = val
 
+    @property
+    def layout(self): return self._layout
     @layout.setter
     def layout(self, val):
         self._layout = val
         self.parms["layout"]["value"] = val
         self.state.kSceneViewer.setLayout(self.state.kSceneViewer.layouts()[val])
 
+    @property
+    def viewport(self): return self._viewport
     @viewport.setter
     def set_viewport(self, val):
         self._viewport = val
