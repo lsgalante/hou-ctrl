@@ -95,7 +95,7 @@ def load():
         # ("h.paste", "ctrl+y"),
         # ("h.redo", "ctrl+shift+z"),
         # ("h.save", "cmd+s"),
-        ("h.hCSessionKeycam", "shift+k"),
+        # ("h.hCSessionKeycam", "shift+k"),
         # ("h.undo", "ctrl+/"),
 
         #
