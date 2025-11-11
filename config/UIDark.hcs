@@ -441,7 +441,7 @@ MenuTextHotkey:         SHADOW2
 MenuHighlight:          bevel_high
 MenuShadow:             bevel_low
 MenuTextSelected:       white
-MenuSelectedBG:         0.7 0.4 0
+MenuSelectedBG:         selection
 MenuTitleBG:            bg_low
 InvertedMenuBackground: GREY(0.8)
 
@@ -767,8 +767,8 @@ SIMAlmostMutualColor: 0.70 0.70 0.10
 SplitBarBackground:  separator
 SplitBarEdgeColor:   selection // Grabber
 SplitBarLightColor:  separator
-SplitBarDarkColor:   separator         //
-SplitBarPaneOutline: bg_low            // ?
+SplitBarDarkColor:   separator //
+SplitBarPaneOutline: bg_low    // ?
 SplitBarGrippyColor: selection // Grabber
 SplitBarHighlight:   selection
 // SplitBarBackground + SplitBarHighlight*0.2
