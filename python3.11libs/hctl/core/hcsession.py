@@ -1,14 +1,11 @@
 import hou
 
-
 class HCSession():
     def __init__(self):
         return
 
-
     def autosave(self):
         return hou.getPreference("autoSave")
-
 
     def clearLayout(self):
         paneTabs = self.paneTabs()
@@ -19,14 +16,11 @@ class HCSession():
         # self.paneTabOnly(paneTab)
         # self.update()
 
-
     def colorEditor(self):
         hou.ui.selectColor()
 
-
     def desktop(self):
         return hou.ui.curDesktop()
-
 
     def floatingParameterEditor(self):
         paneTab = self.paneTab()
@@ -34,7 +28,6 @@ class HCSession():
             hou.ui.showFloatingParameterEditor(self.node())
         else:
             hou.ui.setStatusMessage("Not a network editor", hou.severityType.Error)
-
 
     def hCPanel(self):
         from ..ui.hcpanel import HCPanel
@@ -48,25 +41,23 @@ class HCSession():
         hCPaneTab = HCPaneTab(self.paneTab())
         HCPanel(hCPaneTab).show()
 
-
     def hideShelf(self):
         self.desktop().shelfDock().show(0)
-
 
     def keycam(self):
         sceneViewer = self.sceneViewers()[0]
         category = sceneViewer.pwd().childTypeCategory().name()
         if category == "Object":
             sceneViewer.setCurrentState("keycam")
-            hou.ui.setStatusMessage("Entered keycam viewer state in Obj context.")
+            hou.ui.setStatusMessage("Entered keycam in an obj/object context")
         elif category== "Sop":
             sceneViewer.setCurrentState("keycam")
-            hou.ui.setStatusMessage("Entered keycam viewer state in Sop context.")
+            hou.ui.setStatusMessage("Entered keycam in a sop/geometry context")
         elif category== "Lop":
             sceneViewer.setCurrentState("keycam")
-            hou.ui.setStatusMessage("Entered keycam viewer state in Lop context.")
+            hou.ui.setStatusMessage("Entered keycam in a lop context")
         else:
-            hou.ui.setStatusMessage("No Obj, Sop or Lop context.", hou.severityType.Error)
+            hou.ui.setStatusMessage("Keycam is only available in obj, sop and lop contexts", hou.severityType.Error)
 
 
     def layout(self):
