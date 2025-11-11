@@ -222,8 +222,8 @@ class State(object):
             "Shift+h": self.kCam.translateLeft,
             "Shift+j": self.kCam.translateDown,
             "Shift+k": self.kCam.translateUp,
-            "Shift+l": self.kCam.translateDown,
-            "Ctrl+l": self.kSceneViewer.nextLayout
+            "Shift+l": self.kCam.translateRight,
+            "Ctrl+l": self.kSceneViewer.nextLayout,
         }
         key = kwargs["ui_event"].device().keyString()
         keymap.get(key, lambda: False)()
