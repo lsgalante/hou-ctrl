@@ -165,7 +165,12 @@ class State(object):
         self.options = {
             "center_on_geo": 1,
             "lock_cam": 1,
-            "reset": 1
+            "reset": 1,
+            "show_bbox": 1,
+            "show_perim": 0,
+            "show_pivot2d": 1,
+            "show_pivot3d": 0,
+            "show_ray": 0,
         }
 
     def onDraw(self, kwargs):
