@@ -100,19 +100,18 @@ class State(object):
             }
 
     def onMenuAction(self, kwargs):
-        menumap = {
-            "frame_geo": self.kCam.frame(),
-            "reset": self.kParms.reset(),
-            "cam_axis": self.kGuides.camAxis.show(kwargs["cam_axis"]),
-            "pivot_axis": self.kGuides.pivotAxis.show(kwargs["pivot_axis"]),
-            "perim": self.kGuides.perim.show(kwargs["perim"]),
-            "2d_pivot": self.kGuides.pivot2d.show(kwargs["2d_pivot"]),
-            "3d_pivot": self.kGuides.pivot3d.show(kwargs["3d_pivot"]),
-            "ray": self.kGuides.ray.show(kwargs["ray"])
-        }
-        menuitem = kwargs["menu_item"]
-        menumap.get(menuitem, lambda: False)()
+        menu_item = kwargs["menu_item"]
+        method = getattr(self, "_" + kwargs["menu_item"])
+        return method(kwargs)
         # self.kGuides.update()
+    def _frame(self, kwargs): self.kCam.frame()
+    def _reset(self, kwargs): self.kParms.reset()
+    def _cam_axis(self, kwargs): self.kGuides.camAxis.show(kwargs["cam_axis"])
+    def _pivot_axis(self, kwargs): self.kGuides.pivotAxis.show(kwargs["pivot_axis"])
+    def _perim(self, kwargs): self.kGuides.pivotAxis.show(kwargs["perim"])
+    def _2d_pivot(self, kwargs): self.kGuides.pivot2d.show(kwargs["2d_pivot"])
+    def _3d_pivot(self, kwargs): self.kGuides.pivot3d.show(kwargs["3d_pivot"]),
+    def _ray(self, kwargs): self.kGuides.ray.show(kwargs["ray"])
 
     def onParmChangeEvent(self, kwargs):
         if kwargs["parm_name"] == "t":
