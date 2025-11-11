@@ -162,7 +162,7 @@ def createViewerStateTemplate():
     template.bindFactory(State)
     template.bindIcon("DESKTOP_application_sierra")
 
-    # State parameters
+    # Parameters
     template.bindParameter(hou.parmTemplateType.Menu, name="layout", label="Layout", default_value="single", menu_items=[("doubleside","DoubleSide"), ("doublestack","DoubleStack"), ("quad","Quad"), ("quadbottomsplit","QuadBottomSplit"), ("quadleftsplit","QuadLeftSplit"), ("single","Single"), ("triplebottomsplit","TripleBottomSplit"), ("tripleleftsplit","TripleLeftSplit")])
     template.bindParameter(hou.parmTemplateType.Menu, name="viewport", label="Viewport", default_value="center", menu_items=[("center","Center")])
     template.bindParameter(hou.parmTemplateType.Menu, name="view", label="View", default_value="persp", menu_items=[("persp","Perspective"), ("top","Top"), ("front","Front"), ("right","Right"), ("uv","UV"), ("bottom","Bottom"), ("back","Back"), ("left","Left")])
@@ -178,9 +178,9 @@ def createViewerStateTemplate():
     template.bindParameter(hou.parmTemplateType.Float, name="z", label="Zoom", num_components=1, toolbox=False)
     template.bindParameter(hou.parmTemplateType.Float, name="ow", label="Ortho Width", num_components=1, toolbox=False)
 
-    # State menu
+    # Context menu
     menu = hou.ViewerStateMenu("keycamMenu", "Keycam Menu")
-    menu.addActionItem("frame_geo", "Frame Geometry")
+    menu.addActionItem("frame", "Frame")
     menu.addActionItem("reset", "Reset")
     menu.addToggleItem("cam_axis", "Camera Axis", 1)
     menu.addToggleItem("pivot_axis", "Pivot Axis", 1)
@@ -189,6 +189,7 @@ def createViewerStateTemplate():
     menu.addToggleItem("3d_pivot", "3D Pivot", 0)
     menu.addToggleItem("ray", "Ray", 0)
     template.bindMenu(menu)
+
     return template
 
 
