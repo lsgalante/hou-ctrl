@@ -463,7 +463,7 @@ class KCam:
         self.state.kParms.ow += self.state.kParms.delta_z
 
 
-class KDefaultCam():
+class KDefaultCam:
     def __init__(self, state):
         return
 
@@ -488,7 +488,7 @@ class KDefaultCam():
         return
 
 
-class KGeo():
+class KGeo:
     def __init__(self, state):
         self.state = state
         self.geo = hou.Geometry()
@@ -533,7 +533,7 @@ class KGeo():
         self.context = pwd.childTypeCategory().label()
 
 
-class KGuides():
+class KGuides:
     def __init__(self, state):
         self.state = state
         self.camAxis = hou.GeometryDrawable(
@@ -708,7 +708,7 @@ class KGuides():
         return
 
 
-class KHud():
+class KHud:
     def __init__(self, state):
         self.state = state
         self.template = {
@@ -745,7 +745,7 @@ class KHud():
         self.state.sceneViewer.hudInfo(hud_values=updates)
 
 
-class KParms():
+class KParms:
     def __init__(self, state):
         self.state = state
         self.parms = state.kwargs["state_parms"]
@@ -981,7 +981,7 @@ class KSceneViewer():
         viewport.changeType(viewportType)
 
 
-class KViewport():
+class KViewport:
     def __init__(self):
         return
 
