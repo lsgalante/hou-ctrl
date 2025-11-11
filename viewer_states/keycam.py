@@ -155,7 +155,13 @@ class State(object):
         self.sceneViewer = scene_viewer
         self.cam_type = None
         self.context = None
-        self.state_name = state_name
+        self.kCam = None
+        self.kGeo = None
+        self.kGuides = None
+        self.kHud = None
+        self.kParms = None
+        self.kSceneViewer = KSceneViewer(self)
+        self.kwargs = None
         self.options = {
             "center_on_geo": 1,
             "lock_cam": 1,
