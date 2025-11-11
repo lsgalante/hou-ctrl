@@ -313,49 +313,7 @@ class State(object):
         # self.cam.setDisplayFlag(self.guide_states["camGeo"])
 
 
-def createViewerStateTemplate():
-    template = hou.ViewerStateTemplate(
-        type_name="keycam",
-        label="keycam",
-        category=hou.sopNodeTypeCategory(),
-        contexts=[hou.objNodeTypeCategory()]
-    )
-
-    template.bindFactory(State)
-    template.bindIcon("DESKTOP_application_sierra")
-
-    # Parameters
-    template.bindParameter(hou.parmTemplateType.Menu, name="layout", label="Layout", default_value="single", menu_items=[("doubleside","DoubleSide"), ("doublestack","DoubleStack"), ("quad","Quad"), ("quadbottomsplit","QuadBottomSplit"), ("quadleftsplit","QuadLeftSplit"), ("single","Single"), ("triplebottomsplit","TripleBottomSplit"), ("tripleleftsplit","TripleLeftSplit")])
-    template.bindParameter(hou.parmTemplateType.Menu, name="viewport", label="Viewport", default_value="center", menu_items=[("center","Center")])
-    template.bindParameter(hou.parmTemplateType.Menu, name="view", label="View", default_value="persp", menu_items=[("persp","Perspective"), ("top","Top"), ("front","Front"), ("right","Right"), ("uv","UV"), ("bottom","Bottom"), ("back","Back"), ("left","Left")])
-    template.bindParameter(hou.parmTemplateType.Menu, name="camera", label="Camera", default_value="keycam", menu_items=[("keycam","Keycam"), ("default","Default"), ("other","Other")], toolbox=False)
-    template.bindParameter(hou.parmTemplateType.Menu, name="target", label="Target", default_value="cam", menu_items=[("cam","Camera"), ("pivot","Pivot")], toolbox=False)
-    template.bindParameter(hou.parmTemplateType.Float, name="delta_r", label="Delta R", default_value=15.0, min_limit=-180.0, max_limit=180.0)
-    template.bindParameter(hou.parmTemplateType.Float, name="delta_t", label="Delta T", default_value=1.0, min_limit=0, max_limit=10.0)
-    template.bindParameter(hou.parmTemplateType.Float, name="delta_z", label="Delta Z", default_value=10.0, min_limit=0, max_limit=10.0)
-    template.bindParameter(hou.parmTemplateType.Float, name="delta_ow", label="Delta OW", default_value=1.0, min_limit=0, max_limit=10.0)
-    template.bindParameter(hou.parmTemplateType.Float, name="t", label="Translation", num_components=3, toolbox=False)
-    template.bindParameter(hou.parmTemplateType.Float, name="r", label="Rotation", num_components=3, toolbox=False)
-    template.bindParameter(hou.parmTemplateType.Float, name="p", label="Pivot", num_components=3, toolbox=False)
-    template.bindParameter(hou.parmTemplateType.Float, name="z", label="Zoom", num_components=1, toolbox=False)
-    template.bindParameter(hou.parmTemplateType.Float, name="ow", label="Ortho Width", num_components=1, toolbox=False)
-
-    # Context menu
-    menu = hou.ViewerStateMenu("keycamMenu", "Keycam Menu")
-    menu.addActionItem("frame", "Frame")
-    menu.addActionItem("reset", "Reset")
-    menu.addToggleItem("cam_axis", "Camera Axis", 1)
-    menu.addToggleItem("pivot_axis", "Pivot Axis", 1)
-    menu.addToggleItem("perim", "Perimeter", 0)
-    menu.addToggleItem("2d_pivot", "2D Pivot", 0)
-    menu.addToggleItem("3d_pivot", "3D Pivot", 0)
-    menu.addToggleItem("ray", "Ray", 0)
-    template.bindMenu(menu)
-
-    return template
-
-
-class KCam():
+class KCam:
     def __init__(self, state):
         self.state = state
         # self.cam = hou.node("/obj/keycam")
