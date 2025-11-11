@@ -50,7 +50,8 @@ class HCPanel(QDialog):
             "DetailsView",
             "IPR Viewer",
             "NetworkEditor",
-            "Parm", "PythonPanel",
+            "Parm",
+            "PythonPanel",
             "PythonShell",
             "SceneViewer",
             "Textport",
@@ -146,14 +147,11 @@ class HCPanel(QDialog):
         self.layout.addLayout(paneCol)
         self.setLayout(self.layout)
 
-
     def sliderChange(self, value):
         self.hcPane.setSplitFraction(value/100)
 
-
     def closeEvent(self, event):
         self.setParent(None)
-
 
 
     class SessionAutosaveCheckBox(QCheckBox):
@@ -167,7 +165,6 @@ class HCPanel(QDialog):
             self.clicked.connect(owner.hcSession.toggleAutoSave)
 
 
-
     class PaneTabPinCheckBox(QCheckBox):
         def __init__(self, owner):
             super().__init__("Pin")
@@ -177,7 +174,6 @@ class HCPanel(QDialog):
                 self.setCheckState(Qt.Checked)
             else:
                 self.setCheckState(Qt.Unchecked)
-
 
 
     class PaneTabMenu(HCButton):
@@ -194,12 +190,10 @@ class HCPanel(QDialog):
                 idx += 1
             self.setMenu(self.menu)
 
-
         def changeTab(self, index):
             newTab = self.tabs[index]
             newTab.setIsCurrentTab()
             self.owner.close()
-
 
 
     class PaneTabTypeMenu(HCButton):
@@ -211,7 +205,6 @@ class HCPanel(QDialog):
                 menu.addAction(label)
             menu.triggered.connect(self.on_action_triggered)
             self.setMenu(menu)
-
 
         def on_action_triggered(self, action):
             self.setText(action.text())
