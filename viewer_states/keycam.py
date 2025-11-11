@@ -175,6 +175,7 @@ class State(object):
 
     def onDraw(self, kwargs):
         handle = kwargs["draw_handle"]
+        self.kGuides.bbox.draw(handle, {})
         self.kGuides.camAxis.draw(handle, {})
         self.kGuides.pivotAxis.draw(handle, {})
         self.kGuides.perim.draw(handle, {})
