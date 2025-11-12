@@ -821,33 +821,20 @@ class KHud:
         }
 
     def update(self):
-        if self.state.kSceneViewer.layout() == hou.geometryViewportLayout.DoubleSide:
-            self.template["rows"][3]["count"] = 2
-        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.DoubleStack:
-            self.template["rows"][3]["count"] = 2
-        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.Quad:
-            self.template["rows"][3]["count"] = 4
-        elif (
-            self.state.kSceneViewer.layout()
-            == hou.geometryViewportLayout.QuadBottomSplit
-        ):
-            self.template["rows"][3]["count"] = 4
-        elif (
-            self.state.kSceneViewer.layout() == hou.geometryViewportLayout.QuadLeftSplit
-        ):
-            self.template["rows"][3]["count"] = 4
-        elif (
-            self.state.kSceneViewer.layout()
-            == hou.geometryViewportLayout.TripleBottomSplit
-        ):
-            self.template["rows"][3]["count"] = 3
-        elif (
-            self.state.kSceneViewer.layout()
-            == hou.geometryViewportLayout.TripleLeftSplit
-        ):
-            self.template["rows"][3]["count"] = 3
-        elif self.state.kSceneViewer.layout() == hou.geometryViewportLayout.Single:
-            self.template["rows"][3]["count"] = 1
+        layout = self.state.kSceneViewer.layout()
+        layout_map = {
+            "hou.geometryViewportLayout.DoubleSide": 2,
+            "hou.geometryViewportLayout.DoubleStack": 2,
+            "hou.geometryViewportLayout.Quad": 4,
+            "hou.geometryViewportLayout.QuadBottomSplit": 4,
+            "hou.geometryViewportLayout.QuadLeftSplit": 4,
+            "hou.geometryViewportLayout.TripleBottomSplit": 3,
+            "hou.geometryViewportLayout.TripleLeftSplit": 3,
+            "hou.geometryViewportLayout.Single": 1,
+        }
+        viewport_ct = layout_map[str(layout)]
+        self.template["rows"][3]["count"] = viewport_ct
+
         self.state.sceneViewer.hudInfo(template=self.template)
         updates = {
             "layout": str(self.state.kSceneViewer.layout())[23:],
