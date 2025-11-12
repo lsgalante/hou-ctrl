@@ -155,16 +155,7 @@ def createViewerStateTemplate():
 
 class State(object):
     def __init__(self, state_name, scene_viewer):
-        self.sceneViewer = scene_viewer
-        self.cam_type = None
-        self.context = None
-        self.kCam = None
-        self.kGeo = None
-        self.kGuides = None
-        self.kHud = None
-        self.kParms = None
-        self.kSceneViewer = KSceneViewer(self)
-        self.kwargs = None
+        # Put options first
         self.options = {
             "center_on_geo": 1,
             "lock_cam": 1,
@@ -175,7 +166,21 @@ class State(object):
             "show_pivot3d": 0,
             "show_ray": 0,
         }
+
+        self.sceneViewer = scene_viewer
         self.state_name = state_name
+        self.cam_type = None
+        self.context = None
+        self.kwargs = None
+
+        # Define state elements
+        self.kCam = KCam(self)
+        self.kDefaultCam = KDefaultCam(self)
+        self.kGeo = KGeo(self)
+        self.kGuides = KGuides(self)
+        self.kHud = KHud(self)
+        self.kParms = KParms(self)
+        self.kSceneViewer = KSceneViewer(self)
 
     def onDraw(self, kwargs):
         handle = kwargs["draw_handle"]
@@ -196,12 +201,6 @@ class State(object):
         # Prevent exiting the state when current node changes
         kwargs["state_flags"]["exit_on_node_select"] = False
         self.kwargs = kwargs
-        # self.kSceneViewer = KSceneViewer(self)
-        self.kGeo = KGeo(self)
-        self.kCam = KCam(self)
-        self.kGuides = KGuides(self)
-        self.kHud = KHud(self)
-        self.kParms = KParms(self)
         self.kParms.reset()
         self.kGuides.update()
         self.kHud.update()
