@@ -234,18 +234,16 @@ class State(object):
 
         # Default cam
         if 2 == 1:
-            if self.kSceneViewer.viewport.type() == hou.geometryViewportType.Top:
-                self.indices = (0, 1)
-            elif self.kSceneViewer.viewport.type() == hou.geometryViewportType.Bottom:
-                self.indices = (2, 0)
-            elif self.kSceneViewer.viewport.type() == hou.geometryViewportType.Front:
-                self.indices = (0, 1)
-            elif self.kSceneViewer.type() == hou.geometryViewportType.Back:
-                self.indices = (1, 0)
-            elif self.kSceneViewer.type() == hou.geometryViewportType.Right:
-                self.indices = (0, 1)
-            elif self.kSceneViewer.type() == hou.geometryViewportType.Left:
-                self.indices = (1, 2)
+            default_cam_map = {
+                "hou.geometryViewportType.Top": (0, 1),
+                "hou.geometryViewportType.Bottom": (2, 0),
+                "hou.geometryViewportType.Front": (0, 1),
+                "hou.geometryViewportType.Back": (1, 0),
+                "hou.geometryViewportType.Right": (0, 1),
+                "hou.geometryViewportType.Left": (1, 2),
+            }
+            viewport_type = self.kSceneViewer.viewport.type()
+            self.indices = default_cam_map[str(viewport_type)]
 
             keymap = {
                 "-": self.kDefaultCam.zoomOut,
