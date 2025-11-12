@@ -571,13 +571,8 @@ class KGeo:
         elif self.context == "Objects":
             self.displayNode = pwd.children()[0].displayNode()
         elif self.context == "Geometry":
-            displayNode = pwd.displayNode()
+            self.displayNode = pwd.displayNode()
         return self.displayNode.geometry()
-
-    def home(self):
-        self.displayNode = None
-        pwd = self.state.kSceneViewer.pwd()
-        self.context = pwd.childTypeCategory().label()
 
 
 class KGuides:
