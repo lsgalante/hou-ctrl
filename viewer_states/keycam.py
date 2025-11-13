@@ -264,7 +264,7 @@ class State(object):
             }
 
     def onMenuAction(self, kwargs):
-        function_map = {
+        funcmap = {
             "frame": self.kCam.frame,
             "reset": self.kParms.reset,
             "bbox": self.kGuides.bbox.show,
@@ -276,7 +276,7 @@ class State(object):
             "ray": self.kGuides.ray.show,
         }
 
-        args_map = {
+        argmap = {
             "frame": None,
             "reset": None,
             "bbox": kwargs["bbox"],
@@ -289,12 +289,12 @@ class State(object):
         }
 
         menu_item = kwargs["menu_item"]
-        args = args_map[menu_item]
-        if args == None:
-            func = function_map[menu_item]()
+        args = argmap[menu_item]
+        if not args:
+            func = funcmap[menu_item]()
             return func
         else:
-            func = function_map[menu_item](args)
+            func = funcmap[menu_item](args)
             return func
 
     def onParmChangeEvent(self, kwargs):
@@ -465,21 +465,21 @@ class KCam:
         move = self.state.kParms.local_z * zoom_level
         self.state.kParms.t += move
 
-    def zoomIn(self):
+    def zoomIn(self, key):
         move = self.state.kParms.local_z * self.state.kParms.delta_zoom
         self.state.kParms.t -= move
 
-    def zoomOut(self):
+    def zoomOut(self, key):
         move = self.state.kParms.local_z * self.state.kParms.delta_zoom
         self.state.kParms.t += move
 
     def setOrthoZoom(self, zoom_level):
         self.state.kParms.ow = zoom_level
 
-    def orthoZoomIn(self):
+    def orthoZoomIn(self, key):
         self.state.kParms.ow += self.state.kParms.delta_zoom * -1
 
-    def orthoZoomOut(self):
+    def orthoZoomOut(self, key):
         self.state.kParms.ow += self.state.kParms.delta_zoom
 
 
