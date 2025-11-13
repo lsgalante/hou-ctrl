@@ -216,24 +216,24 @@ class State(object):
             "-": self.kCam.zoomOut,
             "=": self.kCam.zoomIn,
             "o": self.kCam.nextProjection,
-            "h": self.kCam.rotateLeft,
-            "j": self.kCam.rotateUp,
-            "k": self.kCam.rotateDown,
-            "l": self.kCam.rotateRight,
+            "h": self.kCam.rotate,
+            "j": self.kCam.rotate,
+            "k": self.kCam.rotate,
+            "l": self.kCam.rotate,
             "v": self.kSceneViewer.nextView,
             "Shift+-": self.kCam.orthoZoomOut,
             "Shift+=": self.kCam.orthoZoomIn,
-            "Shift+h": self.kCam.translateLeft,
-            "Shift+j": self.kCam.translateDown,
-            "Shift+k": self.kCam.translateUp,
-            "Shift+l": self.kCam.translateRight,
+            "Shift+h": self.kCam.translate,
+            "Shift+j": self.kCam.translate,
+            "Shift+k": self.kCam.translate,
+            "Shift+l": self.kCam.translate,
             "Ctrl+l": self.kSceneViewer.nextLayout,
         }
         key = kwargs["ui_event"].device().keyString()
         if key in keymap:
-            keymap.get(key, lambda: False)()
+            func = keymap[key](key)
             self.kGuides.update()
-            return True
+            return func
         else:
             return False
 
@@ -409,80 +409,43 @@ class KCam:
             cam.parm("xOrd").set(0)
         self.cam = hou.node("/obj/keycam")
 
-    def rotate(self, m):
-        self.state.kParms.t = hou.Vector3(self.state.kParms.t) - hou.Vector3(
-            self.state.kParms.p
-        )
+    def rotate(self, key):
+        axismap = {
+            "h": self.state.kParms.global_y,
+            "j": self.state.kParms.local_x,
+            "k": self.state.kParms.local_x,
+            "l": self.state.kParms.global_y,
+        }
+        signmap = {"h": -1, "j": -1, "k": 1, "l": 1}
+        deltamap = {
+            "h": hou.Vector3(0, self.state.kParms.delta_r, 0),
+            "j": hou.Vector3(self.state.kParms.delta_r, 0, 0),
+            "k": hou.Vector3(self.state.kParms.delta_r, 0, 0),
+            "l": hou.Vector3(0, self.state.kParms.delta_r, 0),
+        }
+        axis = axismap[key]
+        sign = signmap[key]
+        delta = deltamap[key] * sign
+        self.state.kParms.r += delta
+        m = hou.hmath.buildRotateAboutAxis(axis, self.state.kParms.delta_r * sign)
+        self.state.kParms.t -= self.state.kParms.p
         self.state.kParms.t *= m
-        self.state.kParms.t = hou.Vector3(self.state.kParms.t) + hou.Vector3(
-            self.state.kParms.p
-        )
+        self.state.kParms.t += self.state.kParms.p
         self.state.kParms.local_x *= m
         self.state.kParms.local_y *= m
         self.state.kParms.local_z *= m
 
-    def rotateUp(self):
-        self.state.kParms.r = hou.Vector3(
-            self.state.kParms.r[0] + self.state.kParms.delta_r,
-            self.state.kParms.r[1],
-            self.state.kParms.r[2],
-        )
-        m = hou.hmath.buildRotateAboutAxis(
-            self.state.kParms.local_x, self.state.kParms.delta_r
-        )
-        self.rotate(m)
-
-    def rotateDown(self):
-        self.state.kParms.r = hou.Vector3(
-            self.state.kParms.r[0] - self.state.kParms.delta_r,
-            self.state.kParms.r[1],
-            self.state.kParms.r[2],
-        )
-        m = hou.hmath.buildRotateAboutAxis(
-            self.state.kParms.local_x, self.state.kParms.delta_r * -1
-        )
-        self.rotate(m)
-
-    def rotateLeft(self):
-        print(self.state.kParms.r)
-        self.state.kParms.r = hou.Vector3(
-            self.state.kParms.r[0],
-            self.state.kParms.r[1] - self.state.kParms.delta_r,
-            self.state.kParms.r[2],
-        )
-        m = hou.hmath.buildRotateAboutAxis(
-            self.state.kParms.global_y, self.state.kParms.delta_r * -1
-        )
-        self.rotate(m)
-
-    def rotateRight(self):
-        self.state.kParms.r = hou.Vector3(
-            self.state.kParms.r[0],
-            self.state.kParms.r[1] + self.state.kParms.delta_r,
-            self.state.kParms.r[2],
-        )
-        m = hou.hmath.buildRotateAboutAxis(
-            self.state.kParms.global_y, self.state.kParms.delta_r
-        )
-        self.rotate(m)
-
-    def translateUp(self):
-        move = self.state.kParms.local_y * self.state.kParms.delta_t
-        self.state.kParms.t += move
-        self.state.kParms.p += move
-
-    def translateDown(self):
-        move = self.state.kParms.local_y * self.state.kParms.delta_t * -1
-        self.state.kParms.t += move
-        self.state.kParms.p += move
-
-    def translateLeft(self):
-        move = self.state.kParms.local_x * self.state.kParms.delta_t * -1
-        self.state.kParms.t += move
-        self.state.kParms.p += move
-
-    def translateRight(self):
-        move = self.state.kParms.local_x * self.state.kParms.delta_t
+    def translate(self, key):
+        axismap = {
+            "Shift+h": self.state.kParms.local_x,
+            "Shift+j": self.state.kParms.local_y,
+            "Shift+k": self.state.kParms.local_y,
+            "Shift+l": self.state.kParms.local_x,
+        }
+        signmap = {"Shift+h": -1, "Shift+j": -1, "Shift+k": 1, "Shift+l": 1}
+        axis = axismap[key]
+        sign = signmap[key]
+        move = axis * self.state.kParms.delta_t * sign
         self.state.kParms.t += move
         self.state.kParms.p += move
 
