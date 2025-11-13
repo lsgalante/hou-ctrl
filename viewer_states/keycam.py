@@ -203,14 +203,15 @@ class State(object):
         kwargs["state_flags"]["exit_on_node_select"] = False
         self.kwargs = kwargs
         self.kParms.reset()
-        self.kGuides.update()
         self.kHud.update()
         self.updateNetworkContext()
         self.updateOptions()
+        self.kGuides.update()
+        self.kCam.fitAspectRatio()
         # self.kCam.frame()
 
     def onKeyEvent(self, kwargs):
-        self.kCam.updateAspectRatio()
+        self.kCam.fitAspectRatio()
         # Node cam
         keymap = {
             "-": self.kCam.zoomOut,
@@ -362,12 +363,20 @@ class KCam:
         self.nodeCheck()
         self.lock()
 
+    def fitAspectRatio(self):
+        self.cam.parm("resx").set(1000)
+        self.cam.parm("resy").set(1000)
+        viewport = self.state.sceneViewer.findViewport("persp1")
+        ratio = viewport.size()[2] / viewport.size()[3]
+        self.cam.parm("aspect").set(ratio)
+
     def frame(self):
         centroid = self.state.kGeo.centroid()
         self.state.kParms.t = hou.Vector3(centroid)
         self.state.kParms.p = hou.Vector3(centroid)
         # self.state.kParms.ow = 10
         self.setZoom(6)
+        self.state.kGuides.update()
 
     def home(self):
         centroid = self.state.kGeo.centroid()
@@ -454,13 +463,6 @@ class KCam:
         self.cam.parmTuple("r").set(self.state.kParms.r)
         self.cam.parm("orthowidth").set(self.state.kParms.ow)
 
-    def updateAspectRatio(self):
-        self.cam.parm("resx").set(1000)
-        self.cam.parm("resy").set(1000)
-        viewport = self.state.sceneViewer.findViewport("persp1")
-        ratio = viewport.size()[2] / viewport.size()[3]
-        self.cam.parm("aspect").set(ratio)
-
     def setZoom(self, zoom_level):
         move = self.state.kParms.local_z * zoom_level
         self.state.kParms.t += move
@@ -493,6 +495,7 @@ class KDefaultCam:
             # Is cam default or node.
             if not cam:
                 viewport.frameAll()
+        self.state.kGuides.update()
 
     def nextView(self):
         return
