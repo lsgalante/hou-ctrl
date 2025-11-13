@@ -227,16 +227,16 @@ class State(object):
         self.kCam.fitAspectRatio()
         # Node cam
         keymap = {
-            "-": self.kCam.zoomOut,
-            "=": self.kCam.zoomIn,
+            "-": self.kCam.zoom,
+            "=": self.kCam.zoom,
             "o": self.kCam.nextProjection,
             "h": self.kCam.rotate,
             "j": self.kCam.rotate,
             "k": self.kCam.rotate,
             "l": self.kCam.rotate,
             "v": self.kSceneViewer.nextView,
-            "Shift+-": self.kCam.orthoZoomOut,
-            "Shift+=": self.kCam.orthoZoomIn,
+            "Shift+-": self.kCam.orthoZoom,
+            "Shift+=": self.kCam.orthoZoom,
             "Shift+h": self.kCam.translate,
             "Shift+j": self.kCam.translate,
             "Shift+k": self.kCam.translate,
@@ -480,22 +480,19 @@ class KCam:
         move = self.state.kParms.local_z * zoom_level
         self.state.kParms.t += move
 
-    def zoomIn(self, key):
-        move = self.state.kParms.local_z * self.state.kParms.delta_zoom
-        self.state.kParms.t -= move
-
-    def zoomOut(self, key):
-        move = self.state.kParms.local_z * self.state.kParms.delta_zoom
+    def zoom(self, key):
+        signmap = {"-": 1, "=": -1}
+        sign = signmap[key]
+        move = self.state.kParms.local_z * self.state.kParms.delta_zoom * sign
         self.state.kParms.t += move
 
     def setOrthoZoom(self, zoom_level):
         self.state.kParms.ow = zoom_level
 
-    def orthoZoomIn(self, key):
-        self.state.kParms.ow += self.state.kParms.delta_zoom * -1
-
-    def orthoZoomOut(self, key):
-        self.state.kParms.ow += self.state.kParms.delta_zoom
+    def orthoZoom(self, key):
+        signmap = {"Shift+-": 1, "Shift+=": -1}
+        sign = signmap[key]
+        self.state.kParms.ow += self.state.kParms.delta_zoom * sign
 
 
 class KDefaultCam:
