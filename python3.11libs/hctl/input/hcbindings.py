@@ -17,7 +17,6 @@ def load():
     assignment_clear_arr = (
         "deskmgr.new",
         "deskmgr.save",
-
         "h.add_key",
         "h.aliases",
         "h.audio_panel",
@@ -39,16 +38,13 @@ def load():
         # "h.redo",
         # "h.save",
         # "h.undo",
-
         "h.pane.gview.decrease_subd",
         "h.pane.gview.increase_subd",
         "h.pane.gview.restore_prevcam",
         "h.pane.gview.state.volatile_chmodify",
-
         # "h.pane.edit_bookmark",
         # "h.pane.nexttab",
         # "h.pane.to_parm",
-
         "h.pane.wsheet.add_image",
         "h.pane.wsheet.add_postit",
         "h.pane.wsheet.addfileop",
@@ -69,8 +65,7 @@ def load():
         "h.pane.wsheet.up",
         "h.pane.wsheet.zoom_in",
         "h.pane.wsheet.zoom_out",
-
-        "inputfield.context_help"
+        "inputfield.context_help",
     )
 
     # Remove assignments
@@ -97,30 +92,24 @@ def load():
         # ("h.save", "cmd+s"),
         # ("h.hCSessionKeycam", "shift+k"),
         # ("h.undo", "ctrl+/"),
-
         #
         ("h.pane.editparms.selectall", "alt+h"),
-
         # Scene viewer bindings
         ("h.pane.gview.refplane", "shift+g"),
-
         # Pane tab bindings
         ("h.pane.nexttab", "ctrl+space"),
         ("h.pane.prevtab", "ctrl+shift+space"),
-
         # Parameter bindings
         ("h.pane.parms.edit_expression", "ctrl+e"),
-
         # Net editor vim bindings
-        ("h.pane.wsheet.up",             "shift+k"),
-        ("h.pane.wsheet.down",           "shift+j"),
-        ("h.pane.wsheet.left",           "shift+h"),
+        ("h.pane.wsheet.up", "shift+k"),
+        ("h.pane.wsheet.down", "shift+j"),
+        ("h.pane.wsheet.left", "shift+h"),
         ("h.pane.wsheet.node_quick_nav", "ctrl+s"),
-        ("h.pane.wsheet.right",          "shift+l"),
-        ("h.pane.wsheet.select",         "ctrl+alt+h"),
+        ("h.pane.wsheet.right", "shift+l"),
+        ("h.pane.wsheet.select", "ctrl+alt+h"),
         # ("h.pane.wsheet.zoom_in",        "="),
         # ("h.pane.wsheet.zoom_out",       "-"),
-
         # Text editor emacs bindings
         # ("h.pane.textport.up",             "ctrl+p"),
         # ("h.pane.textport.down",           "ctrl+n"),
@@ -142,38 +131,36 @@ def load():
         # ("h.pane.textport.selecttop",      "ctrl+shift+a"),
         # ("h.pane.textport.selectnextword", "cmd+shift+f"),
         # ("h.pane.textport.toggle_comment", "ctrl+;"),
-
         # Text editor vim bindings
-        ("h.pane.textport.up",             "ctrl+k"),
-        ("h.pane.textport.down",           "ctrl+j"),
-        ("h.pane.textport.next",           "ctrl+l"),
-        ("h.pane.textport.prev",           "ctrl+h"),
-        ("h.pane.textport.top",            "alt+k"),
-        ("h.pane.textport.bottom",         "alt+j"),
-        ("h.pane.textport.nextword",       "ctrl+w"),
-        ("h.pane.textport.prevword",       "ctrl+b"),
-        ("h.pane.textport.pageup",         "ctrl+u"),
-        ("h.pane.textport.pagedown",       "ctrl+d"),
-        ("h.pane.textport.firstline",      "ctrl+G"),
-        ("h.pane.textport.lastline",       "ctrl+g"),
-        ("h.pane.textport.jump_to_line",   "alt+g"),
-        ("h.pane.textport.selectup",       "ctrl+shift+k"),
-        ("h.pane.textport.selectdown",     "ctrl+shift+j"),
-        ("h.pane.textport.selectnext",     "ctrl+shift+l"),
-        ("h.pane.textport.selectprev",     "ctrl+shift+h"),
+        ("h.pane.textport.up", "ctrl+k"),
+        ("h.pane.textport.down", "ctrl+j"),
+        ("h.pane.textport.next", "ctrl+l"),
+        ("h.pane.textport.prev", "ctrl+h"),
+        ("h.pane.textport.top", "alt+k"),
+        ("h.pane.textport.bottom", "alt+j"),
+        ("h.pane.textport.nextword", "ctrl+w"),
+        ("h.pane.textport.prevword", "ctrl+b"),
+        ("h.pane.textport.pageup", "ctrl+u"),
+        ("h.pane.textport.pagedown", "ctrl+d"),
+        ("h.pane.textport.firstline", "ctrl+G"),
+        ("h.pane.textport.lastline", "ctrl+g"),
+        ("h.pane.textport.jump_to_line", "alt+g"),
+        ("h.pane.textport.selectup", "ctrl+shift+k"),
+        ("h.pane.textport.selectdown", "ctrl+shift+j"),
+        ("h.pane.textport.selectnext", "ctrl+shift+l"),
+        ("h.pane.textport.selectprev", "ctrl+shift+h"),
         ("h.pane.textport.selectnextword", "ctrl+shift+w"),
         ("h.pane.textport.selectprevword", "ctrl+shift+b"),
         ("h.pane.textport.toggle_comment", "ctrl+/"),
-
         # Input field bindings
-        ("inputfield.down",      "ctrl+n"),
-        ("inputfield.end",       "ctrl+e"),
-        ("inputfield.home",      "ctrl+a"),
-        ("inputfield.next",      "ctrl+f"),
+        ("inputfield.down", "ctrl+n"),
+        ("inputfield.end", "ctrl+e"),
+        ("inputfield.home", "ctrl+a"),
+        ("inputfield.next", "ctrl+f"),
         ("inputfield.next_word", "alt+f"),
-        ("inputfield.prev",      "ctrl+b"),
+        ("inputfield.prev", "ctrl+b"),
         ("inputfield.prev_word", "alt+b"),
-        ("inputfield.up",        "ctrl+p")
+        ("inputfield.up", "ctrl+p"),
     )
 
     # Command bindings

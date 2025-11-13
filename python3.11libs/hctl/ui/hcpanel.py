@@ -1,9 +1,18 @@
 import hou
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QCheckBox, QSlider, QDialog, QLabel, QMenu, QHBoxLayout, QVBoxLayout
-from .hcwidgets import HCButton
-from ..core.hcsession import HCSession
+from PySide6.QtWidgets import (
+    QCheckBox,
+    QDialog,
+    QHBoxLayout,
+    QLabel,
+    QMenu,
+    QSlider,
+    QVBoxLayout,
+)
+
 from ..core.hcpane import HCPane
+from ..core.hcsession import HCSession
+from .hcwidgets import HCButton
 
 
 class HCPanel(QDialog):
@@ -23,7 +32,7 @@ class HCPanel(QDialog):
         self.resize(300, 200)
         self.move(x, y)
         self.setWindowTitle("hctl panel")
-        self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint )
+        self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint)
 
         # Utility lists
         self.pane_tab_types = (
@@ -39,7 +48,7 @@ class HCPanel(QDialog):
             hou.paneTabType.PythonShell,
             hou.paneTabType.SceneViewer,
             hou.paneTabType.Textport,
-            hou.paneTabType.TreeView
+            hou.paneTabType.TreeView,
         )
         self.pane_tab_names = [paneTab.name() for paneTab in self.hcSession.paneTabs()]
         self.pane_tab_type_names = (
@@ -55,10 +64,10 @@ class HCPanel(QDialog):
             "PythonShell",
             "SceneViewer",
             "Textport",
-            "Tree View")
+            "Tree View",
+        )
         self.pane_tab_labels = []
         for paneTab in self.hcSession.paneTabs():
-            print(paneTab.type())
             index = self.pane_tab_types.index(paneTab.type())
             label = self.pane_tab_type_names[index]
             self.pane_tab_labels.append(label)
@@ -75,12 +84,6 @@ class HCPanel(QDialog):
         sessionLabel = QLabel("Session")
         sessionLabel.setStyleSheet("color: #909090")
         sessionCol.addWidget(sessionLabel)
-        # Toggle autosave
-        sessionCol.addWidget(self.SessionAutosaveCheckBox(self))
-        # Toggle menus
-        sessionMenusBtn = HCButton("Menus")
-        sessionMenusBtn.clicked.connect(self.hcSession.toggleMenus)
-        sessionCol.addWidget(sessionMenusBtn)
         # Toggle tabs
         sessionTabsBtn = HCButton("Tabs")
         sessionTabsBtn.clicked.connect(self.hcSession.toggleTabs)
@@ -89,6 +92,12 @@ class HCPanel(QDialog):
         sessionNetworkControlsBtn = HCButton("Network Controls")
         sessionNetworkControlsBtn.clicked.connect(self.hcSession.toggleNetworkControls)
         sessionCol.addWidget(sessionNetworkControlsBtn)
+        # Toggle autosave
+        sessionCol.addWidget(self.SessionAutosaveCheckBox(self))
+        # Toggle menus
+        sessionMenusBtn = HCButton("Menus")
+        sessionMenusBtn.clicked.connect(self.hcSession.toggleMenus)
+        sessionCol.addWidget(sessionMenusBtn)
         # Toggle stowbars
         sessionStowbarsBtn = HCButton("Stowbars")
         sessionStowbarsBtn.clicked.connect(self.hcSession.toggleStowbars)
@@ -102,6 +111,14 @@ class HCPanel(QDialog):
         paneLabel = QLabel("Pane/Tab")
         paneLabel.setStyleSheet("color: #909090")
         paneCol.addWidget(paneLabel)
+        # Toggle tabs
+        panePaneTabsBtn = HCButton("Tabs")
+        panePaneTabsBtn.clicked.connect(self.hcPane.togglePaneTabs)
+        paneCol.addWidget(panePaneTabsBtn)
+        # Toggle network controls
+        paneTabNetworkControlsBtn = HCButton("Network Controls")
+        paneTabNetworkControlsBtn.clicked.connect(self.hcPaneTab.toggleNetworkControls)
+        paneCol.addWidget(paneTabNetworkControlsBtn)
         # Toggle pin
         paneCol.addWidget(self.PaneTabPinCheckBox(self))
         # Tab switcher
@@ -112,20 +129,12 @@ class HCPanel(QDialog):
         paneMaximizeBtn = HCButton("Maximize")
         paneMaximizeBtn.clicked.connect(self.hcPane.toggleMaximized)
         paneCol.addWidget(paneMaximizeBtn)
-        # Toggle tabs
-        panePaneTabsBtn = HCButton("Tabs")
-        panePaneTabsBtn.clicked.connect(self.hcPane.togglePaneTabs)
-        paneCol.addWidget(panePaneTabsBtn)
         # Size slider
-        sizeSlider= QSlider(Qt.Horizontal)
-        sizeSlider.setFixedWidth(300/2)
-        sizeSlider.setValue(self.hcPane.splitFraction()*100)
+        sizeSlider = QSlider(Qt.Horizontal)
+        sizeSlider.setFixedWidth(300 / 2)
+        sizeSlider.setValue(self.hcPane.splitFraction() * 100)
         sizeSlider.valueChanged.connect(self.sliderChange)
         paneCol.addWidget(sizeSlider)
-        # Toggle network controls
-        paneTabNetworkControlsBtn = HCButton("Network Controls")
-        paneTabNetworkControlsBtn.clicked.connect(self.hcPaneTab.toggleNetworkControls)
-        paneCol.addWidget(paneTabNetworkControlsBtn)
 
         # Scene viewer controls
         if self.hcPaneTab.type() == hou.paneTabType.SceneViewer:
@@ -148,11 +157,10 @@ class HCPanel(QDialog):
         self.setLayout(self.layout)
 
     def sliderChange(self, value):
-        self.hcPane.setSplitFraction(value/100)
+        self.hcPane.setSplitFraction(value / 100)
 
     def closeEvent(self, event):
         self.setParent(None)
-
 
     class SessionAutosaveCheckBox(QCheckBox):
         def __init__(self, owner):
@@ -164,7 +172,6 @@ class HCPanel(QDialog):
                 self.setCheckState(Qt.Unchecked)
             self.clicked.connect(owner.hcSession.toggleAutoSave)
 
-
     class PaneTabPinCheckBox(QCheckBox):
         def __init__(self, owner):
             super().__init__("Pin")
@@ -174,7 +181,6 @@ class HCPanel(QDialog):
                 self.setCheckState(Qt.Checked)
             else:
                 self.setCheckState(Qt.Unchecked)
-
 
     class PaneTabMenu(HCButton):
         def __init__(self, owner):
@@ -186,7 +192,9 @@ class HCPanel(QDialog):
             idx = 0
             for tabName in self.tabNames:
                 action = self.menu.addAction(tabName)
-                action.triggered.connect(lambda checked=False, index=idx: self.changeTab(index))
+                action.triggered.connect(
+                    lambda checked=False, index=idx: self.changeTab(index)
+                )
                 idx += 1
             self.setMenu(self.menu)
 
@@ -194,7 +202,6 @@ class HCPanel(QDialog):
             newTab = self.tabs[index]
             newTab.setIsCurrentTab()
             self.owner.close()
-
 
     class PaneTabTypeMenu(HCButton):
         def __init__(self, owner):
