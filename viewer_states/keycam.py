@@ -226,7 +226,8 @@ class State(object):
     def onKeyEvent(self, kwargs):
         self.kCam.fitAspectRatio()
         # Node cam
-        keymap = {
+        # functions with args
+        keymap1 = {
             "-": self.kCam.zoom,
             "=": self.kCam.zoom,
             "o": self.kCam.nextProjection,
@@ -243,11 +244,17 @@ class State(object):
             "Shift+l": self.kCam.translate,
             "Ctrl+l": self.kSceneViewer.nextLayout,
         }
+        # functions without args
+        keymap2 = {"f": self.kCam.frame}
         key = kwargs["ui_event"].device().keyString()
-        if key in keymap:
-            func = keymap[key](key)
+        if key in keymap1:
+            func = keymap1[key](key)
             self.kGuides.update()
-            return func
+            return True
+        elif key in keymap2:
+            func = keymap2[key]()
+            self.kGuides.update()
+            return True
         else:
             return False
 
@@ -305,11 +312,9 @@ class State(object):
         menu_item = kwargs["menu_item"]
         args = argmap[menu_item]
         if not args:
-            func = funcmap[menu_item]()
-            return func
+            return funcmap[menu_item]()
         else:
-            func = funcmap[menu_item](args)
-            return func
+            return funcmap[menu_item](args)
 
     def onParmChangeEvent(self, kwargs):
         parmmap = {
@@ -388,7 +393,7 @@ class KCam:
         self.state.kParms.t = hou.Vector3(centroid)
         self.state.kParms.p = hou.Vector3(centroid)
         # self.state.kParms.ow = 10
-        self.setZoom(6)
+        self.setZoom(10)
         self.state.kGuides.update()
 
     def home(self):
@@ -413,7 +418,7 @@ class KCam:
             self.state.kParms.p = [0, 0, self.state.kParms.zoom * -1]
             self.state.kParms.ow = 10
 
-    def nextProjection(self):
+    def nextProjection(self, key):
         parm = self.cam.parm("projection")
         proj = parm.evalAsString()
         if proj == "ortho":
@@ -510,28 +515,13 @@ class KDefaultCam:
     def nextView(self):
         return
 
-    def rotateLeft(self):
+    def rotate(self, key):
         return
 
-    def rotateRight(self):
+    def translate(self, key):
         return
 
-    def translateUp(self, indices):
-        return
-
-    def translateDown(self, indices):
-        return
-
-    def translateLeft(self, indices):
-        return
-
-    def translateRight(self, indices):
-        return
-
-    def zoomIn(self):
-        return
-
-    def zoomOut(self):
+    def zoom(self):
         return
 
 
@@ -615,7 +605,7 @@ class KGuides:
             name="pivot3d",
         )
         self.pivot3d.setParams(
-            {"color1": hou.Vector4(0.2, 0.8, 0.2, 0.7), "fade_factor": 0.5}
+            {"color1": hou.Vector4(0.2, 0.8, 0.2, 0.2), "fade_factor": 0.2}
         )
         self.ray = hou.GeometryDrawable(
             scene_viewer=self.state.sceneViewer,
@@ -752,13 +742,16 @@ class KGuides:
 
     def updatePivot3d(self):
         verb = hou.sopNodeTypeCategory().nodeVerb("sphere")
+        # scale = self.state.kParms.t.distanceTo(self.state.kParms.p) * 0.02
+        scale = 0.02
         verb.setParms(
             {
                 "freq": 7,
-                "scale": self.state.kParms.t.distanceTo(
-                    hou.Vector3(self.state.kParms.p)
-                )
-                * 0.02,
+                # "scale": self.state.kParms.t.distanceTo(
+                # hou.Vector3(self.state.kParms.p)
+                # )
+                # * 0.02,
+                "scale": scale,
                 "type": 1,
                 "t": self.state.kParms.p,
             }
@@ -785,7 +778,7 @@ class KHud:
     def __init__(self, state):
         self.state = state
         self.template = {
-            "title": "test",
+            "title": "keycam",
             "rows": [
                 {
                     "id": "layout",
