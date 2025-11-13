@@ -286,7 +286,6 @@ OpListSelectionFGColor: white
 
 // Old UI colors ---------------------------------------------------------------
 
-
 ListTitleColor:              EDIT_BG
 ListEntryColor:              GREY(0.62)
 ListEntrySelectedColor:      0.93 0.86 0.51
@@ -439,8 +438,8 @@ MenuBG:                 bg_low    // network editor menu bar
 MenuText:               text
 MenuTextDisabled:       SHADOW2
 MenuTextHotkey:         SHADOW2
-MenuHighlight:          bevel_high
-MenuShadow:             bevel_low
+MenuHighlight:          GREY(0.1)
+MenuShadow:             GREY(0.1)
 MenuTextSelected:       white
 MenuSelectedBG:         selection
 MenuTitleBG:            bg_low
