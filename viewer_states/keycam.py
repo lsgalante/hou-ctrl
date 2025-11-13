@@ -379,7 +379,7 @@ class KCam:
     def fitAspectRatio(self):
         self.cam.parm("resx").set(1000)
         self.cam.parm("resy").set(1000)
-        viewport = self.state.sceneViewer.findViewport("persp1")
+        viewport = self.state.sceneViewer.curViewport()
         ratio = viewport.size()[2] / viewport.size()[3]
         self.cam.parm("aspect").set(ratio)
 
