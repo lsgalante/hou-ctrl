@@ -14,19 +14,24 @@ Scheme: lsgalante dark
 IconBrightness: 0.9
 IconContrast:   1
 IconGamma:      1
-IconSaturation: 0.2
+IconSaturation: 0.8
 
 // Base colors -----------------------------------------------------------------
 
-BackColor:       bg_low     // If white lines appear, adjust BorderDark due to auto contrast code.
-BorderLight:     bg_high
-BorderDark:      bg_low
-TextColor:       text
-HiliteTextColor: TEXT_HIGHLIGHT
-HiliteTextBG:    #454B50
-SecondaryText:   GREY(0.5)
-LinkText:        #64ACFF
-DropIndicator    0.0 0.0 1.0
+BackColor:          bg_low     // If white lines appear, adjust BorderDark due to auto contrast code.
+BorderLight:        bg_low     // line left of node graph pane & some menus
+BorderDark:         bg_low
+TextColor:          text
+HiliteTextColor:    TEXT_HIGHLIGHT
+HiliteTextBG:       #454B50
+SecondaryText:      GREY(0.5)
+LinkText:           #64ACFF
+DropIndicator       0.0 0.0 1.0
+
+ForegroundColor:    GREY(0.02)        // line in parameter pane (auto contrast code)
+BackgroundColor:    UNK
+PaperColor:         bg_low        // also: line below pane tabs, other lines
+TextHighlightColor: TEXT_HIGHLIGHT
 
 //
 //
@@ -104,27 +109,27 @@ ActiveHandleColor:       SELECTION_BASE     // Handle is active
 // point1/tx and point1/vx will be both be reds of different hues, which in turn
 // will also differ from point2/tx and point2/vx.
 
-ChannelColorRed1:   0.8 0.15 0.15       // Red
-ChannelColorRed2:   hsv 320.0 1.0 0.75  // Before red
+ChannelColorRed1:   0.8 0.15 0.15      // red
+ChannelColorRed2:   hsv 320.0 1.0 0.75 // before red
 ChannelColorRed3:   hsv 340.0 1.0 0.75
-ChannelColorRed4:   hsv  20.0 1.0 0.75  // After red
-ChannelColorRed5:   hsv  40.0 1.0 0.75
-ChannelColorGreen1: 0.15 0.8 0.15       // Green
-ChannelColorGreen2: hsv  80.0 1.0 0.75  // Before green
+ChannelColorRed4:   hsv 20.0 1.0 0.75  // after red
+ChannelColorRed5:   hsv 40.0 1.0 0.75
+ChannelColorGreen1: 0.15 0.8 0.15      // green
+ChannelColorGreen2: hsv 80.0 1.0 0.75  // before green
 ChannelColorGreen3: hsv 100.0 1.0 0.75
-ChannelColorGreen4: hsv 140.0 1.0 0.75  // After green
+ChannelColorGreen4: hsv 140.0 1.0 0.75 // after green
 ChannelColorGreen5: hsv 160.0 1.0 0.75
-ChannelColorBlue1:  0.15 0.15 0.8       // Blue
-ChannelColorBlue2:  hsv 200.0 1.0 0.75  // Before blue
+ChannelColorBlue1:  0.15 0.15 0.8      // blue
+ChannelColorBlue2:  hsv 200.0 1.0 0.75 // before blue
 ChannelColorBlue3:  hsv 220.0 1.0 0.75
-ChannelColorBlue4:  hsv 260.0 1.0 0.75  // After blue
+ChannelColorBlue4:  hsv 260.0 1.0 0.75 // after blue
 ChannelColorBlue5:  hsv 280.0 1.0 0.75
-ChannelColorOther1: hsv  60.0 1.0 0.75  // Yellow
-ChannelColorOther2: hsv 180.0 1.0 0.75  // Aqua
-ChannelColorOther3: hsv 300.0 1.0 0.75  // Purple
-ChannelColorOther4: hsv  60.0 1.0 0.50  // Dark Yellow
-ChannelColorOther5: hsv 180.0 1.0 0.50  // Dark Aqua
-ChannelColorOther6: hsv 300.0 1.0 0.50  // Dark Purple
+ChannelColorOther1: hsv 60.0 1.0 0.75  // yellow
+ChannelColorOther2: hsv 180.0 1.0 0.75 // aqua
+ChannelColorOther3: hsv 300.0 1.0 0.75 // purple
+ChannelColorOther4: hsv 60.0 1.0 0.5   // dark yellow
+ChannelColorOther5: hsv 180.0 1.0 0.5  // dark aqua
+ChannelColorOther6: hsv 300.0 1.0 0.5  // dark purple
 
 // CHOP editor -----------------------------------------------------------------
 
@@ -205,29 +210,29 @@ LinkerPartialLinkColor: GREY(0.8)
 
 // Lists / spreadsheets --------------------------------------------------------
 
-ListShadow:                GREY(0.26)
-ListHighlight:             GREY(0.32)
-ListBorder:                GREY(0.1)
-ListBG:                    BASE_ALT         // BG in download color scheme window
+ListShadow:                bg_low
+ListHighlight:             bg_low
+ListBorder:                bg_low
+ListBG:                    BASE_ALT        // bg in download color scheme window
 ListEntry1:                LISTB
 ListEntry2:                LISTA
-ListEntrySelected:         SELECTION_BASE
-ListTitleShadow:           GREY(0.1)
-ListTitleHighlight:        ListHighlight
-ListTitleGradHi:           DRKGRADLOW
-ListTitleGradLow:          BASE_ALT
-ListTitleHighlightGradHi:  HSV 36 1 0.8
-ListTitleHighlightGradLow: HSV 36 1 0.8
+ListEntrySelected:         selection
+ListTitleShadow:           GREY(0.1)       // ??
+ListTitleHighlight:        bg_low          // ss row number border
+ListTitleGradHi:           bg_low          // ss row number bg
+ListTitleGradLow:          bg_low          // ss row number bg
+ListTitleHighlightGradHi:  HSV 36 1 0.8    // ??
+ListTitleHighlightGradLow: HSV 36 1 0.8    // ??
 ListTitleFilteredText:     SELECTION_BASE
-ListText:                  text             // Text in download color scheme window
+ListText:                  text            // text in download color scheme window
 ListAltText:               HSV 40 0.85 1.0
 ListHoverHighlight:        GREY(0.28)
 
-SSBorder:                  GREY(0.1)        // Divider line between spreadsheet columns
-SSOutline:                 DropIndicator    // Drag And Drop Outline in spreadsheet
-SSHeader:                  GREY(0.29)
-SSTableBackgroundColor:    0.9 0.9 0.9      // Tables
-SSTableSelectedColor:      0.125 0.125 1.0  // Tables
+SSBorder:                  selection       // divider line between spreadsheet columns
+SSOutline:                 DropIndicator   // drag And Drop Outline in spreadsheet
+SSHeader:                  GREY(0.29)      // ??
+SSTableBackgroundColor:    0.9 0.9 0.9     // ??
+SSTableSelectedColor:      0.125 0.125 1.0 // ??
 
 // Highlight Color Alpha in the channel lister
 // Red is for the Displayed Channel Alpha
@@ -281,10 +286,6 @@ OpListSelectionFGColor: white
 
 // Old UI colors ---------------------------------------------------------------
 
-ForegroundColor:             bg_low        // Separator in parameter pane (auto contrast code)
-BackgroundColor:             UNK
-PaperColor:                  separator     // Some UI separators
-TextHighlightColor:          TEXT_HIGHLIGHT
 
 ListTitleColor:              EDIT_BG
 ListEntryColor:              GREY(0.62)
@@ -410,21 +411,21 @@ ParmSheetHeaderColor: 0.60 0.60 0.60
 
 ButtonGradHi:           bg_high
 ButtonGradLow:          bg_high
-ButtonNonActiveGradLow: bg_low     // Low end of gradient on non-selected tabs
+ButtonNonActiveGradLow: bg_low     // low end of gradient on non-selected tabs
 
-ButtonShadowLight:      separator
-ButtonShadowMed:        separator  // Separators & stowbard arrows
-ButtonShadowMedDark:    selection  // Selected sceneviewer toolbar item
-ButtonShadowDark:       separator  // Some separators
-ButtonShadow:           separator  // Some button shadows
+ButtonShadowLight:      bg_low     // also: line above spreadsheet pane, lines above and left of playbar, scene viewer menu buttons, network editor menu
+ButtonShadowMed:        separator  // lines between playbar buttons, stowbar arrows, line around some parameter folders
+ButtonShadowMedDark:    selection  // selected sceneviewer toolbar item
+ButtonShadowDark:       bg_low     // borders on ui buttons & menus
+ButtonShadow:           separator  // borders on some ui buttons
 
 ButtonText:             text
 ButtonHoverHighlight:   white
 ButtonPressedText:      white
 
-ButtonPressedText2:     GREY(0.1)  // Scene viewer toolbar buttons
-ButtonPressedGradHi:    selection  // Scene viewer toolbar buttons
-ButtonPressedGradLow:   selection  // Scene viewer toolbar buttons
+ButtonPressedText2:     GREY(0.1)  // scene viewer toolbar buttons
+ButtonPressedGradHi:    selection  // scene viewer toolbar buttons
+ButtonPressedGradLow:   selection  // scene viewer toolbar buttons
 
 ButtonMenuArrowHi:      bg_high
 ButtonMenuArrowLow:     bg_high
@@ -434,7 +435,7 @@ ButtonArrowDisabled:    bg_low
 ButtonArrowPressed:     bg_low
 ButtonArrowModified:    SHADOW1
 
-MenuBG:                 bg_low    // Network editor menu bar
+MenuBG:                 bg_low    // network editor menu bar
 MenuText:               text
 MenuTextDisabled:       SHADOW2
 MenuTextHotkey:         SHADOW2
@@ -445,7 +446,7 @@ MenuSelectedBG:         selection
 MenuTitleBG:            bg_low
 InvertedMenuBackground: GREY(0.8)
 
-HyperTextLinkColor:     1.0 0.0 1.0 // used for buttons that simulate a hypertext link (may be not used)
+HyperTextLinkColor:     1.0 0.0 1.0 // buttons that simulate a hypertext link (may be not used)
 
 // Parameter: check ------------------------------------------------------------
 
@@ -532,7 +533,7 @@ RangeSliderArrowSelected: GREY(1.00)
 
 // Parameter: separator --------------------------------------------------------
 
-Separator: separator // also: line above network editor menu
+Separator: bg_low // also: line above network editor menu, line below some pane tabs, line in scene viewer menus
 
 // Parameter: slider -----------------------------------------------------------
 
@@ -558,7 +559,7 @@ SliderThumbRangeArrow:     black
 
 // Parameter: textbox ----------------------------------------------------------
 
-TextboxBG:              EDIT_BG
+TextboxBG:              bg_high // also: python shell shadow
 TextboxInvalidBG:       0.95 0.56 0.56
 TextboxBorderPrimary:   EDIT_BG_OUTLINE
 TextboxBorderHighlight: EDIT_BG_HIGHLIGHT
@@ -765,11 +766,11 @@ SIMAlmostMutualColor: 0.70 0.70 0.10
 // Split bar -------------------------------------------------------------------
 
 SplitBarBackground:  separator
-SplitBarEdgeColor:   selection // Grabber
-SplitBarLightColor:  separator
+SplitBarEdgeColor:   selection // grabber
+SplitBarLightColor:  bg_low    // also: minimized stowbar line
 SplitBarDarkColor:   separator //
 SplitBarPaneOutline: bg_low    // ?
-SplitBarGrippyColor: selection // Grabber
+SplitBarGrippyColor: selection // grabber
 SplitBarHighlight:   selection
 // SplitBarBackground + SplitBarHighlight*0.2
 SplitBarHighlight2:  0.432 0.392 0.313
@@ -787,10 +788,10 @@ StatusBarErrorBG:   HSV 0 1 1
 
 // Toolbars --------------------------------------------------------------------
 
-ToolbarBevelLight: separator  // Some separators
+ToolbarBevelLight: bg_low  // stowbar toggle borders, line above playbar, line above geo spreadsheet
 ToolbarBevelDark:  GREY(0.2)
-ToolbarFlatGradHi: bg_low     // Top/left end of gradient
-ToolbarFlatGradLo: bg_low     // Bottom/right end of gradient
+ToolbarFlatGradHi: bg_low  // top/left end of gradient
+ToolbarFlatGradLo: bg_low  // bottom/right end of gradient
 
 // Tool shelf ------------------------------------------------------------------
 
