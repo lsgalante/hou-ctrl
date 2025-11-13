@@ -68,38 +68,7 @@ def createViewerStateTemplate():
         menu_items=[("cam", "Camera"), ("pivot", "Pivot")],
         toolbox=False,
     )
-    template.bindParameter(
-        hou.parmTemplateType.Float,
-        name="delta_r",
-        label="Delta R",
-        default_value=15.0,
-        min_limit=-180.0,
-        max_limit=180.0,
-    )
-    template.bindParameter(
-        hou.parmTemplateType.Float,
-        name="delta_t",
-        label="Delta T",
-        default_value=1.0,
-        min_limit=0,
-        max_limit=10.0,
-    )
-    template.bindParameter(
-        hou.parmTemplateType.Float,
-        name="delta_zoom",
-        label="Delta Zoom",
-        default_value=10.0,
-        min_limit=0,
-        max_limit=10.0,
-    )
-    template.bindParameter(
-        hou.parmTemplateType.Float,
-        name="delta_ow",
-        label="Delta OW",
-        default_value=1.0,
-        min_limit=0,
-        max_limit=10.0,
-    )
+    template.bindParameter(hou.parmTemplateType.Separator, toolbox=False)
     template.bindParameter(
         hou.parmTemplateType.Float,
         name="t",
@@ -134,6 +103,39 @@ def createViewerStateTemplate():
         label="Ortho Width",
         num_components=1,
         toolbox=False,
+    )
+    template.bindParameter(hou.parmTemplateType.Separator, toolbox=False)
+    template.bindParameter(
+        hou.parmTemplateType.Float,
+        name="delta_t",
+        label="Delta T",
+        default_value=1.0,
+        min_limit=0,
+        max_limit=10.0,
+    )
+    template.bindParameter(
+        hou.parmTemplateType.Float,
+        name="delta_r",
+        label="Delta R",
+        default_value=15.0,
+        min_limit=-180.0,
+        max_limit=180.0,
+    )
+    template.bindParameter(
+        hou.parmTemplateType.Float,
+        name="delta_zoom",
+        label="Delta Zoom",
+        default_value=10.0,
+        min_limit=0,
+        max_limit=10.0,
+    )
+    template.bindParameter(
+        hou.parmTemplateType.Float,
+        name="delta_ow",
+        label="Delta OW",
+        default_value=1.0,
+        min_limit=0,
+        max_limit=10.0,
     )
 
     # Context menu
