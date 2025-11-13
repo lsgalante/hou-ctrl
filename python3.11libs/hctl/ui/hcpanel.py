@@ -29,7 +29,7 @@ class HCPanel(QDialog):
         pane_center = pane_geo.center()
         x = pane_center.x() - 200
         y = pane_center.y() - 75
-        self.resize(300, 200)
+        self.resize(200, 100)
         self.move(x, y)
         self.setWindowTitle("hctl panel")
         self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint)

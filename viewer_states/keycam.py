@@ -6,8 +6,8 @@ def createViewerStateTemplate():
     template = hou.ViewerStateTemplate(
         type_name="keycam",
         label="keycam",
-        category=hou.sopNodeTypeCategory(),
-        contexts=[hou.objNodeTypeCategory()],
+        category=hou.objNodeTypeCategory(),
+        contexts=[hou.sopNodeTypeCategory()],
     )
     template.bindFactory(State)
     template.bindIcon("DESKTOP_application_sierra")
@@ -86,8 +86,8 @@ def createViewerStateTemplate():
     )
     template.bindParameter(
         hou.parmTemplateType.Float,
-        name="delta_z",
-        label="Delta Z",
+        name="delta_zoom",
+        label="Delta Zoom",
         default_value=10.0,
         min_limit=0,
         max_limit=10.0,
@@ -123,7 +123,7 @@ def createViewerStateTemplate():
     )
     template.bindParameter(
         hou.parmTemplateType.Float,
-        name="z",
+        name="zoom",
         label="Zoom",
         num_components=1,
         toolbox=False,
@@ -162,8 +162,9 @@ class State(object):
             "reset": 1,
             "show_bbox": 1,
             "show_perim": 0,
-            "show_pivot2d": 1,
-            "show_pivot3d": 0,
+            "show_pivot2d": 0,
+            "show_pivot3d": 1,
+            "show_pivot_axis": 1,
             "show_ray": 0,
         }
 
@@ -229,8 +230,12 @@ class State(object):
             "Ctrl+l": self.kSceneViewer.nextLayout,
         }
         key = kwargs["ui_event"].device().keyString()
-        keymap.get(key, lambda: False)()
-        self.kGuides.update()
+        if key in keymap:
+            keymap.get(key, lambda: False)()
+            self.kGuides.update()
+            return True
+        else:
+            return False
 
         # Default cam
         if 2 == 1:
@@ -259,47 +264,61 @@ class State(object):
             }
 
     def onMenuAction(self, kwargs):
-        method = getattr(self, "_" + kwargs["menu_item"])
-        return method(kwargs)
-        # self.kGuides.update()
+        function_map = {
+            "frame": self.kCam.frame,
+            "reset": self.kParms.reset,
+            "bbox": self.kGuides.bbox.show,
+            "cam_axis": self.kGuides.camAxis.show,
+            "pivot_axis": self.kGuides.pivotAxis.show,
+            "perim": self.kGuides.perim.show,
+            "pivot2d": self.kGuides.pivot2d.show,
+            "pivot3d": self.kGuides.pivot3d.show,
+            "ray": self.kGuides.ray.show,
+        }
 
-    def _frame(self, kwargs):
-        self.kCam.frame()
+        args_map = {
+            "frame": None,
+            "reset": None,
+            "bbox": kwargs["bbox"],
+            "cam_axis": kwargs["cam_axis"],
+            "pivot_axis": kwargs["pivot_axis"],
+            "perim": kwargs["perim"],
+            "pivot2d": kwargs["pivot2d"],
+            "pivot3d": kwargs["pivot3d"],
+            "ray": kwargs["ray"],
+        }
 
-    def _reset(self, kwargs):
-        self.kParms.reset()
-
-    def _bbox(self, kwargs):
-        self.kGuides.bbox.show(kwargs["bbox"])
-
-    def _cam_axis(self, kwargs):
-        self.kGuides.camAxis.show(kwargs["cam_axis"])
-
-    def _pivot_axis(self, kwargs):
-        self.kGuides.pivotAxis.show(kwargs["pivot_axis"])
-
-    def _perim(self, kwargs):
-        self.kGuides.pivotAxis.show(kwargs["perim"])
-
-    def _pivot2d(self, kwargs):
-        self.kGuides.pivot2d.show(kwargs["pivot2d"])
-
-    def _pivot3d(self, kwargs):
-        self.kGuides.pivot3d.show(kwargs["pivot3d"])
-
-    def _ray(self, kwargs):
-        self.kGuides.ray.show(kwargs["ray"])
+        menu_item = kwargs["menu_item"]
+        args = args_map[menu_item]
+        if args == None:
+            func = function_map[menu_item]()
+            return func
+        else:
+            func = function_map[menu_item](args)
+            return func
 
     def onParmChangeEvent(self, kwargs):
-        if kwargs["parm_name"] == "t":
-            self.kParms._t = self.kParms.parms["t"]["value"]
-            self.kCam.cam.parmTuple("t").set(self.kParms.t)
-        elif kwargs["parm_name"] == "p":
-            self.kParms._p = self.kParms.parms["p"]["value"]
-            self.kCam.cam.parmTuple("p").set(self.kParms.p)
-        elif kwargs["parm_name"] == "r":
-            self.kParms._r = self.kParms.parms["r"]["value"]
-            self.kCam.cam.parmTuple("r").set(self.kParms.r)
+        parmmap = {
+            "layout": self.kParms.layout,
+            "viewport": self.kParms.viewport,
+            # "view": self.kParms.view,
+            # "camera": self.kParms.camera,
+            "target": self.kParms.target,
+            "delta_r": self.kParms.delta_r,
+            "delta_t": self.kParms.delta_t,
+            "delta_zoom": self.kParms.delta_zoom,
+            # "delta_ow": self.kParms.delta_ow,
+            "t": self.kParms.t,
+            "p": self.kParms.p,
+            "r": self.kParms.r,
+            "zoom": self.kParms.zoom,
+            "ow": self.kParms.ow,
+        }
+        parm_name = kwargs["parm_name"]
+        parm_value = kwargs["parm_value"]
+        parm = parmmap[parm_name]
+        parm = parm_value
+        return parm
         # self.kGuides.update()
 
     # def setView(self):
@@ -345,8 +364,8 @@ class KCam:
 
     def frame(self):
         centroid = self.state.kGeo.centroid()
-        self.state.kParms.t = centroid
-        self.state.kParms.p = centroid
+        self.state.kParms.t = hou.Vector3(centroid)
+        self.state.kParms.p = hou.Vector3(centroid)
         # self.state.kParms.ow = 10
         self.setZoom(6)
 
@@ -367,9 +386,9 @@ class KCam:
     def movePivot(self):
         # If origin
         if self.state.kParms.target == 0:
-            self.state.kParms.t = [0, 0, self.state.kParms.dist]
+            self.state.kParms.t = [0, 0, self.state.kParms.zoom]
             self.state.kParms.r = [45, 45, 0]
-            self.state.kParms.p = [0, 0, self.state.kParms.dist * -1]
+            self.state.kParms.p = [0, 0, self.state.kParms.zoom * -1]
             self.state.kParms.ow = 10
 
     def nextProjection(self):
@@ -391,9 +410,13 @@ class KCam:
         self.cam = hou.node("/obj/keycam")
 
     def rotate(self, m):
-        self.state.kParms.t -= self.state.kParms.p
+        self.state.kParms.t = hou.Vector3(self.state.kParms.t) - hou.Vector3(
+            self.state.kParms.p
+        )
         self.state.kParms.t *= m
-        self.state.kParms.t += self.state.kParms.p
+        self.state.kParms.t = hou.Vector3(self.state.kParms.t) + hou.Vector3(
+            self.state.kParms.p
+        )
         self.state.kParms.local_x *= m
         self.state.kParms.local_y *= m
         self.state.kParms.local_z *= m
@@ -421,6 +444,7 @@ class KCam:
         self.rotate(m)
 
     def rotateLeft(self):
+        print(self.state.kParms.r)
         self.state.kParms.r = hou.Vector3(
             self.state.kParms.r[0],
             self.state.kParms.r[1] - self.state.kParms.delta_r,
@@ -443,20 +467,24 @@ class KCam:
         self.rotate(m)
 
     def translateUp(self):
-        move = self.state.kParms.local_y * self.state.kParms.delta_t * -1
-        self.state.kParms.t += move
-
-    def translateDown(self):
         move = self.state.kParms.local_y * self.state.kParms.delta_t
         self.state.kParms.t += move
+        self.state.kParms.p += move
+
+    def translateDown(self):
+        move = self.state.kParms.local_y * self.state.kParms.delta_t * -1
+        self.state.kParms.t += move
+        self.state.kParms.p += move
 
     def translateLeft(self):
         move = self.state.kParms.local_x * self.state.kParms.delta_t * -1
         self.state.kParms.t += move
+        self.state.kParms.p += move
 
     def translateRight(self):
         move = self.state.kParms.local_x * self.state.kParms.delta_t
         self.state.kParms.t += move
+        self.state.kParms.p += move
 
     def update(self):
         self.cam.parmTuple("t").set(self.state.kParms.t)
@@ -470,26 +498,26 @@ class KCam:
         ratio = viewport.size()[2] / viewport.size()[3]
         self.cam.parm("aspect").set(ratio)
 
-    def setZoom(self, zoom):
-        move = self.state.kParms.local_z * zoom
+    def setZoom(self, zoom_level):
+        move = self.state.kParms.local_z * zoom_level
         self.state.kParms.t += move
 
     def zoomIn(self):
-        move = self.state.kParms.local_z * self.state.kParms.delta_z
+        move = self.state.kParms.local_z * self.state.kParms.delta_zoom
         self.state.kParms.t -= move
 
     def zoomOut(self):
-        move = self.state.kParms.local_z * self.state.kParms.delta_z
+        move = self.state.kParms.local_z * self.state.kParms.delta_zoom
         self.state.kParms.t += move
 
     def setOrthoZoom(self, zoom_level):
         self.state.kParms.ow = zoom_level
 
     def orthoZoomIn(self):
-        self.state.kParms.ow += self.state.kParms.delta_z * -1
+        self.state.kParms.ow += self.state.kParms.delta_zoom * -1
 
     def orthoZoomOut(self):
-        self.state.kParms.ow += self.state.kParms.delta_z
+        self.state.kParms.ow += self.state.kParms.delta_zoom
 
 
 class KDefaultCam:
@@ -611,7 +639,7 @@ class KGuides:
             name="pivot3d",
         )
         self.pivot3d.setParams(
-            {"color1": hou.Vector4(0.8, 0.8, 0.4, 0.7), "fade_factor": 0.5}
+            {"color1": hou.Vector4(0.2, 0.8, 0.2, 0.7), "fade_factor": 0.5}
         )
         self.ray = hou.GeometryDrawable(
             scene_viewer=self.state.sceneViewer,
@@ -622,6 +650,7 @@ class KGuides:
 
         self.bbox.show(self.state.options["show_bbox"])
         self.pivot2d.show(self.state.options["show_pivot2d"])
+        self.pivot3d.show(self.state.options["show_pivot3d"])
 
     def toggle(self, kwargs, guide):
         kwargs[guide] = not kwargs[guide]
@@ -630,7 +659,8 @@ class KGuides:
     def update(self):
         self.updateBbox()
         self.updatePivot2d()
-        self.updatePivotAxis()
+        self.updatePivot3d()
+        # self.updatePivotAxis()
 
         # if self.guide_states["axis_cam"]: self.updateAxisCam()
         # else: self.Cam.show(0)
@@ -698,9 +728,9 @@ class KGuides:
             pt_arr = geo.createPoints((P0, P1))
             pt_arr[0].setAttribValue("Cd", colors[i])
             pt_arr[1].setAttribValue("Cd", colors[i])
-            poly = geo.createPolygon(is_closed=False)
-            poly.addVertex(pt_arr[0])
-            poly.addVertex(pt_arr[1])
+            # poly = geo.createPolygon(is_closed=False)
+            # poly.addVertex(pt_arr[0])
+            # poly.addVertex(pt_arr[1])
         self.pivotAxis.setGeometry(geo)
         self.pivotAxis.setParams({"fade_factor": 0.0})
 
@@ -725,15 +755,16 @@ class KGuides:
         self.perim.show(1)
 
     def updatePivot2d(self):
+        r = self.state.kParms.r
         p = self.state.kParms.p
-        print(p)
+        scale = self.state.kParms.ow * 0.0075
         verb = hou.sopNodeTypeCategory().nodeVerb("circle")
         verb.setParms(
             {
                 "type": 1,
-                "r": self.state.kParms.r,
+                "r": r,
                 "t": p,
-                "scale": self.state.kParms.ow * 0.0075,
+                "scale": scale,
             }
         )
         geo = hou.Geometry()
@@ -749,13 +780,15 @@ class KGuides:
             {
                 "type": 1,
                 "t": self.state.kParms.p,
-                "scale": self.state.kParms.t.distanceTo(self.state.kParms.p) * 0.002,
+                "scale": self.state.kParms.t.distanceTo(
+                    hou.Vector3(self.state.kParms.p)
+                )
+                * 0.02,
             }
         )
-        geo = hou.Geometry()
-        verb.execute(geo, [])
-        self.pivot3d.setGeometry(geo)
-        self.pivot3d.show(1)
+        pivot_geo = hou.Geometry()
+        verb.execute(pivot_geo, [])
+        self.pivot3d.setGeometry(pivot_geo)
 
     def updateRay(self):
         geo = hou.Geometry()
@@ -818,14 +851,14 @@ class KHud:
     def update(self):
         layout = self.state.kSceneViewer.layout()
         layout_map = {
-            "hou.geometryViewportLayout.DoubleSide": 2,
-            "hou.geometryViewportLayout.DoubleStack": 2,
-            "hou.geometryViewportLayout.Quad": 4,
-            "hou.geometryViewportLayout.QuadBottomSplit": 4,
-            "hou.geometryViewportLayout.QuadLeftSplit": 4,
-            "hou.geometryViewportLayout.TripleBottomSplit": 3,
-            "hou.geometryViewportLayout.TripleLeftSplit": 3,
-            "hou.geometryViewportLayout.Single": 1,
+            "geometryViewportLayout.DoubleSide": 2,
+            "geometryViewportLayout.DoubleStack": 2,
+            "geometryViewportLayout.Quad": 4,
+            "geometryViewportLayout.QuadBottomSplit": 4,
+            "geometryViewportLayout.QuadLeftSplit": 4,
+            "geometryViewportLayout.TripleBottomSplit": 3,
+            "geometryViewportLayout.TripleLeftSplit": 3,
+            "geometryViewportLayout.Single": 1,
         }
         viewport_ct = layout_map[str(layout)]
         self.template["rows"][3]["count"] = viewport_ct
@@ -843,6 +876,10 @@ class KHud:
 class KParms:
     def __init__(self, state):
         self.state = state
+
+        # Vector variables are stored as Vector3 and converted when settings
+        # parameters
+
         # Hidden vars
         self.local_x = hou.Vector3(0, 0, 0)
         self.local_y = hou.Vector3(0, 0, 0)
@@ -850,18 +887,20 @@ class KParms:
         self.global_x = hou.Vector3(0, 0, 0)
         self.global_y = hou.Vector3(0, 0, 0)
         self.global_z = hou.Vector3(0, 0, 0)
+
         # Parameters
         self._p = hou.Vector3(0, 0, 0)
         self._r = hou.Vector3(0, 0, 0)
         self._t = hou.Vector3(0, 0, 0)
-        self._dist = 0
+        self._zoom = 0
         self._ow = 0
         self._target = None
         self._delta_r = 0
         self._delta_t = 0
-        self._delta_z = 0
+        self._delta_zoom = 0
         self._layout = None
         self._viewport = None
+
         # Guides
         self.guide_axis_size = 1
         self.guide_cam_axis = 1
@@ -876,14 +915,14 @@ class KParms:
 
     def reset(self):
         self.parms = self.state.kwargs["state_parms"]
-        self._t = hou.Vector3(0, 0, 0)
-        self._r = hou.Vector3(0, 0, 0)
-        self._p = hou.Vector3(0, 0, 0)
-        self._z = 10
-        self._ow = 10
-        self._delta_t = 1
-        self._delta_r = 15
-        self._delta_z = 1
+        self.p = hou.Vector3(0, 0, 0)
+        self.r = hou.Vector3(0, 0, 0)
+        self.t = hou.Vector3(0, 0, 0)
+        self.zoom = 10
+        self.ow = 10
+        self.delta_t = 1
+        self.delta_r = 15
+        self.delta_zoom = 1
         self.local_x = hou.Vector3(1, 0, 0)
         self.local_y = hou.Vector3(0, 1, 0)
         self.local_z = hou.Vector3(0, 0, 1)
@@ -898,10 +937,8 @@ class KParms:
     @p.setter
     def p(self, val):
         self._p = val
-        print(val)
-        self.parms["p"]["value"] = val
-        print(self.parms["p"])
-        self.state.kCam.cam.parmTuple("p").set(val)
+        self.parms["p"]["value"] = list(val)
+        # self.state.kCam.cam.parmTuple("p").set(list(val))
 
     @property
     def r(self):
@@ -911,7 +948,7 @@ class KParms:
     def r(self, val):
         self._r = val
         self.parms["r"]["value"] = list(val)
-        self.state.kCam.cam.parmTuple("r").set(val)
+        self.state.kCam.cam.parmTuple("r").set(list(val))
         self.state.kGuides.update()
 
     @property
@@ -922,16 +959,16 @@ class KParms:
     def t(self, val):
         self._t = val
         self.parms["t"]["value"] = list(val)
-        self.state.kCam.cam.parmTuple("t").set(val)
+        self.state.kCam.cam.parmTuple("t").set(list(val))
 
     @property
-    def z(self):
-        return self._z
+    def zoom(self):
+        return self._zoom
 
-    @z.setter
-    def z(self, val):
-        self._z = val
-        self.parms["z"]["value"] = val
+    @zoom.setter
+    def zoom(self, val):
+        self._zoom = val
+        self.parms["zoom"]["value"] = val
         self.state.kCam.setZoom(10)
 
     @property
@@ -976,13 +1013,13 @@ class KParms:
         self.parms["delta_t"]["value"] = val
 
     @property
-    def delta_z(self):
-        return self._delta_z
+    def delta_zoom(self):
+        return self._delta_zoom
 
-    @delta_z.setter
-    def delta_z(self, val):
-        self._delta_z = val
-        self.parms["delta_z"]["value"] = val
+    @delta_zoom.setter
+    def delta_zoom(self, val):
+        self._delta_zoom = val
+        self.parms["delta_zoom"]["value"] = val
 
     @property
     def layout(self):
@@ -1085,7 +1122,6 @@ class KSceneViewer:
         return self.sceneViewer.pwd()
 
     def setLayout(self, layout):
-        print(layout)
         self.sceneViewer.setViewportLayout(layout)
 
     def setType(self, viewportType):

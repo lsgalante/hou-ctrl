@@ -11,6 +11,7 @@ import hou
 # pause
 # space
 
+
 def load():
     hou.hotkeys.revertToDefaults("h", "", False)
     # Clear all assignments from command
@@ -79,7 +80,8 @@ def load():
     assignment_add_arr = (
         # Desktop manager bindings
         # ("deskmgr.save", "ctrl+s"),
-
+        # Move Shelf Here None h.pane.shelf None  /Houdini/Panes
+        # Reset Shelf to Top None h.reset_shelf None  /Houdini
         # Generic bindings
         # ("h.copy", "cmd+w"),
         # ("h.cut", "ctrl+w"),
