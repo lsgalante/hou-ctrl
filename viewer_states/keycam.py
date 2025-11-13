@@ -757,12 +757,13 @@ class KGuides:
         verb = hou.sopNodeTypeCategory().nodeVerb("sphere")
         verb.setParms(
             {
-                "type": 1,
-                "t": self.state.kParms.p,
+                "freq": 7,
                 "scale": self.state.kParms.t.distanceTo(
                     hou.Vector3(self.state.kParms.p)
                 )
                 * 0.02,
+                "type": 1,
+                "t": self.state.kParms.p,
             }
         )
         pivot_geo = hou.Geometry()
