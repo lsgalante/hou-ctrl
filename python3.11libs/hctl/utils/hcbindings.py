@@ -14,12 +14,6 @@ import hou
 
 def load():
 
-    # Macos or linux
-    if sys == "Darwin":
-        modifier = Qt.MetaModifier
-    elif sys == "linux":
-    hou.hotkeys.revertToDefaults("h", "", False)
-
     assignments_to_clear = (
         #
         # Desktop manager
@@ -169,10 +163,13 @@ def load():
         ("inputfield.up", "ctrl+p"),
     )
 
-    # Command bindings
-    commands_to_bind = (
-        # ("h.pane.pythonshell", "h.desktopToggleHctl")
-    )
+    commands_to_bind = ()
+
+    # System specific
+    # if sys == "Darwin":
+        # return
+    # elif sys == "linux":
+        # return
 
     for assignment in assignments_to_clear:
         context = assignment.rpartition(".")[0]
