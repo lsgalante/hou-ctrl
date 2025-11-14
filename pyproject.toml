@@ -1,0 +1,8 @@
+[tool.basedpyright]
+typeCheckingMode = "standard"  # or "strict" if you like stricter checks
+venvPath = "."
+venv = ".venv"
+
+# extraPaths = [
+#   "/Applications/Houdini/Current/Frameworks/Houdini.framework/Resources/houdini/python3.11libs"
+# ]

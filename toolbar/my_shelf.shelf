@@ -6,7 +6,17 @@
  a single file. -->
 
   <shelfSet name="my_shelf_set" label="My Shelf Set">
-    <memberToolshelf name="session_shelf"/>
-    <memberToolshelf name="tab_shelf"/>
+    <memberToolshelf name="hc_shelf_global"/>
+    <memberToolshelf name="hc_shelf_context"/>
   </shelfSet>
+
+  <toolshelf name="hc_shelf_global" label="Global">
+    <memberTool name="reload_shelf_sets"/>
+    <memberTool name="reload_color_schemes"/>
+    <memberTool name="color_editor"/>
+    <memberTool name="stowbars"/>
+    <memberTool name="pane_tabs_session"/>
+    <memberTool name="network_controls_session"/>
+    <memberTool name="test"/>
+  </toolshelf>
 </shelfDocument>

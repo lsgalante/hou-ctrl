@@ -6,10 +6,8 @@ class HCViewport():
         pass
         # self.viewport = viewport
 
-
     def update():
         pass
-
 
     def visualizers(self):
         category = hou.viewportVisualizerCategory.Scene

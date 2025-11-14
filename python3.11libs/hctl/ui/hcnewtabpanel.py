@@ -2,6 +2,7 @@ import hou
 from fuzzyfinder import fuzzyfinder
 from PySide6 import QtCore, QtWidgets
 from PySide6.QtWidgets import QLineEdit, QDialog
+from .core.hcglobal import HCGlobal
 
 
 class inputBox(QLineEdit):
@@ -14,55 +15,53 @@ class inputBox(QLineEdit):
             return QLineEdit.event(self, event)
 
 
-class newTabMenu(QDialog):
+class newTabPanel(QDialog):
     def __init__(self):
-        super(newTabMenu, self).__init__(hou.qt.mainWindow())
+        super(newTabPanel, self).__init__(hou.qt.mainWindow())
+
+        self.hc_global = HCGlobal()
 
         # Input box
-        self.inputBox = inputBox()
-        self.inputBox.onTab.connect(self.nextItem)
-        self.inputBox.textEdited.connect(self.filter)
-        self.inputBox.returnPressed.connect(self.execAction)
+        self.input_box = inputBox()
+        self.input_box.onTab.connect(self.nextItem)
+        self.input_box.textEdited.connect(self.filter)
+        self.input_box.returnPressed.connect(self.execAction)
 
         # Item array
         self.items = []
         self.items.append(("Geometry Spreadsheet", hou.paneTabType.DetailsView))
-        self.items.append(("Network Editor",       hou.paneTabType.NetworkEditor))
-        self.items.append(("Parameters",           hou.paneTabType.Parm))
-        self.items.append(("Python Shell",         hou.paneTabType.PythonShell))
-        self.items.append(("Scene Viewer",         hou.paneTabType.SceneViewer))
+        self.items.append(("Network Editor", hou.paneTabType.NetworkEditor))
+        self.items.append(("Parameters", hou.paneTabType.Parm))
+        self.items.append(("Python Shell", hou.paneTabType.PythonShell))
+        self.items.append(("Scene Viewer", hou.paneTabType.SceneViewer))
 
         # List widget
-        self.listWidget = QtWidgets.QListWidget()
+        self.list_widget = QtWidgets.QListWidget()
         for item in self.items:
-            self.listWidget.addItem(item[0])
-        self.listWidget.itemClicked.connect(self.execAction)
+            self.list_widget.addItem(item[0])
+        self.list_widget.itemClicked.connect(self.execAction)
 
         # Make layout
         self.layout = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.TopToBottom)
-        self.layout.addWidget(self.inputBox)
-        self.layout.addWidget(self.listWidget)
+        self.layout.addWidget(self.input_box)
+        self.layout.addWidget(self.list_widget)
         self.setLayout(self.layout)
         self.setIndex(0)
-
 
     def closeEvent(self, event):
         print("closing")
         self.setParent(None)
 
-
     def execAction(self):
-        current_item = self.listWidget.selectedItems()[0]
+        current_item = self.list_widget.selectedItems()[0]
         items = self.getItems()
         index = items.index(current_item)
-
-        tab = hou.ui.paneUnderCursor()
+        tab = self.hc_global.tab()
         tab.createTab(self.items[index][1])
         self.accept()
 
-
     def filter(self):
-        text = self.inputBox.text()
+        text = self.input_box.text()
         items = self.getItems()
         names = [item.text() for item in items]
         suggestions = fuzzyfinder(text, names)
@@ -74,30 +73,26 @@ class newTabMenu(QDialog):
                 item.setHidden(1)
         self.setIndex(0)
 
-
     def getItems(self):
-        item_count = self.listWidget.count()
-        items = [self.listWidget.item(i) for i in range(item_count)]
+        item_count = self.list_widget.count()
+        items = [self.list_widget.item(i) for i in range(item_count)]
         return(items)
 
-
     def getVisibleItems(self):
-        item_count = self.listWidget.count()
+        item_count = self.list_widget.count()
         items = []
         for i in range(item_count):
-            item = self.listWidget.item(i)
+            item = self.list_widget.item(i)
             if not item.isHidden():
                 items.append(item)
         return(items)
 
-
     def nextItem(self):
         items = self.getVisibleItems()
-        selected_item = self.listWidget.selectedItems()[0]
+        selected_item = self.list_widget.selectedItems()[0]
         index = items.index(selected_item)
         index = (index + 1) % len(items)
         self.setIndex(index)
-
 
     def setIndex(self, idx):
         items = self.getItems()

@@ -1,132 +1,105 @@
 import hou
-from .hcsession import HCSession
+from .hcglobal import HCGlobal
 
 
 class HCPane:
 
     def __init__(self, pane):
-        self.hCSession = HCSession()
+        self.hc_global= HCSession()
         self.pane = pane
 
+    ## PANE ##
 
     def close(self):
-        for paneTab in self.paneTabs():
-            paneTab.close()
-
-
-    def contract(self):
-        fraction = self.splitFraction()
-        fraction = round(fraction, 3) + 0.1
-        hou.ui.setStatusMessage("Pane fraction: " + str(fraction))
-        self.setSplitFraction(fraction)
-
-
-    def currentTab(self):
-        return self.pane.currentTab()
-
-
-    def expand(self):
-        fraction = self.splitFraction()
-        fraction = round(fraction, 3) - 0.1
-        message = "Pane fraction: " + str(fraction)
-        hou.ui.setStatusMessage(message)
-        self.setSplitFraction(fraction)
-
+        for tab in self.tabs():
+            tab.close()
 
     def isMaximized(self):
         return self.pane.isMaximized()
 
+    def only(self):
+        tabs = self.hc_global.tabs()
+        tabs.remove(self.tab())
+        for tab in tabs:
+            tab.close()
 
-    def isShowingPaneTabs(self):
-        return self.pane.isShowingPaneTabs()
+    def qtScreenGeometry(self):
+        return self.pane.qtScreenGeometry()
 
+    def setIsMaximized(self, bool):
+        self.pane.setIsMaximized(bool)
+
+    def toggleMaximize(self):
+        self.setIsMaximized(not self.isMaximized())
+
+    # SPLIT
+
+    def contract(self):
+        fraction = round(self.splitFraction(), 3) + 0.1
+        self.setSplitFraction(fraction)
+        hou.ui.setStatusMessage("Pane fraction: " + str(fraction))
+
+    def expand(self):
+        fraction = round(self.splitFraction(), 3) - 0.1
+        self.setSplitFraction(fraction)
+        hou.ui.setStatusMessage("Pane fraction: " + str(fraction))
 
     def isSplitMaximized(self):
         return self.pane.isSplitMaximized()
-
-
-    # def newPaneTab(self):
-    #     reload(hcnewpanetabmenu)
-    #     newPaneTabMenu = hcnewpanetabmenu.newPaneTabMenu()
-    #     newPaneTabMenu.show()
-
-
-    def only(self):
-        paneTabs = self.hCSession.paneTabs()
-        paneTabs.remove(self.paneTab())
-        for paneTab in paneTabs:
-            paneTab.close()
-
 
     # def resize(self):
     # import hctl.ui.resizedialog
     # panel = hctl.ui.resizedialog.resizeWidget(self)
     # panel.show()
 
-
-    def setIsMaximized(self, bool):
-        self.pane.setIsMaximized(bool)
-
-
     def setIsSplitMaximized(self, bool):
         self.pane.setIsSplitMaximized(bool)
-
 
     def setRatioHalf(self):
         self.setSplitFraction(0.5)
 
-
     def setRatioQuarter(self):
         self.setSplitFraction(0.25)
-
 
     def setRatioThird(self):
         self.setSplitFraction(0.333)
 
-
     def setSplitFraction(self, fraction):
         self.pane.setSplitFraction(fraction)
-
-
-    def showPaneTabs(self, bool):
-        self.pane.showPaneTabs(bool)
-
 
     def splitFraction(self):
         return self.pane.getSplitFraction()
 
-
-    def splitHorizontally(self):
+    def splitHorizontal(self):
         self.pane.splitHorizontally()
-
 
     def splitRotate(self):
         self.pane.splitRotate()
 
-
     def splitSwap(self):
         self.pane.splitSwap()
 
-
-    def splitVertically(self):
+    def splitVertical(self):
         self.pane.splitVertically()
 
+    def toggleSplitMaximized(self):
+        self.setIsSplitMaximized(not self.isSplitMaximized())
+
+    ## TABS ##
+
+    def currentTab(self):
+        return self.pane.currentTab()
+
+    # def newTab(self):
+    #     reload(hcnewpanetabmenu)
+    #     newPaneTabMenu = hcnewpanetabmenu.newPaneTabMenu()
+    #     newPaneTabMenu.show()
+
+    def showTabs(self, bool):
+        self.pane.showPaneTabs(bool)
 
     def tabs(self):
         return self.pane.tabs()
 
-
-    def qtScreenGeometry(self):
-        return self.pane.qtScreenGeometry()
-
-
-    def toggleMaximized(self):
-        self.setIsMaximized(not self.isMaximized())
-
-
-    def togglePaneTabs(self):
-        self.showPaneTabs(not self.isShowingPaneTabs())
-
-
-    def toggleSplitMaximized(self):
-        self.setIsSplitMaximized(not self.isSplitMaximized())
+    def toggleTabs(self):
+        self.showTabs(not self.isShowingTabs())

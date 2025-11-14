@@ -10,7 +10,6 @@ class filterBox(QLineEdit):
         # Key handler
         self.onTab = QtCore.Signal()
 
-
     def event(self, event):
         if event.type() == QEvent.Type.KeyPress:
             key = event.key()
@@ -20,56 +19,53 @@ class filterBox(QLineEdit):
         return QLineEdit.event(self, event)
 
 
-
-class visualizerMenu(QDialog):
+class VisualizerMenu(QDialog):
     def __init__(self):
-        super(visualizerMenu, self).__init__(hou.qt.mainWindow())
+        super(VisualizerMenu, self).__init__(hou.qt.mainWindow())
 
         # Resources
         self.viewport = hou.session.hctlSession.viewport()
         self.vis_arr = self.viewport.visualizers()
 
         # Filter box
-        self.filterBox = filterBox()
-        self.filterBox.onTab.connect(self.listNext)
-        self.filterBox.returnPressed.connect(self.itemToggle)
-        self.filterBox.textEdited.connect(self.listFilter)
+        self.filter_box = filterBox()
+        self.filter_box.onTab.connect(self.listNext)
+        self.filter_box.returnPressed.connect(self.itemToggle)
+        self.filter_box.textEdited.connect(self.listFilter)
 
         # List widget
-        self.listWidget = QListWidget()
+        self.list_widget = QListWidget()
         if self.vis_arr:
             for vis in self.vis_arr:
-                listItem = QListWidgetItem()
-                itemLabel = vis.label()
-                itemState = vis.isActive(self.curViewport)
+                list_item = QListWidgetItem()
+                item_label = vis.label()
+                item_state = vis.isActive(self.curViewport)
 
-                listItem.setText(itemLabel)
+                list_item.setText(item_label)
 
-                if itemState:
-                    listItem.setCheckState(Qt.Checked)
+                if item_state:
+                    list_item.setCheckState(Qt.Checked)
                 else:
-                    listItem.setCheckState(Qt.Unchecked)
+                    list_item.setCheckState(Qt.Unchecked)
 
-                self.listWidget.addItem(listItem)
+                self.list_widget.addItem(list_item)
 
-        self.listWidget.itemClicked.connect(self.itemToggle)
+        self.list_widget.itemClicked.connect(self.item_toggle)
 
         # Layout
         self.layout = QBoxLayout(QBoxLayout.Direction.TopToBottom)
-        self.layout.addWidget(self.filterBox)
-        self.layout.addWidget(self.listWidget)
+        self.layout.addWidget(self.filter_box)
+        self.layout.addWidget(self.list_widget)
         self.setLayout(self.layout)
         self.listSetIndex(0)
-
 
     def closeEvent(self, event):
         print("Closing")
         self.setParent(None)
 
-
     def itemToggle(self):
-        curItem = self.listWidget.selectedItems()[0]
-        item_name = curItem.text()
+        current_item = self.list_widget.selectedItems()[0]
+        item_name = current_tem.text()
         items = self.listGetItems()
         item_names = [item.text() for item in items]
         index = item_names.index(item_name)
@@ -80,13 +76,12 @@ class visualizerMenu(QDialog):
         vis.setIsActive(not state, self.viewport)
 
         if state:
-            curItem.setCheckState(Qt.Unchecked)
+            current_item.setCheckState(Qt.Unchecked)
         else:
-            curItem.setCheckState(Qt.Checked)
-
+            current_item.setCheckState(Qt.Checked)
 
     def listFilter(self):
-        text = self.inputBox.text()
+        text = self.input_box.text()
         items = self.getItems()
         names = [item.text() for item in items]
         suggestions = fuzzyfinder(text, names)
@@ -98,44 +93,39 @@ class visualizerMenu(QDialog):
                 item.setHidden(1)
         self.listSetIndex(0)
 
-
     def listGetItems(self):
-        item_count = self.listWidget.count()
-        items = [self.listWidget.item(i) for i in range(item_count)]
+        item_count = self.list_widget.count()
+        items = [self.list_widget.item(i) for i in range(item_count)]
         return(items)
 
-
     def listGetVisibleItems(self):
-        item_count = self.listWidget.count()
+        item_count = self.list_widget.count()
         items = []
         for i in range(item_count):
-            item = self.listWidget.item(i)
+            item = self.list_widget.item(i)
             if not item.isHidden():
                 items.append(item)
         return(items)
 
-
     def listNext(self):
-        visibleItems = self.listGetVisibleItems()
-        curItem = self.listWidget.selectedItems()[0]
-        index = visibleItems.index(curItem)
-        index = (index + 1) % len(visibleItems)
+        visible_items = self.listGetVisibleItems()
+        current_item = self.list_widget.selectedItems()[0]
+        index = visible_items.index(current_item)
+        index = (index + 1) % len(visible_items)
         self.listSetIndex(index)
-
 
     def listPrev(self):
-        visibleItems = self.listGetVisibleItems()
-        curItem = self.listWidget.selectedItems()[0]
-        index = visibleItems.index(curItem)
-        index = (index - 1) % len(visibleItems)
+        visible_items = self.listGetVisibleItems()
+        current_item = self.list_widget.selectedItems()[0]
+        index = visible_items.index(current_item)
+        index = (index - 1) % len(visible_items)
         self.listSetIndex(index)
 
-
     def listSetIndex(self, index):
-        visibleItems = self.listGetVisibleItems()
+        visible_items = self.listGetVisibleItems()
         counter = 0
-        for visibleItem in visibleItems:
+        for visible_item in visible_items:
             if counter == index:
-                self.listWidget.setItemSelected(visibleItem, 1)
+                self.list_widget.setItemSelected(visible_item, 1)
                 return
             counter += 1
