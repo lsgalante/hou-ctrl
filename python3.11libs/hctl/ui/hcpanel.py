@@ -140,7 +140,7 @@ class HCPanel(QDialog):
         if self.hcPaneTab.type() == hou.paneTabType.SceneViewer:
             # Toggle keycam
             paneTabKeycamBtn = HCButton("Keycam")
-            paneTabKeycamBtn.clicked.connect(self.hcSession.keycam)
+            paneTabKeycamBtn.clicked.connect(self.hcPaneTab.keycam)
             paneCol.addWidget(paneTabKeycamBtn)
             # Home all viewports
             paneTabHomeBtn = HCButton("Home")
