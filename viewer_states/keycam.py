@@ -588,7 +588,7 @@ class KGuides:
             scene_viewer=self.state.sceneViewer,
             geo_type=hou.drawableGeometryType.Line,
             name="bbox",
-            params={"color1": hou.Vector4((1, 1, 1, 0.3))},
+            params={"color1": hou.Vector4((1, 1, 1, 0.3)), "fade_factor": 0.0},
         )
         self.perim = hou.GeometryDrawable(
             scene_viewer=self.state.sceneViewer,
@@ -606,7 +606,7 @@ class KGuides:
             name="pivot3d",
         )
         self.pivot3d.setParams(
-            {"color1": hou.Vector4(0.2, 0.8, 0.2, 0.2), "fade_factor": 0.2}
+            {"color1": hou.Vector4(0.2, 0.8, 0.2, 0.6), "fade_factor": 0.2}
         )
         self.ray = hou.GeometryDrawable(
             scene_viewer=self.state.sceneViewer,
@@ -744,7 +744,7 @@ class KGuides:
     def updatePivot3d(self):
         verb = hou.sopNodeTypeCategory().nodeVerb("sphere")
         # scale = self.state.kParms.t.distanceTo(self.state.kParms.p) * 0.02
-        scale = 0.02
+        scale = 0.03
         verb.setParms(
             {
                 "freq": 7,
