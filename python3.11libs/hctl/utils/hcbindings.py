@@ -33,11 +33,6 @@ def load():
         "h.context_help",
         "h.mat_palette",
         #
-        # hctl
-        "h.desktopToggleHctl",
-        #
-        # Pane
-        #
         # Pane - scene viewer
         "h.pane.gview.increase_subd",
         "h.pane.gview.decrease_subd",
@@ -88,8 +83,8 @@ def load():
         ("h.pane.prevtab", "ctrl+shift+space"),
         #
         # hctl
-        ("h.hCSessionPanel", "alt+x"),
-        ("h.hCSessionPanel", "\\"),
+        ("h.hc_global_panel", "alt+x"),
+        ("h.hc_global_panel", "\\"),
         #
         # Scene viewer
         ("h.pane.gview.refplane", "shift+g"),
