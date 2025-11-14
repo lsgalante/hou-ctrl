@@ -1,7 +1,7 @@
 import hou
 
 
-class HCSession:
+class HCGlobal:
     def __init__(self):
         return
 

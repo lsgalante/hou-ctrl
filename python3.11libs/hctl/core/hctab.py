@@ -6,11 +6,11 @@ class HCTab():
     def __init__(self, tab):
         self.tab = tab
         if self.type() == hou.paneTabType.NetworkEditor:
-            import .hcnetworkeditor
-            hcnetworkeditor.addFunctions(self)
+            from .hcnetworkeditor import addFunctions
+            addFunctions(self)
         elif self.type() == hou.paneTabType.SceneViewer:
-            import .hcsceneviewer
-            hcsceneviewer.addFunctions(self)
+            from .hcsceneviewer import addFunctions
+            addFunctions(self)
 
     ## CONTEXT ##
 

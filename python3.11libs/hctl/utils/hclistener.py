@@ -1,8 +1,8 @@
 import hou
 # from importlib import reload
-from .core.hcglobal import HCSession
-from .core.hcpane import HCPane
-from .core.hctab import HCPaneTab
+from ..core.hcglobal import HCGlobal
+from ..core.hcpane import HCPane
+from ..core.hctab import HCTab
 # from .core.hcviewport import HCViewport
 
 
