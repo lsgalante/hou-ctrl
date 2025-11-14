@@ -428,12 +428,13 @@ class KCam:
 
     # Create keycam node if nonexistant
     def nodeCheck(self):
-        children = hou.node("/obj").children()
-        names = [node.name() for node in children]
-        if "keycam" not in names:
-            cam = hou.node("/obj").createNode("cam")
-            cam.setName("keycam")
-            cam.parm("xOrd").set(0)
+        if not hou.node("/obj/keycam"):
+            obj_cam = hou.node("/obj").createNode("cam")
+            obj_cam.setName("keycam")
+            obj_cam.parm("xOrd").set(0)
+        if not hou.node("/stage/keycam"):
+            stage_cam = hou.node("/stage").createNode("camera")
+            stage_cam.setName("keycam")
         self.cam = hou.node("/obj/keycam")
 
     def rotate(self, key):
