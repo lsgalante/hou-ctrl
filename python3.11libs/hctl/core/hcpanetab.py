@@ -269,15 +269,15 @@ def keycam(self):
     context = self.pwd().childTypeCategory().name()
     if context == "Object":
         self.paneTab.setCurrentState("keycam")
-        hou.ui.setStatusMessage("Entered keycam viewer state in Obj context.")
+        hou.ui.setStatusMessage("Entered keycam in an obj context")
     elif context == "Sop":
         self.paneTab.setCurrentState("keycam")
-        hou.ui.setStatusMessage("Entered keycam viewer state in Sop context.")
+        hou.ui.setStatusMessage("Entered keycam in a sop context")
     elif context == "Lop":
         self.paneTab.setCurrentState("keycam")
-        hou.ui.setStatusMessage("Entered keycam viewer state in Lop context.")
+        hou.ui.setStatusMessage("Entered keycam in a lop context")
     else:
-        hou.ui.setStatusMessage("No Obj, Sop or Lop context.", hou.severityType.Error)
+        hou.ui.setStatusMessage("No obj, sop or lop context", hou.severityType.Error)
 
 
 def setLayoutDoubleSide(self):
