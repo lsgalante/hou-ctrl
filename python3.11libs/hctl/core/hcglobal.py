@@ -19,7 +19,7 @@ class HCGlobal:
                 tab.close()
 
     def desktop(self):
-        hou.ui.curDesktop()
+        return hou.ui.curDesktop()
 
     def hcPane(self):
         from .hcpane import HCPane
