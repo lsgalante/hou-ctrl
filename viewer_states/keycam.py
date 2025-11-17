@@ -245,7 +245,10 @@ class State(object):
             "Ctrl+l": self.kSceneViewer.nextLayout,
         }
         # functions without args
-        keymap2 = {"f": self.kCam.frame}
+        keymap2 = {
+            "f": self.kCam.frame,
+            "c": self.kCam.center
+        }
         key = kwargs["ui_event"].device().keyString()
         if key in keymap1:
             func = keymap1[key](key)
@@ -380,6 +383,12 @@ class KCam:
         # self.cam = hou.node("/obj/keycam")
         self.nodeCheck()
         self.lock()
+
+    def center(self):
+        centroid = self.state.kGeo.centroid()
+        self.state.kParms.t = hou.Vector3(centroid)
+        self.state.kParms.p = hou.Vector3(centroid)
+        self.state.kGuides.update()
 
     def fitAspectRatio(self):
         self.cam.parm("resx").set(1000)
