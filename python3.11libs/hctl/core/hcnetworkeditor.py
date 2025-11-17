@@ -47,7 +47,7 @@ def selectDisplayNode(self):
 ## UTILS ##
 
 def nextGridMode(self):
-    mode = int(self.getPref("gridmode"))
+    mode = int(self.tab.getPref("gridmode"))
     self.setPref("gridmode", (mode + 1) % 3)
 
 def renameNode(self):
@@ -57,12 +57,13 @@ def renameNode(self):
         node.setName(name[1])
 
 def toggleDimUnusedNodes(self):
-    dim = int(self.getPref("dimunusednodes"))
+    dim = int(self.tab.getPref("dimunusednodes"))
     self.setPref("dimunusednodes", str(not dim))
 
 def toggleLocating(self):
     self.setLocatingEnabled(not self.locatingEnabled())
 
 def toggleMenu(self):
-    visible = int(self.getPref("showmenu"))
-    self.setPref("showmenu", str(not visible))
+    map = {"0": "1", "1": "0"}
+    visible = self.tab.getPref("showmenu")
+    self.tab.setPref("showmenu", map[visible])
