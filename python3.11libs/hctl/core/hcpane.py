@@ -5,7 +5,7 @@ from .hcglobal import HCGlobal
 class HCPane:
 
     def __init__(self, pane):
-        self.hc_global= HCSession()
+        self.hc_global= HCGlobal()
         self.pane = pane
 
     ## PANE ##
@@ -87,8 +87,13 @@ class HCPane:
 
     ## TABS ##
 
-    def currentTab(self):
-        return self.pane.currentTab()
+    def hcTab(self):
+        from .hctab import HCTab
+
+        return HCTab(self.tab())
+
+    def isShowingTabs(self):
+        return self.pane.isShowingPaneTabs()
 
     # def newTab(self):
     #     reload(hcnewpanetabmenu)
@@ -97,6 +102,9 @@ class HCPane:
 
     def showTabs(self, bool):
         self.pane.showPaneTabs(bool)
+
+    def tab(self):
+        return self.pane.currentTab()
 
     def tabs(self):
         return self.pane.tabs()
