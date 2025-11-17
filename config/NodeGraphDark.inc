@@ -4,13 +4,13 @@
 
 // Background ------------------------------------------------------------------
 
-GraphBackground:                    bg_low
-GraphOverviewBackground:            GREY(0.10)
-GraphOverviewViewRegion:            0.5 0.3 0.5
-GraphOverviewBorder:                BLACK
-GraphPromptText:                    GREY(0.8)
-GraphGridLines:                     GREY(0.25)
-GraphGridPoints:                    GREY(0.6)
+GraphBackground:         bg_low
+GraphOverviewBackground: GREY(0.10)
+GraphOverviewViewRegion: 0.5 0.3 0.5
+GraphOverviewBorder:     BLACK
+GraphPromptText:         GREY(0.8)
+GraphGridLines:          GREY(0.25)
+GraphGridPoints:         GREY(0.6)
 
 // Badges ----------------------------------------------------------------------
 
