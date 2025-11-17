@@ -41,22 +41,22 @@ def addFunctions(hc_tab):
 ## CONTROLS ##
 
 def isShowingDisplayOptionsBar(self):
-    return self.paneTab.isShowingDisplayOptionsBar()
+    return self.tab.isShowingDisplayOptionsBar()
 
 def isShowingOperationBar(self):
-    return self.paneTab.isShowingOperationBar()
+    return self.tab.isShowingOperationBar()
 
 def isShowingSelectionBar(self):
-    return self.paneTab.isShowingSelectionBar()
+    return self.tab.isShowingSelectionBar()
 
 def showDisplayOptionsBar(self, bool):
-    self.paneTab.showDisplayOptionsBar(bool)
+    self.tab.showDisplayOptionsBar(bool)
 
 def showOperationBar(self, bool):
-    self.paneTab.showOperationBar(bool)
+    self.tab.showOperationBar(bool)
 
 def showSelectionBar(self, bool):
-    self.paneTab.showSelectionBar(bool)
+    self.tab.showSelectionBar(bool)
 
 def toggleDisplayOptionsToolbar(self):
     self.showDisplayOptionsBar(not self.isShowingDisplayOptionsBar())
@@ -112,6 +112,7 @@ def toggleGrid(self):
 def togglePointMarkers(self):
     visible = 0
     displaySets = self.displaySets()
+    print(displaySets)
     for displaySet in displaySets:
         if displaySet.isShowingPointMarkers():
             visible = 1
@@ -192,25 +193,42 @@ def setLayoutTripleLeftSplit(self):
     self.setViewportLayout(hou.geometryViewportLayout.TripleLeftSplit)
 
 def viewport(self):
-    return self.paneTab.curViewport()
+    return self.tab.curViewport()
 
 def viewports(self):
-    return self.paneTab.viewports()
+    return self.tab.viewports()
 
 ## UTILS ##
 
 def keycam(self):
     # Contexts:
-    # Chop, ChopNet, Cop, Cop2, CopNet, Data, Director, Dop, Driver, Lop, Manager, Object, Shop, Sop, Top, TopNet, Vop, VopNet
+    # Chop
+    # ChopNet
+    # Cop
+    # Cop2
+    # CopNet
+    # Data
+    # Director
+    # Dop
+    # Driver
+    # Lop
+    # Manager
+    # Object
+    # Shop
+    # Sop
+    # Top
+    # TopNet
+    # Vop
+    # VopNet
     context = self.pwd().childTypeCategory().name()
     if context == "Object":
-        self.paneTab.setCurrentState("keycam")
+        self.tab.setCurrentState("keycam")
         hou.ui.setStatusMessage("Entered keycam in an obj context")
     elif context == "Sop":
-        self.paneTab.setCurrentState("keycam")
+        self.tab.setCurrentState("keycam")
         hou.ui.setStatusMessage("Entered keycam in a sop context")
     elif context == "Lop":
-        self.paneTab.setCurrentState("keycam")
+        self.tab.setCurrentState("keycam")
         hou.ui.setStatusMessage("Entered keycam in a lop context")
     else:
         hou.ui.setStatusMessage("No obj, sop or lop context", hou.severityType.Error)
