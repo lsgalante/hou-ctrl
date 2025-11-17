@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shelfDocument>
+  <!-- This file contains definitions of shelves, toolbars, and tools.
+ It should not be hand-edited when it is being used by the application.
+ Note, that two definitions of the same element are not allowed in
+ a single file. -->
+
+  <shelfSet name="my_shelf_set" label="My Shelf Set">
+    <memberToolshelf name="hc_shelf_global"/>
+    <memberToolshelf name="hc_shelf_pane"/>
+    <memberToolshelf name="hc_shelf_networkeditor"/>
+    <memberToolshelf name="hc_shelf_sceneviewer"/>
+  </shelfSet>
+
+  <tool name="sceneviewer_keycam" label="Keycam" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hctl
+hctl.hcglobal.HCGlobal().hcPane().hcTab().keycam()]]></script>
+  </tool>
+
+  <tool name="hc_global_toggle_tabs" label="Tabs" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hctl
+hctl.hcglobal.HCGlobal().toggleTabs()]]></script>
+  </tool>
+
+  <tool name="hc_global_toggle_paths" label="Paths" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hctl
+hctl.hcglobal.HCGlobal().toggleNetworkControls()]]></script>
+  </tool>
+
+  <tool name="hc_global_toggle_stowbars" label="Stowbars" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hctl
+hctl.hcglobal.HCGlobal().toggleStowbars()]]></script>
+  </tool>
+
+  <tool name="hc_shelf_separator_1" label="|" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[]]></script>
+  </tool>
+
+  <tool name="hc_shelf_separator_2" label="|" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[]]></script>
+  </tool>
+
+  <tool name="hc_pane_resize_right" label="Right" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[]]></script>
+  </tool>
+
+  <tool name="hc_pane_home" label="Home" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[]]></script>
+  </tool>
+
+  <tool name="hc_networkeditor_toggle_menu" label="Menu" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hctl
+hctl.hcglobal.HCGlobal().hcPane().hcTab().toggleMenu()]]></script>
+  </tool>
+
+  <toolshelf name="hc_shelf_sceneviewer" label="Scene Viewer">
+    <memberTool name="sceneviewer_keycam"/>
+    <memberTool name="hc_shelf_separator_1"/>
+    <memberTool name="hc_sceneviewer_toggleleftbar"/>
+    <memberTool name="hc_sceneviewer_toggletopbar"/>
+    <memberTool name="hc_sceneviewer_togglerightbar"/>
+  </toolshelf>
+
+  <toolshelf name="hc_shelf_networkeditor" label="Network Editor">
+    <memberTool name="hc_networkeditor_toggle_menu"/>
+  </toolshelf>
+
+  <toolshelf name="hc_shelf_pane" label="Pane">
+    <memberTool name="hc_pane_toggle_tabs"/>
+    <memberTool name="hc_pane_toggle_path"/>
+    <memberTool name="hc_shelf_separator_1"/>
+    <memberTool name="hc_pane_resize_up"/>
+    <memberTool name="hc_pane_resize_down"/>
+    <memberTool name="hc_pane_resize_left"/>
+    <memberTool name="hc_pane_resize_right"/>
+    <memberTool name="hc_shelf_separator_2"/>
+    <memberTool name="hc_pane_home"/>
+  </toolshelf>
+
+  <toolshelf name="hc_shelf_global" label="Global">
+    <memberTool name="hc_global_toggle_tabs"/>
+    <memberTool name="hc_global_toggle_paths"/>
+    <memberTool name="hc_global_toggle_stowbars"/>
+  </toolshelf>
+
+  <tool name="hc_sceneviewer_toggleleftbar" label="Left bar" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hctl
+hctl.hcglobal.HCGlobal().hcPane().hcTab().toggleSelectionBar()]]></script>
+  </tool>
+
+  <tool name="hc_sceneviewer_toggletopbar" label="Top bar" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hctl
+hctl.hcglobal.HCGlobal().hcPane().hcTab().toggleOperationBar()]]></script>
+  </tool>
+
+  <tool name="hc_sceneviewer_togglerightbar" label="Right bar" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hctl
+hctl.hcglobal.HCGlobal().hcPane().hcTab().toggleDisplayOptionsToolbar()]]></script>
+  </tool>
+</shelfDocument>
