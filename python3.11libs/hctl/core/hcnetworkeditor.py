@@ -4,8 +4,8 @@ import types
 def addFunctions(hc_tab):
     hc_tab.addNetworkBox = types.MethodType(addNetworkBox, hc_tab)
     hc_tab.addStickyNote = types.MethodType(addStickyNote, hc_tab)
-    hc_tab.nextGridMode = types.MethodType(nextGrid, hc_tab)
-    hc_tab.deselectAll = types.MethodType(nextGrid, hc_tab)
+    hc_tab.nextGridMode = types.MethodType(nextGridMode, hc_tab)
+    hc_tab.deselectAll = types.MethodType(deselectAll, hc_tab)
     hc_tab.renameNode = types.MethodType(renameNode, hc_tab)
     hc_tab.selectDisplayNode = types.MethodType(selectDisplayNode, hc_tab)
     hc_tab.toggleDimUnusedNodes = types.MethodType(toggleDimUnusedNodes, hc_tab)
