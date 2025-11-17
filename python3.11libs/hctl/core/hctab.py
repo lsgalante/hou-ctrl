@@ -15,7 +15,7 @@ class HCTab():
     ## CONTEXT ##
 
     def currentNode(self):
-        return self.paneTab.currentNode()
+        return self.tab.currentNode()
 
     def path(self):
         if self.hasNetworkControls():
@@ -24,28 +24,28 @@ class HCTab():
             return "None"
 
     def pwd(self):
-        if self.paneTab.hasNetworkControls:
-            return self.paneTab.pwd()
+        if self.tab.hasNetworkControls:
+            return self.tab.pwd()
         else:
             return "No path"
 
     ## CONTROLS ##
 
     def hasNetworkControls(self):
-        return self.paneTab.hasNetworkControls()
+        return self.tab.hasNetworkControls()
 
     def isPin(self):
-        return self.paneTab.isPin()
+        return self.tab.isPin()
 
     def isShowingNetworkControls(self):
-        return self.paneTab.isShowingNetworkControls()
+        return self.tab.isShowingNetworkControls()
 
     def setCheckState(self, bool):
         if bool:
             self.tab.setCheckState()
 
     def setPin(self, bool):
-        self.paneTab.setPin(bool)
+        self.tab.setPin(bool)
 
     def showNetworkControls(self, bool):
         self.tab.showNetworkControls(bool)
@@ -69,7 +69,7 @@ class HCTab():
                 tab.close()
 
     # def setIsCurrentTab(self):
-        # self.paneTab.setIsCurrentTab()
+        # self.tab.setIsCurrentTab()
 
     def setTypeDetailsView(self):
         self.setType(hou.paneTabType.DetailsView)
@@ -91,7 +91,7 @@ class HCTab():
         return tab
 
     def pane(self):
-        return self.paneTab.pane()
+        return self.tab.pane()
 
     def type(self):
-        return self.paneTab.type()
+        return self.tab.type()
