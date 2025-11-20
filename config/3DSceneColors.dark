@@ -1,64 +1,121 @@
-BackgroundColor:       0.00 0.00 0.00   # bg - top
+# BackgroundColor:       0.00 0.00 0.00   # bg - top
+BackgroundColor:       0.1175 0.1188 0.1214
 BackgroundBottomColor: @BackgroundColor # bg - bottom
+XaxesColor:            1.00 0.00 0.00   # sticky x axis
+YaxesColor:            0.00 1.00 0.00   # sticky y axis
+ZaxesColor:            0.00 0.00 1.00   # sticky z axis
 
-## BBOX ##
+# Bounding box
 
 BBoxOutlineColor: 0.40 0.40 0.40 # wireframe
 BBoxOutlineAlpha: ALPHA 0.75     # wireframe alpha (*approx)
 BBoxSolidColor:   0.35 0.35 0.35 # wireframe
 BBoxSolidAlpha:   ALPHA 0.75     # shaded alpha (approx*)
 
-## CPLANE ##
+# Geometry - Points
+PointColor:              0.40 1.00 1.00 # pt info unselected
+SelectedPointColor:      1.00 1.00 0.00 # pt info selected
+PointLocateColor:        0.60 0.90 1.00 # hover - pt
+PointLocateRemoveColor:  1.00 0.10 0.10 # hover - pt
+PointLocateToggleColor:  0.70 0.30 0.60 # hover - pt
+PointLocateAlpha:        ALPHA 1.00     # hover - pt overlay alpha
+PointTrailColor:         0.00 0.58 0.58 # pt trail - unselected
+SelectedPointTrailColor: 0.80 0.30 0.30 # pt trail - selected
 
-CplaneColor:          0.35 0.40 0.40 # unselected
-ActiveCplaneColor:    0.30 0.45 0.45 # unselected active
-SelectedCplaneColor:  1.00 0.51 0.80 # selected
-CplaneAlpha:          ALPHA 0.10     # amount of shading between grid lines
-CplaneLineAlpha:      ALPHA 0.30     # grid line alpha
-CplaneLineFadedAlpha: ALPHA 0.10     # faded grid line alpha
+# Geometry - Primitives
+PrimClosureColor:          0.15 0.40 0.25 # unselected prims
+PrimLocateColor:           0.40 0.75 1.00 # hover - prim
+PrimLocateRemoveColor:     0.95 0.30 0.30 # hover - prim
+PrimLocateToggleColor:     0.50 0.15 0.60 # hover - prim
+PrimLocateAlpha:           ALPHA 0.40     # hover - prim overlay alpha
+BackfaceTintColor:         0.04 0.12 0.30 # backfacing poly tint, when enabled
+BackfaceTintAlpha:         ALPHA 0.66     # backfacing poly tint blend
+AuxSelectedPrimColor1:     1.00 1.00 0.00 # 1st template selection prims
+AuxSelectedPrimColor2:     0.00 1.00 1.00 # 2nd template selection prims
+PrimInfoColor:             1.00 0.78 1.00 # prim-vtx, prim-num, prim-normal
+SelectedPrimInfoColor:     1.00 0.78 0.70 # selected prim-vtx, prim-num, prim-normal
+WireframeColor:            0.80 0.80 0.73 # non-selected prims
+SelectedPrimColor:         1.00 0.80 0.30 # selected prims
+UsdSelectedPrimitiveAlpha: ALPHA 0.20     # selected USD prims
+UsdModifiedPrimitiveColor: 0.00 1.00 1.00 # current state modified USD prims
+UsdModifiedPrimitiveAlpha: ALPHA 0.20     # current state modified USD prims
 
-## GEO ##
+# Geometry - Edges
+EdgeLocateColor:       0.60 0.90 1.00 # hover
+EdgeLocateRemoveColor: 1.00 0.10 0.10 # hover
+EdgeLocateToggleColor: 0.70 0.30 0.60 # hover
+EdgeLocateAlpha:       ALPHA 1.00     # hover alpha
+EdgeTipColor:          0.10 0.90 0.40 # selection direction hint
 
-PrimClosureColor:            0.15 0.40 0.25 # unselected prims
+# Geometry - Vertices
+VertexLocateColor:       0.60 0.90 1.00 # hover
+VertexLocateRemoveColor: 1.00 0.10 0.10 # hover
+VertexLocateToggleColor: 0.70 0.30 0.60 # hover
+VertexLocateAlpha:       ALPHA 1.00     # hover alpha
+
+# Geometry - Breakpoints
+BreakpointLocateColor:       0.60 0.90 1.00 # hover
+BreakpointLocateRemoveColor: 1.00 0.30 0.30 # hover
+BreakpointLocateToggleColor: 0.70 0.30 0.60 # hover
+BreakpointLocateAlpha:       ALPHA 1.00     # hover alpha
+
+# Geometry - Curves
+CurveEndPointColor:       0.65 0.15 0.25 # curve state - end points
+CurveBranchPointColor:    0.40 0.40 1.00 # curve state - branch points
+CurveBranchEndPointColor: 0.55 0.30 0.65 # curve state - branch-end points
+
+# Geo - Objects
+ObjectSelectColor:     1.00 1.00 0.00 # selection highlight
+ObjectSelectHintColor: 0.50 0.80 0.00 # selection hint highlight
+ObjectCurrentColor:    1.00 0.85 0.00 # current highlight
+ObjectGhostColor:      0.30 0.30 0.30 # color blended into object when ghosted
+ObjectGhostAlpha:      ALPHA 0.75     # alpha for color/ghost mixing
+ObjectNameColor:       1.00 0.30 0.30 # name guides
+
+# Geo - other
 AuxGeoColor:                 0.70 0.40 0.40 # spline/quadric hulls
 SelectedAuxGeoColor:         0.90 0.60 0.70 # selected spline/quadric hulls
-PointColor:                  0.40 1.00 1.00 # pt info unselected
-SelectedPointColor:          1.00 1.00 0.00 # pt info selected
-PrimInfoColor:               1.00 0.78 1.00 # prim-vtx, prim-num, prim-normal
-SelectedPrimInfoColor:       1.00 0.78 0.70 # selected prim-vtx, prim-num, prim-normal
-Guide1Color:                 0.40 0.40 1.00 # 1st guide
-Guide2Color:                 0.20 0.50 1.00 # 2nd guide
-PrimLocateColor:             0.40 0.75 1.00 # hover - prim
-PrimLocateRemoveColor:       0.95 0.30 0.30 # hover - prim
-PrimLocateToggleColor:       0.50 0.15 0.60 # hover - prim
-PrimLocateAlpha:             ALPHA 0.40     # hover - prim overlay alpha
-PointLocateColor:            0.60 0.90 1.00 # hover - pt
-PointLocateRemoveColor:      1.00 0.10 0.10 # hover - pt
-PointLocateToggleColor:      0.70 0.30 0.60 # hover - pt
-PointLocateAlpha:            ALPHA 1.00     # hover - pt overlay alpha
-EdgeLocateColor:             0.60 0.90 1.00 # hover - edge
-EdgeLocateRemoveColor:       1.00 0.10 0.10 # hover - edge
-EdgeLocateToggleColor:       0.70 0.30 0.60 # hover - edge
-EdgeLocateAlpha:             ALPHA 1.00     # hover - edge overlay alpha
-VertexLocateColor:           0.60 0.90 1.00 # hover - vtx
-VertexLocateRemoveColor:     1.00 0.10 0.10 # hover - vtx
-VertexLocateToggleColor:     0.70 0.30 0.60 # hover - vtx
-VertexLocateAlpha:           ALPHA 1.00     # hover - vtx overlay alpha
-BreakpointLocateColor:       0.60 0.90 1.00 # hover - breakpoint
-BreakpointLocateRemoveColor: 1.00 0.30 0.30 # hover - breakpoint
-BreakpointLocateToggleColor: 0.70 0.30 0.60 # hover - breakpoint
-BreakpointLocateAlpha:       ALPHA 1.00     # hover - breakpoint overlay alpha
-PointTrailColor:             0.00 0.58 0.58 # pt trail - unselected
-SelectedPointTrailColor:     0.80 0.30 0.30 # pt trail - selected
 BoundaryColor:               0.10 0.20 0.90 # geo boundary decoration
-EdgeTipColor:                0.10 0.90 0.40 # edge selection direction indicator
-CurveEndPointColor:          0.65 0.15 0.25 # curve state - end points
-CurveBranchPointColor:       0.40 0.40 1.00 # curve state - branch points
-CurveBranchEndPointColor:    0.55 0.30 0.65 # curve state - branch-end points
-BackfaceTintColor:           0.04 0.12 0.30 # backfacing poly tint, when enabled
-BackfaceTintAlpha:           ALPHA 0.66     # backfacing poly tint blend
+WireOverColor:               0.20 0.20 0.20 # Wire Shaded mode wires
+GhostFillColor:              0.30 0.30 0.30 # hidden-line ghost fill
+CookSelectColor:             0.90 0.60 0.00 # cook selection points/prims
+FillSelectionAlpha:          ALPHA 0.50     # shading/select blend factor
+FillSelectionWireOverAlpha:  ALPHA 0.25     # shading/select blend factor
 
-## HANDLE ##
+
+# Grids
+
+CplaneColor:             0.35 0.40 0.40 # unselected
+ActiveCplaneColor:       0.30 0.45 0.45 # unselected active
+SelectedCplaneColor:     1.00 0.51 0.80 # selected
+CplaneAlpha:             ALPHA 0.10     # amount of shading between grid lines
+CplaneLineAlpha:         ALPHA 0.30     # grid line alpha
+CplaneLineFadedAlpha:    ALPHA 0.10     # faded grid line alpha
+CPlaneHandleXlateColor:  0.45 0.00 0.90 # cplane translate axes
+CPlaneHandleRotateColor: 0.65 0.15 0.25 # cplane rotation
+CPlaneHandleBorderColor: 0.45 0.00 0.90 # cplane scale border
+GridColor:               0.40 0.45 0.50 # grid
+GridLineAlpha:           ALPHA 0.30     # grid line alpha
+GridLineFadedAlpha:      ALPHA 0.20     # faded grid line alpha
+GridXRulerColor:         0.70 0.50 0.50 # x ruler
+GridYRulerColor:         0.50 0.70 0.50 # y ruler
+GridZRulerColor:         0.50 0.50 0.70 # z ruler
+GridRulerAlpha:          ALPHA 0.60     # ruler alpha
+GridRulerFadedAlpha:     ALPHA 0.40     # faded ruler alpha
+OrthoGridColor:       0.40 0.45 0.50 # ortho viewport grid lines
+OrthoGridOriginColor: 0.30 0.30 0.30 # ortho viewport origin lines
+
+# Guides
+
+Guide1Color:        0.40 0.40 1.00 # 1st guide
+Guide2Color:        0.20 0.50 1.00 # 2nd guide
+LopIncludeBoxGuide: 0.40 0.40 1.00 # "include" bbox guide
+LopExcludeBoxGuide: 1.00 0.40 0.40 # "exclude" bbox guide
+LopSubnetGuide1:    0.40 0.40 1.00 # subnet first guide
+LopSubnetGuide2:    1.00 0.40 0.40 # subnet second guide
+LopSubnetGuide3:    0.40 1.00 0.40 # subnet third guide
+
+# Handles
 
 HandlePivotColor:           0.40 0.40 1.00 # pivot
 HandleAxisColor:            1.00 1.00 1.00 # axes
@@ -74,9 +131,6 @@ HandleTracerColor:          0.40 0.40 0.40 # drag tracers
 HandleDeltaTextColor:       1.00 0.17 0.00 # text - delta val
 HandleDeltaTextShadowColor: 0.00 0.00 0.00 # text - delta val shadow
 HandleDeltaTextAlpha:       ALPHA 1.00     # text - delta val alpha
-CPlaneHandleXlateColor:     0.45 0.00 0.90 # cplane translate axes
-CPlaneHandleRotateColor:    0.65 0.15 0.25 # cplane rotation
-CPlaneHandleBorderColor:    0.45 0.00 0.90 # cplane scale border
 HandleLocateColor:          0.70 0.70 0.50 # hover glow
 HandleLocateAlpha:          ALPHA 0.60     # hover glow alpha
 HandleLocatePassiveColor:   0.30 0.30 0.65 # hover passive glow
@@ -88,86 +142,41 @@ PickedHandleColor:          1.00 0.51 0.80 # picked handle widget for direct man
 SelectedHandleColor:        1.00 1.00 0.00 # selected handle
 HandleTracerFillAlpha:      ALPHA 0.70     # filled handle tracer alpha
 
-## LOP ##
+# Text
+MessageColor:         0.80 0.80 0.80 # normal
+PromptColor:          0.80 0.80 1.00 # tool prompt
+WarningColor:         0.90 0.65 0.00 # warning
+ErrorColor:           1.00 0.20 0.20 # error
+SuccessColor:         0.35 0.65 0.35 # success
+FlashMessageColor:    1.00 1.00 1.00 # flash
+TextColor:            0.60 0.60 0.60 # viewport text
+TextShadowColor:      0.00 0.00 0.00 # viewport text dropshadow
+LabelColor:           0.30 0.30 0.30 # viewer overlay labels
+SelectedLabelColor:   0.60 0.60 0.60 # viewport - selected labels
+OverlayLabelColor:    1.00 0.00 1.00 # label - viewer overlay
+AuxOverlayLabelColor: 0.80 0.80 0.00 # label - viewer overlay auxiliary
 
-LopIncludeBoxGuide: 0.40 0.40 1.00 # "include" bbox guide
-LopExcludeBoxGuide: 1.00 0.40 0.40 # "exclude" bbox guide
-LopSubnetGuide1:    0.40 0.40 1.00 # subnet first guide
-LopSubnetGuide2:    1.00 0.40 0.40 # subnet second guide
-LopSubnetGuide3:    0.40 1.00 0.40 # subnet third guide
+# Misc
+GeoWarningColor:      1.00 0.70 0.20 # warning
+LocateColor:          0.80 0.50 0.00 # hover - overlay
+LocateAlpha:          ALPHA 0.20     # hover - overlay alpha
+LocateNearColor:      0.10 0.90 0.10 # hover - nearby
+LocateNearAlpha:      ALPHA 0.30     # hover - nearby alpha
+IKCriticalZoneColor:  0.98 0.35 0.20 # inverse kinematic danger zone cone
+SelectBoxOutline:     0.60 0.60 0.60 # selection box - outer outline
+SelectBoxInnerLine:   0.30 0.30 0.30 # selection box - inner outline
+SelectBoxFill:        0.20 0.20 0.20 # selection box - shaded fill
+SelectBoxAlpha:       ALPHA 0.25     # selection box - fill alpha
+ProfileWireColor:     0.60 0.55 0.50 # profiles
+AxesColor:            1.00 0.00 0.00 # coordinate/cplane axes
+SelectedAxesColor:    1.00 0.00 0.00 # selected coordinate axes
+HeightVectorColor:    1.00 0.50 0.50 # height motion indicator
+PeanutColor:          1.00 0.45 0.07 # peanut color for orientation picking
+SliderKnobMaxColor:   1.00 1.00 0.00 # slider handle max value warning
+ViewPivotFGColor:     1.00 0.20 0.20 # view pivot - indicators
+ViewPivotBGColor:     1.00 0.20 0.20 # view pivot - bg (ignored if same as fg)
 
-## MESSAGE ##
-
-MessageColor:      0.80 0.80 0.80 # normal
-PromptColor:       0.80 0.80 1.00 # tool prompt
-WarningColor:      0.90 0.65 0.00 # warning
-ErrorColor:        1.00 0.20 0.20 # error
-SuccessColor:      0.35 0.65 0.35 # success
-FlashMessageColor: 1.00 1.00 1.00 # flash
-
-## MISC ##
-
-SnapshotColor:               0.60 0.60 0.60 # viewport snapshot
-OverlayLabelColor:           1.00 0.00 1.00 # label - viewer overlay
-AuxOverlayLabelColor:        0.80 0.80 0.00 # label - viewer overlay auxiliary
-ViewMaskOverlayColor:        0.40 0.40 0.40 # viewer mask overlay
-CameraMaskColor:             0.40 0.40 0.40 # cam mask
-LockedCameraMaskColor:       0.60 0.20 0.20 # cam mask - locked
-CameraOverlayColor:          1.00 1.00 1.00 # cam overlay
-TextColor:                   0.60 0.60 0.60 # viewport text
-TextShadowColor:             0.00 0.00 0.00 # viewport text dropshadow
-GeoWarningColor:             1.00 0.70 0.20 # warning
-LocateColor:                 0.80 0.50 0.00 # hover - overlay
-LocateAlpha:                 ALPHA 0.20     # hover - overlay alpha
-LocateNearColor:             0.10 0.90 0.10 # hover - nearby
-LocateNearAlpha:             ALPHA 0.30     # hover - nearby alpha
-IKCriticalZoneColor:         0.98 0.35 0.20 # inverse kinematic danger zone cone
-SelectBoxOutline:            0.60 0.60 0.60 # selection box - outer outline
-SelectBoxInnerLine:          0.30 0.30 0.30 # selection box - inner outline
-SelectBoxFill:               0.20 0.20 0.20 # selection box - shaded fill
-SelectBoxAlpha:              ALPHA 0.25     # selection box - fill alpha
-ProfileWireColor:            0.60 0.55 0.50 # profiles
-AxesColor:                   1.00 0.00 0.00 # coordinate/cplane axes
-XaxesColor:                  1.00 0.00 0.00 # sticky x axis
-YaxesColor:                  0.00 1.00 0.00 # sticky y axis
-ZaxesColor:                  0.00 0.00 1.00 # sticky z axis
-SelectedAxesColor:           1.00 0.00 0.00 # selected coordinate axes
-WireframeColor:              0.80 0.80 0.73 # non-selected prims
-WireOverColor:               0.20 0.20 0.20 # Wire Shaded mode wires
-GhostFillColor:              0.30 0.30 0.30 # hidden-line ghost fill
-SelectedPrimColor:           1.00 0.80 0.30 # selected prims
-AuxSelectedPrimColor1:       1.00 1.00 0.00 # 1st template selection prims
-AuxSelectedPrimColor2:       0.00 1.00 1.00 # 2nd template selection prims
-UsdSelectedPrimitiveAlpha:   ALPHA 0.20     # selected USD prims
-UsdModifiedPrimitiveColor:   0.00 1.00 1.00 # current state modified USD prims
-UsdModifiedPrimitiveAlpha:   ALPHA 0.20     # current state modified USD prims
-CookSelectColor:             0.90 0.60 0.00 # cook selection points/prims
-FillSelectionAlpha:          ALPHA 0.50     # shading/select blend factor
-FillSelectionWireOverAlpha:  ALPHA 0.25     # shading/select blend factor
-HeightVectorColor:           1.00 0.50 0.50 # height motion indicator
-PeanutColor:                 1.00 0.45 0.07 # peanut color for orientation picking
-LabelColor:                  0.00 0.80 0.80 # viewer overlay labels
-SelectedLabelColor:          0.80 0.80 0.00 # viewport - selected labels
-SliderKnobMaxColor:          1.00 1.00 0.00 # slider handle max value warning
-ViewPivotFGColor:            1.00 0.20 0.20 # view pivot - indicators
-ViewPivotBGColor:            1.00 0.20 0.20 # view pivot - bg (ignored if same as fg)
-
-## OBJECT ##
-
-ObjectSelectColor:     1.00 1.00 0.00 # selection highlight
-ObjectSelectHintColor: 0.50 0.80 0.00 # selection hint highlight
-ObjectCurrentColor:    1.00 0.85 0.00 # current highlight
-ObjectGhostColor:      0.30 0.30 0.30 # color blended into object when ghosted
-ObjectGhostAlpha:      ALPHA 0.75     # alpha for color/ghost mixing
-ObjectNameColor:       1.00 0.30 0.30 # name guides
-
-## ORTHO ##
-
-OrthoGridColor:       0.40 0.45 0.50 # ortho viewport grid lines
-OrthoGridOriginColor: 0.30 0.30 0.30 # ortho viewport origin lines
-
-## PILL ##
-
+# Pill
 PillBGColor:              0.15 0.15 0.15       # bg
 PillBGAlpha:              ALPHA 1.00           # bg alpha
 PillOutlineColor:         @PillBGColor         # outline
@@ -178,28 +187,27 @@ PillCamLockTextColor:     0.85 0.85 0.85       # locked cam text
 SelectedPillBGColor:      0.25 0.25 0.25       # selected viewport bg
 SelectedPillBGAlpha:      ALPHA 1.00           # selected viewport bg alpha
 SelectedPillOutlineColor: @SelectedPillBGColor # selected viewport outline
-SelectedPillTextColor:    0.80 0.80 0.65       # selected viewport text
+SelectedPillTextColor:    0.70 0.80 0.80       # selected viewport text
 
-## REF PLANE ##
+# Regions/overlays
 
-GridColor:           0.40 0.45 0.50 # grid
-GridLineAlpha:       ALPHA 0.30     # grid line alpha
-GridLineFadedAlpha:  ALPHA 0.20     # faded grid line alpha
-GridXRulerColor:     0.70 0.50 0.50 # x ruler
-GridYRulerColor:     0.50 0.70 0.50 # y ruler
-GridZRulerColor:     0.50 0.50 0.70 # z ruler
-GridRulerAlpha:      ALPHA 0.60     # ruler alpha
-GridRulerFadedAlpha: ALPHA 0.40     # faded ruler alpha
+RenderBorderColor:             0.40 0.40 0.40 # border hover
+RenderInactiveBorderColor:     0.05 0.05 0.05 # border
+RenderTextColor:               0.50 0.50 0.50 # heading text
+RenderLocateColor:             0.60 0.30 0.20 # part hover
+RenderBarColor:                0.15 0.15 0.15 # title bar bg
+CameraMaskColor:               0.40 0.40 0.40 # viewport mask
+LockedCameraMaskColor:         0.60 0.20 0.20 # viewport mask - locked
+CameraOverlayColor:            1.00 1.00 1.00 # viewport overlay
+OverlayBackgroundColor:        @BackgroundColor # group list - bg
+OverlayBackgroundAlpha:        ALPHA 0.50       # group list - bg alpha
+OverviewViewRegionColor:       0.70 0.70 0.70   # view region rect
+OverviewWinRegionColor:        1.00 1.00 0.00   # window region rect
+OverviewNominalWinRegionColor: 0.40 0.40 1.00   # nominal window region rect
+SnapshotColor:                 0.60 0.60 0.60   # viewport snapshot
+ViewMaskOverlayColor:          0.40 0.40 0.40   # viewer mask overlay
 
-## RENDER REGION ##
-
-RenderBorderColor:         0.40 0.40 0.40 # border hover
-RenderInactiveBorderColor: 0.05 0.05 0.05 # border
-RenderTextColor:           0.50 0.50 0.50 # heading text
-RenderLocateColor:         0.60 0.30 0.20 # part hover
-RenderBarColor:            0.15 0.15 0.15 # title bar bg
-
-## UV ##
+# UV
 
 UVGridColor:                 0.30 0.30 0.30 # viewport grid lines
 UVGridOriginColor:           0.35 0.35 0.35 # viewport origin lines
@@ -213,14 +221,6 @@ FlattenPinColor:             1.00 0.00 0.00 # flatten state pin color
 FlattenSelectedPinColor:     1.00 1.00 0.00 # flatten state selected pin color
 FlattenInitialPinColor:      0.70 0.00 0.00 # flatten state initial pin color
 
-## VIEWPORT ##
-
-OverlayBackgroundColor:        @BackgroundColor # group list - bg
-OverlayBackgroundAlpha:        ALPHA 0.50       # group list - bg alpha
-OverviewViewRegionColor:       0.70 0.70 0.70   # view region rect
-OverviewWinRegionColor:        1.00 1.00 0.00   # window region rect
-o
-OverviewNominalWinRegionColor: 0.40 0.40 1.00   # nominal window region rect
 
 # *approx: uses sample-based opacity. Will be rounded to 1/AA_level, where
 # AA_level is the antialias-level of the framebuffer. Higher values will

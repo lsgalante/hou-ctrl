@@ -19,8 +19,7 @@
 #define ORANGE   1 0.5 0
 #define BROWN	 #8C6238
 
-
-// New variables---------------------------------------------------------------
+// New variables
 
 #define selection  GREY(0.5)
 
@@ -39,8 +38,7 @@
 
 #define text       GREY(0.8)
 
-
-// OLD VARIABLES ---------------------------------------------------------------
+// Old variables
 
 #define DRKBASE              GREY(0.179)
 #define DRKGRADHIGH          GREY(0.1)
