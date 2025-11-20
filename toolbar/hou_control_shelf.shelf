@@ -68,13 +68,6 @@ hctl.hcglobal.HCGlobal().hcPane().hcTab().toggleMenu()]]></script>
   <toolshelf name="hc_shelf_pane" label="Pane">
     <memberTool name="hc_pane_toggle_tabs"/>
     <memberTool name="hc_pane_toggle_path"/>
-    <memberTool name="hc_shelf_separator_1"/>
-    <memberTool name="hc_pane_resize_up"/>
-    <memberTool name="hc_pane_resize_down"/>
-    <memberTool name="hc_pane_resize_left"/>
-    <memberTool name="hc_pane_resize_right"/>
-    <memberTool name="hc_shelf_separator_2"/>
-    <memberTool name="hc_pane_home"/>
   </toolshelf>
 
   <toolshelf name="hc_shelf_global" label="Global">
@@ -83,18 +76,40 @@ hctl.hcglobal.HCGlobal().hcPane().hcTab().toggleMenu()]]></script>
     <memberTool name="hc_global_toggle_stowbars"/>
   </toolshelf>
 
-  <tool name="hc_sceneviewer_toggleleftbar" label="Left bar" icon="PLASMA_App">
+  <tool name="hc_sceneviewer_toggleleftbar" label="Menu 1" icon="PLASMA_App">
     <script scriptType="python"><![CDATA[import hctl
 hctl.hcglobal.HCGlobal().hcPane().hcTab().toggleSelectionBar()]]></script>
   </tool>
 
-  <tool name="hc_sceneviewer_toggletopbar" label="Top bar" icon="PLASMA_App">
+  <tool name="hc_sceneviewer_toggletopbar" label="Menu 2" icon="PLASMA_App">
     <script scriptType="python"><![CDATA[import hctl
 hctl.hcglobal.HCGlobal().hcPane().hcTab().toggleOperationBar()]]></script>
   </tool>
 
-  <tool name="hc_sceneviewer_togglerightbar" label="Right bar" icon="PLASMA_App">
+  <tool name="hc_sceneviewer_togglerightbar" label="Menu 3" icon="PLASMA_App">
     <script scriptType="python"><![CDATA[import hctl
 hctl.hcglobal.HCGlobal().hcPane().hcTab().toggleDisplayOptionsToolbar()]]></script>
+  </tool>
+
+  <tool name="hc_pane_toggle_tabs" label="Tabs" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hctl
+hctl.hcglobal.HCGlobal().hcPane().toggleTabs()]]></script>
+  </tool>
+
+  <tool name="hc_pane_toggle_path" label="Path" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hctl
+hctl.hcglobal.HCGlobal().hcPane().hcTab().toggleNetworkControls()]]></script>
+  </tool>
+
+  <tool name="hc_pane_resize_up" label="Up" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[]]></script>
+  </tool>
+
+  <tool name="hc_pane_resize_down" label="Down" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[]]></script>
+  </tool>
+
+  <tool name="hc_pane_resize_left" label="Left" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[]]></script>
   </tool>
 </shelfDocument>
