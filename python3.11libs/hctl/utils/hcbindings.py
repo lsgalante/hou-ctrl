@@ -79,8 +79,8 @@ def load():
         # Pane
         ("h.pane.shelf", "ctrl+]"),
         ("h.pane.shelf", "cmd+]"),
-        ("h.pane.nexttab", "ctrl+space"),
-        ("h.pane.prevtab", "ctrl+shift+space"),
+        ("h.pane.nexttab", "ctrl+tab"),
+        ("h.pane.prevtab", "ctrl+shift+tab"),
         #
         # hctl
         ("h.hc_global_panel", "alt+x"),
