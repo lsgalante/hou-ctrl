@@ -1,9 +1,8 @@
 import hou
-from hctl.core.hcglobal import HCGlobal
-# from hctl.utils.hclistener import HCListener
+from hctl import HCGlobal
 from PySide6.QtCore import Qt
 
-hc_global = HCGlobal()
+hcglobal = HCGlobal()
 
 # Settings
 hotkeys = 1
@@ -13,13 +12,13 @@ listener = 0
 
 # Hotkeys
 if hotkeys:
-    hc_global.reloadHotkeys()
+    hcglobal.reloadHotkeys()
 
 # Layout
 if layout:
-    hc_global.toggleMenus()
-    hc_global.toggleMainMenuBar()
-    hc_global.togglePaneTabs()
+    hcglobal.toggleMenus()
+    hcglobal.toggleMainMenuBar()
+    hcglobal.togglePaneTabs()
 
     # Set network grid points to on
     # networkeditors = desktop.getNetworkEditors()

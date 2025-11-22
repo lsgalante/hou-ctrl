@@ -1,13 +1,12 @@
-from .core import hcglobal, hcpane, hctab
-from .ui import hcpanel, hcstatuspanel
-from .utils import hcbindings, hclistener, hcutils
+from .core import HCGlobal, HCPane, HCTab
+from .utils import hcbindings
 
 __all__ = [
-    "hcglobal",
-    "hcpane",
-    "hcpanel",
-    "hcstatuspanel",
+    "HCGlobal",
+    "HCPane",
+    "HCPanel",
+    "HCStatuspanel",
     "hcbindings",
-    "hclistener",
-    "hcutils"
+    "HCListener",
+    "HCUtils"
 ]
