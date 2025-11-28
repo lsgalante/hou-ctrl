@@ -5,10 +5,12 @@ from .hcglobal import HCGlobal
 class HCPane:
 
     def __init__(self, pane):
-        self.hc_global= HCGlobal()
+        self.hcglobal = HCGlobal()
         self.pane = pane
 
-    ## PANE ##
+    """
+    Pane
+    """
 
     def close(self):
         for tab in self.tabs():
@@ -18,7 +20,7 @@ class HCPane:
         return self.pane.isMaximized()
 
     def only(self):
-        tabs = self.hc_global.tabs()
+        tabs = self.hcglobal.tabs()
         tabs.remove(self.tab())
         for tab in tabs:
             tab.close()
@@ -32,7 +34,9 @@ class HCPane:
     def toggleMaximize(self):
         self.setIsMaximized(not self.isMaximized())
 
-    # SPLIT
+    """
+    Split
+    """
 
     def contract(self):
         fraction = round(self.splitFraction(), 3) + 0.1
@@ -85,7 +89,9 @@ class HCPane:
     def toggleSplitMaximized(self):
         self.setIsSplitMaximized(not self.isSplitMaximized())
 
-    ## TABS ##
+    """
+    Tabs
+    """
 
     def hcTab(self):
         from .hctab import HCTab

@@ -13,23 +13,23 @@
   </shelfSet>
 
   <tool name="hcsceneviewer_keycam" label="Keycam" icon="PLASMA_App">
-    <script scriptType="python"><![CDATA[import hctl
-hctl.HCGlobal().hcPane().hcTab().keycam()]]></script>
+    <script scriptType="python"><![CDATA[from hclib import HCGlobal, HCSceneViewer
+HCSceneViewer(HCGlobal().tab()).keycam()]]></script>
   </tool>
 
   <tool name="hcglobal_toggle_tabs" label="Tabs" icon="PLASMA_App">
-    <script scriptType="python"><![CDATA[import hctl
-hctl.HCGlobal().toggleTabs()]]></script>
+    <script scriptType="python"><![CDATA[import hclib
+hclib.HCGlobal().toggleTabs()]]></script>
   </tool>
 
   <tool name="hcglobal_toggle_paths" label="Paths" icon="PLASMA_App">
-    <script scriptType="python"><![CDATA[import hctl
-hctl.HCGlobal().toggleNetworkControls()]]></script>
+    <script scriptType="python"><![CDATA[import hclib
+hclib.HCGlobal().toggleNetworkControls()]]></script>
   </tool>
 
   <tool name="hcglobal_toggle_stowbars" label="Stowbars" icon="PLASMA_App">
-    <script scriptType="python"><![CDATA[import hctl
-hctl.HCGlobal().toggleStowbars()]]></script>
+    <script scriptType="python"><![CDATA[import hclib
+hclib.HCGlobal().toggleStowbars()]]></script>
   </tool>
 
   <tool name="hc_shelf_separator_1" label="|" icon="PLASMA_App">
@@ -49,8 +49,8 @@ hctl.HCGlobal().toggleStowbars()]]></script>
   </tool>
 
   <tool name="hcnetworkeditor_toggle_menu" label="Menu" icon="PLASMA_App">
-    <script scriptType="python"><![CDATA[import hctl
-hctl.HCGlobal().hcPane().hcTab().toggleMenu()]]></script>
+    <script scriptType="python"><![CDATA[import hclib
+hclib.HCGlobal().hcPane().hcTab().toggleMenu()]]></script>
   </tool>
 
   <toolshelf name="hc_shelf_sceneviewer" label="Scene Viewer">
@@ -77,28 +77,28 @@ hctl.HCGlobal().hcPane().hcTab().toggleMenu()]]></script>
   </toolshelf>
 
   <tool name="hcsceneviewer_toggleleftbar" label="Menu 1" icon="PLASMA_App">
-    <script scriptType="python"><![CDATA[import hctl
-hctl.HCGlobal().hcPane().hcTab().toggleSelectionBar()]]></script>
+    <script scriptType="python"><![CDATA[import hclib
+hclib.HCGlobal().hcPane().hcTab().toggleSelectionBar()]]></script>
   </tool>
 
   <tool name="hcsceneviewer_toggletopbar" label="Menu 2" icon="PLASMA_App">
-    <script scriptType="python"><![CDATA[import hctl
-hctl.HCGlobal().hcPane().hcTab().toggleOperationBar()]]></script>
+    <script scriptType="python"><![CDATA[import hclib
+hclib.HCGlobal().hcPane().hcTab().toggleOperationBar()]]></script>
   </tool>
 
   <tool name="hcsceneviewer_togglerightbar" label="Menu 3" icon="PLASMA_App">
-    <script scriptType="python"><![CDATA[import hctl
-hctl.HCGlobal().hcPane().hcTab().toggleDisplayOptionsToolbar()]]></script>
+    <script scriptType="python"><![CDATA[import hclib
+hclib.HCGlobal().hcPane().hcTab().toggleDisplayOptionsToolbar()]]></script>
   </tool>
 
   <tool name="hcpane_toggle_tabs" label="Tabs" icon="PLASMA_App">
-    <script scriptType="python"><![CDATA[import hctl
-hctl.HCGlobal().hcPane().toggleTabs()]]></script>
+    <script scriptType="python"><![CDATA[import hclib
+hclib.HCGlobal().hcPane().toggleTabs()]]></script>
   </tool>
 
   <tool name="hcpane_toggle_path" label="Path" icon="PLASMA_App">
-    <script scriptType="python"><![CDATA[import hctl
-hctl.HCGlobal().hcPane().hcTab().toggleNetworkControls()]]></script>
+    <script scriptType="python"><![CDATA[import hclib
+hclib.HCGlobal().hcPane().hcTab().toggleNetworkControls()]]></script>
   </tool>
 
   <tool name="hcpane_resize_up" label="Up" icon="PLASMA_App">

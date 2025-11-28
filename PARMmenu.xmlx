@@ -13,14 +13,13 @@
       <label>Set to X</label>
       <context>
         <expression><![CDATA[
-import hctl_menu_utils as hmu
-answer = hmu.vector3Test(kwargs)
-return answer
+from hclib import hcmenuutils as hcmu
+return hcmu.vector3Test(kwargs)
 ]]></expression>
       </context>
       <scriptCode><![CDATA[
-import hctl_menu_utils as hmu
-hmu.setVector3(kwargs, 1, 0, 0)
+from hclib import hcmenuutils as hcmu
+hcmu.setVector3(kwargs, 1, 0, 0)
 ]]></scriptCode>
     </scriptItem>
 
@@ -29,14 +28,13 @@ hmu.setVector3(kwargs, 1, 0, 0)
       <label>Lock Y and Z to X</label>
       <context>
         <expression><![CDATA[
-import hctl_menu_utils as hmu
-answer = hmu.vector3Test(kwargs)
-return answer
+from hclib import hcmenuutils as hcmu
+return hmu.vector3Test(kwargs)
 ]]></expression>
       </context>
       <scriptCode><![CDATA[
-import hctl_menu_utils as hmu
-hmu.vector3XMaster(kwargs)
+from hclib import hcmenuutils as hcmu
+hcmu.vector3XMaster(kwargs)
 ]]></scriptCode>
     </scriptItem>
   </menu>

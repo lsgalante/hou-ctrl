@@ -5,14 +5,10 @@ import types
 class HCTab():
     def __init__(self, tab):
         self.tab = tab
-        if self.type() == hou.paneTabType.NetworkEditor:
-            from .hcnetworkeditor import addFunctions
-            addFunctions(self)
-        elif self.type() == hou.paneTabType.SceneViewer:
-            from .hcsceneviewer import addFunctions
-            addFunctions(self)
 
-    ## CONTEXT ##
+    """
+    Context
+    """
 
     def currentNode(self):
         return self.tab.currentNode()
@@ -29,7 +25,9 @@ class HCTab():
         else:
             return "No path"
 
-    ## CONTROLS ##
+    """
+    Controls
+    """
 
     def hasNetworkControls(self):
         return self.tab.hasNetworkControls()
@@ -57,16 +55,22 @@ class HCTab():
     def togglePin(self):
         self.setPin(not self.isPin())
 
-    ## TAB ##
+    """
+    Tab
+    """
 
     def close(self):
         self.tab.close()
 
     def closeOtherTabs(self):
-        from .hcsglobal import tabs
+        from .hcglobal import tabs
         for tab in tabs():
             if tab != self.tab:
                 tab.close()
+
+    def hcPane(self):
+        from .hcpane import HCPane
+        return HCPane(self.pane())
 
     # def setIsCurrentTab(self):
         # self.tab.setIsCurrentTab()

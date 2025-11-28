@@ -5,12 +5,16 @@ class HCGlobal:
     def __init__(self):
         return
 
-    ## CONTEXT ##
+    """
+    Context
+    """
 
     def node(self):
         return self.tab().currentNode()
 
-    ## LAYOUT ##
+    """
+    Layout
+    """
 
     def clearLayout(self):
         tabs = self.tabs()
@@ -61,11 +65,12 @@ class HCGlobal:
                 scene_viewers.append(tab)
         return scene_viewers
 
+    # tab and tabs functions intentionally do not use the hou.ui.paneTabUnderCursor method
     def tab(self):
-        return hou.ui.paneTabUnderCursor()
+        return self.pane().currentTab()
 
     def tabs(self):
-        return self.desktop().paneTabs()
+        return self.pane().tabs()
 
     def viewports(self):
         viewports = []
@@ -75,7 +80,9 @@ class HCGlobal:
                 viewports.append(viewport)
         return viewports
 
-    ## MENUS ##
+    """
+    Menus
+    """
 
     def colorEditor(self):
         hou.ui.selectColor()
@@ -110,7 +117,9 @@ class HCGlobal:
     def openFile(self):
         hou.ui.selectFile()
 
-    ## UTILS ##
+    """
+    Utils
+    """
 
     def autosave(self):
         return hou.getPreference("autoSave")
@@ -178,7 +187,9 @@ class HCGlobal:
     def updateMainMenuBar(self):
         hou.ui.updateMainMenuBar()
 
-    ## VISIBILITY
+    """
+    Visibility
+    """
 
     def hideShelf(self):
         self.desktop().shelfDock().show(0)

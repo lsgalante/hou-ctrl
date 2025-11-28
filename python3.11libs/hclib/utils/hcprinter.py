@@ -1,5 +1,6 @@
 import hou
 
+
 class Printer():
     def __init__(self):
         self.message = ""

@@ -3,11 +3,10 @@
      MainMenuMaster, and MainMenuEscape)
      can exist in $HOME/houdiniX.Y/ directory and will supplement
      the original definitions found in $HFS/houdini/ -->
-
 <mainMenu>
   <menuBar>
-    <subMenu id="hctl_submenu">
-    <label>hctl</label>
+    <subMenu id="hc_submenu">
+    <label>hc</label>
 
       <titleItem>
         <label>Global</label>
@@ -16,7 +15,7 @@
       <scriptItem id="h.hcglobal_open_color_editor">
         <label>Color Editor</label>
         <scriptCode>
-<![CDATA[from hctl import HCGlobal
+<![CDATA[from hclib import HCGlobal
 HCGlobal().openColorEditor()]]>
         </scriptCode>
       </scriptItem>
@@ -24,7 +23,7 @@ HCGlobal().openColorEditor()]]>
       <scriptItem id="h.hcglobal_keycam">
         <label>Keycam</label>
         <scriptCode>
-<![CDATA[from hctl import HCGlobal
+<![CDATA[from hclib import HCGlobal
 HCGlobal().keycam()]]>
         </scriptCode>
       </scriptItem>
@@ -32,7 +31,7 @@ HCGlobal().keycam()]]>
       <scriptItem id="h.hcglobal_reload_color_schemes">
         <label>Reload Color Schemes</label>
         <scriptCode>
-<![CDATA[from hctl import HCGlobal
+<![CDATA[from hclib import HCGlobal
 HCGlobal().reload_color_schemes()]]>
         </scriptCode>
       </scriptItem>
@@ -40,7 +39,7 @@ HCGlobal().reload_color_schemes()]]>
       <scriptItem id="h.hcglobal_reload_hotkeys">
         <label>Reload Hotkeys</label>
         <scriptCode>
-<![CDATA[from hctl import HCGlobal
+<![CDATA[from hclib import HCGlobal
 HCGlobal().reloadHotkeys()]]>
         </scriptCode>
     </scriptItem>
@@ -48,7 +47,7 @@ HCGlobal().reloadHotkeys()]]>
       <scriptItem id="h.hcglobal_reload_keycam">
         <label>Reload Keycam</label>
         <scriptCode>
-<![CDATA[from hctl import HCGlobal
+<![CDATA[from hclib import HCGlobal
 HCGlobal().reloadKeycam()]]>
         </scriptCode>
       </scriptItem>
@@ -56,7 +55,7 @@ HCGlobal().reloadKeycam()]]>
       <scriptItem id="h.hcglobal_restart_houdini">
         <label>Restart Houdini</label>
         <scriptCode>
-<![CDATA[from hctl import HCGlobal
+<![CDATA[from hclib import HCGlobal
 HCGlobal().restartHoudini()]]>
         </scriptCode>
     </scriptItem>
@@ -64,7 +63,7 @@ HCGlobal().restartHoudini()]]>
       <scriptItem id="h.hcglobal_toggle_menus">
         <label>Toggle Menus</label>
         <scriptCode>
-<![CDATA[from hctl import HCGlobal
+<![CDATA[from hclib import HCGlobal
 HCGlobal().toggleMenus()]]>
         </scriptCode>
       </scriptItem>
@@ -72,7 +71,7 @@ HCGlobal().toggleMenus()]]>
       <scriptItem id="h.hcglobal_toggle_network_controls">
         <label>Toggle Network Controls</label>
         <scriptCode>
-<![CDATA[from hctl import HCGlobal
+<![CDATA[from hclib import HCGlobal
 HCGlobal().toggleNetworkControls()]]>
         </scriptCode>
       </scriptItem>
@@ -80,7 +79,7 @@ HCGlobal().toggleNetworkControls()]]>
       <scriptItem id="h.hcglobal_toggle_tabs">
         <label>Toggle Tabs</label>
         <scriptCode>
-<![CDATA[from hctl import HCGlobal
+<![CDATA[from hclib import HCGlobal
 HCGlobal().toggleTabs()]]>
         </scriptCode>
       </scriptItem>
@@ -88,7 +87,7 @@ HCGlobal().toggleTabs()]]>
       <scriptItem id="h.hcglobal_toggle_stowbars">
         <label>Toggle Stowbars</label>
         <scriptCode>
-<![CDATA[from hctl import HCGlobal
+<![CDATA[from hclib import HCGlobal
 HCGlobal().toggleStowbars()]]>
         </scriptCode>
       </scriptItem>
@@ -96,7 +95,7 @@ HCGlobal().toggleStowbars()]]>
       <scriptItem id="h.hcglobal_update_main_menu_bar">
         <label>Update Main Menu Bar</label>
         <scriptCode>
-<![CDATA[from hctl import HCGlobal
+<![CDATA[from hclib import HCGlobal
 HCGlobal().updateMainMenuBar()]]>
         </scriptCode>
       </scriptItem>
