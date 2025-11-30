@@ -78,7 +78,7 @@ class HCCam:
         self.parms.globalz = hou.Vector3(0, 0, 1)
         self.parms.p = hou.Vector3(0, 0, 0)
         self.parms.r = hou.Vector3(0, 0, 0)
-        self.parms.t = hou.Vector3(0, 0, 0)
+        self.parms.t = hou.Vector3(0, 0, 2)
         self.parms.zoom = 10
         self.parms.ow = 10
         self.parms.deltat = 1
