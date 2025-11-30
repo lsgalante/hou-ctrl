@@ -19,26 +19,26 @@ def createEventHandler(uievent, pending_actions):
         hctab = HCTab(tab)
         hceditor = HCNetworkEditor(hctab)
         keymap = {
-            # Zoom
-            "=": hceditor.zoomIn,
-            "-": hceditor.zoomOut,
-            # Move view
-            "K": hceditor.translateViewUp,
-            "J": hceditor.translateViewDown,
-            "H": hceditor.translateViewLeft,
-            "L": hceditor.translateViewRight,
-            # Move node
-            "Ctrl+UpArrow": hceditor.translateNodes,
-            "Ctrl+DownArrow": hceditor.translateNodes,
-            "Ctrl+LeftArrow": hceditor.translateNodes,
-            "Ctrl+RightArrow": hceditor.translateNodes,
-            # Organize
-            "Ctrl+Shift+A": hceditor.arrangeNodes,
-            "Shift+D": hceditor.placeDot,
-            # Grid
-            "Shift+G": hceditor.nextGridMode,
-            # Update mode
-            "M": hceditor.nextUpdateMode
+            ## Zoom
+            '=': hceditor.zoomIn,
+            '-': hceditor.zoomOut,
+            ## Move view
+            'K': hceditor.translateViewUp,
+            'J': hceditor.translateViewDown,
+            'H': hceditor.translateViewLeft,
+            'L': hceditor.translateViewRight,
+            ## Move node
+            'Ctrl+K': lambda: hceditor.translateNodes('up'),
+            'Ctrl+J': lambda: hceditor.translateNodes('down'),
+            'Ctrl+H': lambda: hceditor.translateNodes('left'),
+            'Ctrl+L': lambda: hceditor.translateNodes('right'),
+            ## Organize
+            'Ctrl+Shift+A': hceditor.arrangeNodes,
+            'Shift+D': hceditor.placeDot,
+            ## Grid
+            'Shift+G': hceditor.nextGridMode,
+            ## Update mode
+            'M': hceditor.nextUpdateMode
         }
 
         key = uievent.key

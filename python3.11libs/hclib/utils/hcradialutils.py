@@ -19,7 +19,7 @@ def viewerRadialMain(**kwargs):
     menu = hou.ui.createRadialMenu('hcviewerradial', "HC Viewer Radial")
     createItem(
         pos=0,
-        label="keycam",
+        label="Keycam",
         script='from hclib import HCSceneViewer; HCSceneViewer(kwargs["pane"]).keycam()'
     )
     createItem(
@@ -48,7 +48,7 @@ def viewerRadialMain(**kwargs):
         submenu=True, script='from hclib import hcradialutils; hcradialutils.viewerRadialGlobal()'
     )
     createItem(
-        pos=3
+        pos=3,
         label="Layout",
         submenu=True, script='from hclib import hcradialutils; hcradialutils.viewerRadialLayout()'
     )

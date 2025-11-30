@@ -44,10 +44,12 @@ class HCNetworkEditor(HCTab):
     """
 
     def nextUpdateMode(self):
+        map = {
+            'updateMode.Manual': hou.updateMode.AutoUpdate,
+            'updateMode.AutoUpdate': hou.updateMode.Manual
+        }
         mode = hou.updateModeSetting()
-        modes = (hou.updateMode.Manual, hou.updateMode.AutoUpdate)
-        idx = (modes.index(mode) + 1) % len(modes)
-        hou.setUpdateMode(modes[idx])
+        hou.setUpdateMode(map[str(hou.updateModeSetting())])
 
     """
     Movement
@@ -60,24 +62,24 @@ class HCNetworkEditor(HCTab):
     def quantizeNodes(self):
         return
 
-    def translateNodes(self, key):
+    def translateNodes(self, direction):
         idxmap = {
-            'Ctrl+UpArrow': 1,
-            'Ctrl+DownArrow': 1,
-            'Ctrl+LeftArrow': 0,
-            'Ctrl+RightArrow': 0
+            'up': 1,
+            'down': 1,
+            'left': 0,
+            'right': 0
         }
         rectifiermap = {
-            'Ctrl+UpArrow': hou.Vector2(0, 0.85),
-            'Ctrl+DownArrow': hou.Vector2(0, -0.85),
-            'Ctrl+LeftArrow': hou.Vector2(0.-0.85, 0),
-            'Ctrl+RightArrow': hou.Vector2(0.85, 0)
+            'up': hou.Vector2(0, 0.85),
+            'down': hou.Vector2(0, -0.85),
+            'left': hou.Vector2(0.-0.85, 0),
+            'right': hou.Vector2(0.85, 0)
         }
         for node in self.nodes():
             p = node.position()
-            rectifier = rectifiermap[key]
+            rectifier = rectifiermap[direction]
             p += rectifier
-            idx = idxmap[key]
+            idx = idxmap[direction]
             val = p[idx]
             if val%1 <= 0.5:
                 val = math.floor(val)
@@ -95,7 +97,7 @@ class HCNetworkEditor(HCTab):
 
     def renameNode(self):
         node = self.currentNode()
-        name = hou.ui.readInput("'ename_node', buttons=("Yes", "No"))
+        name = hou.ui.readInput("Rename_node", buttons=("Yes", "No"))
         if name[0] == 0:
             node.setName(name[1])
 

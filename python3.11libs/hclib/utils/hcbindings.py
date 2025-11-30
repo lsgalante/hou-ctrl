@@ -163,7 +163,7 @@ def remove_assignments():
         ## h
         ('h.copy', 'alt+c'),
         ('h.cut', 'alt+x'),
-        ('h.find', 'alt+f''),
+        ('h.find', 'alt+f'),
         ## h.pane.wsheet
         ('h.pane.wsheet.home', 'h'),
         ('h.pane.wsheet.home_selected', 'shift+h'),
