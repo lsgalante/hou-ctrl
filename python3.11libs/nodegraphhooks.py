@@ -16,8 +16,7 @@ def createEventHandler(uievent, pending_actions):
     elif isinstance(uievent, KeyboardEvent) and \
     uievent.eventtype == 'keyhit':
         tab = uievent.editor
-        hctab = HCTab(tab)
-        hceditor = HCNetworkEditor(hctab)
+        hceditor = HCNetworkEditor(tab)
         keymap = {
             ## Zoom
             '=': lambda: hceditor.zoom('in'),
