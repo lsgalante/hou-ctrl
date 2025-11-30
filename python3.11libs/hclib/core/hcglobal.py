@@ -46,11 +46,11 @@ class HCGlobal:
         print(tops)
 
     def networkEditors(self):
-        network_editors = []
+        editors = []
         for tab in self.tabs():
             if tab.type() == hou.paneTabType.NetworkEditor:
-                network_editors.append(tab)
-        return network_editors
+                editors.append(tab)
+        return editors
 
     def pane(self):
         return hou.ui.paneUnderCursor()
@@ -59,11 +59,11 @@ class HCGlobal:
         return self.desktop().panes()
 
     def sceneViewers(self):
-        scene_viewers = []
+        viewers = []
         for tab in self.tabs():
             if tab.type() == hou.paneTabType.SceneViewer:
-                scene_viewers.append(tab)
-        return scene_viewers
+                viewers.append(tab)
+        return viewers
 
     ## tab and tabs functions intentionally do not use the hou.ui.paneTabUnderCursor method
     def tab(self):
@@ -74,9 +74,9 @@ class HCGlobal:
 
     def viewports(self):
         viewports = []
-        scene_viewers = self.sceneViewers
-        for scene_viewer in scene_viewers:
-            for viewport in scene_viewer.viewports():
+        viewers = self.sceneViewers
+        for viewer in viewers:
+            for viewport in viewer.viewports():
                 viewports.append(viewport)
         return viewports
 
@@ -87,32 +87,12 @@ class HCGlobal:
     def colorEditor(self):
         hou.ui.selectColor()
 
-    def debugger(self):
-        from ..ui.hcdebugger import HCDebugger
-
-        hc_debugger= HCDebugger()
-        hc_debugger.show()
-
     def floatingParameterEditor(self):
         tab = self.tab()
         if tab.type() == hou.paneTabType.NetworkEditor:
             hou.ui.showFloatingParameterEditor(self.node())
         else:
             hou.ui.setStatusMessage("Not a network editor", hou.severityType.Error)
-
-    def hcPanel(self):
-        from ..ui.hcpanel import HCPanel
-        from .hctab import HCTab
-
-        mainWindow = hou.qt.mainWindow()
-        children = mainWindow.children()
-        for child in children:
-            if isinstance(child, HCPanel):
-                child.close()
-                # return
-        hc_tab = HCTab(self.tab())
-        panel = HCPanel(hc_tab)
-        panel.show()
 
     def openFile(self):
         hou.ui.selectFile()
@@ -125,22 +105,19 @@ class HCGlobal:
         return hou.getPreference('autoSave')
 
     def keycam(self):
-        sceneViewer = self.sceneViewers()[0]
-        category = sceneViewer.pwd().childTypeCategory().name()
-        if category == "Object":
-            sceneViewer.setCurrentState('keycam')
-            hou.ui.setStatusMessage("Entered keycam in an obj/object context")
-        elif category == "Sop":
-            sceneViewer.setCurrentState("keycam")
-            hou.ui.setStatusMessage("Entered keycam in a sop/geometry context")
-        elif category == "Lop":
-            sceneViewer.setCurrentState('keycam')
-            hou.ui.setStatusMessage("Entered keycam in a lop context")
+        msgmap = {
+            "Object": "Entered keycam in an obj/object context",
+            "Sop": "Entered keycam in a sop/geometry context",
+            "Lop": "Entered keycam in a lop context"
+        }
+        viewer = self.sceneViewers()[0]
+        category = viewer.pwd().childTypeCategory().name()
+        if category in msgmap:
+            viewer.setCurrentState('keycam')
+            hou.ui.setStatusMessage(msgmap[category])
         else:
-            hou.ui.setStatusMessage(
-                "Keycam is only available in obj, sop and lop contexts",
-                hou.severityType.Error,
-            )
+            hou.ui.setStatusMessage("Keycam is only available in obj, sop and lop contexts",
+                hou.severityType.Error)
 
     def projectPath(self):
         return hou.hipFile.path()
@@ -198,57 +175,52 @@ class HCGlobal:
         self.shelfDock().show(1)
 
     def toggleMainMenuBar(self):
-        if hou.getPreference('showmenu.val') == '1':
-            hou.setPreference("showmenu.val", '0')
-        else:
-            hou.setPreference("showmenu.val", '1')
+        map = {'1': '0', '0': '1'}
+        hou.setPreference('showmenu.val', map[hou.getPreference('showmenu.val')])
 
     def toggleMenus(self):
         visible = 0
         panes = self.panes()
         tabs = self.tabs()
-        network_editors = self.networkEditors()
-        scene_viewers = self.sceneViewers()
-        # Main menu
+        editors = self.networkEditors()
+        viewers = self.sceneViewers()
+        ## Main menu
         if hou.getPreference('showmenu.val') == '1':
             visible = 1
-        # Network editor menu
-        elif any(network_editor.getPref('showmenu'') == '1' for network_editor in network_editors):
+        ## Network editor menu
+        elif any(editor.getPref('showmenu') == '1' for editor in editors):
             visible = 1
-        # Network controls
+        ## Network controls
         elif any(tab.isShowingNetworkControls() for tab in tabs):
             visible = 1
-        # Scene viewer toolbars (top, right, left)
-        elif any(scene_viewer.isShowingOperationBar() for scene_viewer in scene_viewers):
+        ## Scene viewer toolbars (top, right, left)
+        elif any(viewer.isShowingOperationBar() for viewer in viewers):
             visible = 1
-        elif any(
-            scene_viewer.isShowingDisplayOptionsBar() for scene_viewer in scene_viewers
-        ):
+        elif any(viewer.isShowingDisplayOptionsBar() for viewer in viewers):
             visible = 1
-        elif any(scene_viewer.isShowingSelectionBar() for scene_viewer in scene_viewers):
+        elif any(viewer.isShowingSelectionBar() for viewer in viewers):
             visible = 1
-        # Tabs
+        ## Tabs
         elif any(pane.isShowingPaneTabs() for pane in panes):
             visible = 1
 
-        # Set state
+        ## Set state
         hou.setPreference('showmenu.val', str(not visible))
-        for network_editor in network_editors:
-            network_editor.setPref('showmenu'', str(not visible))
+        for editor in editors:
+            editor.setPref('showmenu', str(not visible))
         for tab in tabs:
             tab.showNetworkControls(not visible)
         for pane in panes:
             pane.showPaneTabs(not visible)
-        for scene_viewer in scene_viewers:
-            scene_viewer.showOperationBar(not visible)
-            scene_viewer.showDisplayOptionsBar(not visible)
-            scene_viewer.showSelectionBar(not visible)
-        # Needs to be called twice for some reason
+        for viewer in viewers:
+            viewer.showOperationBar(not visible)
+            viewer.showDisplayOptionsBar(not visible)
+            viewer.showSelectionBar(not visible)
+        ## Needs to be called twice for some reason
         hou.ui.setHideAllMinimizedStowbars(visible)
         hou.ui.setHideAllMinimizedStowbars(visible)
 
     def toggleNetworkControls(self):
-        print('x')
         visible = 0
         tabs = self.tabs()
         for tab in tabs:
