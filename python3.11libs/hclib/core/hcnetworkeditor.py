@@ -156,28 +156,15 @@ class HCNetworkEditor(HCTab):
     def screenSize(self):
         return self.editor.screenBounds().size()
 
-    def translateViewUp(self):
-        xform = hou.Vector2(0, self.step_t * self.zoomLevel())
+    def translateView(self, direction):
+        xformmap = {
+            'up': hou.Vector2(0, self.step_t * self.zoomLevel()),
+            'down': hou.Vector2(0, self.step_t * self.zoomLevel() * -1),
+            'left': hou.Vector2(self.step_t * self.zoomLevel() * -1, 0),
+            'right': hou.Vector2(self.step_t * self.zoomLevel(), 0)
+        }
         bounds = self.visibleBounds()
-        bounds.translate(xform)
-        self.editor.setVisibleBounds(bounds)
-
-    def translateViewDown(self):
-        xform = hou.Vector2(0, self.step_t * self.zoomLevel() * -1)
-        bounds = self.visibleBounds()
-        bounds.translate(xform)
-        self.editor.setVisibleBounds(bounds)
-
-    def translateViewLeft(self):
-        xform = hou.Vector2(self.step_t * self.zoomLevel() * -1, 0)
-        bounds = self.visibleBounds()
-        bounds.translate(xform)
-        self.editor.setVisibleBounds(bounds)
-
-    def translateViewRight(self):
-        xform = hou.Vector2(self.step_t * self.zoomLevel(), 0)
-        bounds = self.visibleBounds()
-        bounds.translate(xform)
+        bounds.translate(xformmap[direction])
         self.editor.setVisibleBounds(bounds)
 
     def visibleBounds(self):
@@ -186,18 +173,15 @@ class HCNetworkEditor(HCTab):
     def visibleSize(self):
         return self.editor.visibleBounds().size()
 
-    def zoomIn(self):
-        scale = (0.75, 0.75)
+    def zoom(self, direction):
+        scalemap = {
+            'in': (0.75, 0.75),
+            'out': (1.25, 1.25)
+        }
         bounds = self.visibleBounds()
-        bounds.scale(scale)
+        bounds.scale(scalemap[direction])
         self.editor.setVisibleBounds(bounds)
 
     def zoomLevel(self):
         zoom_level = self.visibleSize()[0] / self.screenSize()[0]
         return zoom_level
-
-    def zoomOut(self):
-        scale = (1.25, 1.25)
-        bounds = self.visibleBounds()
-        bounds.scale(scale)
-        self.editor.setVisibleBounds(bounds)

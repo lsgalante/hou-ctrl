@@ -20,13 +20,13 @@ def createEventHandler(uievent, pending_actions):
         hceditor = HCNetworkEditor(hctab)
         keymap = {
             ## Zoom
-            '=': hceditor.zoomIn,
-            '-': hceditor.zoomOut,
+            '=': lambda: hceditor.zoom('in'),
+            '-': lambda: hceditor.zoom('out'),
             ## Move view
-            'K': hceditor.translateViewUp,
-            'J': hceditor.translateViewDown,
-            'H': hceditor.translateViewLeft,
-            'L': hceditor.translateViewRight,
+            'K': lambda: hceditor.translateView('up'),
+            'J': lambda: hceditor.translateView('down'),
+            'H': lambda: hceditor.translateView('left'),
+            'L': lambda: hceditor.translateView('right'),
             ## Move node
             'Ctrl+K': lambda: hceditor.translateNodes('up'),
             'Ctrl+J': lambda: hceditor.translateNodes('down'),
