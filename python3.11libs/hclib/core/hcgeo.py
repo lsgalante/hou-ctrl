@@ -4,9 +4,6 @@ class HCGeo:
     def __init__(self, viewer):
         self.viewer = viewer
         self.geo = self.get()
-        self.geo_type = hou.drawableGeometryType.Line
-        self.name = 'geo'
-        self.color = hou.Vector4((1, 1, 1, 0.5))
 
     def bbox(self):
         geo = self.get()
