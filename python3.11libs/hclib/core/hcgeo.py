@@ -20,16 +20,24 @@ class HCGeo:
         centroid = pt.position()
         return centroid
 
+    def context(self):
+        return self.viewer.pwd()
+
+    def contextType(self):
+        return self.viewer.pwd().type().name()
+
     def get(self):
-        pwd = self.viewer.pwd()
-        self.displayNode = None
-        self.context = pwd.childTypeCategory().label()
-        if self.context == 'dop':
-            self.displayNode = pwd.displayNode()
-        elif self.context == 'lop':
-            return None
-        elif self.context == 'Objects':
-            self.displayNode = pwd.children()[0].displayNode()
-        elif self.context == 'Geometry':
-            self.displayNode = pwd.displayNode()
+        map = {
+            'dop': self.node,
+            'lop': None,
+            'obj': self.viewer.pwd().children()[0].displayNode,
+            'Geometry': self.node
+        }
+        self.displayNode = map[self.contextType()]()
         return self.displayNode.geometry()
+
+    def node(self):
+        return self.viewer.currentNode()
+
+    def nodeType(self):
+        return self.viewer.currentNode().type().name()
