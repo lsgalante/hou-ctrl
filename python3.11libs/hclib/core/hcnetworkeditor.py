@@ -5,58 +5,21 @@ from .hctab import HCTab
 class HCNetworkEditor(HCTab):
     def __init__(self, tab):
         self.editor = tab
-        self.step_t = 160
-
-    """
-    Appearance
-    """
-
-    def nextGridMode(self):
-        modemap = {
-            '0': '1',
-            '1': '2',
-            '2': '0'
-        }
-        mode = int(self.editor.getPref('gridmode'))
-        self.setPref('gridmode', modemap[mode])
-
-    def toggleDimUnusedNodes(self):
-        dim = int(self.editor.getPref('dimunusednodes'))
-        self.setPref('dimunusednodes', str(not dim))
-
-    def toggleMenu(self):
-        visiblemap = {
-            '0': '1',
-            '1': '0'
-        }
-        visible = self.editor.getPref('showmenu')
-        self.editor.setPref('showmenu', visiblemap[visible])
+        self.deltat = 160
 
     """
     Context
     """
 
-    def pwd(self):
+    def context(self):
         return self.editor.pwd()
 
     """
-    Cooking
-    """
-
-    def nextUpdateMode(self):
-        map = {
-            'updateMode.Manual': hou.updateMode.AutoUpdate,
-            'updateMode.AutoUpdate': hou.updateMode.Manual
-        }
-        mode = hou.updateModeSetting()
-        hou.setUpdateMode(map[str(hou.updateModeSetting())])
-
-    """
-    Movement
+    Nodes
     """
 
     def arrangeNodes(self):
-        # node.parent().layoutChildren(horizontal_spacing=5, vertical_spacing=
+        # self.context().layoutChildren(horizontal_spacing=5, vertical_spacing=
         return
 
     def quantizeNodes(self):
@@ -76,10 +39,10 @@ class HCNetworkEditor(HCTab):
             'right': hou.Vector2(0.85, 0)
         }
         for node in self.nodes():
-            p = node.position()
             rectifier = rectifiermap[direction]
-            p += rectifier
             idx = idxmap[direction]
+            p = node.position()
+            p += rectifier
             val = p[idx]
             if val%1 <= 0.5:
                 val = math.floor(val)
@@ -88,15 +51,14 @@ class HCNetworkEditor(HCTab):
             p[idx] = val
             node.setPosition(p)
 
-    """
-    Nodes
-    """
+    def node(self):
+        return self.editor.currentNode()
 
     def nodes(self):
-        return self.pwd().selectedChildren()
+        return self.context().selectedChildren()
 
     def renameNode(self):
-        node = self.currentNode()
+        node = self.node()
         name = hou.ui.readInput("Rename_node", buttons=("Yes", "No"))
         if name[0] == 0:
             node.setName(name[1])
@@ -106,45 +68,64 @@ class HCNetworkEditor(HCTab):
     """
 
     def addNetworkBox(self):
-        networkbox = self.pwd().createNetworkBox()
-        networkbox.setPosition(self.currentNode().position())
+        networkbox = self.context().createNetworkBox()
+        networkbox.setPosition(self.node().position())
 
     def addStickyNote(self):
-        stickynote = self.pwd().createStickyNote()
-        p = self.cursorPosition()
+        stickynote = self.context().createStickyNote()
+        p = self.cursorPos()
         stickynote.setPosition(p)
         stickynote.setColor(hou.Color(0.71, 0.78, 1.0))
 
     def placeDot(self):
-        nodes = self.nodes()
-        if len(nodes) == 1:
-            context = nodes(0).parent()
-            dot = context.createNetworkDot()
+        if len(self.nodes()) == 1:
+            dot = self.context().createNetworkDot()
             dot.setInput(node)
             dot.setPosition(self.cursorPos())
-
-    """
-    Options
-    """
-
-    def getPref(self, pref):
-        return self.editor.getPref(pref)
-
-    def setPref(self, pref):
-        return self.editor.setPref(pref)
-
-    def toggleLocating(self):
-        self.setLocatingEnabled(not self.locatingEnabled())
 
     """
     Selection
     """
 
     def deselectAll(self):
-        self.currentNode().setSelected(False)
+        self.node().setSelected(False)
 
-    def selectDisplayNode(self):
-        self.pwd().setCurrent(True, True)
+    """
+    Settings
+    """
+
+    def toggleDimUnusedNodes(self):
+        map = {
+            '0': '1',
+            '1': '0'
+        }
+        mode = self.editor.getPref('dimunusednodes')
+        self.editor.setPref('dimunusednodes', map[mode])
+
+    def toggleGridMode(self):
+        map = {
+            '0': '1',
+            '1': '2',
+            '2': '0'
+        }
+        mode = self.editor.getPref('gridmode')
+        self.editor.setPref('gridmode', map[mode])
+
+    def toggleMenu(self):
+        map = {
+            '0': '1',
+            '1': '0'
+        }
+        mode = self.editor.getPref('showmenu')
+        self.editor.setPref('showmenu', map[mode])
+
+    def toggleUpdateMode(self):
+        map = {
+            'updateMode.Manual': hou.updateMode.AutoUpdate,
+            'updateMode.AutoUpdate': hou.updateMode.Manual
+        }
+        mode = str(hou.updateModeSetting())
+        hou.setUpdateMode(map[mode])
 
     """
     Viewport
@@ -153,35 +134,41 @@ class HCNetworkEditor(HCTab):
     def cursorPos(self):
         return self.editor.cursorPosition()
 
+    def bounds(self):
+        return self.editor.visibleBounds()
+
+    def frameAll(self):
+        self.requestZoomReset()
+
     def screenSize(self):
         return self.editor.screenBounds().size()
 
-    def translateView(self, direction):
-        xformmap = {
-            'up': hou.Vector2(0, self.step_t * self.zoomLevel()),
-            'down': hou.Vector2(0, self.step_t * self.zoomLevel() * -1),
-            'left': hou.Vector2(self.step_t * self.zoomLevel() * -1, 0),
-            'right': hou.Vector2(self.step_t * self.zoomLevel(), 0)
-        }
-        bounds = self.visibleBounds()
-        bounds.translate(xformmap[direction])
+    def setBounds(self, bounds):
         self.editor.setVisibleBounds(bounds)
 
-    def visibleBounds(self):
-        return self.editor.visibleBounds()
+    def size(self):
+        return self.bounds().size()
 
-    def visibleSize(self):
-        return self.editor.visibleBounds().size()
+    def translateView(self, direction):
+        xformmap = {
+            'up': hou.Vector2(0, self.deltat * self.zoomLevel()),
+            'down': hou.Vector2(0, self.deltat * self.zoomLevel() * -1),
+            'left': hou.Vector2(self.deltat * self.zoomLevel() * -1, 0),
+            'right': hou.Vector2(self.deltat * self.zoomLevel(), 0)
+        }
+        bounds = self.bounds()
+        bounds.translate(xformmap[direction])
+        self.setBounds(bounds)
 
     def zoom(self, direction):
         scalemap = {
             'in': (0.75, 0.75),
             'out': (1.25, 1.25)
         }
-        bounds = self.visibleBounds()
+        bounds = self.bounds()
         bounds.scale(scalemap[direction])
-        self.editor.setVisibleBounds(bounds)
+        self.editor.setBounds(bounds)
 
     def zoomLevel(self):
-        zoom_level = self.visibleSize()[0] / self.screenSize()[0]
-        return zoom_level
+        zoomlevel = self.size()[0] / self.size()[0]
+        return zoomlevel

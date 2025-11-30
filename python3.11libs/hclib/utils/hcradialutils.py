@@ -144,6 +144,11 @@ def editorRadialMain(**kwargs):
         script='from hclib import HCNetworkEditor; HCNetworkEditor(kwargs["pane"]).toggleMenu()'
     )
     createItem(
+        pos=7,
+        label="Frame all",
+        script='from hclib import HCNetworkEditor; HCNetworkEditor(kwargs["pabe"]).frameAll()'
+    )
+    createItem(
         pos=1,
         submenu=True,
         label="Global",

@@ -125,6 +125,8 @@ def clear_assignments():
         'h.pane.wsheet.batch_rename',
         'h.pane.wsheet.color_palette',
         'h.pane.wsheet.doautomovenodes',
+        'h.pane.wsheet.home',
+        'h.pane.wsheet.home_selected',
         'h.pane.wsheet.up',
         'h.pane.wsheet.down',
         'h.pane.wsheet.left',
@@ -164,9 +166,6 @@ def remove_assignments():
         ('h.copy', 'alt+c'),
         ('h.cut', 'alt+x'),
         ('h.find', 'alt+f'),
-        ## h.pane.wsheet
-        ('h.pane.wsheet.home', 'h'),
-        ('h.pane.wsheet.home_selected', 'shift+h'),
     )
 
 def add_assignments():
