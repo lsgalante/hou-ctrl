@@ -27,8 +27,8 @@ class HCFunctionPanel(QtWidgets.QDialog):
 
         ## PATHS
         self.project_path = self.hc_global.projectPath()
-        ct = self.project_path.count("/")
-        self.project_path = self.project_path.split("/", ct - 2)[-1]
+        ct = self.project_path.count('/')
+        self.project_path = self.project_path.split('/', ct - 2)[-1]
         self.network_path = self.hc_tab.pwd()
 
         ## LAYOUT
@@ -56,8 +56,8 @@ class HCFunctionPanel(QtWidgets.QDialog):
         )
         self.tab_type_names = (
             "ApexEditor",
-            "CompositorViewer", "
-            DetailsView",
+            "CompositorViewer",
+            "DetailsView",
             "NetworkEditor",
             "Parm",
             "PythonPanel",
@@ -112,9 +112,9 @@ class FunctionPanel(QtWidgets.QFrame):
                 modifier = None
 
                 # Macos or linux
-                if sys == "Darwin":
+                if sys == 'Darwin':
                     modifier = Qt.MetaModifier
-                elif sys == "linux":
+                elif sys == 'linux':
                     modifier = Qt.ControlModifier
 
                 # Highlight next item
@@ -189,21 +189,21 @@ class FunctionPanel(QtWidgets.QFrame):
             index = items.index(current_item)
             item = items[index]
             label = item.text()
-            obj_name, method_name = label.split(".")
+            obj_name, method_name = label.split('.')
             # Populate functions based on context
-            if obj_name == "HCNetworkEditor":
+            if obj_name == 'HCNetworkEditor':
                 method = getattr(self.owner.hcNetworkEditor, method_name)
                 method()
-            elif obj_name == "HCPane":
+            elif obj_name == 'HCPane':
                 method = getattr(self.owner.hcPane, method_name)
                 method()
-            elif obj_name == "HCTab":
+            elif obj_name == 'HCTab':
                 method = getattr(self.owner.hcTab, method_name)
                 method()
-            elif obj_name == "HCSceneViewer":
+            elif obj_name == 'HCSceneViewer':
                 method = getattr(self.owner.hcSceneViewer, method_name)
                 method()
-            elif obj_name == "HCGlobal":
+            elif obj_name == 'HCGlobal':
                 method = getattr(self.owner.hcGlobal, method_name)
                 method()
             # Close window on function execution
@@ -218,28 +218,28 @@ class FunctionPanel(QtWidgets.QFrame):
             items = []
 
             for name, obj in inspect.getmembers(HCNetworkEditor, inspect.isfunction):
-                if hasattr(obj, "interactive") and obj.interactive:
-                    items.append(("HCNetworkEditor", name))
+                if hasattr(obj, 'interactive') and obj.interactive:
+                    items.append(('HCNetworkEditor', name))
 
             for name, obj in inspect.getmembers(hcu.HCPane, inspect.isfunction):
-                if hasattr(obj, "interactive") and obj.interactive:
-                    items.append(("HCPane", name))
+                if hasattr(obj, 'interactive') and obj.interactive:
+                    items.append(('HCPane', name))
 
             for name, obj in inspect.getmembers(hcu.HCTab, inspect.isfunction):
-                if hasattr(obj, "interactive") and obj.interactive:
-                    items.append(("HCTab", name))
+                if hasattr(obj, 'nteractive') and obj.interactive:
+                    items.append(('HCTab', name))
 
             if self.owner.hc_tab.type() == hou.paneTabType.SceneViewer:
                 for name, obj in inspect.getmembers(HCSceneViewer, inspect.isfunction):
-                    if hasattr(obj, "interactive") and obj.interactive:
-                        items.append(("HCSceneViewer", name))
+                    if hasattr(obj, 'interactive') and obj.interactive:
+                        items.append(('HCSceneViewer', name))
 
             for name, obj in inspect.getmembers(HCGlobal, inspect.isfunction):
-                if hasattr(obj, "interactive") and obj.interactive:
-                    items.append(("HCGlobal", name))
+                if hasattr(obj, 'interactive') and obj.interactive:
+                    items.append(('HCGlobal', name))
 
             for item in items:
-                self.addItem(item[0] + "." + item[1])
+                self.addItem(item[0] + '.' + item[1])
 
         def setIndex(self, index):
             items = self.items()

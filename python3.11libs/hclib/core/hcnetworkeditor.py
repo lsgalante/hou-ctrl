@@ -4,7 +4,6 @@ from .hctab import HCTab
 
 class HCNetworkEditor(HCTab):
     def __init__(self, tab):
-        # super().__init__(hctab.tab)
         self.editor = tab
         self.step_t = 160
 
@@ -14,24 +13,24 @@ class HCNetworkEditor(HCTab):
 
     def nextGridMode(self):
         modemap = {
-            "0": "1",
-            "1": "2",
-            "2": "0"
+            '0': '1',
+            '1': '2',
+            '2': '0'
         }
-        mode = int(self.editor.getPref("gridmode"))
-        self.setPref("gridmode", modemap[mode])
+        mode = int(self.editor.getPref('gridmode'))
+        self.setPref('gridmode', modemap[mode])
 
     def toggleDimUnusedNodes(self):
-        dim = int(self.tab.getPref("dimunusednodes"))
-        self.setPref("dimunusednodes", str(not dim))
+        dim = int(self.editor.getPref('dimunusednodes'))
+        self.setPref('dimunusednodes', str(not dim))
 
     def toggleMenu(self):
         visiblemap = {
-            "0": "1",
-            "1": "0"
+            '0': '1',
+            '1': '0'
         }
-        visible = self.tab.getPref("showmenu")
-        self.tab.setPref("showmenu", visiblemap[visible])
+        visible = self.editor.getPref('showmenu')
+        self.editor.setPref('showmenu', visiblemap[visible])
 
     """
     Context
@@ -63,25 +62,23 @@ class HCNetworkEditor(HCTab):
 
     def translateNodes(self, key):
         idxmap = {
-            "Ctrl+UpArrow": 1,
-            "Ctrl+DownArrow": 1,
-            "Ctrl+LeftArrow": 0,
-            "Ctrl+RightArrow": 0
+            'Ctrl+UpArrow': 1,
+            'Ctrl+DownArrow': 1,
+            'Ctrl+LeftArrow': 0,
+            'Ctrl+RightArrow': 0
         }
         rectifiermap = {
-            "Ctrl+UpArrow": hou.Vector2(0, 0.85),
-            "Ctrl+DownArrow": hou.Vector2(0, -0.85),
-            "Ctrl+LeftArrow": hou.Vector2(0.-0.85, 0),
-            "Ctrl+RightArrow": hou.Vector2(0.85, 0)
+            'Ctrl+UpArrow': hou.Vector2(0, 0.85),
+            'Ctrl+DownArrow': hou.Vector2(0, -0.85),
+            'Ctrl+LeftArrow': hou.Vector2(0.-0.85, 0),
+            'Ctrl+RightArrow': hou.Vector2(0.85, 0)
         }
         for node in self.nodes():
             p = node.position()
-            print(p)
             rectifier = rectifiermap[key]
             p += rectifier
             idx = idxmap[key]
             val = p[idx]
-            print(val)
             if val%1 <= 0.5:
                 val = math.floor(val)
             else:
@@ -98,7 +95,7 @@ class HCNetworkEditor(HCTab):
 
     def renameNode(self):
         node = self.currentNode()
-        name = hou.ui.readInput("rename_node", buttons=("yes", "no"))
+        name = hou.ui.readInput("'ename_node', buttons=("Yes", "No"))
         if name[0] == 0:
             node.setName(name[1])
 

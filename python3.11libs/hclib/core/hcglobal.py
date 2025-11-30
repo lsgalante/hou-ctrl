@@ -65,7 +65,7 @@ class HCGlobal:
                 scene_viewers.append(tab)
         return scene_viewers
 
-    # tab and tabs functions intentionally do not use the hou.ui.paneTabUnderCursor method
+    ## tab and tabs functions intentionally do not use the hou.ui.paneTabUnderCursor method
     def tab(self):
         return self.pane().currentTab()
 
@@ -122,19 +122,19 @@ class HCGlobal:
     """
 
     def autosave(self):
-        return hou.getPreference("autoSave")
+        return hou.getPreference('autoSave')
 
     def keycam(self):
         sceneViewer = self.sceneViewers()[0]
         category = sceneViewer.pwd().childTypeCategory().name()
         if category == "Object":
-            sceneViewer.setCurrentState("keycam")
+            sceneViewer.setCurrentState('keycam')
             hou.ui.setStatusMessage("Entered keycam in an obj/object context")
         elif category == "Sop":
             sceneViewer.setCurrentState("keycam")
             hou.ui.setStatusMessage("Entered keycam in a sop/geometry context")
         elif category == "Lop":
-            sceneViewer.setCurrentState("keycam")
+            sceneViewer.setCurrentState('keycam')
             hou.ui.setStatusMessage("Entered keycam in a lop context")
         else:
             hou.ui.setStatusMessage(
@@ -155,7 +155,7 @@ class HCGlobal:
         load()
 
     def reloadKeycam(self):
-        hou.ui.reloadViewerState("keycam")
+        hou.ui.reloadViewerState('keycam')
 
     def removeEventLoopCallbacks(self):
         callbacks = hou.ui.eventLoopCallbacks()
@@ -181,8 +181,8 @@ class HCGlobal:
         hou.ui.triggerUpdate()
 
     def toggleAutoSave(self):
-        map = {"0": "1", "1": "0"}
-        hou.setPreference("autoSave", map[hou.getPreference("autoSave")])
+        map = {'0': '1', '1': '0'}
+        hou.setPreference('autoSave', map[hou.getPreference('autoSave')])
 
     def updateMainMenuBar(self):
         hou.ui.updateMainMenuBar()
@@ -198,10 +198,10 @@ class HCGlobal:
         self.shelfDock().show(1)
 
     def toggleMainMenuBar(self):
-        if hou.getPreference("showmenu.val") == "1":
-            hou.setPreference("showmenu.val", "0")
+        if hou.getPreference('showmenu.val') == '1':
+            hou.setPreference("showmenu.val", '0')
         else:
-            hou.setPreference("showmenu.val", "1")
+            hou.setPreference("showmenu.val", '1')
 
     def toggleMenus(self):
         visible = 0
@@ -210,10 +210,10 @@ class HCGlobal:
         network_editors = self.networkEditors()
         scene_viewers = self.sceneViewers()
         # Main menu
-        if hou.getPreference("showmenu.val") == "1":
+        if hou.getPreference('showmenu.val') == '1':
             visible = 1
         # Network editor menu
-        elif any(network_editor.getPref("showmenu") == "1" for network_editor in network_editors):
+        elif any(network_editor.getPref('showmenu'') == '1' for network_editor in network_editors):
             visible = 1
         # Network controls
         elif any(tab.isShowingNetworkControls() for tab in tabs):
@@ -232,9 +232,9 @@ class HCGlobal:
             visible = 1
 
         # Set state
-        hou.setPreference("showmenu.val", str(not visible))
+        hou.setPreference('showmenu.val', str(not visible))
         for network_editor in network_editors:
-            network_editor.setPref("showmenu", str(not visible))
+            network_editor.setPref('showmenu'', str(not visible))
         for tab in tabs:
             tab.showNetworkControls(not visible)
         for pane in panes:
@@ -248,6 +248,7 @@ class HCGlobal:
         hou.ui.setHideAllMinimizedStowbars(visible)
 
     def toggleNetworkControls(self):
+        print('x')
         visible = 0
         tabs = self.tabs()
         for tab in tabs:

@@ -173,14 +173,14 @@ class HCSceneViewer(HCTab):
 
     def setLayout(self, layout):
         layoutmap = {
-            "DoubleSide": hou.geometryViewportLayout.DoubleSide,
-            "DoubleStack": hou.geometryViewportLayout.DoubleStack,
-            "Quad": hou.geometryViewportLayout.Quad,
-            "QuadBottomSplit": hou.geometryViewportLayout.QuadBottomSplit,
-            "QuadLeftSplit": hou.geometryViewportLayout.QuadLeftSplit,
-            "Single": hou.geometryViewportLayout.Single,
-            "TripleBottomSplit": hou.geometryViewportLayout.TripleBottomSplit,
-            "TripleLeftSplit": hou.geometryViewportLayout.TripleLeftSplit
+            'DoubleSide': hou.geometryViewportLayout.DoubleSide,
+            'DoubleStack': hou.geometryViewportLayout.DoubleStack,
+            'Quad': hou.geometryViewportLayout.Quad,
+            'QuadBottomSplit': hou.geometryViewportLayout.QuadBottomSplit,
+            'QuadLeftSplit': hou.geometryViewportLayout.QuadLeftSplit,
+            'Single': hou.geometryViewportLayout.Single,
+            'TripleBottomSplit': hou.geometryViewportLayout.TripleBottomSplit,
+            'TripleLeftSplit': hou.geometryViewportLayout.TripleLeftSplit
         }
         self.viewer.setViewportLayout(layoutmap[layout])
 
@@ -262,7 +262,7 @@ class HCSceneViewer(HCTab):
         }
         context = self.pwd().childTypeCategory().name()
         if context in contextmap:
-            self.viewer.setCurrentState("keycam")
+            self.viewer.setCurrentState('keycam')
             hou.ui.setStatusMessage(contextmap[context])
         else:
             hou.ui.setStatusMessage("No obj, sop or lop context", hou.severityType.Error)

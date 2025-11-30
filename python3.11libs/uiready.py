@@ -7,13 +7,13 @@ hcglobal = HCGlobal()
 hcglobal.reloadHotkeys()
 hcglobal.toggleStowbars()
 
-# Set network grid points to on
+## Set network grid points to on
 # networkeditors = desktop.getNetworkEditors()
 # for networkeditor in networkeditors:
     # networkeditor.setPref("gridmode", "1")
 
 
-# Qt
+## Qt
 # if qt_commands:
 #     window = hou.qt.mainWindow()
 #     window.setWindowFlags(Qt.FramelessWindowHint)
