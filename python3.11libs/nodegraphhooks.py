@@ -43,7 +43,7 @@ def createEventHandler(uievent, pending_actions):
 
         key = uievent.key
         if key in keymap:
-            func = keymap[key](key)
+            func = keymap[key]()
             return None, True
         else:
             return None, False
