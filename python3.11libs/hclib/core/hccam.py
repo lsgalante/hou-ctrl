@@ -109,7 +109,7 @@ class HCCam:
         self.parms.t += self.parms.p
         self.parms.localx *= m
         self.parms.localy *= m
-        self.localz *= m
+        self.parms.localz *= m
 
     def setOrthoZoom(self, level):
         self.parms.ow = zoomlevel
