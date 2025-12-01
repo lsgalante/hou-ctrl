@@ -35,9 +35,9 @@ def createEventHandler(uievent, pending_actions):
             'Ctrl+Shift+A': hceditor.arrangeNodes,
             'Shift+D': hceditor.placeDot,
             ## Grid
-            'Shift+G': hceditor.nextGridMode,
+            'Shift+G': hceditor.toggleGridMode,
             ## Update mode
-            'M': hceditor.nextUpdateMode
+            'M': hceditor.toggleUpdateMode
         }
 
         key = uievent.key
