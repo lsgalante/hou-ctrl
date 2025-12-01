@@ -17,12 +17,6 @@ class HCCam:
         self.parms.t = hou.Vector3(centroid)
         self.parms.p = hou.Vector3(centroid)
 
-    def doZoom(self, direction):
-        signmap = {'out': 1, 'in': -1}
-        sign = signmap[direction]
-        move = self.parms.localz * self.parms.deltazoom * sign
-        self.parms.t += move
-
     def fitAspectRatio(self):
         self.cam.parm('resx').set(1000)
         self.cam.parm('resy').set(1000)
@@ -56,63 +50,44 @@ class HCCam:
             self.parms.p = [0, 0, self.parms.zoom * -1]
             self.parms.ow = 10
 
-    def nextProjection(self):
-        projectionmap = {
-            'perspective': 'ortho',
-            'ortho': 'perspective'
-        }
-        parm = self.cam.parm('projection')
-        parm.set(projectionmap[parm.evalAsString()])
-
-    def orthoZoom(self, direction):
-        signmap = {'out': 1, 'in': -1}
-        sign = signmap[direction]
-        self.parms.ow += self.parms.deltazoom * sign
-
     def reset(self):
+        self.parms.t = hou.Vector3(0, 0, 2)
+        self.parms.r = hou.Vector3(0, 0, 0)
+        self.parms.p = hou.Vector3(0, 0, 0)
+        self.parms.zoom = 10
+        self.parms.ow = 10
         self.parms.localx = hou.Vector3(1, 0, 0)
         self.parms.localy = hou.Vector3(0, 1, 0)
         self.parms.localz = hou.Vector3(0, 0, 1)
         self.parms.globalx = hou.Vector3(1, 0, 0)
         self.parms.globaly = hou.Vector3(0, 1, 0)
         self.parms.globalz = hou.Vector3(0, 0, 1)
-        self.parms.p = hou.Vector3(0, 0, 0)
-        self.parms.r = hou.Vector3(0, 0, 0)
-        self.parms.t = hou.Vector3(0, 0, 2)
-        self.parms.zoom = 10
-        self.parms.ow = 10
         self.parms.deltat = 1
         self.parms.deltar = 15
         self.parms.deltazoom = 1
 
-    def rotate(self, direction):
+    def rotate(self, dir):
         axismap = {
             'up': self.parms.localx,
             'down': self.parms.localx,
             'left': self.parms.globaly,
             'right': self.parms.globaly,
         }
-        signmap = {'up': 1, 'down': -1, 'left': -1, 'right': 1}
+        dirmapmap = {'up': 1, 'down': -1, 'left': -1, 'right': 1}
         deltamap = {
             'up': hou.Vector3(self.parms.deltar, 0, 0),
             'down': hou.Vector3(self.parms.deltar, 0, 0),
             'left': hou.Vector3(0, self.parms.deltar, 0),
             'right': hou.Vector3(0, self.parms.deltar, 0),
         }
-        axis = axismap[direction]
-        sign = signmap[direction]
-        delta = deltamap[direction] * sign
-        self.parms.r += delta
-        m = hou.hmath.buildRotateAboutAxis(axis, self.parms.deltar * sign)
+        self.parms.r += deltamap[dir] * sign
+        m = hou.hmath.buildRotateAboutAxis(axismap[dir], self.parms.deltar * dirmap[dir])
         self.parms.t -= self.parms.p
         self.parms.t *= m
         self.parms.t += self.parms.p
         self.parms.localx *= m
         self.parms.localy *= m
         self.parms.localz *= m
-
-    def setOrthoZoom(self, level):
-        self.parms.ow = zoomlevel
 
     def setView(self):
         viewmap = {
@@ -125,29 +100,44 @@ class HCCam:
         }
         self.hccam.r = viewmap[self.parms.view]
 
-    def setZoom(self, level):
-        move = self.parms.localz * level
+    def setZoom(self, amt):
+        move = self.parms.localz * amt
         self.parms.t += move
 
-    def translate(self, direction):
+    def translate(self, dir):
         axismap = {
             'up': self.parms.localy,
             'down': self.parms.localy,
             'left': self.parms.localx,
             'right': self.parms.localx,
         }
-        signmap = {'up': 1, 'down': -1, 'left': -1, 'right': 1}
-        axis = axismap[direction]
-        sign = signmap[direction]
-        move = axis * self.parms.deltat * sign
+        dirmap = {'up': 1, 'down': -1, 'left': -1, 'right': 1}
+        move = axismap[dir] * self.parms.deltat * dirmap[dir]
         self.parms.t += move
         self.parms.p += move
+
+    def toggleProjection(self):
+        projectionmap = {
+            'perspective': 'ortho',
+            'ortho': 'perspective'
+        }
+        parm = self.cam.parm('projection')
+        parm.set(projectionmap[parm.evalAsString()])
 
     def unlock(self):
         self.viewport().lockCameraToView(0)
 
     def viewport(self):
         return self.viewer.viewports()[3]
+
+    def zoom(self, dir):
+        dirmap = {'out': 1, 'in': -1}
+        move = self.parms.localz * self.parms.deltazoom * dirmap[dir]
+        self.parms.t += move
+
+    def zoomOrtho(self, dir):
+        dirmap = {'out': 1, 'in': -1}
+        self.parms.ow += self.parms.deltazoom * dirmap[dir]
 
 
 class Parms:
@@ -156,6 +146,7 @@ class Parms:
         self._t = hou.Vector3(0, 0, 0)
         self._r = hou.Vector3(0, 0, 0)
         self._p = hou.Vector3(0, 0, 0)
+        self._ow = 10
         self._projection = 'perspective'
         self.localx = hou.Vector3(1, 0, 0)
         self.localy = hou.Vector3(0, 1, 0)
@@ -164,11 +155,11 @@ class Parms:
         self.globaly = hou.Vector3(0, 1, 0)
         self.globalz = hou.Vector3(0, 0, 1)
         self.zoom = 10
-        self.ow = 10
         self.deltat = 1
         self.deltar = 15
         self.deltazoom = 1
         self.target = None
+
 
     @property
     def t(self):
@@ -196,6 +187,14 @@ class Parms:
     def p(self, val):
         self._p = val
         self.cam.parmTuple('p').set(val)
+
+    @property ow(self):
+        return self._ow
+
+    @ow.setter
+    def ow(self, val):
+        self._ow = val
+        self.cam.parm('orthowidth').set(val)
 
     @property
     def projection(self):
