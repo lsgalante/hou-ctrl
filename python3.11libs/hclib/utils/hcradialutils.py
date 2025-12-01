@@ -93,27 +93,27 @@ def viewerRadialLayout(**kwargs):
     createItem(
         pos=3,
         label="QuadBottomSplit",
-        script='from hclib import HCSceneViewer; HCSceneViewer(kwargs["pane"].setLayout("QuadBottomSplit")'
+        script='from hclib import HCSceneViewer; HCSceneViewer(kwargs["pane"]).setLayout("QuadBottomSplit")'
     )
     createItem(
         pos=4,
         label="QuadLeftSplit",
-        script='from hclib import HCSceneViewer; HCSceneViewer(kwargs["pane"].setLayout("QuadLeftSplit")'
+        script='from hclib import HCSceneViewer; HCSceneViewer(kwargs["pane"]).setLayout("QuadLeftSplit")'
     )
     createItem(
         pos=5,
         label="Single",
-        script='from hclib import HCSceneViewer; HCSceneViewer(kwargs["pane"].setLayout("Single")'
+        script='from hclib import HCSceneViewer; HCSceneViewer(kwargs["pane"]).setLayout("Single")'
     )
     createItem(
         pos=6,
         label="TripleBottomSplit",
-        script='from hclib import HCSceneViewer; HCSceneViewer(kwargs["pane"].setLayout("TripleBottomSplit")'
+        script='from hclib import HCSceneViewer; HCSceneViewer(kwargs["pane"]).setLayout("TripleBottomSplit")'
     )
     createItem(
         pos=7,
         label="TripleLeftSplit",
-        script='from hclib import HCSceneViewer; HCSceneViewer(kwargs["pane"].setLayout("TripleLeftSplit")'
+        script='from hclib import HCSceneViewer; HCSceneViewer(kwargs["pane"]).setLayout("TripleLeftSplit")'
     )
     return menu
 
@@ -122,17 +122,17 @@ def viewerRadialPane(**kwargs):
     createItem(
         pos=0,
         label="Tabs",
-        script='from hclib import HCTab; HCTab(kwargs["pane"].hcPane().toggleTabs()'
+        script='from hclib import HCTab; HCTab(kwargs["pane"]).hcPane().toggleTabs()'
     )
     createItem(
         pos=1,
         label="Path",
-        script='from hclib import HCTab; HCTab(kwargs["pane"].hcPane().toggleNetworkControls()'
+        script='from hclib import HCTab; HCTab(kwargs["pane"]).toggleNetworkControls()'
     )
     createItem(
         pos=2,
         label="Maximize",
-        script='from hclib import HCTab; HCTab(kwargs["pane"].hcPane().toggleMaximize()'
+        script='from hclib import HCTab; HCTab(kwargs["pane"]).hcPane().toggleMaximize()'
     )
     return menu
 
@@ -146,7 +146,7 @@ def editorRadialMain(**kwargs):
     createItem(
         pos=7,
         label="Frame all",
-        script='from hclib import HCNetworkEditor; HCNetworkEditor(kwargs["pabe"]).frameAll()'
+        script='from hclib import HCNetworkEditor; HCNetworkEditor(kwargs["pane"]).frameAll()'
     )
     createItem(
         pos=1,
@@ -191,11 +191,11 @@ def editorRadialPane(**kwargs):
     createItem(
         pos=6,
         label="Maximize",
-        script='from hclib import HCTab; HCTab(kwargs["pane"]).hcPane().toggleNetworkControls()'
+        script='from hclib import HCTab; HCTab(kwargs["pane"]).hcPane().toggleMaximize()'
     )
     createItem(
         pos=5,
         label="Path",
-        script='from hclib import HCTab; HCTab(kwargs["pane"]).hcPane().toggleMaximize()'
+        script='from hclib import HCTab; HCTab(kwargs["pane"]).toggleNetworkControls()'
     )
     return menu
