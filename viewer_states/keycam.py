@@ -304,7 +304,7 @@ class State(object):
     def onMenuAction(self, kwargs):
         menumap = {
             'frame': lambda: self.hccam.frame(),
-            'reset': lambda: self.parms.reset(),
+            'reset': lambda: self.hccam.reset(),
             'bbox': lambda: self.guides.bbox.show(kwargs['bbox']),
             'cam_axis': lambda: self.guides.cam_axis.show(kwargs['cam_axis']),
             'pivot_axis': lambda: self.guides.pivot_axis.show(kwargs['pivot_axis']),
@@ -314,7 +314,7 @@ class State(object):
             'ray': lambda: self.guides.ray.show(kwargs['ray'])
         }
 
-        return functionmap[kwargs['menu_item']]()
+        return menumap[kwargs['menu_item']]()
 
     def onParmChangeEvent(self, kwargs):
         parmmap = {
