@@ -5,7 +5,7 @@ from .hctab import HCTab
 class HCNetworkEditor(HCTab):
     def __init__(self, tab):
         self.editor = tab
-        self.deltat = 160
+        self.deltat = 2
 
     """
     Context
@@ -138,7 +138,7 @@ class HCNetworkEditor(HCTab):
         return self.editor.visibleBounds()
 
     def frameAll(self):
-        self.requestZoomReset()
+        self.editor.requestZoomReset()
 
     def screenSize(self):
         return self.editor.screenBounds().size()
@@ -167,7 +167,7 @@ class HCNetworkEditor(HCTab):
         }
         bounds = self.bounds()
         bounds.scale(scalemap[direction])
-        self.editor.setBounds(bounds)
+        self.setBounds(bounds)
 
     def zoomLevel(self):
         zoomlevel = self.size()[0] / self.size()[0]
