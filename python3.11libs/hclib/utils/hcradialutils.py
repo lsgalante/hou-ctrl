@@ -24,13 +24,13 @@ def viewerRadialMain(**kwargs):
     )
     createItem(
         pos=7,
-        label="Operation bar",
-        script='from hclib import HCSceneViewer; HCSceneViewer(kwargs["pane"]).toggleOperationBar()'
+        label="Display bar",
+        script='from hclib import HCSceneViewer; HCSceneViewer(kwargs["pane"]).toggleDisplayOptionsToolbar()'
     )
     createItem(
         pos=6,
-        label="Display bar",
-        script='from hclib import HCSceneViewer; HCSceneViewer(kwargs["pane"]).toggleDisplayOptionsToolbar()'
+        label="Operation bar",
+        script='from hclib import HCSceneViewer; HCSceneViewer(kwargs["pane"]).toggleOperationBar()'
     )
     createItem(
         pos=5,
@@ -38,38 +38,9 @@ def viewerRadialMain(**kwargs):
         script='from hclib import HCSceneViewer; HCSceneViewer(kwargs["pane"]).toggleSelectionBar()'
     )
     createItem(
-        pos=1,
-        label="Pane",
-        submenu=True, script='from hclib import hcradialutils; hcradialutils.viewerRadialPane()'
-    )
-    createItem(
-        pos=2,
-        label="Global",
-        submenu=True, script='from hclib import hcradialutils; hcradialutils.viewerRadialGlobal()'
-    )
-    createItem(
-        pos=3,
-        label="Layout",
-        submenu=True, script='from hclib import hcradialutils; hcradialutils.viewerRadialLayout()'
-    )
-    return menu
-
-def viewerRadialGlobal(**kwargs):
-    menu = hou.ui.createRadialMenu('hcviewerradial', "HC Viewer Radial")
-    createItem(
-        pos=0,
-        label="Tabs",
-        script='from hclib import HCGlobal; HCGlobal().toggleTabs()'
-    )
-    createItem(
-        pos=1,
-        label="Paths",
-        script='from hclib import HCGlobal; HCGlobal().toggleNetworkControls()'
-    )
-    createItem(
-        pos=2,
-        label="Stowbars",
-        script='from hclib import HCGlobal; HCGlobal().toggleStowbars()'
+        pos=4,
+        label="UI",
+        submenu=True, script='from hclib import hcradialutils; hcradialutils.viewerRadialUI()'
     )
     return menu
 
@@ -117,24 +88,45 @@ def viewerRadialLayout(**kwargs):
     )
     return menu
 
-def viewerRadialPane(**kwargs):
+def viewerRadialUI(**kwargs):
     menu = hou.ui.createRadialMenu('hcviewerradial', "HC Viewer Radial")
     createItem(
         pos=0,
-        label="Tabs",
+        label="Pane tabs",
         script='from hclib import HCTab; HCTab(kwargs["pane"]).hcPane().toggleTabs()'
     )
     createItem(
-        pos=1,
-        label="Path",
+        pos=7,
+        label="Pane path",
         script='from hclib import HCTab; HCTab(kwargs["pane"]).toggleNetworkControls()'
     )
     createItem(
-        pos=2,
-        label="Maximize",
+        pos=6,
+        label="Pane maximize",
         script='from hclib import HCTab; HCTab(kwargs["pane"]).hcPane().toggleMaximize()'
     )
+    createItem(
+        pos=5,
+        label="Global tabs",
+        script='from hclib import HCGlobal; HCGlobal().toggleTabs()'
+    )
+    createItem(
+        pos=4,
+        label="Global paths",
+        script='from hclib import HCGlobal; HCGlobal().toggleNetworkControls()'
+    )
+    createItem(
+        pos=3,
+        label="Stowbars",
+        script='from hclib import HCGlobal; HCGlobal().toggleStowbars()'
+    )
+    createItem(
+        pos=2,
+        label="Layout",
+        submenu=True, script='from hclib import hcradialutils; hcradialutils.viewerRadialLayout()'
+    )
     return menu
+
 
 def editorRadialMain(**kwargs):
     menu = hou.ui.createRadialMenu('hceditorradial', "HC Editor Radial")
@@ -151,51 +143,41 @@ def editorRadialMain(**kwargs):
     createItem(
         pos=1,
         submenu=True,
-        label="Global",
-        script='from hclib import hcradialutils; hcradialutils.editorRadialGlobal()'
-    )
-    createItem(
-        pos=2,
-        submenu=True,
-        label="Pane",
-        script='from hclib import hcradialutils; hcradialutils.editorRadialPane()'
+        label="UI",
+        script='from hclib import hcradialutils; hcradialutils.editorRadialUI()'
     )
     return menu
 
-def editorRadialGlobal(**kwargs):
+def editorRadialUI(**kwargs):
     menu = hou.ui.createRadialMenu('hceditorradial', "HC Editor Radial")
     createItem(
         pos=0,
-        label="Tabs",
-        script='from hclib import HCGlobal; HCGlobal().toggleTabs()'
-    )
-    createItem(
-        pos=1,
-        label="Paths",
-        script='from hclib import HCGlobal; HCGlobal().toggleNetworkControls()'
-    )
-    createItem(
-        pos=2,
-        label="Stowbars",
-        script='from hclib import HCGlobal; HCGlobal().toggleStowbars()'
-    )
-    return menu
-
-def editorRadialPane(**kwargs):
-    menu = hou.ui.createRadialMenu('hceditorradial', "HC Editor Radial")
-    createItem(
-        pos=7,
-        label="Tabs",
+        label="Pane tabs",
         script='from hclib import HCTab; HCTab(kwargs["pane"]).hcPane().toggleTabs()'
     )
     createItem(
-        pos=6,
-        label="Maximize",
+        pos=1,
+        label="Pane Maximize",
         script='from hclib import HCTab; HCTab(kwargs["pane"]).hcPane().toggleMaximize()'
     )
     createItem(
-        pos=5,
-        label="Path",
+        pos=2,
+        label="Pane path",
         script='from hclib import HCTab; HCTab(kwargs["pane"]).toggleNetworkControls()'
+    )
+    createItem(
+        pos=3,
+        label="Global tabs",
+        script='from hclib import HCGlobal; HCGlobal().toggleTabs()'
+    )
+    createItem(
+        pos=4,
+        label="Global paths",
+        script='from hclib import HCGlobal; HCGlobal().toggleNetworkControls()'
+    )
+    createItem(
+        pos=5,
+        label="Stowbars",
+        script='from hclib import HCGlobal; HCGlobal().toggleStowbars()'
     )
     return menu
