@@ -31,7 +31,7 @@ class HCGeo:
             'dop': self.node,
             'lop': None,
             'obj': self.viewer.pwd().children()[0].displayNode,
-            'Geometry': self.node
+            'geo': self.node
         }
         self.displayNode = map[self.contextType()]()
         return self.displayNode.geometry()
