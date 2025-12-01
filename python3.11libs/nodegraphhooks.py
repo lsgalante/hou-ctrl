@@ -1,13 +1,16 @@
 import hou
 from canvaseventtypes import *
 import nodegraphdisplay as display
-from hclib import HCTab, HCNetworkEditor
+from hclib import HCNetworkEditor
 # import nodegraphview as view
 
 
 def createEventHandler(uievent, pending_actions):
 
     if isinstance(uievent, ContextEvent):
+        # hceditor = HCNetworkEditor(uievent.editor)
+        # hceditor.showPathMessage()
+        # return None, True
         return None, False
 
     elif isinstance(uievent, MouseEvent):
@@ -15,8 +18,7 @@ def createEventHandler(uievent, pending_actions):
 
     elif isinstance(uievent, KeyboardEvent) and \
     uievent.eventtype == 'keyhit':
-        tab = uievent.editor
-        hceditor = HCNetworkEditor(tab)
+        hceditor = HCNetworkEditor(uievent.editor)
         keymap = {
             ## Zoom
             '=': lambda: hceditor.zoom('in'),
