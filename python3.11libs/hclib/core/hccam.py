@@ -56,13 +56,13 @@ class HCCam:
             self.parms.p = [0, 0, self.parms.zoom * -1]
             self.parms.ow = 10
 
-    def nextProjection(self, projection):
+    def nextProjection(self):
         projectionmap = {
             'perspective': 'ortho',
             'ortho': 'perspective'
         }
         parm = self.cam.parm('projection')
-        parm.set(projectionmap[parm.evalAsString])
+        parm.set(projectionmap[parm.evalAsString()])
 
     def orthoZoom(self, direction):
         signmap = {'out': 1, 'in': -1}
