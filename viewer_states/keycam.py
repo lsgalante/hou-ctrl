@@ -249,23 +249,23 @@ class State(object):
         self.hccam.fitAspectRatio()
         # Node-based camera
         keymap = {
-            '-': lambda: self.hccam.doZoom('out'),
-            '=': lambda: self.hccam.doZoom('in'),
-            'o': lambda: self.hccam.nextProjection(),
+            '-': lambda: self.hccam.zoom('out'),
+            '=': lambda: self.hccam.zoom('in'),
+            'o': lambda: self.hccam.toggleProjection(),
             'h': lambda: self.hccam.rotate('left'),
             'j': lambda: self.hccam.rotate('down'),
             'k': lambda: self.hccam.rotate('up'),
             'l': lambda: self.hccam.rotate('right'),
             'v': lambda: self.hcviewer.nextView(),
-            'Shift+-': lambda: self.hccam.orthoZoom('out'),
-            'Shift+=': lambda: self.hccam.orthoZoom('in'),
+            'Shift+-': lambda: self.hccam.zoomOrtho('out'),
+            'Shift+=': lambda: self.hccam.zoomOrtho('in'),
             'Shift+h': lambda: self.hccam.translate('left'),
             'Shift+j': lambda: self.hccam.translate('down'),
             'Shift+k': lambda: self.hccam.translate('up'),
             'Shift+l': lambda: self.hccam.translate('right'),
             'Ctrl+l': lambda: self.hcviewer.nextLayout(),
-            'f': lambda: self.hccam.frame(),
-            'c': lambda: self.hccam.center()
+            'f': lambda: self.hccam.frame()
+            # 'c': lambda: self.hccam.center()
         }
         key = kwargs['ui_event'].device().keyString()
         if key in keymap:
