@@ -14,6 +14,12 @@ class HCNetworkEditor(HCTab):
     def context(self):
         return self.editor.pwd()
 
+    def path(self):
+        return self.editor.pwd().path()
+
+    def showPathMessage(self):
+        self.editor.flashMessage(image=None, message=self.path(), duration=1)
+
     """
     Nodes
     """
@@ -39,10 +45,8 @@ class HCNetworkEditor(HCTab):
             'right': hou.Vector2(0.85, 0)
         }
         for node in self.nodes():
-            rectifier = rectifiermap[direction]
             idx = idxmap[direction]
-            p = node.position()
-            p += rectifier
+            p = node.position() + rectifiermap[direction]
             val = p[idx]
             if val%1 <= 0.5:
                 val = math.floor(val)
@@ -55,7 +59,7 @@ class HCNetworkEditor(HCTab):
         return self.editor.currentNode()
 
     def nodes(self):
-        return self.context().selectedChildren()
+        return self.editor.pwd().selectedChildren()
 
     def renameNode(self):
         node = self.node()
@@ -88,7 +92,7 @@ class HCNetworkEditor(HCTab):
     """
 
     def deselectAll(self):
-        self.node().setSelected(False)
+        self.nodes().setSelected(False)
 
     """
     Settings
