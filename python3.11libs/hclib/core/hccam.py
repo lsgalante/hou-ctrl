@@ -73,14 +73,14 @@ class HCCam:
             'left': self.parms.globaly,
             'right': self.parms.globaly,
         }
-        dirmapmap = {'up': 1, 'down': -1, 'left': -1, 'right': 1}
+        dirmap = {'up': 1, 'down': -1, 'left': -1, 'right': 1}
         deltamap = {
             'up': hou.Vector3(self.parms.deltar, 0, 0),
             'down': hou.Vector3(self.parms.deltar, 0, 0),
             'left': hou.Vector3(0, self.parms.deltar, 0),
             'right': hou.Vector3(0, self.parms.deltar, 0),
         }
-        self.parms.r += deltamap[dir] * sign
+        self.parms.r += deltamap[dir] * dirmap[dir]
         m = hou.hmath.buildRotateAboutAxis(axismap[dir], self.parms.deltar * dirmap[dir])
         self.parms.t -= self.parms.p
         self.parms.t *= m
@@ -188,7 +188,8 @@ class Parms:
         self._p = val
         self.cam.parmTuple('p').set(val)
 
-    @property ow(self):
+    @property
+    def ow(self):
         return self._ow
 
     @ow.setter

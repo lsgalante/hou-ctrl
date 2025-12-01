@@ -270,7 +270,7 @@ class State(object):
         key = kwargs['ui_event'].device().keyString()
         if key in keymap:
             keymap[key]()
-            # self.guides.update()
+            self.guides.update()
             return True
         else:
             return False
@@ -347,6 +347,7 @@ class Guides:
         self.state = state
         self.cam = state.cam
         self.hccam = state.hccam
+        self.hcgeo = state.hcgeo
         self.viewer = state.viewer
 
         self.options = {
@@ -357,7 +358,7 @@ class Guides:
         self.states = {
             'cam_axis': 1,
             'pivot_axis': 0,
-            'bbox': 0,
+            'bbox': 1,
             'cam': 0,
             'perim': 0,
             'pivot2d': 0,
@@ -448,6 +449,14 @@ class Guides:
         for name, value in self.states.items():
             if value:
                 funcmap[name]()
+        # self.cam_axis.show(self.states['cam_axis'])
+        # self.pivot_axis.show(self.states['pivot_axis'])
+        self.bbox.show(self.states['bbox'])
+        # self.cam.show(self.states['cam'])
+        # self.perim.show(self.states['perim'])
+        # self.pivot2d.show(self.states['pivot2d'])
+        self.pivot3d.show(self.states['pivot3d'])
+        # self.ray.show(self.states['ray'])
 
     def makeCamAxis(self):
         axes = (
@@ -494,7 +503,7 @@ class Guides:
 
     def makeBbox(self):
         guide_geo = hou.Geometry()
-        target_geo = self.state.hcgeo.get()
+        target_geo = self.hcgeo.get()
         bbox = target_geo.boundingBox()
         box = hou.sopNodeTypeCategory().nodeVerb('box')
         box.setParms({

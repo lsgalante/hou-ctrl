@@ -33,8 +33,8 @@ class HCGeo:
             'obj': self.viewer.pwd().children()[0].displayNode,
             'geo': self.node
         }
-        self.displayNode = map[self.contextType()]()
-        return self.displayNode.geometry()
+        node = map[self.contextType()]()
+        return node.geometry()
 
     def node(self):
         return self.viewer.currentNode()
