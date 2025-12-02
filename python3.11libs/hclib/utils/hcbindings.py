@@ -12,7 +12,6 @@ import hou, platform
 # space
 
 def load():
-
     clear_assignments()
     remove_assignments()
     add_assignments()
@@ -20,7 +19,6 @@ def load():
 
 
 def clear_assignments():
-
     assignments = (
         ## h
         'h.add_key',
@@ -40,12 +38,12 @@ def clear_assignments():
         'h.next_key',
         'h.open',
         'h.perf_monitor',
-        'h.play_bwd',
-        'h.play_fwd',
-        'h.prev_key',
+        # 'h.play_bwd',
+        # 'h.play_fwd',
+        # 'h.prev_key',
         'h.python_shell',
-        'h.range_end',
-        'h.range_start',
+        # 'h.range_end',
+        # 'h.range_start',
         'h.textport',
         ## deskmgr
         'deskmgr.new',
@@ -55,8 +53,8 @@ def clear_assignments():
         'h.pane.closetab',
         'h.pane.copytab',
         'h.pane.edit_bookmark',
-        'h.pane.jump_back',
-        'h.pane.jump_forth',
+        # 'h.pane.jump_back',
+        # 'h.pane.jump_forth',
         'h.pane.link_minus',
         'h.pane.link_plus',
         'h.pane.nexttab',
