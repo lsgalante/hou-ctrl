@@ -1,5 +1,5 @@
 import hou, types
-from .hctab import HCTab
+from .hcpathtab import HCPathTab
 # Layout/viewport IDs
 #
 # DoubleSide:        2 3
@@ -32,18 +32,10 @@ from .hctab import HCTab
 # 2: bottom-left quad viewport (default: Front)
 # 3: bottom-right quad viewport (default: Right)
 
-class HCSceneViewer(HCTab):
+class HCSceneViewer(HCPathTab):
     def __init__(self, tab):
-        print(tab)
+        self.tab = tab
         self.viewer = tab
-        hctab = HCTab(tab)
-
-    """
-    Context
-    """
-
-    def pwd(self):
-        return self.viewer.pwd()
 
     """
     Geometry
@@ -72,7 +64,6 @@ class HCSceneViewer(HCTab):
     def togglePointMarkers(self):
         visible = 0
         displaySets = self.displaySets()
-        print(displaySets)
         for displaySet in displaySets:
             if displaySet.isShowingPointMarkers():
                 visible = 1
@@ -188,48 +179,30 @@ class HCSceneViewer(HCTab):
     UI
     """
 
-    def isShowingDisplayOptionsBar(self):
-        return self.viewer.isShowingDisplayOptionsBar()
-
-    def isShowingOperationBar(self):
-        return self.viewer.isShowingOperationBar()
-
-    def isShowingSelectionBar(self):
-        return self.viewer.isShowingSelectionBar()
-
-    def showDisplayOptionsBar(self, bool):
-        self.viewer.showDisplayOptionsBar(bool)
-
-    def showOperationBar(self, bool):
-        self.viewer.showOperationBar(bool)
-
-    def showSelectionBar(self, bool):
-        self.viewer.showSelectionBar(bool)
-
     def toggleDisplayOptionsToolbar(self):
-        self.showDisplayOptionsBar(not self.isShowingDisplayOptionsBar())
+        self.viewer.showDisplayOptionsBar(not self.viewer.isShowingDisplayOptionsBar())
 
     def toggleGroupList(self):
-        self.setGroupListVisible(not self.isGroupListVisible())
+        self.viewer.setGroupListVisible(not self.viewer.isGroupListVisible())
 
     def toggleOperationBar(self):
-        self.showOperationBar(not self.isShowingOperationBar())
+        self.viewer.showOperationBar(not self.viewer.isShowingOperationBar())
 
     def toggleSelectionBar(self):
-        self.showSelectionBar(not self.isShowingSelectionBar())
+        self.viewer.showSelectionBar(not self.viewer.isShowingSelectionBar())
 
     def toggleToolbars(self):
-        state1 = self.isShowingOperationBar()
-        state2 = self.isShowingDisplayOptionsBar()
-        state3 = self.isShowingSelectionBar()
+        state1 = self.viewer.isShowingOperationBar()
+        state2 = self.viewer.isShowingDisplayOptionsBar()
+        state3 = self.viewer.isShowingSelectionBar()
         if state1 + state2 + state3 > 0:
-            self.showOperationBar(0)
-            self.showDisplayOptionsBar(0)
-            self.showSelectionBar(0)
+            self.viewer.showOperationBar(0)
+            self.viewer.showDisplayOptionsBar(0)
+            self.viewer.showSelectionBar(0)
         else:
-            self.showOperationBar(1)
-            self.showDisplayOptionsBar(1)
-            self.showSelectionBar(1)
+            self.viewer.showOperationBar(1)
+            self.viewer.showDisplayOptionsBar(1)
+            self.viewer.showSelectionBar(1)
 
     """
     Utils

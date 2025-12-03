@@ -1,21 +1,12 @@
 import hou, math, types
-from .hctab import HCTab
+from .hcpathtab import HCPathTab
 
 
-class HCNetworkEditor(HCTab):
+class HCNetworkEditor(HCPathTab):
     def __init__(self, tab):
+        self.tab = tab
         self.editor = tab
         self.deltat = 2
-
-    """
-    Context
-    """
-
-    def context(self):
-        return self.editor.pwd()
-
-    def path(self):
-        return self.editor.pwd().path()
 
     def showPathMessage(self):
         self.editor.flashMessage(image=None, message=self.path(), duration=1)
@@ -55,14 +46,8 @@ class HCNetworkEditor(HCTab):
             p[idx] = val
             node.setPosition(p)
 
-    def node(self):
-        return self.editor.currentNode()
-
-    def nodes(self):
-        return self.editor.pwd().selectedChildren()
-
     def renameNode(self):
-        node = self.node()
+        node = self.currentNode()
         name = hou.ui.readInput("Rename_node", buttons=("Yes", "No"))
         if name[0] == 0:
             node.setName(name[1])
@@ -73,7 +58,7 @@ class HCNetworkEditor(HCTab):
 
     def addNetworkBox(self):
         networkbox = self.context().createNetworkBox()
-        networkbox.setPosition(self.node().position())
+        networkbox.setPosition(self.currentNode().position())
 
     def addStickyNote(self):
         stickynote = self.context().createStickyNote()
@@ -82,7 +67,7 @@ class HCNetworkEditor(HCTab):
         stickynote.setColor(hou.Color(0.71, 0.78, 1.0))
 
     def placeDot(self):
-        if len(self.nodes()) == 1:
+        if len(self.selectedNodes()) == 1:
             dot = self.context().createNetworkDot()
             dot.setInput(node)
             dot.setPosition(self.cursorPos())
@@ -92,7 +77,7 @@ class HCNetworkEditor(HCTab):
     """
 
     def deselectAll(self):
-        self.nodes().setSelected(False)
+        self.selectedNodes().setSelected(False)
 
     """
     Settings

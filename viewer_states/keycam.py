@@ -207,21 +207,19 @@ class State(object):
             'show_ray': 0,
         }
 
-        self.viewer = scene_viewer
-        self.state_name = state_name
-        self.cam_type = None
-        self.context = None
-        self.kwargs = None
-
         # Check for cam node
         if not hou.node('/obj/keycam'):
             cam = hou.node('/obj').createNode('cam')
             cam.setName('keycam')
             cam.parm('xOrd').set(0)
         self.cam = hou.node('/obj/keycam')
-        self.hccam = HCCam(self.cam, self.viewer)
+
+        self.viewer = scene_viewer
+        self.hcviewer = None
+        self.state_name = state_name
+        self.hccam = None
         # self.hcdefaultcam = HCDefaultCam(self, defaultcam)
-        self.hcgeo = None
+        self.kwargs = None
         self.guides = None
         self.hud = None
         self.hcviewer = None
@@ -236,13 +234,12 @@ class State(object):
     def onGenerate(self, kwargs):
         # Prevent exiting the state when current node changes
         kwargs['state_flags']['exit_on_node_select'] = False
-        self.kwargs = kwargs
-        self.hcgeo = HCGeo(self.viewer)
-        self.guides = Guides(self)
         self.hcviewer = HCSceneViewer(self.viewer)
+        self.hccam = HCCam(self.cam, self.viewer)
+        self.kwargs = kwargs
+        self.guides = Guides(self)
         self.hud = Hud(self)
         self.hud.update()
-        self.updateNetworkContext()
         self.guides.update()
 
     def onKeyEvent(self, kwargs):
@@ -313,7 +310,6 @@ class State(object):
             'pivot3d': lambda: self.guides.pivot3d.show(kwargs['pivot3d']),
             'ray': lambda: self.guides.ray.show(kwargs['ray'])
         }
-
         return menumap[kwargs['menu_item']]()
 
     def onParmChangeEvent(self, kwargs):
@@ -337,18 +333,14 @@ class State(object):
         return parm
         # self.guides.update()
 
-    def updateNetworkContext(self):
-        node = self.viewer.pwd()
-        self.context = node.type().name()
-
 
 class Guides:
     def __init__(self, state):
         self.state = state
         self.cam = state.cam
         self.hccam = state.hccam
-        self.hcgeo = state.hcgeo
         self.viewer = state.viewer
+        self.hcviewer = state.hcviewer
 
         self.options = {
             'axis_size': 1,
@@ -503,7 +495,7 @@ class Guides:
 
     def makeBbox(self):
         guide_geo = hou.Geometry()
-        target_geo = self.hcgeo.get()
+        target_geo = self.hcviewer.geo()
         bbox = target_geo.boundingBox()
         box = hou.sopNodeTypeCategory().nodeVerb('box')
         box.setParms({
@@ -573,6 +565,7 @@ class Hud:
     def __init__(self, state):
         self.state = state
         self.hcviewer = state.hcviewer
+        print(state.hcviewer)
         self.viewer = state.viewer
         self.template = {
             'title': "Keycam",

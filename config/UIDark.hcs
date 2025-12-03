@@ -387,8 +387,8 @@ ParmSheetHeaderColor: 0.60 0.60 0.60
 // Parameter - Button/menu
 //
 
-ButtonGradHi: bg_high
-ButtonGradLow: bg_high
+ButtonGradHi: button
+ButtonGradLow: button
 ButtonNonActiveGradLow: bg_low // low end of gradient on non-selected tabs
 
 ButtonShadowLight: bg_high // also: line above spreadsheet pane, lines above and left of playbar, scene viewer menu buttons, network editor menu

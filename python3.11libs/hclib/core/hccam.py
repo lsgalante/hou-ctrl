@@ -1,19 +1,20 @@
 import hou
 from .hcgeo import HCGeo
+from .hcsceneviewer import HCSceneViewer
 
 
 class HCCam:
     def __init__(self, cam, viewer):
         self.cam = cam
         self.viewer = viewer
+        self.hcviewer = HCSceneViewer(viewer)
         self.parms = Parms(cam)
-        self.hcgeo = HCGeo(viewer)
         self.fitAspectRatio()
         self.lock()
         self.reset()
 
     def center(self):
-        centroid = self.hcgeo.centroid()
+        centroid = self.hcviewer.hcgeo().centroid()
         self.parms.t = hou.Vector3(centroid)
         self.parms.p = hou.Vector3(centroid)
 
@@ -24,14 +25,14 @@ class HCCam:
         self.cam.parm('aspect').set(ratio)
 
     def frame(self):
-        centroid = self.hcgeo.centroid()
+        centroid = self.hcviewer.hcgeo().centroid()
         self.parms.t = hou.Vector3(centroid)
         self.parms.p = hou.Vector3(centroid)
         # self.parms.ow = 10
         self.setZoom(10)
 
     def home(self):
-        centroid = self.hcgeo.centroid()
+        centroid = self.hcviewer.hcgeo().centroid()
         self.parms.t = centroid
         self.parms.p = centroid
         # self.parms.ow = 10
@@ -128,7 +129,7 @@ class HCCam:
         self.viewport().lockCameraToView(0)
 
     def viewport(self):
-        return self.viewer.viewports()[3]
+        return self.hcviewer.viewports()[3]
 
     def zoom(self, dir):
         dirmap = {'out': 1, 'in': -1}
@@ -159,7 +160,6 @@ class Parms:
         self.deltar = 15
         self.deltazoom = 1
         self.target = None
-
 
     @property
     def t(self):

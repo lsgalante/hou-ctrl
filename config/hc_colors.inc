@@ -27,17 +27,16 @@
 
 #define selection  GREY(0.5)
 
-#define bg_high    0.2137 0.2162 0.2208
-#define bg_medium  0.2137 0.2162 0.2208
-#define bg_low     0.1175 0.1188 0.1214
+#define bg_high    #303132
+#define bg_medium  #363738
+#define bg_low     #1E1E1F
 
-#define button     bg_high
+#define button     #404040
 
 #define bevel_high GREY(0.52)
 #define bevel_low  black
 
-#define separator  0.2137 0.2162 0.2208
-
+#define separator  #363738
 #define error      1 0 0
 
 #define text       GREY(0.8)
