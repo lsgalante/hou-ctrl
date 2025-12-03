@@ -17,10 +17,10 @@ Scheme: hc-dark
 // Icons
 //
 
-IconBrightness: 0.9
+IconBrightness: 0.7
 IconContrast: 1
 IconGamma: 1
-IconSaturation: 0.8
+IconSaturation: 0.6
 
 //
 // Base colors

@@ -39,7 +39,7 @@
 #define separator  #363738
 #define error      1 0 0
 
-#define text       GREY(0.8)
+#define text       #ACDAD5
 
 //
 // Old variables
