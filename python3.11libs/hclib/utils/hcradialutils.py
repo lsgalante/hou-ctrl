@@ -38,7 +38,7 @@ def viewerRadialMain(**kwargs):
         script='from hclib import HCSceneViewer; HCSceneViewer(kwargs["pane"]).toggleSelectionBar()'
     )
     createItem(
-        pos=4,
+        pos=1,
         label="UI",
         submenu=True, script='from hclib import hcradialutils; hcradialutils.viewerRadialUI()'
     )
