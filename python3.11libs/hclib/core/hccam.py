@@ -108,12 +108,11 @@ class HCCam:
     def translate(self, dir):
         axismap = {
             'up': self.parms.localy,
-            'down': self.parms.localy,
-            'left': self.parms.localx,
+            'down': -self.parms.localy,
+            'left': -self.parms.localx,
             'right': self.parms.localx,
         }
-        dirmap = {'up': 1, 'down': -1, 'left': -1, 'right': 1}
-        move = axismap[dir] * self.parms.deltat * dirmap[dir]
+        move = axismap[dir] * self.parms.deltat
         self.parms.t += move
         self.parms.p += move
 
