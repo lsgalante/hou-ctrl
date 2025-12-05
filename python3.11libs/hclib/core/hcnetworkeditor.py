@@ -35,7 +35,7 @@ class HCNetworkEditor(HCPathTab):
             'left': hou.Vector2(0.-0.85, 0),
             'right': hou.Vector2(0.85, 0)
         }
-        for node in self.nodes():
+        for node in self.selectedNodes():
             idx = idxmap[direction]
             p = node.position() + rectifiermap[direction]
             val = p[idx]
