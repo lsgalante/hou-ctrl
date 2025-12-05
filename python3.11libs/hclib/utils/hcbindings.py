@@ -53,6 +53,7 @@ def clear_assignments():
         'h.pane.closetab',
         'h.pane.copytab',
         'h.pane.edit_bookmark',
+        'h.pane.editpathastext',
         # 'h.pane.jump_back',
         # 'h.pane.jump_forth',
         'h.pane.link_minus',
@@ -138,6 +139,7 @@ def clear_assignments():
         'h.pane.wsheet.minimize',
         'h.pane.wsheet.minimize_adjust',
         'h.pane.wsheet.open_display_options',
+        'h.pane.wsheet.open_treeview',
         'h.pane.wsheet.node_quick_nav',
         'h.pane.wsheet.scope_chans',
         'h.pane.wsheet.select',
@@ -150,6 +152,7 @@ def clear_assignments():
         'h.playbar.show_range',
         ## inputfield
         'inputfield.context_help',
+        'inputfield.editor',
     )
 
     for assignment in assignments:
